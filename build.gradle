@@ -137,6 +137,7 @@ jacoco {
 }
 
 jacocoTestReport {
+    dependsOn(startScripts)
     executionData fileTree(project.rootDir) {
         include '**/*.exec'
     }
