@@ -1,4 +1,4 @@
-package seng202.team0.gui;
+package seng202.team5.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

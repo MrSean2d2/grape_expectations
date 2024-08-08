@@ -1,4 +1,4 @@
-package seng202.team0.gui;
+package seng202.team5.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team0.services.CounterService;
+import seng202.team5.services.CounterService;
 
 /**
  * Controller for the main.fxml window

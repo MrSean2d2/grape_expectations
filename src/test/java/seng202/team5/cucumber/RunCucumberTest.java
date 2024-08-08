@@ -1,4 +1,4 @@
-package seng202.team0.cucumber;
+package seng202.team5.cucumber;
 
 import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;

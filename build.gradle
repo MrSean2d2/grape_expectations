@@ -6,9 +6,9 @@ plugins {
 }
 
 archivesBaseName = 'wino'
-group = 'seng202.team0'
+group = 'seng202.team5'
 version = '1.0-SNAPSHOT'
-mainClassName = 'seng202.team0.App'
+mainClassName = 'seng202.team5.App'
 
 def javaVersion = '21'
 def javafxVersion = '20.0.1'
@@ -90,7 +90,7 @@ test {
     useJUnitPlatform()
 
     filter {
-        includeTestsMatching "seng202.team0.unittests.*"
+        includeTestsMatching "seng202.team5.unittests.*"
     }
 
     finalizedBy jacocoTestReport
@@ -103,7 +103,7 @@ tasks.register("cucumber", Test)  {
     useJUnitPlatform()
 
     filter {
-        includeTestsMatching "seng202.team0.cucumber.*"
+        includeTestsMatching "seng202.team5.cucumber.*"
     }
 
     testLogging {
