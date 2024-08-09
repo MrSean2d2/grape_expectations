@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+   <TableView fx:id="wineTable" prefHeight="400.0" prefWidth="520.0">
+     <columns>
+       <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="200.0" resizable="false" text="Wine Name" />
+       <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="82.0" resizable="false" text="Price" />
+         <TableColumn fx:id="yearColumn" prefWidth="79.0" resizable="false" text="Year" />
+         <TableColumn fx:id="ratingColumn" prefWidth="82.0" resizable="false" text="Rating" />
+         <TableColumn fx:id="favouriteColumn" prefWidth="76.0" resizable="false" text="Favourite" />
+     </columns>
+   </TableView>
+</VBox>
