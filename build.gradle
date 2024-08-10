@@ -3,6 +3,7 @@ plugins {
     id 'java'
     id "org.openjfx.javafxplugin" version "0.0.14"
     id 'jacoco'
+    id 'checkstyle'
 }
 
 archivesBaseName = 'wino'
@@ -143,4 +144,8 @@ jacocoTestReport {
     reports {
         html.destination file("${buildDir}/reports/tests/coverage/")
     }
+}
+
+checkstyle {
+    toolVersion = "10.17.0"
 }
