@@ -2,10 +2,12 @@ package seng202.team5.gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import seng202.team5.Wine;
 
 public class DataListPageController {
@@ -46,6 +48,14 @@ public class DataListPageController {
 
         // Add data to TableView
         wineTable.setItems(wines);
-
+        wineTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println(wineTable.getSelectionModel().getSelectedItem().getName());
+                if (mouseEvent.getClickCount() == 2) {
+                    System.out.println("double clicked");
+                }
+            }
+        });
     }
 }
