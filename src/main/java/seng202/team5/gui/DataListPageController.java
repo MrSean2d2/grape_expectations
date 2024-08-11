@@ -54,6 +54,12 @@ public class DataListPageController {
                 System.out.println(wineTable.getSelectionModel().getSelectedItem().getName());
                 if (mouseEvent.getClickCount() == 2) {
                     System.out.println("double clicked");
+//                    MainLayoutController mainLayoutController = new MainLayoutController();
+//                    try {
+//                        mainLayoutController.loadDetailedViewPage();
+//                    } catch (Exception e) {
+//                        throw new RuntimeException(e);
+//                    }
                 }
             }
         });
