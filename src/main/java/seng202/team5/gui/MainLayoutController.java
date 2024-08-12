@@ -25,7 +25,7 @@ public class MainLayoutController {
     private Button accountButton;
     @FXML
     private void loadHomePage() throws Exception {
-        loadPage("/fxml/HomePage.fxml");
+        loadPage("/fxml/newHomePage.fxml");
         homeButton.getStyleClass().add("active");
     }
 

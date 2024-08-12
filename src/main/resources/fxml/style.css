@@ -1,7 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&family=Space+Mono:wght@400;700&display=swap');
+
 .root {
     -fx-background-color: #bbbbbb;
     -fx-text-fill: #000000;
+    -fx-font-family: "Space Mono";
 }
+
+.label {
+    -fx-font-family: "Space Mono";
+}
+
 
 .tool-bar {
     -fx-background-color: #ffffff;
@@ -15,11 +23,39 @@
 }
 
 .button:hover {
-    -fx-background-color: #bbbbbb;
+    -fx-background-color: #dddddd;
+    -fx-text-fill: #000000;
 }
 
 .button.active {
     -fx-background-color: #4db265;
+}
+
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-padding: 8 15;
+}
+
+.menu-button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-padding: 2;
+}
+
+.menu-button:hover {
+    -fx-background-color: #dddddd;
+    -fx-text-fill: #000000;
+}
+
+.menu-item {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+.menu-item:hover {
+    -fx-background-color: #dddddd;
+    -fx-text-fill: #000000;
 }
 
 .stack-pane {
@@ -44,11 +80,10 @@
 }
 
 .table-view .column-header{
-    -fx-border-color: #000000;
+    -fx-background-color: transparent;
 }
 
 .table-view .table-cell{
-    -fx-border-color: #000000;
     -fx-padding: 2 0 2 10px;
 }
 
@@ -62,6 +97,7 @@
 
 .table-row-cell:selected {
     -fx-background-color: #4db265;
+    -fx-text-fill: #ffffff;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }

@@ -29,7 +29,7 @@ public class MainWindow extends Application {
 
         primaryStage.setTitle("Grape Expectations");
 
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 1200, 800);
 
         String styleSheetURL = "/fxml/style.css";
         scene.getStylesheets().add(styleSheetURL);
