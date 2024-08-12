@@ -60,9 +60,4 @@ public class CounterServiceTest
 
         assertEquals(0, testCounterServiceMock.getCurrentCount());
     }
-
-    @Test
-    public void failingTest() {
-        fail();
-    }
 }
