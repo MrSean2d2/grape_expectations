@@ -20,15 +20,20 @@ public class MainWindow extends Application {
      * @throws IOException if there is an issue loading fxml file
      */
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/Wrapper.fxml"));
         Parent root = baseLoader.load();
 
-        MainController baseController = baseLoader.getController();
+        MainLayoutController baseController = baseLoader.getController();
         baseController.init(primaryStage);
 
-        primaryStage.setTitle("WINO App");
+        primaryStage.setTitle("Grape Expectations");
+
         Scene scene = new Scene(root, 600, 400);
+
+        String styleSheetURL = "/fxml/style.css";
+        scene.getStylesheets().add(styleSheetURL);
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }

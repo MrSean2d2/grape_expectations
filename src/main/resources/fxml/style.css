@@ -1,0 +1,67 @@
+.root {
+    -fx-background-color: #bbbbbb;
+    -fx-text-fill: #000000;
+}
+
+.tool-bar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 5;
+}
+
+.button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-padding: 8 15;
+}
+
+.button:hover {
+    -fx-background-color: #bbbbbb;
+}
+
+.button.active {
+    -fx-background-color: #4db265;
+}
+
+.stack-pane {
+    -fx-background-color: #bbbbbb;
+    -fx-padding: 10;
+}
+
+.anchor-pane {
+    -fx-background-color: #bbbbbb;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view:focused {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background .filler {
+ -fx-background-color: transparent;
+}
+
+.table-view .column-header{
+    -fx-border-color: #000000;
+}
+
+.table-view .table-cell{
+    -fx-border-color: #000000;
+    -fx-padding: 2 0 2 10px;
+}
+
+.table-row-cell{
+    -fx-background-color: #ffffff;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: #eeeeee;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #4db265;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}

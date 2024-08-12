@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+
+<GridPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="116.66667175292969" minHeight="10.0" prefHeight="100.66665649414062" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="395.3333435058594" minHeight="10.0" prefHeight="329.3333435058594" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <VBox alignment="CENTER" spacing="20" GridPane.rowIndex="1">
+         <TableView fx:id="wineTable" prefHeight="400.0" prefWidth="520.0">
+           <columns>
+             <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="200.0" resizable="false" text="Wine Name" />
+             <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="82.0" resizable="false" text="Price" />
+               <TableColumn fx:id="yearColumn" prefWidth="79.0" resizable="false" text="Year" />
+               <TableColumn fx:id="ratingColumn" prefWidth="82.0" resizable="false" text="Rating" />
+               <TableColumn fx:id="favouriteColumn" prefWidth="76.0" resizable="false" text="Favourite" />
+           </columns>
+         </TableView>
+      </VBox>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TextField text="Input Search..." />
+                  <Button mnemonicParsing="false" text="Search" GridPane.columnIndex="1" />
+                  <MenuButton mnemonicParsing="false" text="Sort By" GridPane.columnIndex="2">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+               </children>
+            </GridPane>
+            <GridPane GridPane.rowIndex="1">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <MenuButton mnemonicParsing="false" text="variety">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+                  <MenuButton mnemonicParsing="false" text="Region" GridPane.columnIndex="1">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Action 1" />
+                        <MenuItem mnemonicParsing="false" text="Action 2" />
+                     </items>
+                  </MenuButton>
+                  <MenuButton mnemonicParsing="false" text="Year" GridPane.columnIndex="2">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+                  <MenuButton mnemonicParsing="false" text="Price" GridPane.columnIndex="3">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+                  <MenuButton mnemonicParsing="false" text="Score" GridPane.columnIndex="4">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+                  <MenuButton mnemonicParsing="false" text="Favourites" GridPane.columnIndex="5">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+               </children>
+            </GridPane>
+         </children>
+      </GridPane>
+   </children>
+</GridPane>
