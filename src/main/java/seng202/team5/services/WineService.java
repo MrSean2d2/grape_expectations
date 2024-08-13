@@ -1,6 +1,6 @@
 package seng202.team5.services;
 
-import seng202.team5.Wine;
+import seng202.team5.models.Wine;
 
 import java.util.List;
 

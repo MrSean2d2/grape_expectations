@@ -8,7 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import seng202.team5.Wine;
+import seng202.team5.models.Wine;
 
 public class DataListPageController {
 

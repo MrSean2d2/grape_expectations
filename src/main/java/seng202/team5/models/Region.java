@@ -1,9 +1,6 @@
 package seng202.team5.models;
 
-import seng202.team5.Vineyard;
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Model class for Region attribute of wines
