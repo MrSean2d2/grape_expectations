@@ -14,7 +14,7 @@ public class Region {
     /**
      * Constructor
      */
-    public Region(String name, String description, ArrayList<Region> subRegions){
+    public Region(String name, String description, ArrayList<Region> subRegions) {
         this.name = name;
         this.description = description;
         this.subRegions = subRegions;
