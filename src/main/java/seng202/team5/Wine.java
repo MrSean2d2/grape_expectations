@@ -1,5 +1,9 @@
 package seng202.team5;
 
+/** Default Wine class
+ *
+ *
+ */
 public class Wine {
     private String name = null;
     private String description = null;
@@ -14,10 +18,19 @@ public class Wine {
     public double getRating() { return ratingValue; }
     public boolean isFavourite() { return favourite; }
 
+    /**
+     * Constructor for creating a wine object with a name 
+     * and description
+     */
     public Wine(String name, String description) {
         this.name = name;
         this.description = description;
     }
+
+    /**
+     * Constructor for creating a wine object with a name,
+     * description, year, rating, price and favourite status
+     */
     public Wine(String name, String description, int year, int ratingValue, double price, boolean favourite) {
         this.name = name;
         this.description = description;
