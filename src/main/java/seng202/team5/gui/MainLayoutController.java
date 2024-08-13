@@ -46,6 +46,19 @@ public class MainLayoutController {
         accountButton.getStyleClass().add("active");
     }
 
+    /**
+     * loads the detailed wine view page,
+     * detailed view is accessed by double-clicking on a wine in
+     * the wine table in view data page -
+     * WARNING!:
+     * currently not working because detailed view page does not have a pagecontroller
+     * so does not get called
+     * @throws Exception
+     */
+    public void loadDetailedViewPage() throws Exception {
+        loadPage("/fxml/DetailedViewPage.fxml");
+    }
+
     private void loadPage(String fxml) throws Exception {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource(fxml));
         Node page = baseLoader.load();
