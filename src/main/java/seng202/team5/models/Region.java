@@ -14,35 +14,37 @@ public class Region {
     /**
      * Constructor
      */
-    public Region(String name, String description, ArrayList<Region> subRegions){
+    public Region(String name, String description, ArrayList<Region> subRegions) {
         this.name = name;
         this.description = description;
         this.subRegions = subRegions;
     }
-    /**
-     * Get parent of region
-     * @Return Region parent
-     */
-//    public Region getParentRegion(){}
+
     /**
      * Get subregions of region
-     * @Return List of region's subregions
+     * @return List of region's subregions
      */
-    ArrayList<Region> getSubRegions(){return subRegions;}
+    ArrayList<Region> getSubRegions(){
+        return subRegions;
+    }
     /**
      * Get name of region
-     * @Return String of region name
+     * @return String of region name
      */
-    public String getName(){ return name;}
+    public String getName(){return name;
+    }
     /**
      * Get description of region
-     * @Return String of region description
+     * @return String of region description
      */
-    public String getDescription(){return description;}
-
+    public String getDescription(){
+        return description;
+    }
 
     /**
      * Add new subregion to region
      */
-    public void addSubRegion(Region region){subRegions.add(region);}
+    public void addSubRegion(Region region){
+        subRegions.add(region);
+    }
 }
