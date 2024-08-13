@@ -2,7 +2,6 @@ package seng202.team5.models;
 
 /**
  * Creates a vineyard object
- * @author Amiele Miguel
  */
 public class Vineyard {
     private String name;
