@@ -24,27 +24,37 @@ public class WineService {
 
     /**
      * Get list of wines
-     * @Return Wine list
+     * @return Wine list
      */
-    public List<Wine> getWineList() {return wineList;}
+    public List<Wine> getWineList() {
+        return wineList;
+    }
 
     /**
      * Add new Wine entry
      */
-    public void addWine(Wine wineEntry) {wineList.add(wineEntry);}
+    public void addWine(Wine wineEntry) {
+        wineList.add(wineEntry);
+    }
 
     /**
      *  Delete existing Wine entry
      */
-    public void delWine(Wine wineEntry) {wineList.remove(wineEntry);}
+    public void delWine(Wine wineEntry) {
+        wineList.remove(wineEntry);
+    }
 
     /**
      * Apply filter to column by input filter condition
      */
-    public void filter(String colName, String filter) {}
+    public void filter(String colName, String filter) {
+
+    }
 
     /**
      * Search for a wine by specified term
      */
-    public void search(String term) { }
+    public void search(String term) {
+
+    }
 }
