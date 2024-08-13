@@ -3,7 +3,7 @@ package seng202.team5.models;
 import java.util.ArrayList;
 
 /**
- * Model class for Region attribute of wines
+ * Model class for Region attribute of wines.
  */
 public class Region {
     private String name;
@@ -12,7 +12,7 @@ public class Region {
     private ArrayList<Vineyard> vineyards;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public Region(String name, String description, ArrayList<Region> subRegions) {
         this.name = name;
@@ -21,30 +21,36 @@ public class Region {
     }
 
     /**
-     * Get subregions of region
+     * Get subregions of region.
+     *
      * @return List of region's subregions
      */
-    ArrayList<Region> getSubRegions(){
+    ArrayList<Region> getSubRegions() {
         return subRegions;
     }
     /**
-     * Get name of region
+     * Get name of region.
+     *
      * @return String of region name
      */
-    public String getName(){return name;
+
+    public String getName() {
+        return name;
     }
     /**
-     * Get description of region
+     * Get description of region.
+     *
      * @return String of region description
      */
-    public String getDescription(){
+
+    public String getDescription() {
         return description;
     }
 
     /**
-     * Add new subregion to region
+     * Add new subregion to region.
      */
-    public void addSubRegion(Region region){
+    public void addSubRegion(Region region) {
         subRegions.add(region);
     }
 }

@@ -5,7 +5,7 @@ import seng202.team5.models.Wine;
 import java.util.List;
 
 /**
- * Service Class to manage wine actions
+ * Service Class to manage wine actions.
  */
 public class WineService {
 
@@ -15,15 +15,16 @@ public class WineService {
     private List<Wine> wineList;
 
     /**
-     * Constructor
+     * Constructor.
      */
-    public WineService(List<Wine> wineList){
+    public WineService(List<Wine> wineList) {
         this.wineList = wineList;
     }
 
 
     /**
-     * Get list of wines
+     * Get list of wines.
+     *
      * @return Wine list
      */
     public List<Wine> getWineList() {
@@ -31,28 +32,28 @@ public class WineService {
     }
 
     /**
-     * Add new Wine entry
+     * Add new Wine entry.
      */
     public void addWine(Wine wineEntry) {
         wineList.add(wineEntry);
     }
 
     /**
-     *  Delete existing Wine entry
+     *  Delete existing Wine entry.
      */
     public void delWine(Wine wineEntry) {
         wineList.remove(wineEntry);
     }
 
     /**
-     * Apply filter to column by input filter condition
+     * Apply filter to column by input filter condition.
      */
     public void filter(String colName, String filter) {
 
     }
 
     /**
-     * Search for a wine by specified term
+     * Search for a wine by specified term.
      */
     public void search(String term) {
 

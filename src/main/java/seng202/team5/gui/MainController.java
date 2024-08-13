@@ -10,6 +10,7 @@ import seng202.team5.services.CounterService;
 
 /**
  * Controller for the main.fxml window
+ *
  * @author seng202 teaching team
  */
 public class MainController {
@@ -25,7 +26,7 @@ public class MainController {
     private CounterService counterService;
 
     /**
-     * Initialize the window
+     * Initialize the window.
      *
      * @param stage Top level container for this window
      */
@@ -34,7 +35,7 @@ public class MainController {
     }
 
     /**
-     * Method to call when our counter button is clicked
+     * Method to call when our counter button is clicked.
      *
      */
     @FXML

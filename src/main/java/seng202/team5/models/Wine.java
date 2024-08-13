@@ -8,16 +8,31 @@ public class Wine {
     private double price = 0.0;
     private boolean favourite = false;
 
-    public String getName() { return name; }
-    public double getPrice() { return price; }
-    public int getYear() { return year; }
-    public double getRating() { return ratingValue; }
-    public boolean isFavourite() { return favourite; }
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public double getRating() {
+        return ratingValue;
+    }
+
+    public boolean isFavourite() {
+        return favourite;
+    }
 
     public Wine(String name, String description) {
         this.name = name;
         this.description = description;
     }
+
     public Wine(String name, String description, int year, int ratingValue, double price, boolean favourite) {
         this.name = name;
         this.description = description;
