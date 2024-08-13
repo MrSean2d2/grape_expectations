@@ -3,7 +3,7 @@ package seng202.team5.unittests.services;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import seng202.team5.Wine;
+import seng202.team5.models.Wine;
 import seng202.team5.services.DataLoadService;
 
 import static org.junit.jupiter.api.Assertions.*;
