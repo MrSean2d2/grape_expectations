@@ -7,6 +7,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+
+/**
+ * Controller for the Wrapper.fxml page (page header)
+ * @author team 5
+ */
 public class MainLayoutController {
 
     @FXML
@@ -23,28 +28,55 @@ public class MainLayoutController {
 
     @FXML
     private Button accountButton;
+
+
+    /**
+     * Load the home page
+     *
+     * @throws Exception
+     */
     @FXML
     private void loadHomePage() throws Exception {
         loadPage("/fxml/newHomePage.fxml");
         homeButton.getStyleClass().add("active");
     }
 
+
+    /**
+     * Load the data list page
+     *
+     * @throws Exception
+     */
     @FXML
     private void loadDataListPage() throws Exception {
         loadPage("/fxml/DataListPage.fxml");
         dataListButton.getStyleClass().add("active");
     }
 
+
+    /**
+     * Load the map page
+     *
+     * @throws Exception
+     */
     @FXML
     private void loadMapPage() throws Exception {
         loadPage("/fxml/MapPage.fxml");
         mapButton.getStyleClass().add("active");
     }
+
+
+    /**
+     * Load the account page
+     *
+     * @throws Exception
+     */
     @FXML
     private void loadAccountPage() throws Exception {
         loadPage("/fxml/AccountPage.fxml");
         accountButton.getStyleClass().add("active");
     }
+
 
     /**
      * loads the detailed wine view page,
@@ -59,6 +91,13 @@ public class MainLayoutController {
         loadPage("/fxml/DetailedViewPage.fxml");
     }
 
+
+    /**
+     * Load a page with a path given as an argument
+     *
+     * @param String path to fxml file
+     * @throws Exception
+     */
     private void loadPage(String fxml) throws Exception {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource(fxml));
         Node page = baseLoader.load();
