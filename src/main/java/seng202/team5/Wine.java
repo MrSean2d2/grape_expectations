@@ -1,8 +1,8 @@
 package seng202.team5;
 
-/** Default Wine class
- * 
- * 
+/** 
+ * Default Wine class
+ * @author Martyn Gascoigne
  */
 public class Wine {
     private String name = null; // Default wine name
