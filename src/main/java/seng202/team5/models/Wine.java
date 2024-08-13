@@ -1,4 +1,4 @@
-package seng202.team5;
+package seng202.team5.models;
 
 public class Wine {
     private String name = null;

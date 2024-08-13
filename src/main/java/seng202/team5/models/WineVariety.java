@@ -1,4 +1,4 @@
-package seng202.team5;
+package seng202.team5.models;
 
 import seng202.team5.models.WineType;
 
