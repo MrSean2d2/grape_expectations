@@ -52,6 +52,13 @@ public class DataLoadService {
         return new Wine(name, description, year, ratingValue, price, false);
     }
 
+    /**
+     * Reads the specified file and returns all the csv records as a list of String[]s.
+     *
+     * @param text the string to be parsed
+     * @return parsed integer from input string (if string is null, returns 0)
+     * @throws NumberFormatException if there is an error parsing
+     */
     private int numFromTextOr0(String text) {
         int num;
         if (text != null) {
