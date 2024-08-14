@@ -27,15 +27,16 @@ public class DataLoadServiceTest {
 
     @Test
     public void loadFileTestFirst() {
-        try {
-            List<String[]> records = dataLoadService.loadFile(csvFilePath);
-            String[] expectedFirst = {"0","Italy","Aromas include tropical fruit, broom, brimstone and dried herb. The palate isn't overly expressive, offering unripened apple, citrus and dried sage alongside brisk acidity.",
-                    "Vulkà Bianco","87","","Sicily & Sardinia","Etna","","Kerin O’Keefe","@kerinokeefe","Nicosia 2013 Vulkà Bianco  (Etna)","White Blend","Nicosia"};
-            assertEquals(16, records.size());
-            assertArrayEquals(expectedFirst, records.getFirst());
-        } catch (IOException | CsvException exception) {
-            log.error(exception);
-        }
+        List<String[]> records = dataLoadService.loadFile(csvFilePath);
+        String[] expectedFirst = {"0","Italy","Aromas include tropical fruit, broom, brimstone and dried herb. The palate isn't overly expressive, offering unripened apple, citrus and dried sage alongside brisk acidity.",
+                "Vulkà Bianco","87",null,"Sicily & Sardinia","Etna",null,"Kerin O’Keefe","@kerinokeefe","Nicosia 2013 Vulkà Bianco  (Etna)","White Blend","Nicosia"};
+        assertEquals(16, records.size());
+        assertArrayEquals(expectedFirst, records.getFirst());
+    }
+
+    @Test
+    public void convertWineYear() {
+
     }
 
     @Test
