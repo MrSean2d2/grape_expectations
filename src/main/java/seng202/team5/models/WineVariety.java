@@ -18,7 +18,7 @@ public class WineVariety {
      * Get the name of the wine variety
      * @return the wine variety's name
      */
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -26,7 +26,7 @@ public class WineVariety {
      * Get the type of the wine variety
      * @return the wine variety's type
      */
-    WineType getType() {
+    public WineType getType() {
         return type;
     }
 }
