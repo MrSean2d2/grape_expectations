@@ -30,6 +30,8 @@ import seng202.team5.models.*;
 public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
+    public boolean externalDependencies = true;
+
     /**
      * Creates a wine object from a csv entry parsed by {@link DataLoadService#loadFile(String)}.
      *
@@ -52,7 +54,10 @@ public class DataLoadService {
         String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
         String subRegionName = csvEntry[8] != null ? csvEntry[8] : "NoSubRegion";
 
-        Region region = AppEnvironment.regionService.getSubRegion(regionName, subRegionName);
+        Region region = new Region(regionName);
+        if (externalDependencies) {
+            region = AppEnvironment.regionService.getSubRegion(regionName, subRegionName);
+        }
 
         // Wine Name
         String name = csvEntry[11];
@@ -65,7 +70,11 @@ public class DataLoadService {
 
         // Wine Variety
         String varietyName = csvEntry[12];
-        WineVariety variety = AppEnvironment.wineVarietyService.varietyFromString(varietyName);
+        WineVariety variety = new WineVariety(varietyName, WineType.UNKNOWN);
+
+        if (externalDependencies) {
+            variety = AppEnvironment.wineVarietyService.varietyFromString(varietyName);
+        }
 
         // Winery
         String winery = csvEntry[13];

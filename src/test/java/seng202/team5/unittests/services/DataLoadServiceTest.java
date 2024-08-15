@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import seng202.team5.gui.AppEnvironment;
 import seng202.team5.models.Wine;
 import seng202.team5.services.DataLoadService;
 
@@ -23,6 +24,7 @@ public class DataLoadServiceTest {
     public void setUp() {
         csvFilePath = System.getProperty("user.dir") + "/src/test/resources/test.csv";
         dataLoadService = new DataLoadService();
+        dataLoadService.externalDependencies = false;
     }
 
     @Test
