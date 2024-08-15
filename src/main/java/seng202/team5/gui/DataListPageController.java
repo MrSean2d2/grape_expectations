@@ -48,11 +48,12 @@ public class DataListPageController {
         Vineyard dummyVineyard = new Vineyard("dummyVineyard");
         ArrayList<Vineyard> vineyardList = new ArrayList<>();
         Region dummyRegion = new Region("dummyRegion", subRegionsList, vineyardList);
-        ObservableList<Wine> wines = FXCollections.observableArrayList(
-                new Wine("Chardonnay", "", 2020, 4, 15.99, dummyWine, dummyRegion, dummyVineyard),
-                new Wine("Merlot", "", 2018, 4, 10.49, dummyWine, dummyRegion, dummyVineyard),
-                new Wine("Cabernet Sauvignon", "",  2021, 5, 20.99,dummyWine, dummyRegion, dummyVineyard)
-        );
+        ObservableList<Wine> wines = FXCollections.observableArrayList(MainWindow.appEnvironment.wineService.getWineList());
+//        ObservableList<Wine> wines = FXCollections.observableArrayList(
+//                new Wine("Chardonnay", "", 2020, 4, 15.99, dummyWine, dummyRegion, dummyVineyard),
+//                new Wine("Merlot", "", 2018, 4, 10.49, dummyWine, dummyRegion, dummyVineyard),
+//                new Wine("Cabernet Sauvignon", "",  2021, 5, 20.99,dummyWine, dummyRegion, dummyVineyard)
+//        );
 
         // Add data to TableView
         wineTable.setItems(wines);
