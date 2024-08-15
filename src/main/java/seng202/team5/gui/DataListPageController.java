@@ -46,7 +46,8 @@ public class DataListPageController {
         WineVariety dummyWine = new WineVariety("dummyVariety", WineType.RED);
         ArrayList<Region> subRegionsList = new ArrayList<>();
         Vineyard dummyVineyard = new Vineyard("dummyVineyard");
-        Region dummyRegion = new Region("dummyRegion", subRegionsList);
+        ArrayList<Vineyard> vineyardList = new ArrayList<>();
+        Region dummyRegion = new Region("dummyRegion", subRegionsList, vineyardList);
         ObservableList<Wine> wines = FXCollections.observableArrayList(
                 new Wine("Chardonnay", "", 2020, 4, 15.99, dummyWine, dummyRegion, dummyVineyard),
                 new Wine("Merlot", "", 2018, 4, 10.49, dummyWine, dummyRegion, dummyVineyard),

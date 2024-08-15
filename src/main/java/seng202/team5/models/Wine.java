@@ -17,6 +17,9 @@ public class Wine {
     public double getRating() { return ratingValue; }
     //public boolean isFavourite() { return favourite; }
     // removed favourite because it is individual to each user, not wine
+    public WineVariety getWineVariety() { return wineVariety; }
+    public Region getRegion() { return region; }
+    public Vineyard getVineyard() { return vineyard; }
 
     public Wine(String name, String description) {
         this.name = name;

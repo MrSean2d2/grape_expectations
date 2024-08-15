@@ -15,10 +15,11 @@ public class Region {
     /**
      * Constructor
      */
-    public Region(String name, ArrayList<Region> subRegions) {
+    public Region(String name, ArrayList<Region> subRegions, ArrayList<Vineyard> vineyards) {
         this.name = name;
         //this.description = description;
         this.subRegions = subRegions;
+        this.vineyards = vineyards;
     }
 
     /**
@@ -41,4 +42,15 @@ public class Region {
     public void addSubRegion(Region region){
         subRegions.add(region);
     }
+
+    /**
+     * get vineyards of region
+     */
+    public ArrayList getVineyards() { return vineyards; }
+
+    /**
+     * add vineyard to list of vineyards in region
+     * @param vineyard
+     */
+    public void addVineyard(Vineyard vineyard) { vineyards.add(vineyard); }
 }

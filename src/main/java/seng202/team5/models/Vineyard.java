@@ -9,11 +9,17 @@ public class Vineyard {
     //description removed because it was not in the csv file
 
     /**
-     * Sets the name and description of the vineyard
+     * Sets the name of the vineyard
      * @param name the name of the vineyard
      */
     public Vineyard(String name) {
         this.name = name;
-        //this.description = description;
+    }
+
+    /**
+     * gets the name of the vineyard
+     */
+    public String getName() {
+        return name;
     }
 }
