@@ -33,5 +33,8 @@ public class Wine {
         this.ratingValue = ratingValue;
         this.price = price;
         //this.favourite = favourite;
+        this.wineVariety = wineVariety;
+        this.region = region;
+        this.vineyard = vineYard;
     }
 }
