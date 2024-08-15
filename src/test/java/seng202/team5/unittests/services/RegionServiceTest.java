@@ -58,4 +58,11 @@ public class RegionServiceTest {
 
         assertEquals(3, newReg.getSubRegions().size());
     }
+
+    @Test
+    public void addSubRegionFirst() {
+        regionService.getSubRegion("TestRegion1", "subRegion1");
+
+        assertEquals(1, regionService.getRegionList().size());
+    }
 }

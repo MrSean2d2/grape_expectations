@@ -38,23 +38,40 @@ public class DataLoadService {
      */
     private Wine wineFromText(String[] csvEntry) {
         //String country = csvEntry[1];
+
+        // Wine Description
         String description = csvEntry[2];
+
+        // Wine Rating
         int ratingValue = numFromTextOr0(csvEntry[4]);
+
+        // Wine Price
         double price = numFromTextOr0(csvEntry[5]);
-        Region region = new Region(csvEntry[7]);
-        //Region region = new Region(csvEntry[7], new ArrayList<>(), new ArrayList<>());
+
+        // Wine Region
+        String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
+        String subRegionName = csvEntry[8] != null ? csvEntry[8] : "NoSubRegion";
+
+        Region region = AppEnvironment.regionService.getSubRegion(regionName, subRegionName);
+
+        // Wine Name
         String name = csvEntry[11];
+
+        // Wine Year
         Pattern yearPattern = Pattern.compile("\\d{4}");
         Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);
         boolean matchFound = yearMatcher.find();
-        int year = 0;
-        if (matchFound) {
-            year = numFromTextOr0(yearMatcher.group());
-        }
+        int year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
+
+        // Wine Variety
         String varietyName = csvEntry[12];
         WineVariety variety = AppEnvironment.wineVarietyService.varietyFromString(varietyName);
+
+        // Winery
         String winery = csvEntry[13];
         Vineyard vineyard = new Vineyard(winery);
+
+        // Return the created Wine object
         return new Wine(name, description, year, ratingValue, price, variety, region, vineyard);
     }
 
