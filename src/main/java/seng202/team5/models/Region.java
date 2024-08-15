@@ -13,7 +13,23 @@ public class Region {
     private ArrayList<Vineyard> vineyards;
 
     /**
+     * Default Constructor
+     *
+     * @param name The name of the region
+     */
+    public Region(String name) {
+        this.name = name;
+        //this.description = description;
+        this.subRegions = new ArrayList<>();
+        this.vineyards = new ArrayList<>();
+    }
+
+    /**
      * Constructor
+     *
+     * @param name The name of the region
+     * @param subRegions a list of subregions
+     * @param vineyards a list of vineyards
      */
     public Region(String name, ArrayList<Region> subRegions, ArrayList<Vineyard> vineyards) {
         this.name = name;
@@ -33,8 +49,7 @@ public class Region {
      * Get name of region
      * @return String of region name
      */
-    public String getName(){return name;
-    }
+    public String getName(){ return name; }
 
     /**
      * Add new subregion to region
@@ -50,7 +65,8 @@ public class Region {
 
     /**
      * add vineyard to list of vineyards in region
-     * @param vineyard
+     *
+     * @param vineyard the vineyard to add to the list
      */
     public void addVineyard(Vineyard vineyard) { vineyards.add(vineyard); }
 }

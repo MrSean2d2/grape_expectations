@@ -55,7 +55,7 @@ public class RegionService {
         if (foundRegionObject != null) {
             return foundRegionObject;
         } else {
-            Region regionFiller = new Region(regionName, "", new ArrayList<>());
+            Region regionFiller = new Region(regionName);
             regionList.add(regionFiller);
             return regionFiller;
         }
@@ -78,7 +78,7 @@ public class RegionService {
         if (foundSubRegionObject != null) {
             return foundSubRegionObject;
         } else {
-            Region subRegionFiller = new Region(subRegionName, "", new ArrayList<>());
+            Region subRegionFiller = new Region(subRegionName);
             foundRegion.addSubRegion(subRegionFiller);
             return subRegionFiller;
         }
