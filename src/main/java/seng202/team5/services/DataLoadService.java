@@ -17,8 +17,7 @@ import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team5.models.Region;
-import seng202.team5.models.Wine;
+import seng202.team5.models.*;
 
 
 /**
@@ -40,7 +39,7 @@ public class DataLoadService {
         String description = csvEntry[2];
         int ratingValue = numFromTextOr0(csvEntry[4]);
         double price = numFromTextOr0(csvEntry[5]);
-        //Region region = new Region(csvEntry[7], "", new ArrayList<>());
+        Region region = new Region(csvEntry[7], new ArrayList<>());
         String name = csvEntry[11];
         Pattern yearPattern = Pattern.compile("\\d{4}");
         Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);
@@ -49,7 +48,11 @@ public class DataLoadService {
         if (matchFound) {
             year = numFromTextOr0(yearMatcher.group());
         }
-        return new Wine(name, description, year, ratingValue, price, false);
+        String varietyName = csvEntry[12];
+        WineVariety variety = new WineVariety(varietyName, WineType.UNKNOWN);
+        String winery = csvEntry[13];
+        Vineyard vineyard = new Vineyard(winery);
+        return new Wine(name, description, year, ratingValue, price, variety, region, vineyard);
     }
 
     /**

@@ -5,15 +5,21 @@ package seng202.team5.models;
  */
 public class Vineyard {
     private String name;
-    private String description;
+    //private String description;
+    //description removed because it was not in the csv file
 
     /**
-     * Sets the name and description of the vineyard
+     * Sets the name of the vineyard
      * @param name the name of the vineyard
-     * @param description brief description of the vineyard
      */
-    public Vineyard(String name, String description) {
+    public Vineyard(String name) {
         this.name = name;
-        this.description = description;
+    }
+
+    /**
+     * gets the name of the vineyard
+     */
+    public String getName() {
+        return name;
     }
 }

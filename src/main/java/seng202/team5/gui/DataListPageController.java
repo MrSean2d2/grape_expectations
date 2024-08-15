@@ -8,7 +8,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import seng202.team5.models.Wine;
+import seng202.team5.models.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataListPageController {
 
@@ -36,14 +39,19 @@ public class DataListPageController {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
+        //favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
 
         // Populate table with test data
 
+        WineVariety dummyWine = new WineVariety("dummyVariety", WineType.RED);
+        ArrayList<Region> subRegionsList = new ArrayList<>();
+        Vineyard dummyVineyard = new Vineyard("dummyVineyard");
+        ArrayList<Vineyard> vineyardList = new ArrayList<>();
+        Region dummyRegion = new Region("dummyRegion", subRegionsList, vineyardList);
         ObservableList<Wine> wines = FXCollections.observableArrayList(
-                new Wine("Chardonnay", "", 2020, 4, 15.99,  true),
-                new Wine("Merlot", "", 2018, 4, 10.49, false),
-                new Wine("Cabernet Sauvignon", "",  2021, 5, 20.99,true)
+                new Wine("Chardonnay", "", 2020, 4, 15.99, dummyWine, dummyRegion, dummyVineyard),
+                new Wine("Merlot", "", 2018, 4, 10.49, dummyWine, dummyRegion, dummyVineyard),
+                new Wine("Cabernet Sauvignon", "",  2021, 5, 20.99,dummyWine, dummyRegion, dummyVineyard)
         );
 
         // Add data to TableView

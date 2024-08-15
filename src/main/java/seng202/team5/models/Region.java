@@ -7,17 +7,19 @@ import java.util.ArrayList;
  */
 public class Region {
     private String name;
-    private String description;
+    //private String description;
+    // description removed because it is not included in the csv
     private ArrayList<Region> subRegions;
     private ArrayList<Vineyard> vineyards;
 
     /**
      * Constructor
      */
-    public Region(String name, String description, ArrayList<Region> subRegions) {
+    public Region(String name, ArrayList<Region> subRegions, ArrayList<Vineyard> vineyards) {
         this.name = name;
-        this.description = description;
+        //this.description = description;
         this.subRegions = subRegions;
+        this.vineyards = vineyards;
     }
 
     /**
@@ -33,13 +35,6 @@ public class Region {
      */
     public String getName(){return name;
     }
-    /**
-     * Get description of region
-     * @return String of region description
-     */
-    public String getDescription(){
-        return description;
-    }
 
     /**
      * Add new subregion to region
@@ -47,4 +42,15 @@ public class Region {
     public void addSubRegion(Region region){
         subRegions.add(region);
     }
+
+    /**
+     * get vineyards of region
+     */
+    public ArrayList getVineyards() { return vineyards; }
+
+    /**
+     * add vineyard to list of vineyards in region
+     * @param vineyard
+     */
+    public void addVineyard(Vineyard vineyard) { vineyards.add(vineyard); }
 }
