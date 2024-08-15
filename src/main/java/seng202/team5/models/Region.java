@@ -24,7 +24,7 @@ public class Region {
      * Get subregions of region
      * @return List of region's subregions
      */
-    ArrayList<Region> getSubRegions(){
+    public ArrayList<Region> getSubRegions(){
         return subRegions;
     }
     /**
