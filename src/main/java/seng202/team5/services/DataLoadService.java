@@ -14,10 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team5.models.*;
+import seng202.team5.models.Region;
+import seng202.team5.models.Vineyard;
+import seng202.team5.models.Wine;
+import seng202.team5.models.WineType;
+import seng202.team5.models.WineVariety;
 
 
 /**
@@ -39,7 +42,7 @@ public class DataLoadService {
         String description = csvEntry[2];
         int ratingValue = numFromTextOr0(csvEntry[4]);
         double price = numFromTextOr0(csvEntry[5]);
-        Region region = new Region(csvEntry[7], new ArrayList<>());
+        Region region = new Region(csvEntry[7], new ArrayList<>(), new ArrayList<>());
         String name = csvEntry[11];
         Pattern yearPattern = Pattern.compile("\\d{4}");
         Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);

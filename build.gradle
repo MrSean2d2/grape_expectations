@@ -37,7 +37,7 @@ dependencies {
     implementation "org.openjfx:javafx-web:${javafxVersion}"
 
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
-    implementation 'org.xerial:sqlite-jdbc:3.39.2.1'
+    implementation 'org.xerial:sqlite-jdbc:3.46.0.1'
 
     // https://mvnrepository.com/artifact/com.opencsv/opencsv
     implementation 'com.opencsv:opencsv:5.5.2'
