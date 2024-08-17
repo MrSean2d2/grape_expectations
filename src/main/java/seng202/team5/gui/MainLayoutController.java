@@ -82,12 +82,11 @@ public class MainLayoutController {
      * loads the detailed wine view page,
      * detailed view is accessed by double-clicking on a wine in
      * the wine table in view data page -
-     * WARNING!:
-     * currently not working because detailed view page does not have a pagecontroller
-     * so does not get called
+     * TODO: Make consistent with other loaders
      * @throws Exception
      */
     public void loadDetailedViewPage() throws Exception {
+        System.out.println("loading Detailed View page:");
         loadPage("/fxml/DetailedViewPage.fxml");
     }
 

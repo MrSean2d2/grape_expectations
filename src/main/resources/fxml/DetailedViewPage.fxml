@@ -33,9 +33,9 @@
             <Insets left="20.0" top="20.0" />
          </GridPane.margin>
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" text="Back" />
+            <Button mnemonicParsing="false" text="Back" />
             <Label text="Detailed Wine View: Wine" GridPane.columnIndex="1" />
-            <Button fx:id="favoriteToggleButton" mnemonicParsing="false" text="Favourite Toggle" GridPane.columnIndex="2" />
+            <Button mnemonicParsing="false" text="Favourite Toggle" GridPane.columnIndex="2" />
          </children>
       </GridPane>
       <GridPane prefWidth="619.0" GridPane.rowIndex="3">
@@ -76,11 +76,11 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Year: ----" />
-            <Label text="Province: ----" GridPane.columnIndex="1" />
-            <Label text="score: --" GridPane.columnIndex="2" />
-            <Label text="Price: $----" GridPane.rowIndex="1" />
-            <Label text="Variety: ----" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="yearLabel" text="Year: ----" />
+            <Label fx:id="provinceLabel" text="Province: ----" GridPane.columnIndex="1" />
+            <Label fx:id="ratingLabel" text="score: --" GridPane.columnIndex="2" />
+            <Label fx:id="priceLabel" text="Price: $----" GridPane.rowIndex="1" />
+            <Label fx:id="varietyLabel" text="Variety: ----" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <GridPane GridPane.rowIndex="2">
