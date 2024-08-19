@@ -1,12 +1,19 @@
 package seng202.team5.services;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import seng202.team5.models.*;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import seng202.team5.models.Region;
+import seng202.team5.models.Vineyard;
+import seng202.team5.models.Wine;
+import seng202.team5.models.WineType;
+import seng202.team5.models.WineVariety;
 
 /**
  * A class to handle data storage for wines, regions, vineyards, and varieties.
@@ -46,8 +53,11 @@ public class WineDataStoreService {
                 String vineyardName = vineyardResult.getString("NAME");
                 String varietyName = results.getString("VARIETY_NAME");
                 Wine wine = new Wine(name, description, year, rating, price,
+                        // TODO: Replace with a call to WineVarietyService
                         new WineVariety(varietyName, WineType.UNKNOWN),
+                        // TODO: Replace with a call to RegionService
                         new Region(regionName, new ArrayList<>(), new ArrayList<>()),
+                        // TODO: Replace with a call to VineyardService
                         new Vineyard(vineyardName));
                 wines.add(wine);
             }
@@ -55,5 +65,17 @@ public class WineDataStoreService {
             log.error(e);
         }
         return wines;
+    }
+
+    public void addWine(Wine wine) {
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbUrl)) {
+            PreparedStatement addWineStatement = conn.prepareStatement(
+                    "insert into wine(name, description, year, rating, price, region_name,"
+                            +
+                            "vineyard_id, variety_name) values (?, ?, ?, ?, ?, ?, ?, ?)");
+            addWineStatement.setString(1, wine.getName());
+        } catch (SQLException e) {
+            log.error(e);
+        }
     }
 }
