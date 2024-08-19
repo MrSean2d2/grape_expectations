@@ -23,6 +23,5 @@ public class AppEnvironment {
         List<Wine> listOfWines = dataService.processWinesFromCsv(filepath);
 
         wineService = new WineService(listOfWines);
-
     }
 }
