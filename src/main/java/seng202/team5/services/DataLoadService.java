@@ -14,12 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.gui.AppEnvironment;
 import seng202.team5.gui.MainWindow;
-import seng202.team5.models.*;
+import seng202.team5.models.Region;
+import seng202.team5.models.Vineyard;
+import seng202.team5.models.Wine;
+import seng202.team5.models.WineVariety;
 
 
 /**
@@ -30,7 +32,26 @@ import seng202.team5.models.*;
 public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
+    private String fileName;
+    private WineVarietyService wineVarietyService;
+    private RegionService regionService;
     public boolean externalDependencies = true;
+
+    /**
+     * DataLoadService constructor.
+     *
+     * @param fileName the name of the csv file to use
+     * @param wineVarietyService the instance of WineVarietyService which
+     *                           manages the state of WineVariety objects
+     * @param regionService the instance of RegionService which manages the state
+     *                      of Region objects
+     */
+    public DataLoadService(String fileName, WineVarietyService wineVarietyService,
+                           RegionService regionService) {
+        this.fileName = fileName;
+        this.wineVarietyService = wineVarietyService;
+        this.regionService = regionService;
+    }
 
     /**
      * Creates a wine object from a csv entry parsed by {@link DataLoadService#loadFile(String)}.
@@ -54,10 +75,8 @@ public class DataLoadService {
         String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
         String subRegionName = csvEntry[8] != null ? csvEntry[8] : "NoSubRegion";
 
-        Region region = new Region(regionName);
-        if (externalDependencies) {
-            region = AppEnvironment.regionService.getSubRegion(regionName, subRegionName);
-        }
+        Region region = regionService.getSubRegion(regionName, subRegionName);
+
 
         // Wine Name
         String name = csvEntry[11];
@@ -70,11 +89,7 @@ public class DataLoadService {
 
         // Wine Variety
         String varietyName = csvEntry[12];
-        WineVariety variety = new WineVariety(varietyName, WineType.UNKNOWN);
-
-        if (externalDependencies) {
-            variety = AppEnvironment.wineVarietyService.varietyFromString(varietyName);
-        }
+        WineVariety variety = wineVarietyService.varietyFromString(varietyName);
 
         // Winery
         String winery = csvEntry[13];
@@ -139,10 +154,9 @@ public class DataLoadService {
     /**
      * Reads a csv file and returns all valid wines present in a single list.
      *
-     * @param fileName the path of the csv file to read
      * @return a list of wines from the csv file
      */
-    public List<Wine> processWinesFromCsv(String fileName) {
+    public List<Wine> processWinesFromCsv() {
         List<String[]> csvResult = loadFile(fileName);
         List<Wine> wines = new ArrayList<>();
         for (String[] entry : csvResult) {
