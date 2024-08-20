@@ -26,6 +26,8 @@ repositories {
 
 
 dependencies {
+    implementation 'com.opencsv:opencsv:5.9'
+
     // https://mvnrepository.com/artifact/org.openjfx/javafx-controls
     implementation "org.openjfx:javafx-controls:${javafxVersion}"
 

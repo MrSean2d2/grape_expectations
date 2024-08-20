@@ -7,17 +7,31 @@ import java.util.ArrayList;
  */
 public class Region {
     private String name;
-    private String description;
     private ArrayList<Region> subRegions;
     private ArrayList<Vineyard> vineyards;
 
     /**
-     * Constructor.
+     * Default Constructor
+     *
+     * @param name The name of the region
      */
-    public Region(String name, String description, ArrayList<Region> subRegions) {
+    public Region(String name) {
         this.name = name;
-        this.description = description;
+        this.subRegions = new ArrayList<>();
+        this.vineyards = new ArrayList<>();
+    }
+
+    /**
+     * Constructor
+     *
+     * @param name The name of the region
+     * @param subRegions a list of subregions
+     * @param vineyards a list of vineyards
+     */
+    public Region(String name, ArrayList<Region> subRegions, ArrayList<Vineyard> vineyards) {
+        this.name = name;
         this.subRegions = subRegions;
+        this.vineyards = vineyards;
     }
 
     /**
@@ -25,26 +39,17 @@ public class Region {
      *
      * @return List of region's subregions
      */
-    ArrayList<Region> getSubRegions() {
+    public ArrayList<Region> getSubRegions() {
         return subRegions;
     }
+
     /**
      * Get name of region.
      *
      * @return String of region name
      */
-
     public String getName() {
         return name;
-    }
-    /**
-     * Get description of region.
-     *
-     * @return String of region description
-     */
-
-    public String getDescription() {
-        return description;
     }
 
     /**
@@ -52,5 +57,21 @@ public class Region {
      */
     public void addSubRegion(Region region) {
         subRegions.add(region);
+    }
+
+    /**
+     * Get vineyards of region.
+     */
+    public ArrayList<Vineyard> getVineyards() {
+        return vineyards;
+    }
+
+    /**
+     * Add vineyard to list of vineyards in region.
+     *
+     * @param vineyard the vineyard to add to the list
+     */
+    public void addVineyard(Vineyard vineyard) {
+        vineyards.add(vineyard);
     }
 }

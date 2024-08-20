@@ -1,15 +1,13 @@
 package seng202.team5.services;
 
-import seng202.team5.models.Wine;
-
 import java.util.List;
+import seng202.team5.models.Wine;
 
 /**
  * Service Class to manage wine actions.
  */
 public class WineService {
 
-    // private DataLoadService dataService;
     // private WineDataStoreService dataStorage;
 
     private List<Wine> wineList;
@@ -17,8 +15,8 @@ public class WineService {
     /**
      * Constructor.
      */
-    public WineService(List<Wine> wineList) {
-        this.wineList = wineList;
+    public WineService(DataLoadService dataLoadService) {
+        this.wineList = dataLoadService.processWinesFromCsv();
     }
 
 
