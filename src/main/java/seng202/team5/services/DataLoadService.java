@@ -16,8 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team5.gui.AppEnvironment;
-import seng202.team5.gui.MainWindow;
 import seng202.team5.models.Region;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
@@ -32,9 +30,9 @@ import seng202.team5.models.WineVariety;
 public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
-    private String fileName;
-    private WineVarietyService wineVarietyService;
-    private RegionService regionService;
+    private final String fileName;
+    private final WineVarietyService wineVarietyService;
+    private final RegionService regionService;
     public boolean externalDependencies = true;
 
     /**
@@ -121,18 +119,11 @@ public class DataLoadService {
         return num;
     }
 
-    private String textFromWine(Wine wine) {
-        //TODO: method stub
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
     /**
      * Reads the specified file and returns all the csv records as a list of String[]s.
      *
      * @param fileName the URI of the file to read
      * @return all csv records from the file as a list of String[]s
-     * @throws IOException if there is an error reading the file
-     * @throws CsvException if there is a csv validation error
      */
     public List<String[]> loadFile(String fileName) {
         List<String[]> result;
@@ -165,15 +156,5 @@ public class DataLoadService {
         }
         return wines;
 
-    }
-
-    public void overwriteWine(String fileName, Wine wine) {
-        //TODO: method stub
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    public void appendWine(String fileName, Wine wine) {
-        //TODO: method stub
-        throw new UnsupportedOperationException("Not implemented yet");
     }
 }

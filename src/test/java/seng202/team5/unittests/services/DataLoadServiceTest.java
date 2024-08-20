@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.models.Wine;
@@ -14,7 +12,6 @@ import seng202.team5.services.RegionService;
 import seng202.team5.services.WineVarietyService;
 
 public class DataLoadServiceTest {
-    private static final Logger log = LogManager.getLogger(DataLoadServiceTest.class);
     private DataLoadService dataLoadService;
     private String csvFilePath;
 
@@ -36,18 +33,18 @@ public class DataLoadServiceTest {
     }
 
     @Test
-    public void convertWineYear() {
-
-    }
-
-    @Test
     public void loadWinesTestFirst() {
         List<Wine> wines = dataLoadService.processWinesFromCsv();
-        assertEquals(16, wines.size());
         Wine wine = wines.getFirst();
         // Multiple asserts to check wine equality because Wine.equals() isn't implemented yet
         assertEquals("Nicosia 2013 Vulkà Bianco  (Etna)", wine.getName());
         assertEquals(2013, wine.getYear());
         assertEquals(87, wine.getRating());
+    }
+
+    @Test
+    public void loadWinesSizeTest() {
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        assertEquals(16, wines.size());
     }
 }
