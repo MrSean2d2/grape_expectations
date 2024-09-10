@@ -45,7 +45,7 @@ public class WineDataStoreService {
                 ResultSet vineyardResult = vineyardStatement.executeQuery();
                 String vineyardName = vineyardResult.getString("NAME");
                 String varietyName = results.getString("VARIETY_NAME");
-                Wine wine = new Wine(name, description, year, rating, price,
+                Wine wine = new Wine(name, description, year, rating, price, false,
                         new WineVariety(varietyName, WineType.UNKNOWN),
                         new Region(regionName, new ArrayList<>(), new ArrayList<>()),
                         new Vineyard(vineyardName));
