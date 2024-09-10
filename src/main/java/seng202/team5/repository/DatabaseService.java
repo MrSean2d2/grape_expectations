@@ -73,7 +73,7 @@ public class DatabaseService {
      * Initialise the database.
      */
     public void resetDb() {
-        try (InputStream in = getClass().getResourceAsStream("/sql/init_db.sql")) {
+        try (InputStream in = getClass().getResourceAsStream("/sql/init_database.sql")) {
             executeSql(in);
         } catch (NullPointerException | IOException e) {
             log.error(e);
