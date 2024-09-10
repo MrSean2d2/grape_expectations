@@ -50,7 +50,6 @@ public class WineDAO implements DaoInterface{
             return new ArrayList<>();
         }
 
-        return null;
     }
 
     @Override
