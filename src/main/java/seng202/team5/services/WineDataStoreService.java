@@ -34,6 +34,7 @@ public class WineDataStoreService {
                     "select name, region_name from vineyard where id = ?");
             ResultSet results = statement.executeQuery();
             while (results.next()) {
+                int id = results.getInt("ID");
                 String name = results.getString("NAME");
                 String description = results.getString("DESCRIPTION");
                 int year = results.getInt("YEAR");
@@ -45,7 +46,7 @@ public class WineDataStoreService {
                 ResultSet vineyardResult = vineyardStatement.executeQuery();
                 String vineyardName = vineyardResult.getString("NAME");
                 String varietyName = results.getString("VARIETY_NAME");
-                Wine wine = new Wine(name, description, year, rating, price, false, 
+                Wine wine = new Wine(id, name, description, year, rating, price,
                     new WineVariety(varietyName, WineType.UNKNOWN), 
                     new Region(regionName, new ArrayList<Region>(), new ArrayList<Vineyard>()),
                     new Vineyard(vineyardName));

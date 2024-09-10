@@ -3,11 +3,11 @@
 .root {
     -fx-background-color: #bbbbbb;
     -fx-text-fill: #000000;
-    -fx-font-family: "Space Mono";
+    -fx-font-family: "Radio Canada Big";
 }
 
 .label {
-    -fx-font-family: "Space Mono";
+    -fx-font-family: "Radio Canada Big";
 }
 
 

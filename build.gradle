@@ -28,6 +28,7 @@ repositories {
 dependencies {
     implementation 'com.opencsv:opencsv:5.9'
 
+
     // https://mvnrepository.com/artifact/org.openjfx/javafx-controls
     implementation "org.openjfx:javafx-controls:${javafxVersion}"
 
@@ -39,6 +40,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
     implementation 'org.xerial:sqlite-jdbc:3.46.0.1'
+
+    // https://mvnrepository.com/artifact/org.controlsfx/controlsfx
+    implementation 'org.controlsfx:controlsfx:11.2.1'
 
     // https://mvnrepository.com/artifact/com.opencsv/opencsv
     implementation 'com.opencsv:opencsv:5.5.2'

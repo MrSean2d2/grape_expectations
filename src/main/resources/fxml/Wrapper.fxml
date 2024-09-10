@@ -32,28 +32,31 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Button?>
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.MainLayoutController">
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="490.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.MainLayoutController">
   <children>
-      <ToolBar AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
-          <Button fx:id="homeButton" text="Home" onAction="#loadHomePage"/>
-          <Button fx:id="dataListButton" text="Data List" onAction="#loadDataListPage"/>
-          <Button fx:id="mapButton" text="Map" onAction="#loadMapPage"/>
-          <Button fx:id="accountButton" text="Account" onAction="#loadAccountPage"/>
+      <ToolBar AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <ImageView fitHeight="56.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../images/Logo.png" />
+            </image>
+         </ImageView>
+          <Button fx:id="homeButton" onAction="#loadHomePage" prefHeight="40.0" prefWidth="100.0" text="Home" />
+          <Button fx:id="dataListButton" onAction="#loadDataListPage" prefHeight="40.0" prefWidth="150.0" text="Data List" />
+          <Button fx:id="mapButton" onAction="#loadMapPage" prefHeight="40.0" prefWidth="100.0" text="Map" />
+          <Button fx:id="accountButton" onAction="#loadAccountPage" prefHeight="40.0" prefWidth="100.0" text="Account" />
       </ToolBar>
 
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
-        <StackPane fx:id="pageContainer" AnchorPane.topAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="10.0" />
+        <StackPane fx:id="pageContainer" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
       </children>
     </AnchorPane>
   </children>
