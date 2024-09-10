@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import seng202.team5.exceptions.InstanceAlreadyExistsException;
 
 /**
  * A singleton service to handle database connections. Based on DataBaseManager
@@ -53,6 +54,36 @@ public class DatabaseService {
         }
         return instance;
     }
+
+    /**
+     * WARNING Allows for setting specific database url (currently only needed
+     * for test databases, but may be useful in future) USE WITH CAUTION.
+     * This does not override the current singleton instance so must be the first call.
+     *
+     * @param url string url of database to load (this needs to be full url e.g.
+     *           "jdbc:sqlite:./src/...")
+     * @return current singleton instance
+     * @throws InstanceAlreadyExistsException if there is already a singleton instance
+     */
+    public static DatabaseService initialiseInstanceWithUrl(String url)
+            throws InstanceAlreadyExistsException {
+        if (instance == null) {
+            instance = new DatabaseService(url);
+        } else {
+            throw new InstanceAlreadyExistsException(
+                    "Database Manager instance already exists, cannot create with url: " + url);
+        }
+
+        return instance;
+    }
+
+    /**
+     *  WARNING Sets the current singleton instance to null.
+     */
+    public static void removeInstance() {
+        instance = null;
+    }
+
 
     /**
      * Connect to the database and return the connection object.

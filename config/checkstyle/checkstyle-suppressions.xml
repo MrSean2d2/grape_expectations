@@ -6,4 +6,8 @@
 
 <suppressions>
     <suppress checks="PackageName"/>
+    <suppress message="Missing a Javadoc comment"
+              files="./src/test/*"/>
+    <suppress checks="^*Javadoc*|AtclauseOrder|NonEmptyAtclauseDescription|RequireEmptyLineBeforeBlockTagGroup|WriteTag"
+              files="./src/test/*"/>
 </suppressions>
