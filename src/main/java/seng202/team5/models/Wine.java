@@ -82,6 +82,9 @@ public class Wine {
      * @param ratingValue rating value of wine
      * @param price current market price of wine
      * @param favourite favourite status of wine
+     * @param winevariety variety of the wine
+     * @param region the region the wine comes from
+     * @param vineYar the vineyard the wine comes from
      */
     public Wine(String name, String description, int year, int ratingValue, double price,
                 boolean favourite, WineVariety wineVariety, Region region, Vineyard vineYard) {
