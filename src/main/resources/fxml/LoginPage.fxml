@@ -36,7 +36,12 @@
           <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Username">
+            <Label focusTraversable="false" text="Username">
+               <GridPane.margin>
+                  <Insets left="10.0" right="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label focusTraversable="false" text="Password" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
@@ -46,32 +51,27 @@
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </TextField>
-            <Button fx:id="loginButton" maxWidth="1.7976931348623157E308" minWidth="200.0" mnemonicParsing="false" onAction="#attemptLogin" prefHeight="25.0" text="log in" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" />
-               </GridPane.margin>
-            </Button>
-            <Label text="Password" GridPane.rowIndex="2">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" />
-               </GridPane.margin>
-            </Label>
-            <Button fx:id="registerButton" maxWidth="1.7976931348623157E308" minWidth="200.0" mnemonicParsing="false" onAction="#attemptRegister" prefHeight="25.0" text="register" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" />
-               </GridPane.margin>
-            </Button>
-            <Label text="or" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
             <PasswordField fx:id="passwordField" promptText="Password" GridPane.columnSpan="3" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </PasswordField>
+            <Button fx:id="loginButton" maxWidth="1.7976931348623157E308" minWidth="200.0" mnemonicParsing="false" onAction="#attemptLogin" prefHeight="25.0" text="log in" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets left="10.0" right="10.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="registerButton" maxWidth="1.7976931348623157E308" minWidth="200.0" mnemonicParsing="false" onAction="#attemptRegister" prefHeight="25.0" text="register" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets left="10.0" right="10.0" />
+               </GridPane.margin>
+            </Button>
+            <Label focusTraversable="false" text="or" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.valignment="TOP">
          <children>
-            <Label contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Log In to Grape Expectations!">
+            <Label contentDisplay="CENTER" focusTraversable="false" maxWidth="1.7976931348623157E308" text="Log In to Grape Expectations!">
                <padding>
                   <Insets left="10.0" right="10.0" />
                </padding>
@@ -79,7 +79,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label text="Sign in to view, give ratings and add comments to your favourite wines!" wrapText="true">
+            <Label focusTraversable="false" text="Sign in to view, give ratings and add comments to your favourite wines!" wrapText="true">
                <padding>
                   <Insets left="10.0" right="10.0" top="10.0" />
                </padding>
