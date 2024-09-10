@@ -28,7 +28,7 @@ public class WineDataStoreServiceTest {
         List<Wine> wines = wineDataStoreService.getWines();
         Wine testWine = new Wine("Test Wine",
                 "Test Wine is a lovely fruity wine that tastes very nice",
-                2024, 99, 20,
+                2024, 99, 20, false,
                 new WineVariety("Pinot Noir", WineType.UNKNOWN),
                 new Region("Test Region", new ArrayList<>(), new ArrayList<>()),
                 new Vineyard("Test Vineyard"));
