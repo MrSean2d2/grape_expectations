@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Region;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-import seng202.team5.models.WineType;
 import seng202.team5.models.WineVariety;
 
 
@@ -31,6 +30,27 @@ import seng202.team5.models.WineVariety;
 public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
+    private final String fileName;
+    private final WineVarietyService wineVarietyService;
+    private final RegionService regionService;
+    public boolean externalDependencies = true;
+
+    /**
+     * DataLoadService constructor.
+     *
+     * @param fileName the name of the csv file to use
+     * @param wineVarietyService the instance of WineVarietyService which
+     *                           manages the state of WineVariety objects
+     * @param regionService the instance of RegionService which manages the state
+     *                      of Region objects
+     */
+    public DataLoadService(String fileName, WineVarietyService wineVarietyService,
+                           RegionService regionService) {
+        this.fileName = fileName;
+        this.wineVarietyService = wineVarietyService;
+        this.regionService = regionService;
+    }
+
     /**
      * Creates a wine object from a csv entry parsed by {@link DataLoadService#loadFile(String)}.
      *
@@ -39,23 +59,43 @@ public class DataLoadService {
      */
     private Wine wineFromText(String[] csvEntry) {
         //String country = csvEntry[1];
+
+        // Wine Description
         String description = csvEntry[2];
+
+        // Wine Rating
         int ratingValue = numFromTextOr0(csvEntry[4]);
+
+        // Wine Price
         double price = numFromTextOr0(csvEntry[5]);
-        Region region = new Region(csvEntry[7], new ArrayList<>(), new ArrayList<>());
+
+        // Wine Region
+        String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
+        String subRegionName = csvEntry[8] != null ? csvEntry[8] : "NoSubRegion";
+
+        Region region = regionService.getSubRegion(regionName, subRegionName);
+
+
+        // Wine Name
         String name = csvEntry[11];
+
+        // Wine Year
         Pattern yearPattern = Pattern.compile("\\d{4}");
         Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);
         boolean matchFound = yearMatcher.find();
-        int year = 0;
-        if (matchFound) {
-            year = numFromTextOr0(yearMatcher.group());
-        }
+        int year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
+
+        // Wine Variety
         String varietyName = csvEntry[12];
-        WineVariety variety = new WineVariety(varietyName, WineType.UNKNOWN);
+        WineVariety variety = wineVarietyService.varietyFromString(varietyName);
+
+        // Winery
         String winery = csvEntry[13];
         Vineyard vineyard = new Vineyard(winery);
-        return new Wine(name, description, year, ratingValue, price, variety, region, vineyard);
+
+        // Return the created Wine object
+        return new Wine(name, description, year, ratingValue, price, false,
+                variety, region, vineyard);
     }
 
     /**
@@ -80,18 +120,11 @@ public class DataLoadService {
         return num;
     }
 
-    private String textFromWine(Wine wine) {
-        //TODO: method stub
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
     /**
      * Reads the specified file and returns all the csv records as a list of String[]s.
      *
      * @param fileName the URI of the file to read
      * @return all csv records from the file as a list of String[]s
-     * @throws IOException if there is an error reading the file
-     * @throws CsvException if there is a csv validation error
      */
     public List<String[]> loadFile(String fileName) {
         List<String[]> result;
@@ -113,10 +146,9 @@ public class DataLoadService {
     /**
      * Reads a csv file and returns all valid wines present in a single list.
      *
-     * @param fileName the path of the csv file to read
      * @return a list of wines from the csv file
      */
-    public List<Wine> processWinesFromCsv(String fileName) {
+    public List<Wine> processWinesFromCsv() {
         List<String[]> csvResult = loadFile(fileName);
         List<Wine> wines = new ArrayList<>();
         for (String[] entry : csvResult) {
@@ -125,15 +157,5 @@ public class DataLoadService {
         }
         return wines;
 
-    }
-
-    public void overwriteWine(String fileName, Wine wine) {
-        //TODO: method stub
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    public void appendWine(String fileName, Wine wine) {
-        //TODO: method stub
-        throw new UnsupportedOperationException("Not implemented yet");
     }
 }
