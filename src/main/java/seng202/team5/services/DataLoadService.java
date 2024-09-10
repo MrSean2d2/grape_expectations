@@ -19,10 +19,7 @@ import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Region;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-import seng202.team5.models.WineType;
 import seng202.team5.models.WineVariety;
-import seng202.team5.services.WineVarietyService;
-import seng202.team5.services.RegionService;
 
 
 /**
