@@ -12,7 +12,7 @@ version = '1.0-SNAPSHOT'
 mainClassName = 'seng202.team5.App'
 
 def javaVersion = '21'
-def javafxVersion = '20.0.1'
+def javafxVersion = '21'
 def log4jVersion = '2.17.2'
 def cucumberVersion = "7.5.0"
 def junitVersion = "5.8.1"
@@ -23,6 +23,7 @@ targetCompatibility = "${javaVersion}"
 repositories {
     mavenCentral()
 }
+
 
 dependencies {
     implementation 'com.opencsv:opencsv:5.9'
@@ -41,6 +42,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.opencsv/opencsv
     implementation 'com.opencsv:opencsv:5.5.2'
+
+    // https://mvnrepository.com/artifact/com.gluonhq/maps
+    implementation 'com.gluonhq:maps:2.0.0-ea+6'
 
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
     implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
@@ -77,6 +81,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.mockito/mockito-core
     testImplementation 'org.mockito:mockito-core:5.4.0'
+
 }
 
 application {
