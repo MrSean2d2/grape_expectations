@@ -13,6 +13,9 @@ import java.io.IOException;
  * @author seng202 teaching team
  */
 public class MainWindow extends Application {
+    public static AppEnvironment appEnvironment; // we can change this later, not sure where to put it exactly
+
+    public MainWindow() { }
 
     /**
      * Opens the gui with the fxml content specified in resources/fxml/main.fxml
@@ -21,6 +24,8 @@ public class MainWindow extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        appEnvironment = new AppEnvironment();
+
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/Wrapper.fxml"));
         Parent root = baseLoader.load();
 
@@ -29,7 +34,7 @@ public class MainWindow extends Application {
 
         primaryStage.setTitle("Grape Expectations");
 
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 1200, 800);
 
         String styleSheetURL = "/fxml/style.css";
         scene.getStylesheets().add(styleSheetURL);
