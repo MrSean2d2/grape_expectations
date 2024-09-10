@@ -156,4 +156,5 @@ jacocoTestReport {
 
 checkstyle {
     toolVersion = "10.17.0"
+    configProperties = ["org.checkstyle.google.suppressionfilter.config" : "${rootProject.projectDir}/config/checkstyle/checkstyle-suppressions.xml"]
 }
