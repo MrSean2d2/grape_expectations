@@ -1,17 +1,16 @@
 package seng202.team5.repository;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Wine;
-import seng202.team5.models.WineVariety;
 import seng202.team5.services.WineVarietyService;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WineDAO implements DaoInterface{
+public class WineDAO implements DAOInterface<Wine> {
     private final DatabaseService databaseService;
     private final WineVarietyService wineVarietyService;
     private static final Logger log = LogManager.getLogger(WineDAO.class);
@@ -53,22 +52,26 @@ public class WineDAO implements DaoInterface{
     }
 
     @Override
-    public Object getById(int id) {
-        return null;
+    public Wine getOne(int id) {
+        throw new NotImplementedException();
+    }
+
+    public Wine getById(int id) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public int add(Object object) {
-        return 0;
+    public int add(Wine object) {
+        throw new NotImplementedException();
     }
 
     @Override
     public void delete(int id) {
-
+        throw new NotImplementedException();
     }
 
     @Override
-    public void update(Object object) {
-
+    public void update(Wine object) {
+        throw new NotImplementedException();
     }
 }

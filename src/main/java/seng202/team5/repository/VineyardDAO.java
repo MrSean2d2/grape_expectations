@@ -1,5 +1,6 @@
 package seng202.team5.repository;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Vineyard;
@@ -8,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VineyardDAO {
+public class VineyardDAO implements DAOInterface<Vineyard> {
     private static final Logger log = LogManager.getLogger(VineyardDAO.class);
     private final DatabaseService databaseManager;
 
@@ -16,6 +17,7 @@ public class VineyardDAO {
         databaseManager = DatabaseService.getInstance();
     }
 
+    @Override
     public List<Vineyard> getAll() {
         List<Vineyard> vineyards = new ArrayList<>();
         String sql = "SELECT * FROM VINEYARD";
@@ -31,9 +33,9 @@ public class VineyardDAO {
             log.error(sqlException);
             return new ArrayList<>();
         }
-
     }
 
+    @Override
     public Vineyard getOne(int id) {
         Vineyard vineyard = null;
         String sql = "SELECT * FROM vineyard WHERE id=?";
@@ -52,7 +54,7 @@ public class VineyardDAO {
             return null;
         }
     }
-
+    @Override
     public int add (Vineyard toAdd){
         String sql = "INSERT INTO vineyard (name) values (?);";
         try (Connection conn = databaseManager.connect();
@@ -72,7 +74,13 @@ public class VineyardDAO {
         }
     }
 
-    public void update(Vineyard toUpdate) {
+    @Override
+    public void delete(int id) {
+        throw new NotImplementedException();
+    }
 
+    @Override
+    public void update(Vineyard toUpdate) {
+        throw new NotImplementedException();
     }
 }

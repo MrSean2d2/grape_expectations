@@ -87,8 +87,7 @@ public class Wine {
      * @param region the region the wine comes from
      * @param vineYar the vineyard the wine comes from
      */
-    public Wine(int id, String name, String description, int year, int ratingValue, double price,
-                WineVariety wineVariety, Region region, Vineyard vineYard) {
+    public Wine(int id, String name, String description, int year, int ratingValue, double price, WineVariety wineVariety, Region region, Vineyard vineYard) {
         this.id = id;
         this.name = name;
         this.description = description;
