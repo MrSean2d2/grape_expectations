@@ -6,6 +6,7 @@ package seng202.team5.models;
  * @author Martyn Gascoigne
  */
 public class Wine {
+    private int id;
     private String name = null;
     private String description = null;
     private int year = 0;
@@ -83,15 +84,15 @@ public class Wine {
      * @param price current market price of wine
      * @param favourite favourite status of wine
      */
-    public Wine(String name, String description, int year, int ratingValue, double price,
-                boolean favourite, WineVariety wineVariety, Region region, Vineyard vineYard) {
+    public Wine(int id, String name, String description, int year, int ratingValue, double price,
+                WineVariety wineVariety, Region region, Vineyard vineYard) {
+        this.id = id;
         this.name = name;
         this.description = description;
-
         this.year = year;
         this.ratingValue = ratingValue;
         this.price = price;
-        this.favourite = favourite;
+       // this.favourite = favourite;
         this.wineVariety = wineVariety;
         this.region = region;
         this.vineyard = vineYard;
