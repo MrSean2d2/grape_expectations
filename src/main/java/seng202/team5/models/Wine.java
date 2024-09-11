@@ -63,6 +63,32 @@ public class Wine {
     }
 
     /**
+     * Gets the wine id
+     *
+     * @return id
+     */
+    public int getId() {return id;}
+
+    /**
+     * Gets the wine description
+     *
+     * @return description
+     */
+    public String getDescription(){return description;}
+    /**
+     * Gets the wine vineyard
+     *
+     * @return vineyard object
+     */
+    public Vineyard getVineyard(){return vineyard;}
+    /**
+     * Gets the wine variety
+     *
+     * @return wine variety
+     */
+    public WineVariety getWineVariety(){return wineVariety;}
+
+    /**
      * Constructor for creating a wine object with a name and description.
      *
      * @param name name of wine

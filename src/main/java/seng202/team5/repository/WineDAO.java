@@ -93,8 +93,31 @@ public class WineDAO implements DAOInterface<Wine> {
     }
 
     @Override
-    public int add(Wine object) {
-        throw new NotImplementedException();
+    public int add(Wine toAdd) {
+        String sql = "INSERT INTO WINE(id, name, description, year, rating, price, vineyard, variety) values (?,?,?,?,?,?,?,?);";
+        try (Connection conn = databaseService.connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, toAdd.getId());
+            ps.setString(2, toAdd.getName());
+            ps.setString(3, toAdd.getDescription());
+            ps.setInt(4, toAdd.getYear());
+            ps.setDouble(5,toAdd.getRating());
+            ps.setDouble(4, toAdd.getPrice());
+            ps.setObject(5, toAdd.getVineyard());
+            ps.setObject(6, toAdd.getWineVariety());
+
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            int insertID = -1;
+            if (rs.next()) {
+                insertID = rs.getInt(1);
+            }
+            return insertID;
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return -1;
+        }
+
     }
 
     @Override
