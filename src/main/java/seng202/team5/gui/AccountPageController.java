@@ -11,7 +11,8 @@ import seng202.team5.services.UserService;
  * Controller for the account page
  * @author Martyn Gascoigne
  */
-public class AccountPageController {
+public class AccountPageController extends PageController {
+
     @FXML
     private Button loginButton;
 
@@ -47,6 +48,9 @@ public class AccountPageController {
             userManager.setCurrentUser(user);
             usernameField.setText("");
             passwordField.setText("");
+
+            // Go to the homepage
+            swapPage("/fxml/newHomePage.fxml");
         }
     }
 
@@ -71,6 +75,9 @@ public class AccountPageController {
             userManager.setCurrentUser(user);
             usernameField.setText("");
             passwordField.setText("");
+
+            // Go to the homepage
+            swapPage("/fxml/newHomePage.fxml");
         } else {
             usernameField.setStyle("-fx-text-box-border: red");
             passwordField.setStyle("-fx-text-box-border: red");

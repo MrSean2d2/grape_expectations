@@ -25,11 +25,12 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         appEnvironment = new AppEnvironment();
+        System.setProperty("prism.lcdtext", "false");
 
-        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/Wrapper.fxml"));
+        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/Header.fxml"));
         Parent root = baseLoader.load();
 
-        MainLayoutController baseController = baseLoader.getController();
+        HeaderController baseController = baseLoader.getController();
         baseController.init(primaryStage);
 
         primaryStage.setTitle("Grape Expectations");

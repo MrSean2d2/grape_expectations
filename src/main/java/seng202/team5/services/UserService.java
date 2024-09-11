@@ -18,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
+import java.util.Random;
 
 public class UserService {
     private static final Logger log = LogManager.getLogger(UserService.class);
@@ -82,7 +83,11 @@ public class UserService {
             if (!userDAO.userIsUnique(username))
                 return null;
             int userCount = (userDAO.getAll()).size();
-            User user = new User(userCount, username, hashedPassword, "user");
+            Random rand = new Random();
+
+            int iconNum = rand.nextInt(0, 5); // Generate a new (random) icon number
+            User user = new User(userCount, username, hashedPassword, "user", iconNum);
+
             userDAO.add(user);
             return user;
         } catch (DuplicateEntryException | NoSuchAlgorithmException | InvalidKeySpecException e) {

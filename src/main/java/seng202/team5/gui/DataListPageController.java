@@ -11,7 +11,7 @@ import seng202.team5.models.Wine;
 /**
  * Controller for the Data List Page.
  */
-public class DataListPageController {
+public class DataListPageController extends PageController {
 
     @FXML
     private TableView<Wine> wineTable;

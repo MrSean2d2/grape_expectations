@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS USER (
     id INTEGER PRIMARY KEY,
     username TEXT UNIQUE,
     password TEXT,
-    role TEXT
+    role TEXT,
+    icon INTEGER
 );
 --SPLIT
 DROP TABLE IF EXISTS DRINKS;
