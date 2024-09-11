@@ -59,6 +59,10 @@ public class DataLoadService {
      */
     private Wine wineFromText(String[] csvEntry) {
         //String country = csvEntry[1];
+        /* ID from csv file. Not sure if this is how we should do it because the
+        ID for wine in the db should be an alias for sqlite's ROW_ID.
+         */
+        int id = Integer.parseInt(csvEntry[0]);
 
         // Wine Description
         String description = csvEntry[2];
@@ -94,7 +98,7 @@ public class DataLoadService {
         Vineyard vineyard = new Vineyard(winery);
 
         // Return the created Wine object
-        return new Wine(name, description, year, ratingValue, price, false,
+        return new Wine(id, name, description, year, ratingValue, price,
                 variety, region, vineyard);
     }
 

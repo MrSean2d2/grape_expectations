@@ -1,42 +1,48 @@
 package seng202.team5.services;
 
-import seng202.team5.models.Region;
-
 import java.util.ArrayList;
 import java.util.List;
+import seng202.team5.models.Region;
 
 /**
- * Manager class for Regions
+ * Manager class for Regions.
+ *
  * @author mga138
  */
 public class RegionService {
     private List<Region> regionList;
 
     /**
-     * Constructor for RegionService
+     * Constructor for RegionService.
      */
     public RegionService() {
         regionList = new ArrayList<>();
     }
 
     /**
-     * Getter for region list
+     * Getter for region list.
+     *
      * @return List of currently available regions
      */
-    public List<Region> getRegionList() { return regionList; }
+    public List<Region> getRegionList() {
+        return regionList;
+    }
 
     /**
-     * Check if a region exists currently in the array list
-     * @param checkList the list to search through
+     * Check if a region exists currently in the array list.
+     *
+     * @param checkList  the list to search through
      * @param regionName the name of the region to search for
      * @return Region object if found, null otherwise
      */
     public Region regionExistsList(List<Region> checkList, String regionName) {
-        return checkList.stream().filter(region -> regionName.equals(region.getName())).findFirst().orElse(null);
+        return checkList.stream().filter(region -> regionName.equals(region.getName())).findFirst()
+                .orElse(null);
     }
 
     /**
-     * Check if a region exists currently in the array list
+     * Check if a region exists currently in the array list.
+     *
      * @param regionName the name of the region to search for
      * @return Region object if found, null otherwise
      */
@@ -45,7 +51,8 @@ public class RegionService {
     }
 
     /**
-     * Return a region if it currently exists, otherwise create a new region and return it
+     * Return a region if it currently exists, otherwise create a new region and return it.
+     *
      * @param regionName the name of the region to search for
      * @return Found Region object
      */
@@ -62,8 +69,9 @@ public class RegionService {
     }
 
     /**
-     * Return a subregion if it currently exists, otherwise create a new one and return it
-     * @param regionName the name of the region to search for
+     * Return a subregion if it currently exists, otherwise create a new one and return it.
+     *
+     * @param regionName    the name of the region to search for
      * @param subRegionName the name of the subregion to search for
      * @return Return the found / created subregion
      */
