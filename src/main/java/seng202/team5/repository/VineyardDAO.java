@@ -11,17 +11,17 @@ import java.util.List;
 
 public class VineyardDAO implements DAOInterface<Vineyard> {
     private static final Logger log = LogManager.getLogger(VineyardDAO.class);
-    private final DatabaseService databaseManager;
+    private final DatabaseService databaseService;
 
     public VineyardDAO(){
-        databaseManager = DatabaseService.getInstance();
+        databaseService = DatabaseService.getInstance();
     }
 
     @Override
     public List<Vineyard> getAll() {
         List<Vineyard> vineyards = new ArrayList<>();
         String sql = "SELECT * FROM VINEYARD";
-        try (Connection conn = databaseManager.connect();
+        try (Connection conn = databaseService.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
@@ -39,7 +39,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
     public Vineyard getOne(int id) {
         Vineyard vineyard = null;
         String sql = "SELECT * FROM vineyard WHERE id=?";
-        try (Connection conn = databaseManager.connect();
+        try (Connection conn = databaseService.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -57,7 +57,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
     @Override
     public int add (Vineyard toAdd){
         String sql = "INSERT INTO vineyard (name) values (?);";
-        try (Connection conn = databaseManager.connect();
+        try (Connection conn = databaseService.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, toAdd.getName());
 
@@ -76,11 +76,25 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
 
     @Override
     public void delete(int id) {
-        throw new NotImplementedException();
+        String sql = "DELETE FROM vineyard WHERE name=?";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
     }
 
     @Override
     public void update(Vineyard toUpdate) {
-        throw new NotImplementedException();
+        String sql = "UPDATE vineyard SET name = ? WHERE name=?";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, toUpdate.getName());
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
     }
 }
