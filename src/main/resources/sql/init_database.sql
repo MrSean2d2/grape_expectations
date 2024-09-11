@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS WINE (
     name TEXT UNIQUE,
     year INTEGER,
     variety TEXT,
-    rating NUMERIC,
+    rating INTEGER,
     price NUMERIC,
     colour TEXT,
     vineyard TEXT REFERENCES VINEYARD(name),
