@@ -15,12 +15,28 @@ import seng202.team5.models.Wine;
 import seng202.team5.services.RegionService;
 import seng202.team5.services.WineVarietyService;
 
+/**
+ * Wine Data Access Object class. This class implements DAOInterface and handles
+ * CRUD operations for Wine objects.
+ *
+ * @author Caitlin Tam
+ * @author Sean Reitsma
+ */
 public class WineDAO implements DAOInterface<Wine> {
     private final DatabaseService databaseService;
     private final WineVarietyService wineVarietyService;
     private final RegionService regionService;
     private static final Logger log = LogManager.getLogger(WineDAO.class);
 
+    /**
+     * WineDAO constructor. Creates a WineDAO object and initialises it with
+     * services needed for handling WineVariety and Region objects.
+     *
+     * @param wineVarietyService the instance of {@link WineVarietyService}
+     *                           which manages currently active WineVariety's
+     * @param regionService the instance of {@link RegionService}
+     *                      which manages currently active Region's
+     */
     public WineDAO(WineVarietyService wineVarietyService, RegionService regionService) {
         this.regionService = regionService;
         databaseService = DatabaseService.getInstance();
@@ -32,7 +48,9 @@ public class WineDAO implements DAOInterface<Wine> {
     public List<Wine> getAll() {
         List<Wine> wines = new ArrayList<>();
         String sql =
-                "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, wine.variety, wine.price, vineyard.name, vineyard.region FROM WINE, VINEYARD WHERE vineyard.name = wine.vineyard ";
+                "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                        + "wine.variety, wine.price, vineyard.name, vineyard.region "
+                        + "FROM WINE, VINEYARD WHERE vineyard.name = wine.vineyard ";
         try (Connection conn = databaseService.connect();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
@@ -62,7 +80,9 @@ public class WineDAO implements DAOInterface<Wine> {
     @Override
     public Wine getOne(int id) {
         Wine wine = null;
-        String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, wine.variety, wine.price, vineyard.name, vineyard.region FROM WINE, VINEYARD WHERE (id=?, wine.vineyard=wine.name)";
+        String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating,"
+                + " wine.variety, wine.price, vineyard.name AS vineyardName, vineyard.region "
+                + "FROM WINE JOIN VINEYARD ON WINE.vineyard = VINEYARD.name WHERE wine.id=?";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -76,8 +96,8 @@ public class WineDAO implements DAOInterface<Wine> {
                             rs.getInt("rating"),
                             rs.getDouble("price"),
                             wineVarietyService.varietyFromString(rs.getString("variety")),
-                            regionService.getRegion(rs.getString("vineyard.region")),
-                            new Vineyard(rs.getString("vineyard.name"))
+                            regionService.getRegion(rs.getString("region")),
+                            new Vineyard(rs.getString("vineyardName"))
                     );
                 }
                 return wine;
@@ -88,20 +108,18 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
-    public Wine getById(int id) {
-        throw new NotImplementedException();
-    }
-
     @Override
     public int add(Wine toAdd) {
-        String sql = "INSERT INTO WINE(id, name, description, year, rating, price, vineyard, variety) values (?,?,?,?,?,?,?,?);";
+        String sql = "INSERT INTO WINE(id, name, description, year, rating, "
+                + "price, vineyard, variety) "
+                + "values (?,?,?,?,?,?,?,?);";
         try (Connection conn = databaseService.connect();
-            PreparedStatement ps = conn.prepareStatement(sql)){
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, toAdd.getId());
             ps.setString(2, toAdd.getName());
             ps.setString(3, toAdd.getDescription());
             ps.setInt(4, toAdd.getYear());
-            ps.setDouble(5,toAdd.getRating());
+            ps.setDouble(5, toAdd.getRating());
             ps.setDouble(4, toAdd.getPrice());
             ps.setObject(5, toAdd.getVineyard());
             ps.setObject(6, toAdd.getWineVariety());
