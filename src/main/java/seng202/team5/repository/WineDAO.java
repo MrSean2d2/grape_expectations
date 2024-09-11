@@ -110,29 +110,34 @@ public class WineDAO implements DAOInterface<Wine> {
 
     @Override
     public int add(Wine toAdd) {
-        String sql = "INSERT INTO WINE(id, name, description, year, rating, "
-                + "price, vineyard, variety) "
-                + "values (?,?,?,?,?,?,?,?);";
+        String sqlRegion = "INSERT INTO VINEYARD(name, region) values (?,?);";
+        String sqlWine = "INSERT INTO WINE(id, name, description, year, rating, price, vineyard, variety) values (?,?,?,?,?,?,?,?);";
         try (Connection conn = databaseService.connect();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, toAdd.getId());
-            ps.setString(2, toAdd.getName());
-            ps.setString(3, toAdd.getDescription());
-            ps.setInt(4, toAdd.getYear());
-            ps.setDouble(5, toAdd.getRating());
-            ps.setDouble(4, toAdd.getPrice());
-            ps.setObject(5, toAdd.getVineyard());
-            ps.setObject(6, toAdd.getWineVariety());
+                PreparedStatement psRegion = conn.prepareStatement(sqlRegion);
+                PreparedStatement psWine = conn.prepareStatement(sqlWine);){
+            psWine.setInt(1, toAdd.getId());
+            psWine.setString(2, toAdd.getName());
+            psWine.setString(3, toAdd.getDescription());
+            psWine.setInt(4, toAdd.getYear());
+            psWine.setDouble(5, toAdd.getRating());
+            psWine.setDouble(6, toAdd.getPrice());
+            psWine.setObject(7, toAdd.getVineyard().getName());
+            psWine.setObject(8, toAdd.getWineVariety().getName());
 
-            ps.executeUpdate();
-            ResultSet rs = ps.getGeneratedKeys();
+            psRegion.setString(1, toAdd.getVineyard().getName());
+            psRegion.setString(2, toAdd.getRegion().getName());
+
+            psWine.executeUpdate();
+            psRegion.executeUpdate();
+            ResultSet rs = psWine.getGeneratedKeys();
+
             int insertID = -1;
             if (rs.next()) {
                 insertID = rs.getInt(1);
             }
             return insertID;
         } catch (SQLException sqlException) {
-            log.error(sqlException);
+            log.error("Error adding wine: ", sqlException);
             return -1;
         }
 

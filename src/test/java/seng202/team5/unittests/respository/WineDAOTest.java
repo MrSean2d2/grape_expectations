@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
-import seng202.team5.models.Wine;
+import seng202.team5.models.*;
 import seng202.team5.repository.DatabaseService;
 import seng202.team5.repository.WineDAO;
 import seng202.team5.services.RegionService;
@@ -63,5 +63,25 @@ public class WineDAOTest {
         assertEquals(99, wine.getRating());
         assertEquals("Test Vineyard", wine.getVineyard().getName());
         assertEquals("Pinot Noir", wine.getWineVariety().getName());
+    }
+    @Test
+    public void testAdd() {
+        Region testRegion = new Region("testRegion");
+        Vineyard testVineyard = new Vineyard("testVineyard");
+        WineVariety testWineVariety = new WineVariety("testVariety", WineType.RED);
+        testRegion.addVineyard(testVineyard);
+
+        Wine testWine = new Wine(0,"testWine", "tasty",2023,85,15.99,testWineVariety, testRegion, testVineyard);
+
+        wineDAO.add(testWine);
+        Wine retrievedWine = wineDAO.getOne(0);
+
+        assertNotNull(retrievedWine);
+        assertEquals("testWine", retrievedWine.getName());
+        assertEquals("tasty", retrievedWine.getDescription());
+        assertEquals(2023, retrievedWine.getYear());
+        assertEquals(85, retrievedWine.getRating());
+        assertEquals("testVineyard", retrievedWine.getVineyard().getName());
+        assertEquals("testVariety", retrievedWine.getWineVariety().getName());
     }
 }

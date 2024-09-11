@@ -14,7 +14,7 @@ public class Wine {
     private double price = 0.0;
     private boolean favourite = false;
     private WineVariety wineVariety;
-    private Region region;
+    public Region region;
     private Vineyard vineyard;
 
     /**
@@ -87,6 +87,12 @@ public class Wine {
      * @return wine variety
      */
     public WineVariety getWineVariety(){return wineVariety;}
+    /**
+     * Gets the wine region
+     *
+     * @return wine region
+     */
+    public Region getRegion(){return region;}
 
     /**
      * Constructor for creating a wine object with a name and description.
