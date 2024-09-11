@@ -22,7 +22,7 @@ public class UserDAO implements DAOInterface<User> {
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT * FROM user";
         try(Connection conn = databaseService.connect();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)) {
@@ -54,7 +54,7 @@ public class UserDAO implements DAOInterface<User> {
      * @throws NotFoundException no user found with that username
      */
     public User getFromUserName(String username) throws NotFoundException {
-        String sql = "SELECT * FROM users WHERE username=?";
+        String sql = "SELECT * FROM user WHERE username=?";
         try(Connection conn = databaseService.connect();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
@@ -69,13 +69,33 @@ public class UserDAO implements DAOInterface<User> {
     }
 
     /**
+     * Checks if a username is unique
+     * @param username username to search for
+     * @return Boolean - true if user is unique, false if not.
+     */
+    public boolean userIsUnique(String username) {
+        String sql = "SELECT * FROM user WHERE username=?";
+        try(Connection conn = databaseService.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                return false;
+            }
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
+        return true;
+    }
+
+    /**
      * Adds an individual user to database
      * @param toAdd user to add
      * @return true if no error, false if sql error
      */
     @Override
     public int add(User toAdd) throws DuplicateEntryException {
-        String sql = "INSERT INTO users (id, username, password, role) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO user (id, username, password, role) VALUES (?, ?, ?, ?)";
         try(Connection conn = databaseService.connect();
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setInt(1, toAdd.getId());
