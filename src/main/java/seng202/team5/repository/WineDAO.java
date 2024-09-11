@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.services.RegionService;
@@ -93,7 +94,7 @@ public class WineDAO implements DAOInterface<Wine> {
     }
 
     @Override
-    public int add(Wine toAdd) {
+    public int add( Wine toAdd) {
         String sql = "INSERT INTO WINE(id, name, description, year, rating, price, vineyard, variety) values (?,?,?,?,?,?,?,?);";
         try (Connection conn = databaseService.connect();
             PreparedStatement ps = conn.prepareStatement(sql)){
@@ -122,11 +123,18 @@ public class WineDAO implements DAOInterface<Wine> {
 
     @Override
     public void delete(int id) {
-        throw new NotImplementedException();
+        String sql = "DELETE FROM WINE WHERE id=?";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
     }
 
     @Override
-    public void update(Wine object) {
+    public void update(Wine toUpdate) {
         throw new NotImplementedException();
     }
 }
