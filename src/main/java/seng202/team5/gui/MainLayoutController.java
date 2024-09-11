@@ -95,7 +95,7 @@ public class MainLayoutController {
     /**
      * Load a page with a path given as an argument
      *
-     * @param String path to fxml file
+     * @param fxml path to fxml file
      * @throws Exception
      */
     private void loadPage(String fxml) throws Exception {
