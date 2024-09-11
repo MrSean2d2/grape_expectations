@@ -75,19 +75,20 @@ public class Wine {
 
     /**
      * Constructor for creating a wine object with a name,
-     * description, year, rating, price and favourite status
+     * description, year, rating, price and favourite status.
      *
+     * @param id the wine's id
      * @param name name of wine
      * @param description description of wine
      * @param year year of wine
      * @param ratingValue rating value of wine
      * @param price current market price of wine
-     * @param favourite favourite status of wine
-     * @param winevariety variety of the wine
+     * @param wineVariety variety of the wine
      * @param region the region the wine comes from
-     * @param vineYar the vineyard the wine comes from
+     * @param vineYard the vineyard the wine comes from
      */
-    public Wine(int id, String name, String description, int year, int ratingValue, double price, WineVariety wineVariety, Region region, Vineyard vineYard) {
+    public Wine(int id, String name, String description, int year, int ratingValue, double price,
+                WineVariety wineVariety, Region region, Vineyard vineYard) {
         this.id = id;
         this.name = name;
         this.description = description;
