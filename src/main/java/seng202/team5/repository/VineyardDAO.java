@@ -20,7 +20,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
     @Override
     public List<Vineyard> getAll() {
         List<Vineyard> vineyards = new ArrayList<>();
-        String sql = "SELECT * FROM VINEYARD";
+        String sql = "SELECT * FROM vineyard";
         try (Connection conn = databaseService.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -76,7 +76,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
 
     @Override
     public void delete(int id) {
-        String sql = "DELETE FROM vineyard WHERE name=?";
+        String sql = "DELETE FROM vineyard WHERE id=?";
         try (Connection conn = databaseService.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -88,13 +88,6 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
 
     @Override
     public void update(Vineyard toUpdate) {
-        String sql = "UPDATE vineyard SET name = ? WHERE name=?";
-        try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, toUpdate.getName());
-            ps.executeUpdate();
-        } catch (SQLException sqlException) {
-            log.error(sqlException);
-        }
+        throw new NotImplementedException();
     }
 }
