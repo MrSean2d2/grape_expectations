@@ -94,7 +94,7 @@ public class DataLoadService {
         Vineyard vineyard = new Vineyard(winery);
 
         // Return the created Wine object
-        return new Wine(name, description, year, ratingValue, price, false,
+        return new Wine(0, name, description, year, ratingValue, price,
                 variety, region, vineyard);
     }
 
