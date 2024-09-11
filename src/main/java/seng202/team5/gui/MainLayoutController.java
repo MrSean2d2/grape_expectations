@@ -1,11 +1,16 @@
 package seng202.team5.gui;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import seng202.team5.services.UserService;
 
 
 /**
@@ -95,7 +100,7 @@ public class MainLayoutController {
     /**
      * Load a page with a path given as an argument
      *
-     * @param String path to fxml file
+     * @param fxml path to fxml file
      * @throws Exception
      */
     private void loadPage(String fxml) throws Exception {
@@ -117,5 +122,14 @@ public class MainLayoutController {
      */
     public void init(Stage stage) throws Exception {
         loadHomePage();
+
+
+        accountButton.textProperty().bind(
+                Bindings.createStringBinding(() ->
+                                UserService.getInstance().getCurrentUser() != null ?
+                                        "User: " + UserService.getInstance().getCurrentUser().getUsername() : "No user logged in",
+                        UserService.getInstance().getUserProperty()
+                )
+        );
     }
 }

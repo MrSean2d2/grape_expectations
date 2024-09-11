@@ -38,6 +38,16 @@ public class AccountPageController {
     @FXML
     public void attemptLogin() {
         String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        UserService userManager = UserService.getInstance();
+        User user = userManager.signinUser(username, password);
+
+        if (user != null) {
+            userManager.setCurrentUser(user);
+            usernameField.setText("");
+            passwordField.setText("");
+        }
     }
 
     /**
@@ -48,17 +58,17 @@ public class AccountPageController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        if (username.length() < 1) {
+        if (username.isEmpty()) {
             usernameField.setStyle("-fx-text-box-border: red");
             passwordField.setStyle("-fx-text-box-border: red");
             return;
         }
 
-        UserService userManager = new UserService();
+        UserService userManager = UserService.getInstance();
         User user = userManager.registerUser(username, password);
 
         if (user != null) {
-            //switchToMain(user);
+            userManager.setCurrentUser(user);
             usernameField.setText("");
             passwordField.setText("");
         } else {

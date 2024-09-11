@@ -1,9 +1,15 @@
 package seng202.team5.services;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
+import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.User;
+import seng202.team5.repository.DatabaseService;
 import seng202.team5.repository.UserDAO;
 
 import javax.crypto.SecretKeyFactory;
@@ -23,6 +29,9 @@ public class UserService {
 
     // DAO
     private final UserDAO userDAO;
+    private static UserService instance;
+
+    private static final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);
 
     /**
      * Constructor
@@ -31,10 +40,39 @@ public class UserService {
         this.userDAO = new UserDAO();
     }
 
+    /**
+     * Singleton method to get the current instance if it exists. Otherwise,
+     * create one.
+     *
+     * @return the singleton instance of {@link UserService}
+     */
+    public static UserService getInstance() {
+        if (instance == null) {
+            instance = new UserService();
+        }
+        return instance;
+    }
+
+    public ObjectProperty<User> getUserProperty() {
+        return currentUser;
+    }
 
     /**
-     * Generate a salt for the hashed password
-     * @return bytearray for the salt
+     * Set the current user to the passed in user
+     *
+     */
+    public void setCurrentUser(User user) {
+        currentUser.set(user);
+    }
+
+    public User getCurrentUser() {
+        return currentUser.get();
+    }
+
+
+    /**
+     * Register a user if possible
+     * @return user if they register
      */
     public User registerUser(String username, String password) {
         try {
@@ -51,6 +89,33 @@ public class UserService {
             log.error(e);
             return null;
         }
+    }
+
+    /**
+     * Sign in to account
+     * @return user if they sign in
+     */
+    public User signinUser(String username, String password) {
+        // Get password from database if user exists
+        try {
+            User userAccount = userDAO.getFromUserName(username);
+            String hashPassword = userAccount.getPassword();
+
+            // Check if user's password matches
+            if(verifyPassword(password, hashPassword)) {
+                return userAccount;
+            }
+        } catch (NotFoundException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+            log.error(e);
+        }
+        return null;
+    }
+
+    /**
+     * Sign out of account
+     */
+    public void signOut() {
+        currentUser.set(null);
     }
 
     /**
