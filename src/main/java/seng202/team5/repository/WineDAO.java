@@ -27,6 +27,7 @@ public class WineDAO implements DAOInterface<Wine> {
     private final WineVarietyService wineVarietyService;
     private final RegionService regionService;
     private static final Logger log = LogManager.getLogger(WineDAO.class);
+    private final VineyardDAO vineyardDAO;
 
     /**
      * WineDAO constructor. Creates a WineDAO object and initialises it with
@@ -37,10 +38,11 @@ public class WineDAO implements DAOInterface<Wine> {
      * @param regionService the instance of {@link RegionService}
      *                      which manages currently active Region's
      */
-    public WineDAO(WineVarietyService wineVarietyService, RegionService regionService) {
+    public WineDAO(WineVarietyService wineVarietyService, RegionService regionService, VineyardDAO vineyardDAO) {
         this.regionService = regionService;
         databaseService = DatabaseService.getInstance();
         this.wineVarietyService = wineVarietyService;
+        this.vineyardDAO = vineyardDAO;
 
     }
 
@@ -176,7 +178,15 @@ public class WineDAO implements DAOInterface<Wine> {
 
     @Override
     public void delete(int id) {
-        throw new NotImplementedException();
+        vineyardDAO.delete(id);
+        String sql = "DELETE FROM WINE WHERE id=?";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
     }
 
     @Override
