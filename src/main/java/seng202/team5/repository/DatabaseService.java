@@ -36,8 +36,8 @@ public class DatabaseService {
         } else {
             this.url = url;
         }
-        if (!checkDataBaseExists(url)) {
-            createDatabaseFile(url);
+        if (!checkDataBaseExists(this.url)) {
+            createDatabaseFile(this.url);
             resetDb();
         }
     }
