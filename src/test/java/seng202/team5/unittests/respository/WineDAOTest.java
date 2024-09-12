@@ -1,9 +1,5 @@
 package seng202.team5.unittests.respository;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,9 +15,12 @@ import seng202.team5.models.Wine;
 import seng202.team5.models.WineType;
 import seng202.team5.models.WineVariety;
 import seng202.team5.repository.DatabaseService;
+import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
 import seng202.team5.services.RegionService;
 import seng202.team5.services.WineVarietyService;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WineDAOTest {
     private static final Logger log = LogManager.getLogger(WineDAOTest.class);
@@ -35,7 +34,8 @@ public class WineDAOTest {
                 "jdbc:sqlite:./src/test/resources/test.db");
         WineVarietyService wineVarietyService = new WineVarietyService();
         RegionService regionService = new RegionService();
-        wineDAO = new WineDAO(wineVarietyService, regionService);
+        VineyardDAO vineyardDAO = new VineyardDAO();
+        wineDAO = new WineDAO(wineVarietyService, regionService, vineyardDAO);
     }
 
     @BeforeEach
@@ -124,5 +124,20 @@ public class WineDAOTest {
                 () -> assertEquals(testRegion.getName(), retrievedWine.getRegion().getName()),
                 () -> assertEquals(testVineyard.getName(), retrievedWine.getVineyard().getName())
         );
+    }
+    @Test
+    public void testDelete(){
+        Region testRegion = new Region("Test Region");
+        Vineyard testVineyard = new Vineyard("Test Vineyard");
+        WineVariety testVariety = new WineVariety("Test Variety", WineType.WHITE);
+        testRegion.addVineyard(testVineyard);
+        Wine testWine = new Wine("Test Wine", "A very nice wine", 2024,
+                87, 200, testVariety, testRegion, testVineyard);
+        int toDeleteID = wineDAO.add(testWine);
+
+        wineDAO.delete(toDeleteID);
+
+        assertEquals(0, wineDAO.getAll().size());
+
     }
 }
