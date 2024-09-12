@@ -56,6 +56,10 @@ public class AccountPageController extends PageController {
 
     /**
      * Attempt to register with the provided details
+     * if the register is successful,
+     *  the app will go to the home page
+     * otherwise (i.e. username isn't unique),
+     *  the app will remain on the login page
      */
     @FXML
     public void attemptRegister() {
@@ -63,8 +67,7 @@ public class AccountPageController extends PageController {
         String password = passwordField.getText();
 
         if (username.isEmpty()) {
-            usernameField.setStyle("-fx-text-box-border: red");
-            passwordField.setStyle("-fx-text-box-border: red");
+            // Show error
             return;
         }
 
@@ -79,8 +82,7 @@ public class AccountPageController extends PageController {
             // Go to the homepage
             swapPage("/fxml/newHomePage.fxml");
         } else {
-            usernameField.setStyle("-fx-text-box-border: red");
-            passwordField.setStyle("-fx-text-box-border: red");
+            // Show error
         }
     }
 }
