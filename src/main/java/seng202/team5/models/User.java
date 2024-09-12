@@ -11,6 +11,22 @@ public class User {
 
 
     /**
+     * Initialise a new User without id
+     *
+     * @param username user's unique username
+     * @param password user's (hashed) password
+     * @param role user's role
+     * @param icon user's icon number
+     */
+    public User(String username, String password, String role, int icon) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.icon = icon;
+    }
+
+
+    /**
      * Initialise a new User
      *
      * @param id user's unique identification number
@@ -63,5 +79,9 @@ public class User {
 
     public boolean getIsAdmin() {
         return (Objects.equals(role, "admin"));
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

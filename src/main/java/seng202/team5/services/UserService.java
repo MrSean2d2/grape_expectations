@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
+import seng202.team5.exceptions.InvalidUserIDException;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.User;
 import seng202.team5.repository.DatabaseService;
@@ -82,15 +83,24 @@ public class UserService {
                 return null;
             if (!userDAO.userIsUnique(username))
                 return null;
-            int userCount = (userDAO.getAll()).size();
+
             Random rand = new Random();
-
             int iconNum = rand.nextInt(0, 5); // Generate a new (random) icon number
-            User user = new User(userCount, username, hashedPassword, "user", iconNum);
 
-            userDAO.add(user);
+            User user = new User(username, hashedPassword, "user", iconNum);
+
+            // Get the user id (autoincremented by database)
+            int userId = userDAO.add(user);
+
+            // Check if the user id is valid
+            if(userId == -1) {
+                throw new InvalidUserIDException("User id is invalid! = -1");
+            }
+
+            // Update user ID
+            user.setId(userId);
             return user;
-        } catch (DuplicateEntryException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (DuplicateEntryException | NoSuchAlgorithmException | InvalidKeySpecException | InvalidUserIDException e) {
             log.error(e);
             return null;
         }
