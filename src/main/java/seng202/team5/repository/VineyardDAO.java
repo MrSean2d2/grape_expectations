@@ -85,26 +85,22 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
         String sql = "INSERT INTO vineyard (name) values (?);";
         String checksql = "SELECT 1 FROM vineyard WHERE name = ?;";
         try (Connection conn = databaseService.connect();
-                PreparedStatement ps = conn.prepareStatement(checksql)) {
-            ps.setString(1, toAdd.getName());
-            ResultSet rs = ps.executeQuery();
+                PreparedStatement checkPs = conn.prepareStatement(checksql);
+                PreparedStatement insertPs = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            checkPs.setString(1, toAdd.getName());
+            ResultSet rs = checkPs.executeQuery();
             if (rs.next()) {
                 return -1;
             }
-            try (PreparedStatement insertps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
-                ps.setString(1, toAdd.getName());
-
-                ps.executeUpdate();
-                ResultSet rs2 = ps.getGeneratedKeys();
-                int insertId = -1;
-                if (rs2.next()) {
-                    insertId = rs2.getInt(1);
-                }
-                return insertId;
+            insertPs.setString(1, toAdd.getName());
+            insertPs.executeUpdate();
+            ResultSet rs2 = insertPs.getGeneratedKeys();
+            int insertId = -1;
+            if (rs2.next()) {
+                insertId = rs2.getInt(1);
             }
-
+            return insertId;
         } catch (SQLException sqlException) {
-
             log.error(sqlException);
             return -1;
         }
