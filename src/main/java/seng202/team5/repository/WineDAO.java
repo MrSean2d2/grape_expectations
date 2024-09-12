@@ -12,8 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-import seng202.team5.services.RegionService;
-import seng202.team5.services.WineVarietyService;
 
 /**
  * Wine Data Access Object class. This class implements DAOInterface and handles
@@ -127,10 +125,10 @@ public class WineDAO implements DAOInterface<Wine> {
          */
         if (toAdd.getId() < 1) {
             sqlWine = "INSERT INTO WINE(name, description, year, rating, price, "
-                    + "vineyard, variety) values (?,?,?,?,?,?,?);";
+                    + "vineyard, colour, variety) values (?,?,?,?,?,?,?,?);";
         } else {
             sqlWine = "INSERT INTO WINE(id, name, description, year, rating, "
-                    + "price, vineyard, variety) values (?,?,?,?,?,?,?,?);";
+                    + "price, vineyard, colour, variety) values (?,?,?,?,?,?,?,?,?);";
         }
         try (Connection conn = databaseService.connect();
                 PreparedStatement psRegion = conn.prepareStatement(sqlRegion);
@@ -146,7 +144,8 @@ public class WineDAO implements DAOInterface<Wine> {
             psWine.setDouble(4 + startIndex, toAdd.getRating());
             psWine.setDouble(5 + startIndex, toAdd.getPrice());
             psWine.setObject(6 + startIndex, toAdd.getVineyard().getName());
-            psWine.setObject(7 + startIndex, toAdd.getWineVariety());
+            psWine.setObject(7 + startIndex, toAdd.getWineColour());
+            psWine.setObject(8 + startIndex, toAdd.getWineVariety());
 
             psRegion.setString(1, toAdd.getVineyard().getName());
             psRegion.setString(2, toAdd.getRegion());

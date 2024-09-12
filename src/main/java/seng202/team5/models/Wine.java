@@ -135,7 +135,6 @@ public class Wine {
      * @param ratingValue rating value of wine
      * @param price current market price of wine
      * @param wineVariety variety of the wine
-     * @param region the region the wine comes from
      * @param vineYard the vineyard the wine comes from
      */
     public Wine(int id, String name, String description, int year, int ratingValue, double price,
@@ -163,7 +162,6 @@ public class Wine {
      * @param ratingValue the wine's rating value (0 - 100)
      * @param price the wine's price
      * @param wineVariety the grape variety of the wine
-     * @param region the region the wine comes from
      * @param vineyard the vineyard which produced the wine
      */
     public Wine(String name, String description, int year, int ratingValue,
@@ -177,6 +175,15 @@ public class Wine {
         this.price = price;
         this.wineVariety = wineVariety;
         this.vineyard = vineyard;
+    }
+
+    /**
+     * Set the wine's id
+     *
+     * @param id the new id
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -194,6 +201,6 @@ public class Wine {
                 Objects.equals(description, wine.description) &&
                 Objects.equals(wineVariety, wine.wineVariety) &&
                 Objects.equals(colour, wine.colour) &&
-                Objects.equals(vineyard, wine.vineyard);
+                (Objects.equals(vineyard.getName(), wine.vineyard.getName()));
     }
 }

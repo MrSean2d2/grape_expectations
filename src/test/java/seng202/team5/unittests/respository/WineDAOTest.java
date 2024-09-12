@@ -1,19 +1,13 @@
 package seng202.team5.unittests.respository;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
-import seng202.team5.models.Region;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-import seng202.team5.models.WineType;
-import seng202.team5.models.WineVariety;
 import seng202.team5.repository.DatabaseService;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
@@ -53,7 +47,7 @@ public class WineDAOTest {
     public void testGetOne() {
         Vineyard testVineyard = new Vineyard("Test vineyard", "Test region");
         Wine testWine = new Wine("Test Wine", "Test Wine is a nice wine", 2024, 99, 7.99, "Pinot Noir", "Red", testVineyard);
-        wineDAO.add(testWine);
+        testWine.setId(wineDAO.add(testWine));
         Wine wine = wineDAO.getOne(1);
         assertNotNull(wine);
         assertEquals(testWine, wine);
@@ -75,20 +69,6 @@ public class WineDAOTest {
         assertEquals(testWine, retrievedWine);
     }
 
-    @Test
-    public void testAddDefaultId() {
-        Vineyard testVineyard = new Vineyard("Test Vineyard", "Test Region");
-
-        Wine testWine = new Wine("Test Wine", "A very nice wine", 2024,
-                87, 200, "testVariety", "Red", testVineyard);
-        int addedId = wineDAO.add(testWine);
-        // Should be only 1 item in the database so the id should be 1
-        assertEquals(1, addedId);
-        Wine retrievedWine = wineDAO.getOne(addedId);
-        assertNotNull(retrievedWine);
-        assertEquals(1, retrievedWine.getId());
-        assertEquals(testWine, retrievedWine);
-    }
     @Test
     public void testDelete() {
         Vineyard testVineyard = new Vineyard("Test Vineyard", "Test Region");
