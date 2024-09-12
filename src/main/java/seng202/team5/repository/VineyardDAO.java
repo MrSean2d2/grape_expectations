@@ -9,21 +9,35 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of Database Access Object for Vineyard related actions.
+ *
+ * @author Amiele Miguel
+ * @author Matthew Wills
+ */
 public class VineyardDAO implements DAOInterface<Vineyard> {
     private static final Logger log = LogManager.getLogger(VineyardDAO.class);
     private final DatabaseService databaseService;
 
-    public VineyardDAO(){
+    /**
+     * VineyardDAO constructor creates new VineyardDAO object.
+     */
+    public VineyardDAO() {
         databaseService = DatabaseService.getInstance();
     }
 
+    /**
+     * Gets all Vineyard objects from database and adds to a list.
+     *
+     * @return list of all Vineyards in database
+     */
     @Override
     public List<Vineyard> getAll() {
         List<Vineyard> vineyards = new ArrayList<>();
         String sql = "SELECT * FROM vineyard";
         try (Connection conn = databaseService.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 vineyards.add(new Vineyard(rs.getString("name"), rs.getString("region")));
             }
@@ -34,12 +48,18 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
         }
     }
 
+    /**
+     * Gets one Vineyard object in database using primary key id.
+     *
+     * @param id id of object to get
+     * @return Vineyard object if found otherwise null
+     */
     @Override
     public Vineyard getOne(int id) {
         Vineyard vineyard = null;
         String sql = "SELECT * FROM vineyard WHERE id=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -52,11 +72,18 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
             return null;
         }
     }
+
+    /**
+     * add Vineyard object to the database.
+     *
+     * @param toAdd object of type Vineyard to add
+     * @return id of added Vineyard
+     */
     @Override
-    public int add (Vineyard toAdd){
+    public int add(Vineyard toAdd) {
         String sql = "INSERT INTO vineyard (name) values (?);";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, toAdd.getName());
 
             ps.executeUpdate();
@@ -72,11 +99,16 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
         }
     }
 
+    /**
+     * deletes Vineyard from database.
+     *
+     * @param id id of Vineyard to delete
+     */
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM vineyard WHERE id=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (SQLException sqlException) {
