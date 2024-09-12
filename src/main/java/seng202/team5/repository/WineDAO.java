@@ -24,8 +24,6 @@ import seng202.team5.services.WineVarietyService;
  */
 public class WineDAO implements DAOInterface<Wine> {
     private final DatabaseService databaseService;
-    private final WineVarietyService wineVarietyService;
-    private final RegionService regionService;
     private static final Logger log = LogManager.getLogger(WineDAO.class);
     private final VineyardDAO vineyardDAO;
 
@@ -33,15 +31,9 @@ public class WineDAO implements DAOInterface<Wine> {
      * WineDAO constructor. Creates a WineDAO object and initialises it with
      * services needed for handling WineVariety and Region objects.
      *
-     * @param wineVarietyService the instance of {@link WineVarietyService}
-     *                           which manages currently active WineVariety's
-     * @param regionService the instance of {@link RegionService}
-     *                      which manages currently active Region's
      */
-    public WineDAO(WineVarietyService wineVarietyService, RegionService regionService, VineyardDAO vineyardDAO) {
-        this.regionService = regionService;
+    public WineDAO(VineyardDAO vineyardDAO) {
         databaseService = DatabaseService.getInstance();
-        this.wineVarietyService = wineVarietyService;
         this.vineyardDAO = vineyardDAO;
 
     }
@@ -56,7 +48,7 @@ public class WineDAO implements DAOInterface<Wine> {
         List<Wine> wines = new ArrayList<>();
         String sql =
                 "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                        + "wine.variety, wine.price, vineyard.name AS vineyardName, vineyard.region "
+                        + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
                         + "FROM WINE, VINEYARD WHERE vineyard.name = wine.vineyard ";
         try (Connection conn = databaseService.connect();
                 Statement stmt = conn.createStatement();
@@ -69,10 +61,9 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getInt("year"),
                         rs.getInt("rating"),
                         rs.getDouble("price"),
-                        // TODO: get colour
-                        wineVarietyService.varietyFromString(rs.getString(("variety"))),
-                        regionService.getRegion(rs.getString("region")),
-                        new Vineyard(rs.getString("vineyardName"))
+                        rs.getString("colour"),
+                        rs.getString(("variety")),
+                        new Vineyard(rs.getString("vineyardName"), rs.getString("Region"))
                 ));
 
             }
@@ -94,7 +85,7 @@ public class WineDAO implements DAOInterface<Wine> {
     public Wine getOne(int id) {
         Wine wine = null;
         String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating,"
-                + " wine.variety, wine.price, vineyard.name AS vineyardName, vineyard.region "
+                + " wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
                 + "FROM WINE JOIN VINEYARD ON WINE.vineyard = VINEYARD.name WHERE wine.id=?";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -108,9 +99,9 @@ public class WineDAO implements DAOInterface<Wine> {
                             rs.getInt("year"),
                             rs.getInt("rating"),
                             rs.getDouble("price"),
-                            wineVarietyService.varietyFromString(rs.getString("variety")),
-                            regionService.getRegion(rs.getString("region")),
-                            new Vineyard(rs.getString("vineyardName"))
+                            rs.getString("variety"),
+                            rs.getString("colour"),
+                            new Vineyard(rs.getString("vineyardName"), rs.getString("region"))
                     );
                 }
                 return wine;
@@ -155,10 +146,10 @@ public class WineDAO implements DAOInterface<Wine> {
             psWine.setDouble(4 + startIndex, toAdd.getRating());
             psWine.setDouble(5 + startIndex, toAdd.getPrice());
             psWine.setObject(6 + startIndex, toAdd.getVineyard().getName());
-            psWine.setObject(7 + startIndex, toAdd.getWineVariety().getName());
+            psWine.setObject(7 + startIndex, toAdd.getWineVariety());
 
             psRegion.setString(1, toAdd.getVineyard().getName());
-            psRegion.setString(2, toAdd.getRegion().getName());
+            psRegion.setString(2, toAdd.getRegion());
 
             psWine.executeUpdate();
             psRegion.executeUpdate();
@@ -174,6 +165,36 @@ public class WineDAO implements DAOInterface<Wine> {
             return -1;
         }
 
+    }
+
+    public void batchAdd(List<Wine> toAdd) {
+        String sql = "INSERT OR IGNORE INTO WINE (name, year, variety, rating, "
+                + "price, colour, vineyard, description) values (?,?,?,?,?,?,?,?)";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            conn.setAutoCommit(false);
+            for (Wine wine: toAdd) {
+                ps.setString(1, wine.getName());
+                ps.setInt(2, wine.getYear());
+                ps.setString(3, wine.getWineVariety());
+                ps.setInt(4, wine.getRating());
+                ps.setDouble(5, wine.getPrice());
+                ps.setString(6, wine.getWineColour());
+                ps.setInt(7, wine.getVineyard().getId());
+                if (vineyardDAO.getOne(wine.getVineyard().getId()) == null) {
+                    vineyardDAO.add(wine.getVineyard());
+                }
+                ps.setString(8, wine.getDescription());
+            }
+            ps.executeBatch();
+            ResultSet rs = ps.getGeneratedKeys();
+            while (rs.next()) {
+                log.info(rs.getLong(1));
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            log.error(e);
+        }
     }
 
     @Override

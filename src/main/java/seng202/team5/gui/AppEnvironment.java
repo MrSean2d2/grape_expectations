@@ -24,6 +24,6 @@ public class AppEnvironment {
         regionService = new RegionService();
         String filepath = System.getProperty("user.dir") + "/src/main/resources/test_dataset.csv";
         dataService = new DataLoadService(filepath, wineVarietyService, regionService);
-        wineService = new WineService(dataService);
+        wineService = WineService.getInstance();
     }
 }

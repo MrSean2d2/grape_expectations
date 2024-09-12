@@ -34,7 +34,7 @@ public class VineyardDAOTest {
 
     @Test
     public void testAddVineyardOK() {
-        Vineyard toAdd = new Vineyard("test1");
+        Vineyard toAdd = new Vineyard("test1", "region1");
         vineyardDAO.add(toAdd);
         Assertions.assertEquals(1, vineyardDAO.getAll().size());
         Vineyard vineyard = vineyardDAO.getAll().get(0);
@@ -42,7 +42,7 @@ public class VineyardDAOTest {
     }
     @Test
     public void testDeleteVineyard() {
-        int insertId = vineyardDAO.add(new Vineyard("test"));
+        int insertId = vineyardDAO.add(new Vineyard("test", "region1"));
         int totalVineyardsBefore = vineyardDAO.getAll().size();
         vineyardDAO.delete(insertId);
         Assertions.assertEquals(totalVineyardsBefore - 1, vineyardDAO.getAll().size());
@@ -50,7 +50,7 @@ public class VineyardDAOTest {
 
     @Test
     public void testGetVineyardByID() {
-        Vineyard toAdd = new Vineyard("test");
+        Vineyard toAdd = new Vineyard("test", "region1");
         int id = vineyardDAO.add(toAdd);
         Vineyard vineyard = vineyardDAO.getOne(id);
         Assertions.assertEquals(toAdd.getName(), vineyard.getName());
@@ -58,7 +58,7 @@ public class VineyardDAOTest {
 
     @Test
     public void testUpdateVineyard() {
-        Vineyard vineyard = new Vineyard("test");
+        Vineyard vineyard = new Vineyard("test", "region1");
         vineyardDAO.add(vineyard);
         Assertions.assertThrows(NotImplementedException.class, () -> vineyardDAO.update(vineyard));
     }

@@ -35,7 +35,7 @@ public class WineDAOTest {
         WineVarietyService wineVarietyService = new WineVarietyService();
         RegionService regionService = new RegionService();
         VineyardDAO vineyardDAO = new VineyardDAO();
-        wineDAO = new WineDAO(wineVarietyService, regionService, vineyardDAO);
+        wineDAO = new WineDAO(vineyardDAO);
     }
 
     @BeforeEach
@@ -51,89 +51,49 @@ public class WineDAOTest {
 
     @Test
     public void testGetOne() {
-        String createRegion = "INSERT INTO VINEYARD(name, region) "
-                + "VALUES ('Test Vineyard', 'Test Region')";
-        String sql = "INSERT INTO WINE(id, name, description, year, rating, "
-                + "price, vineyard, variety) VALUES (1,'Test Wine', "
-                + "'Test Wine is a nice wine', 2024, 99, 7.99, 'Test Vineyard', 'Pinot Noir')";
-        try (Connection conn = databaseService.connect();
-                Statement statement = conn.createStatement();
-                Statement statement2 = conn.createStatement()) {
-            statement2.execute(createRegion);
-            statement.execute(sql);
-        } catch (SQLException e) {
-            log.error(e);
-        }
+        Vineyard testVineyard = new Vineyard("Test vineyard", "Test region");
+        Wine testWine = new Wine("Test Wine", "Test Wine is a nice wine", 2024, 99, 7.99, "Pinot Noir", "Red", testVineyard);
+        wineDAO.add(testWine);
         Wine wine = wineDAO.getOne(1);
         assertNotNull(wine);
-        assertEquals("Test Wine", wine.getName());
-        assertEquals("Test Wine is a nice wine", wine.getDescription());
-        assertEquals(2024, wine.getYear());
-        assertEquals(99, wine.getRating());
-        assertEquals("Test Vineyard", wine.getVineyard().getName());
-        assertEquals("Pinot Noir", wine.getWineVariety().getName());
+        assertEquals(testWine, wine);
     }
 
     @Test
     public void testAdd() {
-        Region testRegion = new Region("testRegion");
-        Vineyard testVineyard = new Vineyard("testVineyard");
-        WineVariety testWineVariety = new WineVariety("testVariety", WineType.RED);
-        testRegion.addVineyard(testVineyard);
+        Vineyard testVineyard = new Vineyard("testVineyard", "testRegion");
 
         Wine testWine = new Wine(1, "testWine", "tasty",
-                    2023, 85, 15.99, testWineVariety, testRegion, testVineyard);
+                    2023, 85, 15.99, "testVariety", "Red", testVineyard);
 
         wineDAO.add(testWine);
         assertEquals(1, wineDAO.getAll().size());
         Wine retrievedWine = wineDAO.getOne(1);
 
         assertNotNull(retrievedWine);
-        assertEquals("testWine", retrievedWine.getName());
-        assertEquals("tasty", retrievedWine.getDescription());
-        assertEquals(2023, retrievedWine.getYear());
-        assertEquals(85, retrievedWine.getRating());
-        assertEquals("testVineyard", retrievedWine.getVineyard().getName());
-        assertEquals("testVariety", retrievedWine.getWineVariety().getName());
+        assertEquals(1, retrievedWine.getId());
+        assertEquals(testWine, retrievedWine);
     }
 
     @Test
     public void testAddDefaultId() {
-        Region testRegion = new Region("Test Region");
-        Vineyard testVineyard = new Vineyard("Test Vineyard");
-        WineVariety testVariety = new WineVariety("Test Variety", WineType.WHITE);
-        testRegion.addVineyard(testVineyard);
+        Vineyard testVineyard = new Vineyard("Test Vineyard", "Test Region");
 
         Wine testWine = new Wine("Test Wine", "A very nice wine", 2024,
-                87, 200, testVariety, testRegion, testVineyard);
+                87, 200, "testVariety", "Red", testVineyard);
         int addedId = wineDAO.add(testWine);
         // Should be only 1 item in the database so the id should be 1
         assertEquals(1, addedId);
         Wine retrievedWine = wineDAO.getOne(addedId);
         assertNotNull(retrievedWine);
         assertEquals(1, retrievedWine.getId());
-        /* Group all assertions checking that the retrieved wine is the same as
-        the one we added.
-         */
-        assertAll("Wine Equality",
-                () -> assertEquals("Test Wine", retrievedWine.getName()),
-                () -> assertEquals("A very nice wine", retrievedWine.getDescription()),
-                () -> assertEquals(2024, retrievedWine.getYear()),
-                () -> assertEquals(87, retrievedWine.getRating()),
-                () -> assertEquals(200, retrievedWine.getPrice()),
-                () -> assertEquals(testVariety.getName(), retrievedWine.getWineVariety().getName()),
-                () -> assertEquals(testRegion.getName(), retrievedWine.getRegion().getName()),
-                () -> assertEquals(testVineyard.getName(), retrievedWine.getVineyard().getName())
-        );
+        assertEquals(testWine, retrievedWine);
     }
     @Test
-    public void testDelete(){
-        Region testRegion = new Region("Test Region");
-        Vineyard testVineyard = new Vineyard("Test Vineyard");
-        WineVariety testVariety = new WineVariety("Test Variety", WineType.WHITE);
-        testRegion.addVineyard(testVineyard);
+    public void testDelete() {
+        Vineyard testVineyard = new Vineyard("Test Vineyard", "Test Region");
         Wine testWine = new Wine("Test Wine", "A very nice wine", 2024,
-                87, 200, testVariety, testRegion, testVineyard);
+                87, 200, "testVariety", "Red", testVineyard);
         int toDeleteID = wineDAO.add(testWine);
 
         wineDAO.delete(toDeleteID);

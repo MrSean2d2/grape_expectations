@@ -25,8 +25,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                vineyards.add(new Vineyard(
-                        rs.getString("name")));
+                vineyards.add(new Vineyard(rs.getString("name"), rs.getString("region")));
             }
             return vineyards;
         } catch (SQLException sqlException) {
@@ -44,8 +43,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    vineyard = new Vineyard(
-                            rs.getString("name"));
+                    vineyard = new Vineyard(rs.getString("name"), rs.getString("region"));
                 }
                 return vineyard;
             }

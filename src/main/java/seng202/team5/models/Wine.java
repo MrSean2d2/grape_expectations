@@ -15,8 +15,8 @@ public class Wine {
     private int ratingValue = 0;
     private double price = 0.0;
     private boolean favourite = false;
-    private WineVariety wineVariety;
-    public Region region;
+    private String wineVariety;
+    private String colour;
     private Vineyard vineyard;
 
     /**
@@ -51,7 +51,7 @@ public class Wine {
      *
      * @return ratingValue
      */
-    public double getRating() {
+    public int getRating() {
         return ratingValue;
     }
 
@@ -96,8 +96,12 @@ public class Wine {
      *
      * @return wine variety
      */
-    public WineVariety getWineVariety() {
+    public String getWineVariety() {
         return wineVariety;
+    }
+
+    public String getWineColour() {
+        return colour;
     }
 
     /**
@@ -105,8 +109,8 @@ public class Wine {
      *
      * @return wine region
      */
-    public Region getRegion() {
-        return region;
+    public String getRegion() {
+        return vineyard.getRegion();
     }
 
     /**
@@ -135,7 +139,7 @@ public class Wine {
      * @param vineYard the vineyard the wine comes from
      */
     public Wine(int id, String name, String description, int year, int ratingValue, double price,
-                WineVariety wineVariety, Region region, Vineyard vineYard) {
+                String wineVariety, String colour, Vineyard vineYard) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -144,7 +148,7 @@ public class Wine {
         this.price = price;
         // this.favourite = favourite;
         this.wineVariety = wineVariety;
-        this.region = region;
+        this.colour = colour;
         this.vineyard = vineYard;
     }
 
@@ -163,7 +167,8 @@ public class Wine {
      * @param vineyard the vineyard which produced the wine
      */
     public Wine(String name, String description, int year, int ratingValue,
-                double price, WineVariety wineVariety, Region region, Vineyard vineyard) {
+                double price, String wineVariety, String colour, Vineyard vineyard) {
+        this.colour = colour;
         this.id = 0;
         this.name = name;
         this.description = description;
@@ -171,7 +176,6 @@ public class Wine {
         this.ratingValue = ratingValue;
         this.price = price;
         this.wineVariety = wineVariety;
-        this.region = region;
         this.vineyard = vineyard;
     }
 
@@ -189,7 +193,7 @@ public class Wine {
                 Objects.equals(name, wine.name) &&
                 Objects.equals(description, wine.description) &&
                 Objects.equals(wineVariety, wine.wineVariety) &&
-                Objects.equals(region, wine.region) &&
+                Objects.equals(colour, wine.colour) &&
                 Objects.equals(vineyard, wine.vineyard);
     }
 }

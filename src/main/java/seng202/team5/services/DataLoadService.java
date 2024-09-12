@@ -71,9 +71,6 @@ public class DataLoadService {
 
         // Wine Region
         String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
-        String subRegionName = csvEntry[8] != null ? csvEntry[8] : "NoSubRegion";
-
-        Region region = regionService.getSubRegion(regionName, subRegionName);
 
 
         // Wine Name
@@ -87,15 +84,14 @@ public class DataLoadService {
 
         // Wine Variety
         String varietyName = csvEntry[12];
-        WineVariety variety = wineVarietyService.varietyFromString(varietyName);
 
         // Winery
         String winery = csvEntry[13];
-        Vineyard vineyard = new Vineyard(winery);
+        Vineyard vineyard = new Vineyard(winery, regionName);
 
         // Return the created Wine object
         return new Wine(name, description, year, ratingValue, price,
-                variety, region, vineyard);
+                varietyName, "Unknown", vineyard);
     }
 
     /**
