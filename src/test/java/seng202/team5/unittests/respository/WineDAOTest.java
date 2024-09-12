@@ -14,6 +14,9 @@ import seng202.team5.repository.WineDAO;
 import seng202.team5.services.RegionService;
 import seng202.team5.services.WineVarietyService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WineDAOTest {
@@ -67,6 +70,22 @@ public class WineDAOTest {
         assertNotNull(retrievedWine);
         assertEquals(1, retrievedWine.getId());
         assertEquals(testWine, retrievedWine);
+    }
+
+    @Test
+    public void testBatchAdd(){
+        Vineyard testVineyard1 = new Vineyard("tv1","testreg1");
+        Vineyard testVineyard2 = new Vineyard("tv2","testreg2");
+        Vineyard testVineyard3 = new Vineyard("tv3","testreg3");
+
+        Wine testWine1 = new Wine(1, "testWine", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
+        Wine testWine2 = new Wine(1, "testWine", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
+        Wine testWine3 = new Wine(1, "testWine", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
+
+        List<Wine> testWineList = new ArrayList<Wine>(){{add(testWine1); add(testWine2); add(testWine3);}};
+
+        wineDAO.batchAdd(testWineList);
+        assertEquals(3,wineDAO.getAll().size());
     }
 
     @Test
