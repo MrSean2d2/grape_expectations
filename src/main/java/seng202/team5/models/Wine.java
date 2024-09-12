@@ -7,14 +7,14 @@ package seng202.team5.models;
  */
 public class Wine {
     private int id;
-    private String name = null;
-    private String description = null;
+    private final String name;
+    private final String description;
     private int year = 0;
     private int ratingValue = 0;
     private double price = 0.0;
     private boolean favourite = false;
     private WineVariety wineVariety;
-    private Region region;
+    public Region region;
     private Vineyard vineyard;
 
     /**
@@ -63,30 +63,49 @@ public class Wine {
     }
 
     /**
-     * Gets the wine id
+     * Gets the wine id.
      *
      * @return id
      */
-    public int getId() {return id;}
+    public int getId() {
+        return id;
+    }
 
     /**
-     * Gets the wine description
+     * Gets the wine description.
      *
      * @return description
      */
-    public String getDescription(){return description;}
+    public String getDescription() {
+        return description;
+    }
+
     /**
-     * Gets the wine vineyard
+     * Gets the wine vineyard.
      *
      * @return vineyard object
      */
-    public Vineyard getVineyard(){return vineyard;}
+    public Vineyard getVineyard() {
+        return vineyard;
+    }
+
     /**
-     * Gets the wine variety
+     * Gets the wine variety.
      *
      * @return wine variety
      */
-    public WineVariety getWineVariety(){return wineVariety;}
+    public WineVariety getWineVariety() {
+        return wineVariety;
+    }
+
+    /**
+     * Gets the wine region.
+     *
+     * @return wine region
+     */
+    public Region getRegion() {
+        return region;
+    }
 
     /**
      * Constructor for creating a wine object with a name and description.
@@ -121,9 +140,36 @@ public class Wine {
         this.year = year;
         this.ratingValue = ratingValue;
         this.price = price;
-       // this.favourite = favourite;
+        // this.favourite = favourite;
         this.wineVariety = wineVariety;
         this.region = region;
         this.vineyard = vineYard;
+    }
+
+    /**
+     * Constructor for creating a wine object with a name,
+     * description, year, rating, price and favourite status. The wine's id is
+     * determined by the database.
+     *
+     * @param name the name of the wine
+     * @param description the wine's description
+     * @param year the year the wine was produced
+     * @param ratingValue the wine's rating value (0 - 100)
+     * @param price the wine's price
+     * @param wineVariety the grape variety of the wine
+     * @param region the region the wine comes from
+     * @param vineyard the vineyard which produced the wine
+     */
+    public Wine(String name, String description, int year, int ratingValue,
+                double price, WineVariety wineVariety, Region region, Vineyard vineyard) {
+        this.id = 0;
+        this.name = name;
+        this.description = description;
+        this.year = year;
+        this.ratingValue = ratingValue;
+        this.price = price;
+        this.wineVariety = wineVariety;
+        this.region = region;
+        this.vineyard = vineyard;
     }
 }
