@@ -81,11 +81,11 @@ public class WineDAOTest {
         WineVariety testWineVariety = new WineVariety("testVariety", WineType.RED);
         testRegion.addVineyard(testVineyard);
 
-        Wine testWine = new Wine(0, "testWine", "tasty",
+        Wine testWine = new Wine(1, "testWine", "tasty",
                     2023, 85, 15.99, testWineVariety, testRegion, testVineyard);
 
         wineDAO.add(testWine);
-        Wine retrievedWine = wineDAO.getOne(0);
+        Wine retrievedWine = wineDAO.getOne(1);
 
         assertNotNull(retrievedWine);
         assertEquals("testWine", retrievedWine.getName());
