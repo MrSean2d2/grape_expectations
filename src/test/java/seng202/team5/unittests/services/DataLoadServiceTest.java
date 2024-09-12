@@ -3,6 +3,7 @@ package seng202.team5.unittests.services;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,10 @@ public class DataLoadServiceTest {
     public void loadFileTestFirst() {
         List<String[]> records = dataLoadService.loadFile(csvFilePath);
         String[] expectedFirst = {"0", "Italy", "Aromas include tropical fruit, broom, brimstone and dried herb. The palate isn't overly expressive, offering unripened apple, citrus and dried sage alongside brisk acidity.",
-                "Vulkà Bianco", "87", null, "Sicily & Sardinia", "Etna", null, "Kerin O’Keefe", "@kerinokeefe", "Nicosia 2013 Vulkà Bianco  (Etna)", "White Blend", "Nicosia"};
+                new String("Vulkà Bianco".getBytes(), StandardCharsets.UTF_8), "87", null, "Sicily & Sardinia",
+                "Etna", null, new String("Kerin O’Keefe".getBytes(), StandardCharsets.UTF_8),
+                "@kerinokeefe", new String("Nicosia 2013 Vulkà Bianco  (Etna)".getBytes(), StandardCharsets.UTF_8),
+                "White Blend", "Nicosia"};
         assertEquals(16, records.size());
         assertArrayEquals(expectedFirst, records.getFirst());
     }
@@ -37,7 +41,12 @@ public class DataLoadServiceTest {
         List<Wine> wines = dataLoadService.processWinesFromCsv();
         Wine wine = wines.getFirst();
         // Multiple asserts to check wine equality because Wine.equals() isn't implemented yet
-        assertEquals("Nicosia 2013 Vulkà Bianco  (Etna)", wine.getName());
+        String expected = new String("Nicosia 2013 Vulkà Bianco  (Etna)".getBytes(), StandardCharsets.UTF_8);
+
+        String wineName = wine.getName();
+
+        assertEquals(wineName, expected);
+
         assertEquals(2013, wine.getYear());
         assertEquals(87, wine.getRating());
     }
