@@ -39,6 +39,9 @@ dependencies {
 
     implementation 'ch.qos.logback:logback-classic:1.4.6'
 
+    // https://mvnrepository.com/artifact/org.controlsfx/controlsfx
+    implementation 'org.controlsfx:controlsfx:11.2.1'
+
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
     implementation 'org.xerial:sqlite-jdbc:3.46.0.1'
 

@@ -40,10 +40,17 @@ public class HeaderController {
         loadHomePage();
 
         // Make the account button change text
+//        accountButton.textProperty().bind(
+//                Bindings.createStringBinding(() ->
+//                                UserService.getInstance().getCurrentUser() != null ?
+//                                        "User: " + UserService.getInstance().getCurrentUser().getUsername() : "No user logged in",
+//                        UserService.getInstance().getUserProperty()
+//                )
+//        );
         accountButton.textProperty().bind(
                 Bindings.createStringBinding(() ->
                                 UserService.getInstance().getCurrentUser() != null ?
-                                        "User: " + UserService.getInstance().getCurrentUser().getUsername() : "No user logged in",
+                                        "Account" : "Sign In",
                         UserService.getInstance().getUserProperty()
                 )
         );
