@@ -19,6 +19,12 @@ public class UserDAO implements DAOInterface<User> {
         databaseService = DatabaseService.getInstance();
     }
 
+
+    /**
+     * Gets a list of users in the user table
+     *
+     * @return list of all user objects in the table
+     */
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
@@ -27,7 +33,13 @@ public class UserDAO implements DAOInterface<User> {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                users.add(new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"), rs.getString("role"), rs.getInt("icon")));
+                User user = new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getInt("icon"));
+                users.add(user);
             }
             return users;
         } catch (SQLException sqlException) {
@@ -43,7 +55,26 @@ public class UserDAO implements DAOInterface<User> {
      */
     @Override
     public User getOne(int id) {
-        throw new NotImplementedException();
+        User user = null;
+        String sql = "SELECT * FROM user WHERE id=?";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    user = new User(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("role"),
+                            rs.getInt("icon"));
+                }
+                return user;
+            }
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return null;
+        }
     }
 
 
@@ -91,7 +122,7 @@ public class UserDAO implements DAOInterface<User> {
     /**
      * Adds an individual user to database
      * @param toAdd user to add
-     * @return true if no error, false if sql error
+     * @return userId if new user could be created, -1 if not
      */
     @Override
     public int add(User toAdd) throws DuplicateEntryException {
@@ -125,7 +156,14 @@ public class UserDAO implements DAOInterface<User> {
      */
     @Override
     public void delete(int id) {
-        throw new NotImplementedException();
+        String sql = "DELETE FROM user WHERE id=?";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
     }
 
     /**
@@ -134,7 +172,18 @@ public class UserDAO implements DAOInterface<User> {
      */
     @Override
     public void update(User toUpdate) {
-        throw new NotImplementedException();
+        String sql  = "UPDATE user SET username=?, "
+                    + "role=? "
+                    + "WHERE id=?";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, toUpdate.getUsername());
+            ps.setString(2, toUpdate.getRole());
+            ps.setInt(3, toUpdate.getId());
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
     }
 
 }

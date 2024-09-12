@@ -84,4 +84,8 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
+
+    public void setRole(String role) { this.role = role; }
+
+    public void setUsername(String username) { this.username = username; }
 }
