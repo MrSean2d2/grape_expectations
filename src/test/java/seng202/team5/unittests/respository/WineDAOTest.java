@@ -85,6 +85,7 @@ public class WineDAOTest {
                     2023, 85, 15.99, testWineVariety, testRegion, testVineyard);
 
         wineDAO.add(testWine);
+        assertEquals(1, wineDAO.getAll().size());
         Wine retrievedWine = wineDAO.getOne(1);
 
         assertNotNull(retrievedWine);

@@ -1,5 +1,7 @@
 package seng202.team5.models;
 
+import java.util.Objects;
+
 /**
  * Default Wine class.
  *
@@ -171,5 +173,23 @@ public class Wine {
         this.wineVariety = wineVariety;
         this.region = region;
         this.vineyard = vineyard;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Wine wine = (Wine) o;
+        return id == wine.id && year == wine.year && ratingValue == wine.ratingValue &&
+                Double.compare(price, wine.price) == 0 && favourite == wine.favourite &&
+                Objects.equals(name, wine.name) &&
+                Objects.equals(description, wine.description) &&
+                Objects.equals(wineVariety, wine.wineVariety) &&
+                Objects.equals(region, wine.region) &&
+                Objects.equals(vineyard, wine.vineyard);
     }
 }

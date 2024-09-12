@@ -54,7 +54,7 @@ public class WineDAO implements DAOInterface<Wine> {
         List<Wine> wines = new ArrayList<>();
         String sql =
                 "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                        + "wine.variety, wine.price, vineyard.name, vineyard.region "
+                        + "wine.variety, wine.price, vineyard.name AS vineyardName, vineyard.region "
                         + "FROM WINE, VINEYARD WHERE vineyard.name = wine.vineyard ";
         try (Connection conn = databaseService.connect();
                 Statement stmt = conn.createStatement();
@@ -69,8 +69,8 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getDouble("price"),
                         // TODO: get colour
                         wineVarietyService.varietyFromString(rs.getString(("variety"))),
-                        regionService.getRegion(rs.getString("vineyard.region")),
-                        new Vineyard(rs.getString("vineyard.name"))
+                        regionService.getRegion(rs.getString("region")),
+                        new Vineyard(rs.getString("vineyardName"))
                 ));
 
             }
