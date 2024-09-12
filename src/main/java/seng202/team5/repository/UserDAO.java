@@ -1,16 +1,19 @@
 package seng202.team5.repository;
 
-import org.apache.commons.lang3.NotImplementedException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.User;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Database Access Object for the User table in the SQL database.
+ *
+ * @author Martyn Gascoigne
+ */
 public class UserDAO implements DAOInterface<User> {
     private final DatabaseService databaseService;
     private static final Logger log = LogManager.getLogger(UserDAO.class);
@@ -21,7 +24,7 @@ public class UserDAO implements DAOInterface<User> {
 
 
     /**
-     * Gets a list of users in the user table
+     * Gets a list of users in the user table.
      *
      * @return list of all user objects in the table
      */
@@ -29,9 +32,9 @@ public class UserDAO implements DAOInterface<User> {
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM user";
-        try(Connection conn = databaseService.connect();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conn = databaseService.connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 User user = new User(
                         rs.getInt("id"),
@@ -49,7 +52,8 @@ public class UserDAO implements DAOInterface<User> {
     }
 
     /**
-     * Gets an individual user from database by id
+     * Gets an individual user from database by id.
+     *
      * @param id id of user to get
      * @return user object from database that matches id
      */
@@ -58,7 +62,7 @@ public class UserDAO implements DAOInterface<User> {
         User user = null;
         String sql = "SELECT * FROM user WHERE id=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -79,19 +83,25 @@ public class UserDAO implements DAOInterface<User> {
 
 
     /**
-     * Gets a single user from database by username, throws not found exception if user does not exist
+     * Gets a single user from database by username,
+     * throws not found exception if user does not exist.
+     *
      * @param username username to search for
      * @return User retrieved with matching username
      * @throws NotFoundException no user found with that username
      */
     public User getFromUserName(String username) throws NotFoundException {
         String sql = "SELECT * FROM user WHERE username=?";
-        try(Connection conn = databaseService.connect();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = databaseService.connect();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                return new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"), rs.getString("role"), rs.getInt("icon"));
+            if (rs.next()) {
+                return new User(rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getInt("icon"));
             }
         } catch (SQLException sqlException) {
             log.error(sqlException);
@@ -100,17 +110,18 @@ public class UserDAO implements DAOInterface<User> {
     }
 
     /**
-     * Checks if a username is unique
+     * Checks if a username is unique.
+     *
      * @param username username to search for
      * @return Boolean - true if user is unique, false if not.
      */
     public boolean userIsUnique(String username) {
         String sql = "SELECT * FROM user WHERE username=?";
-        try(Connection conn = databaseService.connect();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = databaseService.connect();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 return false;
             }
         } catch (SQLException sqlException) {
@@ -120,15 +131,16 @@ public class UserDAO implements DAOInterface<User> {
     }
 
     /**
-     * Adds an individual user to database
+     * Adds an individual user to database.
+     *
      * @param toAdd user to add
      * @return userId if new user could be created, -1 if not
      */
     @Override
     public int add(User toAdd) throws DuplicateEntryException {
         String sql = "INSERT INTO user (username, password, role, icon) VALUES (?, ?, ?, ?)";
-        try(Connection conn = databaseService.connect();
-            PreparedStatement ps = conn.prepareStatement(sql)){
+        try (Connection conn = databaseService.connect();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, toAdd.getUsername());
             ps.setString(2, toAdd.getPassword());
             ps.setString(3, toAdd.getRole());
@@ -151,14 +163,15 @@ public class UserDAO implements DAOInterface<User> {
     }
 
     /**
-     * Deletes user from database by id
+     * Deletes user from database by id.
+     *
      * @param id id of object to delete
      */
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM user WHERE id=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (SQLException sqlException) {
@@ -167,8 +180,10 @@ public class UserDAO implements DAOInterface<User> {
     }
 
     /**
-     * Updates user in database
-     * @param toUpdate user that needs to be updated (this object must be able to identify itself and its previous self)
+     * Updates user in database.
+     *
+     * @param toUpdate user that needs to be updated
+     *        (this object must be able to identify itself and its previous self)
      */
     @Override
     public void update(User toUpdate) {
@@ -176,7 +191,7 @@ public class UserDAO implements DAOInterface<User> {
                     + "role=? "
                     + "WHERE id=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, toUpdate.getUsername());
             ps.setString(2, toUpdate.getRole());
             ps.setInt(3, toUpdate.getId());
@@ -185,6 +200,5 @@ public class UserDAO implements DAOInterface<User> {
             log.error(sqlException);
         }
     }
-
 }
 

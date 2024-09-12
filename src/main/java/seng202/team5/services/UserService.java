@@ -1,26 +1,28 @@
 package seng202.team5.services;
 
-import javafx.beans.property.BooleanProperty;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
+import java.util.Random;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InvalidUserIDException;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.User;
-import seng202.team5.repository.DatabaseService;
 import seng202.team5.repository.UserDAO;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Base64;
-import java.util.Random;
-
+/**
+ * Class to store the current user and actions regarding user account
+ * Such as registering, logging in, signing out.
+ *
+ * @author Martyn Gascoigne
+ */
 public class UserService {
     private static final Logger log = LogManager.getLogger(UserService.class);
 
@@ -36,7 +38,7 @@ public class UserService {
     private static final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);
 
     /**
-     * Constructor
+     * Constructor for UserService.
      */
     public UserService() {
         this.userDAO = new UserDAO();
@@ -60,8 +62,7 @@ public class UserService {
     }
 
     /**
-     * Set the current user to the passed in user
-     *
+     * Set the current user to the passed in user.
      */
     public void setCurrentUser(User user) {
         currentUser.set(user);
@@ -73,16 +74,20 @@ public class UserService {
 
 
     /**
-     * Register a user if possible
+     * Register a user if possible.
+     *
      * @return user if they register
      */
     public User registerUser(String username, String password) {
         try {
-            String hashedPassword = hashPassword(password, UserService.generateSalt());;
-            if (username.equals("") || password.equals(""))
+            String hashedPassword = hashPassword(password, UserService.generateSalt());
+            if (username.isEmpty() || password.isEmpty()) {
                 return null;
-            if (!userDAO.userIsUnique(username))
+            }
+
+            if (!userDAO.userIsUnique(username)) {
                 return null;
+            }
 
             Random rand = new Random();
             int iconNum = rand.nextInt(0, 5); // Generate a new (random) icon number
@@ -93,21 +98,25 @@ public class UserService {
             int userId = userDAO.add(user);
 
             // Check if the user id is valid
-            if(userId == -1) {
+            if (userId == -1) {
                 throw new InvalidUserIDException("User id is invalid! = -1");
             }
 
             // Update user ID
             user.setId(userId);
             return user;
-        } catch (DuplicateEntryException | NoSuchAlgorithmException | InvalidKeySpecException | InvalidUserIDException e) {
+        } catch (DuplicateEntryException
+                 | NoSuchAlgorithmException
+                 | InvalidKeySpecException
+                 | InvalidUserIDException e) {
             log.error(e);
             return null;
         }
     }
 
     /**
-     * Sign in to account
+     * Sign in to account.
+     *
      * @return user if they sign in
      */
     public User signinUser(String username, String password) {
@@ -117,7 +126,7 @@ public class UserService {
             String hashPassword = userAccount.getPassword();
 
             // Check if user's password matches
-            if(verifyPassword(password, hashPassword)) {
+            if (verifyPassword(password, hashPassword)) {
                 return userAccount;
             }
         } catch (NotFoundException | NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -127,14 +136,15 @@ public class UserService {
     }
 
     /**
-     * Sign out of account
+     * Sign out of account.
      */
     public void signOut() {
         currentUser.set(null);
     }
 
     /**
-     * Generate a salt for the hashed password
+     * Generate a salt for the hashed password.
+     *
      * @return bytearray for the salt
      */
     public static byte[] generateSalt() {
@@ -145,11 +155,14 @@ public class UserService {
     }
 
     /**
-     * Generate a hashed version of the password
+     * Generate a hashed version of the password.
+     *
      * @param password the password to hash
      * @return hashed password as a string
      */
-    public static String hashPassword(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static String hashPassword(String password, byte[] salt)
+            throws NoSuchAlgorithmException,
+                    InvalidKeySpecException {
         PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, HASH_LENGTH * 8);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         byte[] hash = factory.generateSecret(spec).getEncoded();
@@ -162,12 +175,15 @@ public class UserService {
     }
 
     /**
-     * Verify a password
+     * Verify a password.
+     *
      * @param password the password to check
      * @param hashedPassword the hashed password
      * @return hashed password as a string
      */
-    public static boolean verifyPassword(String password, String hashedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static boolean verifyPassword(String password, String hashedPassword)
+            throws NoSuchAlgorithmException,
+                    InvalidKeySpecException {
         String[] parts = hashedPassword.split(":");
         byte[] salt = Base64.getDecoder().decode(parts[0]);
         String storedHashBase64 = parts[1];

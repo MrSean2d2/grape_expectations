@@ -1,11 +1,11 @@
 package seng202.team5.unittests.services;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.models.Region;
 import seng202.team5.services.RegionService;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class RegionServiceTest {
@@ -43,7 +43,9 @@ public class RegionServiceTest {
         Region newSub = regionService.getSubRegion("TestRegion1", "subRegion1");
         regionService.getSubRegion("TestRegion1", "subRegion2");
 
-        Region subRegion = regionService.regionExistsList(regionService.getRegion("TestRegion1").getSubRegions(), "subRegion1");
+        Region subRegion = regionService.regionExistsList(
+                regionService.getRegion("TestRegion1").getSubRegions(),
+                "subRegion1");
 
         assertEquals(subRegion, newSub);
     }
