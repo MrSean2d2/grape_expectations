@@ -3,6 +3,7 @@ package seng202.team5.repository;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.Vineyard;
 
 import java.sql.*;
@@ -82,18 +83,28 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
     @Override
     public int add(Vineyard toAdd) {
         String sql = "INSERT INTO vineyard (name) values (?);";
+        String checksql = "SELECT 1 FROM vineyard WHERE name = ?;";
         try (Connection conn = databaseService.connect();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(checksql)) {
             ps.setString(1, toAdd.getName());
-
-            ps.executeUpdate();
-            ResultSet rs = ps.getGeneratedKeys();
-            int insertId = -1;
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                insertId = rs.getInt(1);
+                return -1;
             }
-            return insertId;
+            try (PreparedStatement insertps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
+                ps.setString(1, toAdd.getName());
+
+                ps.executeUpdate();
+                ResultSet rs2 = ps.getGeneratedKeys();
+                int insertId = -1;
+                if (rs2.next()) {
+                    insertId = rs2.getInt(1);
+                }
+                return insertId;
+            }
+
         } catch (SQLException sqlException) {
+
             log.error(sqlException);
             return -1;
         }

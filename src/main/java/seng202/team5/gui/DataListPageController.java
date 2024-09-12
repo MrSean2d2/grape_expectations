@@ -11,6 +11,9 @@ import javafx.scene.input.MouseEvent;
 import seng202.team5.models.Wine;
 import seng202.team5.services.WineService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Controller for the Data List Page.
  */
@@ -49,8 +52,15 @@ public class DataListPageController {
         ObservableList<Wine> wines = FXCollections.observableArrayList(
                 MainWindow.appEnvironment.wineService.getWineList());
 
+        List<Wine> test_list = new ArrayList<>();
+        //test_list = getWineList();
+        System.out.println(test_list.size());
+
         // Add data to TableView
         wineTable.setItems(wines);
+
+        System.out.println(wines.size());
+
         wineTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
