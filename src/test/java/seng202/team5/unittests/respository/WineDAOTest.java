@@ -53,6 +53,7 @@ public class WineDAOTest {
         testWine.setId(wineDAO.add(testWine));
         Wine wine = wineDAO.getOne(1);
         assertNotNull(wine);
+
         assertEquals(testWine, wine);
     }
 

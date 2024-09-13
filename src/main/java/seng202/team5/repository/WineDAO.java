@@ -82,9 +82,9 @@ public class WineDAO implements DAOInterface<Wine> {
     @Override
     public Wine getOne(int id) {
         Wine wine = null;
-        String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating,"
-                + " wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
-                + "FROM WINE JOIN VINEYARD ON WINE.vineyard = VINEYARD.name WHERE wine.id=?";
+        String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard AND wine.id=? ";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -124,10 +124,10 @@ public class WineDAO implements DAOInterface<Wine> {
          */
         if (toAdd.getId() < 1) {
             sqlWine = "INSERT OR IGNORE INTO WINE(name, description, year, rating, price, "
-                    + "vineyard, colour, variety) values (?,?,?,?,?,?,?,?);";
+                    + "vineyard, variety, colour) values (?,?,?,?,?,?,?,?);";
         } else {
             sqlWine = "INSERT OR IGNORE INTO WINE(id, name, description, year, rating, "
-                    + "price, vineyard, colour, variety) values (?,?,?,?,?,?,?,?,?);";
+                    + "price, vineyard, variety, colour) values (?,?,?,?,?,?,?,?,?);";
         }
         try (Connection conn = databaseService.connect();
                 PreparedStatement psWine = conn.prepareStatement(sqlWine)) {
@@ -151,8 +151,8 @@ public class WineDAO implements DAOInterface<Wine> {
             psWine.setDouble(4 + startIndex, toAdd.getRating());
             psWine.setDouble(5 + startIndex, toAdd.getPrice());
             psWine.setObject(6 + startIndex, toAdd.getVineyard().getId());
-            psWine.setObject(7 + startIndex, toAdd.getWineVariety());
-            psWine.setObject(8 + startIndex, toAdd.getWineColour());
+            psWine.setObject(7 + startIndex, toAdd.getWineColour());
+            psWine.setObject(8 + startIndex, toAdd.getWineVariety());
 
             psWine.executeUpdate();
             ResultSet rs = psWine.getGeneratedKeys();
