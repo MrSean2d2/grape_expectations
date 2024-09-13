@@ -47,7 +47,7 @@ public class WineDAO implements DAOInterface<Wine> {
         String sql =
                 "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
                         + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
-                        + "FROM WINE, VINEYARD WHERE vineyard.name = wine.vineyard ";
+                        + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard ";
         try (Connection conn = databaseService.connect();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
@@ -168,11 +168,11 @@ public class WineDAO implements DAOInterface<Wine> {
 
     public void batchAdd(List<Wine> toAdd) {
         String sql = "INSERT OR IGNORE INTO WINE (name, year, variety, rating, "
-                + "price, colour, vineyard, description) values (?,?,?,?,?,?,?,?)";
+                + "price, colour, vineyard, description) values (?,?,?,?,?,?,?,?);";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             conn.setAutoCommit(false);
-            for (Wine wine: toAdd) {
+            for (Wine wine : toAdd) {
                 ps.setString(1, wine.getName());
                 ps.setInt(2, wine.getYear());
                 ps.setString(3, wine.getWineVariety());
@@ -180,13 +180,15 @@ public class WineDAO implements DAOInterface<Wine> {
                 ps.setDouble(5, wine.getPrice());
                 ps.setString(6, wine.getWineColour());
                 //System.out.println(wine.getVineyard().getName());
-                ps.setInt(7, wine.getVineyard().getId());
                 if (vineyardDAO.getOne(wine.getVineyard().getId()) == null) {
-                    vineyardDAO.add(wine.getVineyard());
+                    wine.getVineyard().setId(vineyardDAO.add(wine.getVineyard()));
+                    conn.commit();
                 } else {
-                    System.out.println(wine.getVineyard().getName());
+                    log.info(wine.getVineyard().getName());
                 }
+                ps.setInt(7, wine.getVineyard().getId());
                 ps.setString(8, wine.getDescription());
+                ps.addBatch();
             }
             ps.executeBatch();
             ResultSet rs = ps.getGeneratedKeys();

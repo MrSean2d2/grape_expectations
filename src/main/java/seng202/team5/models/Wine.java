@@ -201,6 +201,6 @@ public class Wine {
                 Objects.equals(description, wine.description) &&
                 Objects.equals(wineVariety, wine.wineVariety) &&
                 Objects.equals(colour, wine.colour) &&
-                (Objects.equals(vineyard.getName(), wine.vineyard.getName()));
+                (Objects.equals(vineyard, wine.vineyard));
     }
 }

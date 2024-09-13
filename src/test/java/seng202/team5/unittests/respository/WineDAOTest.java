@@ -64,8 +64,9 @@ public class WineDAOTest {
                     2023, 85, 15.99, "testVariety", "Red", testVineyard);
 
         wineDAO.add(testWine);
-        assertEquals(1, wineDAO.getAll().size());
-        Wine retrievedWine = wineDAO.getOne(1);
+        List<Wine> wines = wineDAO.getAll();
+        assertEquals(1, wines.size());
+        Wine retrievedWine = wines.getFirst();
 
         assertNotNull(retrievedWine);
         assertEquals(1, retrievedWine.getId());
@@ -73,14 +74,14 @@ public class WineDAOTest {
     }
 
     @Test
-    public void testBatchAdd(){
+    public void testBatchAdd() {
         Vineyard testVineyard1 = new Vineyard("tv1","testreg1");
         Vineyard testVineyard2 = new Vineyard("tv2","testreg2");
         Vineyard testVineyard3 = new Vineyard("tv3","testreg3");
 
-        Wine testWine1 = new Wine(1, "testWine", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
-        Wine testWine2 = new Wine(1, "testWine", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
-        Wine testWine3 = new Wine(1, "testWine", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
+        Wine testWine1 = new Wine("testWine", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
+        Wine testWine2 = new Wine("testWine2", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
+        Wine testWine3 = new Wine("testWine3", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
 
         List<Wine> testWineList = new ArrayList<Wine>(){{add(testWine1); add(testWine2); add(testWine3);}};
 

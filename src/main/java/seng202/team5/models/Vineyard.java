@@ -1,10 +1,12 @@
 package seng202.team5.models;
 
+import java.util.Objects;
+
 /**
  * Creates a vineyard object.
  */
 public class Vineyard {
-    private final int id;
+    private int id;
     private final String name;
     private final String region;
 
@@ -38,5 +40,22 @@ public class Vineyard {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Vineyard vineyard = (Vineyard) o;
+        return id == vineyard.id && Objects.equals(name, vineyard.name) &&
+                Objects.equals(region, vineyard.region);
     }
 }

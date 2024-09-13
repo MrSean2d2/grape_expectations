@@ -49,8 +49,8 @@ public class DataListPageController {
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         //favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
 
-        ObservableList<Wine> wines = FXCollections.observableArrayList(
-                MainWindow.appEnvironment.wineService.getWineList());
+        ObservableList<Wine> wines = FXCollections.observableArrayList(WineService.getInstance()
+                .getWineList());
 
         List<Wine> test_list = new ArrayList<>();
         //test_list = getWineList();
