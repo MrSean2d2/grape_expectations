@@ -102,14 +102,16 @@ public class DataListPageController {
     }
 
     /**
-     * Gets text from search bar and searches list when search button is clicked.
+     * Gets text from search bar and uses wineDAO to get matching wines
+     * to display on table.
      */
     @FXML
     public void searchClicked() {
         String searching = searchTextField.getText();
         System.out.println(searching);
         List<Wine> searchResults = wineDAO.getSearchedWines(searching);
-        ObservableList<Wine> observableSearchResults = FXCollections.observableArrayList(searchResults);
+        ObservableList<Wine> observableSearchResults =
+                FXCollections.observableArrayList(searchResults);
         wineTable.getItems().clear();
         wineTable.setItems(observableSearchResults);
     }
