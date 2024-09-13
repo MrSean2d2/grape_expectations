@@ -49,6 +49,24 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
         }
     }
 
+    public int getIdFromName(String vineyardName) {
+        int id = 0;
+        String sql = "SELECT * FROM vineyard WHERE name=?";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, vineyardName);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    id = rs.getInt("id");
+                }
+                return id;
+            }
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return 0;
+        }
+    }
+
     /**
      * Gets one Vineyard object in database using primary key id.
      *
@@ -82,23 +100,17 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      */
     @Override
     public int add(Vineyard toAdd) {
-        String sql = "INSERT INTO vineyard (name, region) values (?, ?);";
-        String checksql = "SELECT 1 FROM vineyard WHERE name = ?;";
-        try (Connection conn = databaseService.connect();
-                PreparedStatement checkPs = conn.prepareStatement(checksql);
-                PreparedStatement insertPs = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            checkPs.setString(1, toAdd.getName());
-            ResultSet rs = checkPs.executeQuery();
-            if (rs.next()) {
-                return -1;
-            }
-            insertPs.setString(1, toAdd.getName());
-            insertPs.setString(2, toAdd.getRegion());
-            insertPs.executeUpdate();
-            ResultSet rs2 = insertPs.getGeneratedKeys();
+        String sql = "INSERT OR IGNORE INTO vineyard (name, region) VALUES (?, ?)";
+        try(Connection conn = databaseService.connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, toAdd.getName());
+            ps.setString(2, toAdd.getRegion());
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
             int insertId = -1;
-            if (rs2.next()) {
-                insertId = rs2.getInt(1);
+            if (rs.next()) {
+                insertId = rs.getInt(1);
             }
             return insertId;
         } catch (SQLException sqlException) {
