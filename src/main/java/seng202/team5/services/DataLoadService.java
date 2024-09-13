@@ -61,7 +61,6 @@ public class DataLoadService {
         // Wine Region
         String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
 
-
         // Wine Name
         String name = csvEntry[11];
 

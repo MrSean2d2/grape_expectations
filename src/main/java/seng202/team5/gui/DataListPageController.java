@@ -1,5 +1,7 @@
 package seng202.team5.gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -11,13 +13,10 @@ import javafx.scene.input.MouseEvent;
 import seng202.team5.models.Wine;
 import seng202.team5.services.WineService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Controller for the Data List Page.
  */
-public class DataListPageController {
+public class DataListPageController extends PageController {
 
     @FXML
     private TableView<Wine> wineTable;
@@ -52,13 +51,8 @@ public class DataListPageController {
         ObservableList<Wine> wines = FXCollections.observableArrayList(WineService.getInstance()
                 .getWineList());
 
-        List<Wine> test_list = new ArrayList<>();
-        //test_list = getWineList();
-        System.out.println(test_list.size());
-
         // Add data to TableView
         wineTable.setItems(wines);
-
         System.out.println(wines.size());
 
         wineTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -67,7 +61,7 @@ public class DataListPageController {
                 System.out.println(wineTable.getSelectionModel().getSelectedItem().getName());
                 if (mouseEvent.getClickCount() == 2) {
                     System.out.println("double clicked");
-                    MainLayoutController mainLayoutController = new MainLayoutController();
+                    HeaderController mainLayoutController = new HeaderController();
                     try {
                         System.out.println("trying to open Detailed View");
                         Wine selectedWine = wineTable.getSelectionModel().getSelectedItem();

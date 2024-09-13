@@ -7,7 +7,7 @@ import seng202.team5.services.WineService;
 
 import java.awt.*;
 
-public class DetailedViewPageController {
+public class DetailedViewPageController extends PageController {
 
     @FXML
     private Button backButton;
