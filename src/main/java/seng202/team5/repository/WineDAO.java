@@ -232,9 +232,9 @@ public class WineDAO implements DAOInterface<Wine> {
      */
     public List<Wine> getSearchedWines(String search) {
         List<Wine> searchedWines = new ArrayList<>();
-        String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+        String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
                 + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
-                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard AND wine.name LIKE ? OR wine.description LIKE ?";
+                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard AND (wine.name LIKE ? OR wine.description LIKE ?)";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             String searchPattern = "%" + search + "%";

@@ -6,8 +6,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import seng202.team5.models.Wine;
+import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
 import seng202.team5.services.WineService;
 
@@ -39,6 +42,11 @@ public class DataListPageController {
 
     @FXML
     private MenuButton varietyMenuButton;
+
+    @FXML
+    private TextField searchTextField;
+    private WineDAO wineDAO;
+    private VineyardDAO vineyardDAO;
 
     private void setUpFilterButtons() {
         varietyMenuButton.getItems().removeFirst();
@@ -89,5 +97,32 @@ public class DataListPageController {
                 }
             }
         });
+        vineyardDAO = new VineyardDAO();
+        wineDAO = new WineDAO(vineyardDAO);
+    }
+
+    /**
+     * Gets text from search bar and searches list when search button is clicked.
+     */
+    @FXML
+    public void searchClicked() {
+        String searching = searchTextField.getText();
+        System.out.println(searching);
+        List<Wine> searchResults = wineDAO.getSearchedWines(searching);
+        ObservableList<Wine> observableSearchResults = FXCollections.observableArrayList(searchResults);
+        wineTable.getItems().clear();
+        wineTable.setItems(observableSearchResults);
+    }
+
+    /**
+     * When enter key is pressed, functionality of searchClicked is executed.
+     *
+     * @param event KeyEvent that triggered the method, pressing of a key
+     */
+    @FXML
+    public void enterPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            searchClicked();
+        }
     }
 }
