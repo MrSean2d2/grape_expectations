@@ -146,7 +146,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
         List<String> regions = new ArrayList<>();
         String sql = "SELECT DISTINCT region FROM VINEYARD ORDER BY region;";
         try (Connection conn = databaseService.connect();
-                Statement statement = databaseService.connect().createStatement()) {
+                Statement statement = conn.createStatement()) {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 regions.add(rs.getString("region"));
