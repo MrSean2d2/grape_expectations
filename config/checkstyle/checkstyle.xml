@@ -261,6 +261,7 @@
       <property name="arrayInitIndent" value="4"/>
     </module>
     <module name="AbbreviationAsWordInName">
+      <property name="allowedAbbreviations" value="DAO"/>
       <property name="ignoreFinal" value="false"/>
       <property name="allowedAbbreviationLength" value="0"/>
       <property name="tokens"

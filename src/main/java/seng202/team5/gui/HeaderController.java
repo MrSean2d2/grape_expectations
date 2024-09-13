@@ -11,7 +11,8 @@ import seng202.team5.services.UserService;
 
 
 /**
- * Controller for the Header.fxml page (page header)
+ * Controller for the Header.fxml page (page header).
+ *
  * @author team 5
  */
 public class HeaderController {
@@ -32,7 +33,7 @@ public class HeaderController {
     private Button accountButton;
 
     /**
-     * Initialize the window
+     * Initialize the window.
      *
      * @param stage Top level container for this window
      */
@@ -57,9 +58,9 @@ public class HeaderController {
     }
 
     /**
-     * Load the home page
+     * Load the home page.
      *
-     * @throws Exception
+     * @throws Exception if loading the page fails
      */
     @FXML
     private void loadHomePage() throws Exception {
@@ -68,9 +69,9 @@ public class HeaderController {
     }
 
     /**
-     * Load the data list page
+     * Load the data list page.
      *
-     * @throws Exception
+     * @throws Exception if loading the page fails
      */
     @FXML
     private void loadDataListPage() throws Exception {
@@ -80,9 +81,9 @@ public class HeaderController {
 
 
     /**
-     * Load the map page
+     * Load the map page.
      *
-     * @throws Exception
+     * @throws Exception if loading the page fails
      */
     @FXML
     private void loadMapPage() throws Exception {
@@ -92,9 +93,9 @@ public class HeaderController {
 
 
     /**
-     * Load the account page
+     * Load the account page.
      *
-     * @throws Exception
+     * @throws Exception if loading the page fails
      */
     @FXML
     private void loadAccountPage() throws Exception {
@@ -102,7 +103,7 @@ public class HeaderController {
         // Otherwise, load the "account" page
 
         // Signed-in user is NOT NULL, so we load the manage page
-        if(UserService.getInstance().getCurrentUser() != null) {
+        if (UserService.getInstance().getCurrentUser() != null) {
             loadPage("/fxml/AccountManagePage.fxml");
         } else {
             loadPage("/fxml/LoginPage.fxml");
@@ -114,9 +115,9 @@ public class HeaderController {
     /**
      * loads the detailed wine view page,
      * detailed view is accessed by double-clicking on a wine in
-     * the wine table in view data page -
-     * TODO: Make consistent with other loaders
-     * @throws Exception
+     * the wine table in view data page.
+     *
+     * @throws Exception if loading the page fails
      */
     public void loadDetailedViewPage() throws Exception {
         System.out.println("loading Detailed View page:");
@@ -125,10 +126,10 @@ public class HeaderController {
 
 
     /**
-     * Load a page with a path given as an argument
+     * Load a page with a path given as an argument.
      *
      * @param fxml path to fxml file
-     * @throws Exception
+     * @throws Exception if loading the page fails
      */
     public void loadPage(String fxml) throws Exception {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource(fxml));
@@ -136,7 +137,7 @@ public class HeaderController {
 
         // Set the header controller reference to the new page controller
         PageController pageController = baseLoader.getController();
-        if(pageController != null) {
+        if (pageController != null) {
             pageController.setHeaderController(this);
         }
         pageContainer.getChildren().setAll(page);
