@@ -218,9 +218,37 @@ public class WineDAO implements DAOInterface<Wine> {
             log.error(sqlException);
         }
     }
-
     @Override
     public void update(Wine object) {
         throw new NotImplementedException();
+    }
+
+    public List<Wine> getSearchedWines(String search) {
+        List<Wine> searchedWines = new ArrayList<>();
+        String sql = "SELECT * FROM wine WHERE name LIKE ? OR description LIKE ?";
+        try (Connection conn = databaseService.connect();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            String searchPattern = "%" + search + "%";
+            ps.setString(1, searchPattern);
+            ps.setString(2, searchPattern);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                searchedWines.add(new Wine(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("year"),
+                        rs.getInt("rating"),
+                        rs.getInt("price"),
+                        rs.getString("variety"),
+                        rs.getString("colour"),
+                        new Vineyard(rs.getString("vineyardName"), rs.getString("Region"))
+                ));
+            }
+            return searchedWines;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
     }
 }

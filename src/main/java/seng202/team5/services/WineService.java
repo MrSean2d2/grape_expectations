@@ -92,4 +92,11 @@ public class WineService {
         return selectedWine;
     }
 
+//    public String buildSearchQuery(String search) {
+//        // select * from wine where name LIKE '%Red%' or description like '%Red%'
+//    }
+
+//    public List<Wine> getQueryResults() {
+//
+//    }
 }
