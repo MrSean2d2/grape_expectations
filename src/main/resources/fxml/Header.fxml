@@ -42,9 +42,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import org.controlsfx.control.BreadCrumbBar?>
 
-<VBox prefHeight="400.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.HeaderController">
+<VBox prefHeight="400.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.HeaderController">
   <children>
       <ToolBar AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
           <HBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0">
@@ -53,6 +52,9 @@
                       <image>
                           <Image url="@../images/Logo.png" />
                       </image>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
                   </ImageView>
               </children>
           </HBox>
@@ -75,7 +77,6 @@
               <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor></Button>
-          <BreadCrumbBar />
       </ToolBar>
 
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
