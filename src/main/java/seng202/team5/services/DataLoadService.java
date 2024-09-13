@@ -16,10 +16,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team5.models.Region;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-import seng202.team5.models.WineVariety;
 
 
 /**
@@ -31,24 +29,15 @@ public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
     private final String fileName;
-    private final WineVarietyService wineVarietyService;
-    private final RegionService regionService;
     public boolean externalDependencies = true;
 
     /**
      * DataLoadService constructor.
      *
      * @param fileName the name of the csv file to use
-     * @param wineVarietyService the instance of WineVarietyService which
-     *                           manages the state of WineVariety objects
-     * @param regionService the instance of RegionService which manages the state
-     *                      of Region objects
      */
-    public DataLoadService(String fileName, WineVarietyService wineVarietyService,
-                           RegionService regionService) {
+    public DataLoadService(String fileName) {
         this.fileName = fileName;
-        this.wineVarietyService = wineVarietyService;
-        this.regionService = regionService;
     }
 
     /**

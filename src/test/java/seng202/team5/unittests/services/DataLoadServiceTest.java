@@ -9,8 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.models.Wine;
 import seng202.team5.services.DataLoadService;
-import seng202.team5.services.RegionService;
-import seng202.team5.services.WineVarietyService;
 
 public class DataLoadServiceTest {
     private DataLoadService dataLoadService;
@@ -19,8 +17,8 @@ public class DataLoadServiceTest {
     @BeforeEach
     public void setUp() {
         csvFilePath = System.getProperty("user.dir") + "/src/test/resources/test.csv";
-        dataLoadService = new DataLoadService(csvFilePath, new WineVarietyService(),
-                new RegionService());
+        dataLoadService = new DataLoadService(csvFilePath
+        );
         dataLoadService.externalDependencies = false;
     }
 
