@@ -59,8 +59,8 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getInt("year"),
                         rs.getInt("rating"),
                         rs.getDouble("price"),
-                        rs.getString("colour"),
                         rs.getString(("variety")),
+                        rs.getString("colour"),
                         new Vineyard(rs.getString("vineyardName"), rs.getString("Region"))
                 ));
 
@@ -150,9 +150,9 @@ public class WineDAO implements DAOInterface<Wine> {
             psWine.setInt(3 + startIndex, toAdd.getYear());
             psWine.setDouble(4 + startIndex, toAdd.getRating());
             psWine.setDouble(5 + startIndex, toAdd.getPrice());
-            psWine.setObject(6 + startIndex, toAdd.getVineyard().getId());
-            psWine.setObject(7 + startIndex, toAdd.getWineColour());
-            psWine.setObject(8 + startIndex, toAdd.getWineVariety());
+            psWine.setInt(6 + startIndex, toAdd.getVineyard().getId());
+            psWine.setString(7 + startIndex, toAdd.getWineVariety());
+            psWine.setString(8 + startIndex, toAdd.getWineColour());
 
             psWine.executeUpdate();
             ResultSet rs = psWine.getGeneratedKeys();

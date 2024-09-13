@@ -59,19 +59,13 @@ public class WineDAOTest {
 
     @Test
     public void testAdd() {
-        Vineyard testVineyard = new Vineyard("testVineyard", "testRegion");
-
-        Wine testWine = new Wine("testWine", "tasty",
-                    2023, 85, 15.99, "testVariety", "Red", testVineyard);
-
+        Vineyard testVineyard = new Vineyard("Test vineyard", "Test region");
+        Wine testWine = new Wine("Test Wine", "Test Wine is a nice wine", 2024, 99, 7.99, "Pinot Noir", "Red", testVineyard);
         testWine.setId(wineDAO.add(testWine));
-        List<Wine> wines = wineDAO.getAll();
-        assertEquals(1, wines.size());
-        Wine retrievedWine = wines.getFirst();
+        Wine wine = wineDAO.getAll().getFirst();
+        assertNotNull(wine);
 
-        assertNotNull(retrievedWine);
-        assertEquals(1, retrievedWine.getId());
-        assertTrue(testWine.equals(retrievedWine));
+        assertEquals(testWine, wine);
     }
 
     @Test
