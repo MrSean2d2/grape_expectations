@@ -1,7 +1,9 @@
 package seng202.team5.unittests.respository;
 
+import java.util.List;
 import kotlin.NotImplementedError;
 import org.apache.commons.lang3.NotImplementedException;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -61,5 +63,24 @@ public class VineyardDAOTest {
         Vineyard vineyard = new Vineyard("test", "region1");
         vineyardDAO.add(vineyard);
         Assertions.assertThrows(NotImplementedException.class, () -> vineyardDAO.update(vineyard));
+    }
+
+    @Test
+    public void testGetRegions() {
+        Vineyard vineyard = new Vineyard("Test", "A region");
+        vineyardDAO.add(vineyard);
+        List<String> regions = vineyardDAO.getRegions();
+        Assertions.assertEquals(1, regions.size());
+        Assertions.assertEquals("A region", regions.getFirst());
+    }
+
+    @Test
+    public void testGetRegionsDistinct() {
+        Vineyard vineyard1 = new Vineyard("Vineyard 1", "A region");
+        Vineyard vineyard2 = new Vineyard("Vineyard 2", "A region");
+        vineyardDAO.add(vineyard1);
+        vineyardDAO.add(vineyard2);
+        List<String> regions = vineyardDAO.getRegions();
+        Assertions.assertEquals(1, regions.size());
     }
 }
