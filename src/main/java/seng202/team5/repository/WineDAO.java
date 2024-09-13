@@ -182,7 +182,6 @@ public class WineDAO implements DAOInterface<Wine> {
                 //System.out.println(wine.getVineyard().getName());
                 if (vineyardDAO.getOne(wine.getVineyard().getId()) == null) {
                     wine.getVineyard().setId(vineyardDAO.add(wine.getVineyard()));
-                    conn.commit();
                 } else {
                     log.info(wine.getVineyard().getName());
                 }
