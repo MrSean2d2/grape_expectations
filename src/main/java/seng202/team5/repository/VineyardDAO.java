@@ -137,6 +137,11 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
     }
 
 
+    /**
+     * Get all the distinct regions in the database by alphabetical order.
+     *
+     * @return the list of distinct region names
+     */
     public List<String> getRegions() {
         List<String> regions = new ArrayList<>();
         String sql = "SELECT DISTINCT region FROM VINEYARD ORDER BY region;";
