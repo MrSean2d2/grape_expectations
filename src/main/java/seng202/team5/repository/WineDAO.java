@@ -223,9 +223,15 @@ public class WineDAO implements DAOInterface<Wine> {
         throw new NotImplementedException();
     }
 
+    /**
+     * Searches for wines by name or description and
+     * returns list of wines matching search.
+     *
+     * @param search name or description of wine
+     * @return list of wines matching search
+     */
     public List<Wine> getSearchedWines(String search) {
         List<Wine> searchedWines = new ArrayList<>();
-//        String sql = "SELECT * FROM wine WHERE name LIKE ? OR description LIKE ?";
         String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
                 + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
                 + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard AND wine.name LIKE ? OR wine.description LIKE ?";
