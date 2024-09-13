@@ -2,6 +2,7 @@ package seng202.team5.unittests.respository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,5 +96,20 @@ public class WineDAOTest {
 
         assertEquals(0, wineDAO.getAll().size());
 
+    }
+
+    @Test
+    public void testGetSearchedWine() {
+        Vineyard testVineyard1 = new Vineyard("Test Vineyard", "Test Region");
+        Wine testWine1 = new Wine("Test Wine 1", "A very nice wine", 2024,
+                87, 200, "testVariety", "Red", testVineyard1);
+        Vineyard testVineyard2 = new Vineyard("Test Vineyard", "Test Region");
+        Wine testWine2 = new Wine("Test Wine 2", "A very nice wine", 2024,
+                87, 200, "testVariety", "Red", testVineyard2);
+        wineDAO.add(testWine1);
+        wineDAO.add(testWine2);
+        List<Wine> result = wineDAO.getSearchedWines("wine");
+        System.out.println(result.get(0).getDescription());
+        Assertions.assertEquals(2, result.size());
     }
 }
