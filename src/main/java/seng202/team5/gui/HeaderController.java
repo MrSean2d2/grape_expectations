@@ -1,18 +1,20 @@
 package seng202.team5.gui;
 
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import seng202.team5.services.UserService;
 
 
 /**
- * Controller for the Wrapper.fxml page (page header)
+ * Controller for the Header.fxml page (page header)
  * @author team 5
  */
-public class MainLayoutController {
+public class HeaderController {
 
     @FXML
     private StackPane pageContainer;
@@ -29,6 +31,30 @@ public class MainLayoutController {
     @FXML
     private Button accountButton;
 
+    /**
+     * Initialize the window
+     *
+     * @param stage Top level container for this window
+     */
+    public void init(Stage stage) throws Exception {
+        loadHomePage();
+
+        // Make the account button change text
+//        accountButton.textProperty().bind(
+//                Bindings.createStringBinding(() ->
+//                                UserService.getInstance().getCurrentUser() != null ?
+//                                        "User: " + UserService.getInstance().getCurrentUser().getUsername() : "No user logged in",
+//                        UserService.getInstance().getUserProperty()
+//                )
+//        );
+        accountButton.textProperty().bind(
+                Bindings.createStringBinding(() ->
+                                UserService.getInstance().getCurrentUser() != null ?
+                                        "Account" : "Sign In",
+                        UserService.getInstance().getUserProperty()
+                )
+        );
+    }
 
     /**
      * Load the home page
@@ -40,7 +66,6 @@ public class MainLayoutController {
         loadPage("/fxml/newHomePage.fxml");
         homeButton.getStyleClass().add("active");
     }
-
 
     /**
      * Load the data list page
@@ -73,7 +98,15 @@ public class MainLayoutController {
      */
     @FXML
     private void loadAccountPage() throws Exception {
-        loadPage("/fxml/AccountPage.fxml");
+        // Load the "login" page if a user is currently not signed in
+        // Otherwise, load the "account" page
+
+        // Signed-in user is NOT NULL, so we load the manage page
+        if(UserService.getInstance().getCurrentUser() != null) {
+            loadPage("/fxml/AccountManagePage.fxml");
+        } else {
+            loadPage("/fxml/LoginPage.fxml");
+        }
         accountButton.getStyleClass().add("active");
     }
 
@@ -94,27 +127,24 @@ public class MainLayoutController {
     /**
      * Load a page with a path given as an argument
      *
-     * @param String path to fxml file
+     * @param fxml path to fxml file
      * @throws Exception
      */
-    private void loadPage(String fxml) throws Exception {
+    public void loadPage(String fxml) throws Exception {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource(fxml));
         Node page = baseLoader.load();
+
+        // Set the header controller reference to the new page controller
+        PageController pageController = baseLoader.getController();
+        if(pageController != null) {
+            pageController.setHeaderController(this);
+        }
         pageContainer.getChildren().setAll(page);
 
+        // Reset the active
         homeButton.getStyleClass().remove("active");
         dataListButton.getStyleClass().remove("active");
         mapButton.getStyleClass().remove("active");
         accountButton.getStyleClass().remove("active");
-    }
-
-
-    /**
-     * Initialize the window
-     *
-     * @param stage Top level container for this window
-     */
-    public void init(Stage stage) throws Exception {
-        loadHomePage();
     }
 }

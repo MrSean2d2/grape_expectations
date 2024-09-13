@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
  * Controller class for MapPage.fxml
  * @author Martyn Gascoigne
  */
-public class MapPageController {
+public class MapPageController extends PageController {
     
     @FXML
     private GridPane viewMap;
