@@ -82,7 +82,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      */
     @Override
     public int add(Vineyard toAdd) {
-        String sql = "INSERT INTO vineyard (name) values (?);";
+        String sql = "INSERT INTO vineyard (name, region) values (?, ?);";
         String checksql = "SELECT 1 FROM vineyard WHERE name = ?;";
         try (Connection conn = databaseService.connect();
                 PreparedStatement checkPs = conn.prepareStatement(checksql);
@@ -93,6 +93,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
                 return -1;
             }
             insertPs.setString(1, toAdd.getName());
+            insertPs.setString(2, toAdd.getRegion());
             insertPs.executeUpdate();
             ResultSet rs2 = insertPs.getGeneratedKeys();
             int insertId = -1;
