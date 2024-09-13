@@ -4,11 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import seng202.team5.models.Wine;
+import seng202.team5.repository.WineDAO;
 import seng202.team5.services.WineService;
 
 import java.util.ArrayList;
@@ -37,6 +37,16 @@ public class DataListPageController {
     @FXML
     private TableColumn<Wine, Boolean> favouriteColumn;
 
+    @FXML
+    private MenuButton varietyMenuButton;
+
+    private void setUpFilterButtons() {
+        varietyMenuButton.getItems().removeFirst();
+        varietyMenuButton.getItems().removeFirst();
+        //for (String varietyName : ) get list of varieties from DAO
+            //varietyMenuButton.getItems().add(new MenuItem(varietyName));
+    }
+
     /**
      * Initializes the data List by calling {@link seng202.team5.services.WineService}
      * to populate the list of wines.
@@ -49,17 +59,14 @@ public class DataListPageController {
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         //favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
 
+        setUpFilterButtons();
+
         ObservableList<Wine> wines = FXCollections.observableArrayList(WineService.getInstance()
                 .getWineList());
 
-        List<Wine> test_list = new ArrayList<>();
-        //test_list = getWineList();
-        System.out.println(test_list.size());
 
         // Add data to TableView
         wineTable.setItems(wines);
-
-        System.out.println(wines.size());
 
         wineTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
