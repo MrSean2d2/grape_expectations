@@ -8,7 +8,8 @@ import seng202.team5.models.User;
 import seng202.team5.services.UserService;
 
 /**
- * Controller for the account page
+ * Controller for the account page.
+ *
  * @author Martyn Gascoigne
  */
 public class AccountPageController extends PageController {
@@ -26,7 +27,7 @@ public class AccountPageController extends PageController {
     private PasswordField passwordField;
 
     /**
-     * Initialize
+     * Initialize the user page.
      */
     @FXML
     public void initialize() {
@@ -34,7 +35,7 @@ public class AccountPageController extends PageController {
     }
 
     /**
-     * Attempt to log in with the provided details
+     * Attempt to log in with the provided details.
      */
     @FXML
     public void attemptLogin() {
@@ -57,9 +58,9 @@ public class AccountPageController extends PageController {
     /**
      * Attempt to register with the provided details
      * if the register is successful,
-     *  the app will go to the home page
+     * the app will go to the home page
      * otherwise (i.e. username isn't unique),
-     *  the app will remain on the login page
+     * the app will remain on the login page.
      */
     @FXML
     public void attemptRegister() {

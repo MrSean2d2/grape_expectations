@@ -2,26 +2,18 @@ package seng202.team5.gui;
 
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import seng202.team5.models.User;
 import seng202.team5.services.UserService;
 
-import java.io.IOException;
-
 /**
- * Controller for the account page
+ * Controller for the account page.
+ *
  * @author Martyn Gascoigne
  */
 public class AccountManagePageController extends PageController {
@@ -38,13 +30,13 @@ public class AccountManagePageController extends PageController {
     private BorderPane userIconField;
 
     /**
-     * Initialize
+     * Initialize the account manage page.
      */
     @FXML
     public void initialize() {
         // Create a new cutout circle to display the image in
-        Circle circleCutout = new Circle(100,-100,40);
-        Image userIcon = new Image(UserService.getInstance().getCurrentUser().getIcon(),false);
+        Circle circleCutout = new Circle(100, -100, 40);
+        Image userIcon = new Image(UserService.getInstance().getCurrentUser().getIcon(), false);
         circleCutout.setFill(new ImagePattern(userIcon));
         circleCutout.setStroke(Color.WHITE);
         circleCutout.setStrokeWidth(10);
@@ -55,15 +47,18 @@ public class AccountManagePageController extends PageController {
         // Make the account button change text
         usernameLabel.textProperty().bind(
                 Bindings.createStringBinding(() ->
-                                UserService.getInstance().getCurrentUser() != null ?
-                                        UserService.getInstance().getCurrentUser().getUsername() : "Null user!",
-                        UserService.getInstance().getUserProperty()
+                    UserService.getInstance().getCurrentUser() != null
+                    ?
+                    UserService.getInstance().getCurrentUser().getUsername()
+                    :
+                    "Null user!",
+                    UserService.getInstance().getUserProperty()
                 )
         );
     }
 
     /**
-     * Sign the user out of their account
+     * Sign the user out of their account.
      */
     @FXML
     private void signOut() {

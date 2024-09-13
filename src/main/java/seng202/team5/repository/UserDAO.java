@@ -22,7 +22,6 @@ public class UserDAO implements DAOInterface<User> {
         databaseService = DatabaseService.getInstance();
     }
 
-
     /**
      * Gets a list of users in the user table.
      *

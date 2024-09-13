@@ -57,6 +57,13 @@ public class UserService {
         return instance;
     }
 
+    /**
+     * Gets the current user property.
+     * This uses an ObjectProperty type as it is observable,
+     * and this is used for getting the user's name.
+     *
+     * @return the current user
+     */
     public ObjectProperty<User> getUserProperty() {
         return currentUser;
     }
@@ -74,7 +81,7 @@ public class UserService {
 
 
     /**
-     * Register a user if possible.
+     * Attempt to register a user, if they don't already exist.
      *
      * @return user if they register
      */
@@ -115,7 +122,7 @@ public class UserService {
     }
 
     /**
-     * Sign in to account.
+     * Attempt to sign in to an account if they exist.
      *
      * @return user if they sign in
      */
