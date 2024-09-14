@@ -1,5 +1,7 @@
 package seng202.team5.gui;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -32,6 +34,10 @@ public class DataListPageController {
     public Slider ratingSlider;
     @FXML
     public ToggleButton favToggleButton;
+    @FXML
+    public Label priceSliderValue;
+    @FXML
+    public Label ratingSliderValue;
     @FXML
     private TableView<Wine> wineTable;
 
@@ -71,6 +77,19 @@ public class DataListPageController {
      */
     @FXML
     public void initialize() {
+        // sets value of price/rating labels in real time
+        priceSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+            Float value = Float.valueOf(String.format("%.1f", newVal));
+            priceSliderValue.setText(String.valueOf(value));
+        });
+        ratingSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+            Float value = Float.valueOf(String.format("%.1f", newVal));
+            ratingSliderValue.setText(String.valueOf(value));
+        });
+
+        // initialises listeners on sliders
+        initializeSliderListeners();
+
         setDefaultFilters();
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -111,6 +130,23 @@ public class DataListPageController {
         wineDAO = new WineDAO(vineyardDAO);
 
         setUpFilterButtons();
+    }
+
+    /**
+     * Adds listeners to price and rating slider filters, to handle action of such filters
+     */
+    private void initializeSliderListeners() {
+        priceSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+            Float value = Float.valueOf(String.format("%.1f", newVal));
+            maxPriceFilter = value;
+            applySearchFilters();
+        });
+
+        ratingSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+            Float value = Float.valueOf(String.format("%.1f", newVal));
+            maxRatingFilter = value;
+            applySearchFilters();
+        });
     }
 
     /**
@@ -188,6 +224,7 @@ public class DataListPageController {
         if (!(selectedVariety == "Variety" || selectedVariety == null)) {
             varietyFilter = selectedVariety;
         }
+        System.out.println(varietyFilter);
         applySearchFilters();
     }
 
@@ -215,28 +252,7 @@ public class DataListPageController {
     }
 
     /**
-     * Handles action of price slider changing.
-     */
-    public void onPriceSliderChanged() {
-        double maxPrice = priceSlider.getValue();
-        if (maxPrice != 0.0) {
-            maxPriceFilter = maxPrice;
-        }
-        applySearchFilters();
-    }
-
-    /**
-     * Handles action of rating slider changing.
-     */
-    public void onRatingSliderChanged() {
-        double maxRating = ratingSlider.getValue();
-        if (maxRating != 0.0) {
-            maxRatingFilter = maxRating;
-        }
-        applySearchFilters();
-    }
-
-    /**
+     * TODO: implement favourite toggle feature
      * Handles action of favourite toggle button being selected.
      */
     public void onFavToggleButtonClicked() {
@@ -251,6 +267,8 @@ public class DataListPageController {
      * Resets search and filters.
      */
     public void onResetSearchFilterButtonClicked() {
+        priceSlider.setValue(0.0);
+        ratingSlider.setValue(0.0);
         searchTextField.clear();
         wineTable.getItems().clear();
         setDefaultFilters();
@@ -259,8 +277,7 @@ public class DataListPageController {
         varietyComboBox.setValue(varietyComboBox.getItems().get(0));
         regionComboBox.setValue(regionComboBox.getItems().get(0));
         yearComboBox.setValue(yearComboBox.getItems().get(0));
-        priceSlider.setValue(0.0);
-        ratingSlider.setValue(0.0);
+
         favToggleButton.setSelected(false);
     }
 }

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane alignment="TOP_CENTER" prefHeight="450.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+<GridPane alignment="TOP_CENTER" prefHeight="450.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -55,20 +55,20 @@
             </GridPane>
             <GridPane maxWidth="1000.0" prefHeight="101.0" prefWidth="1000.0" GridPane.rowIndex="1">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="150.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="150.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="169.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="165.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="226.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="194.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="145.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ComboBox fx:id="varietyComboBox" onAction="#onVarietyComboBoxClicked" prefWidth="150.0" promptText="Variety" />
-                  <ComboBox fx:id="yearComboBox" onAction="#onYearComboBoxClicked" prefWidth="150.0" promptText="Year" GridPane.columnIndex="2" />
-                  <ToggleButton fx:id="favToggleButton" mnemonicParsing="false" onAction="#onFavToggleButtonClicked" text="Toggle Favourites" GridPane.columnIndex="5" />
+                  <ComboBox fx:id="varietyComboBox" onAction="#onVarietyComboBoxClicked" prefWidth="150.0" promptText="Variety" GridPane.halignment="CENTER" />
+                  <ComboBox fx:id="yearComboBox" onAction="#onYearComboBoxClicked" prefHeight="24.0" prefWidth="85.0" promptText="Year" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                  <ToggleButton fx:id="favToggleButton" mnemonicParsing="false" onAction="#onFavToggleButtonClicked" prefHeight="24.0" prefWidth="136.0" text="Toggle Favourites" GridPane.columnIndex="5" />
                   <GridPane GridPane.columnIndex="4">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -78,11 +78,16 @@
                       <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Slider fx:id="ratingSlider" GridPane.rowIndex="1" />
+                        <Slider fx:id="ratingSlider" blockIncrement="1.0" majorTickUnit="10.0" maxWidth="-Infinity" minorTickCount="1"  showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.rowIndex="1" />
                         <Label alignment="CENTER" ellipsisString="---" prefHeight="17.0" prefWidth="111.0" text="Rating" textOverrun="CLIP" GridPane.halignment="CENTER" />
+                        <Label fx:id="ratingSliderValue" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </Label>
                      </children>
                   </GridPane>
-                  <GridPane GridPane.columnIndex="3">
+                  <GridPane prefHeight="50.0" prefWidth="208.0" GridPane.columnIndex="3">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
@@ -91,11 +96,16 @@
                         <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Slider fx:id="priceSlider" onDragDetected="#onPriceSliderChanged" GridPane.rowIndex="1" />
+                        <Slider fx:id="priceSlider" blockIncrement="1.0" majorTickUnit="100.0" max="800.0" maxWidth="-Infinity" minWidth="-Infinity" minorTickCount="10"  prefHeight="38.0" prefWidth="183.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.rowIndex="1" />
                         <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Price" GridPane.halignment="CENTER" />
+                        <Label fx:id="priceSliderValue" minHeight="-Infinity" minWidth="-Infinity" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </Label>
                      </children>
                   </GridPane>
-                  <ComboBox fx:id="regionComboBox" onAction="#onRegionComboBoxClicked" prefWidth="150.0" promptText="Region" GridPane.columnIndex="1" />
+                  <ComboBox fx:id="regionComboBox" onAction="#onRegionComboBoxClicked" prefHeight="24.0" prefWidth="148.0" promptText="Region" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                </children>
                <GridPane.margin>
                   <Insets />

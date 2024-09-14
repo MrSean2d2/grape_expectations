@@ -187,7 +187,6 @@ public class WineDAO implements DAOInterface<Wine> {
                 ps.setInt(4, wine.getRating());
                 ps.setDouble(5, wine.getPrice());
                 ps.setString(6, wine.getWineColour());
-                //System.out.println(wine.getVineyard().getName());
 
                 int vineyardIndex = vineyardDAO.getIdFromName(wine.getVineyard().getName());
                 if (vineyardIndex == 0) {
@@ -277,7 +276,7 @@ public class WineDAO implements DAOInterface<Wine> {
      * @param year to filter
      * @return sql string
      */
-    public String queryBuilder(String search, String variety, String region, String year, double minPrice, double maxPrice, double minRating, double maxScore, boolean favourite){
+    public String queryBuilder(String search, String variety, String region, String year, double minPrice, double maxPrice, double minRating, double maxRating, boolean favourite){
         String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
                 + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
                 + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard";
@@ -285,10 +284,10 @@ public class WineDAO implements DAOInterface<Wine> {
             sql +=  " AND (wine.name LIKE ? OR wine.description LIKE ?) ";
         }
         if(variety != "0") {
-            sql += " AND wine.variety = "+variety;
+            sql += " AND wine.variety = '" + variety + "'";
         }
         if (region != "0") {
-            sql += " AND vineyard.region = "+region;
+            sql += " AND vineyard.region = '" + region + "'";
         }
         if (year != "0") {
             sql += " AND wine.year = "+ year;
@@ -298,12 +297,14 @@ public class WineDAO implements DAOInterface<Wine> {
             sql+= " AND wine.price <= "+ String.valueOf(maxPrice);
         }
         //TODO: implement minRating sql query
-        if(maxScore != 100.0) {
-            sql += " AND wine.rating <= " + String.valueOf(maxScore);
+        if(maxRating != 100.0) {
+
+            sql += " AND wine.rating <= " + String.valueOf(maxRating);
         }
         //TODO: implement favourite toggle -- wait for drinks table
 
         sql += ";";
+
         return sql;
     }
 
