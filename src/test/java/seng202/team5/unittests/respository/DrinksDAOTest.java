@@ -290,4 +290,86 @@ public class DrinksDAOTest {
 
         assertEquals("Could be better", drinksDAO.getWineReview(testWine.getId(), testUser.getId()).getNotes());
     }
+
+
+    /**
+     * Test a scenario when a user is deleted
+     */
+    @Test
+    public void testUserDeleteScenario() throws DuplicateEntryException {
+        Vineyard testVineyard = new Vineyard("Test vineyard", "Test region");
+        Wine testWine =
+                new Wine("Test Wine", "Test Wine 1 is a nice wine", 2024, 99, 7.99, "Pinot Noir",
+                        "Red", testVineyard);
+        testWine.setId(wineDAO.add(testWine));
+
+        Wine testWine2 =
+                new Wine("Test Wine 2", "Test Wine 2 is a nice wine", 2024, 99, 7.99, "Pinot Noir",
+                        "Red", testVineyard);
+        testWine2.setId(wineDAO.add(testWine2));
+
+        User testUser = new User("Test User", "password", "user", 0);
+        testUser.setId(userDAO.add(testUser));
+
+        User testUser2 = new User("Test User 2", "password", "user", 0);
+        testUser2.setId(userDAO.add(testUser2));
+
+        Drinks testReview1 = new Drinks(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Drinks testReview2 = new Drinks(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+        Drinks testReview3 = new Drinks(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+        Drinks testReview4 = new Drinks(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+
+        drinksDAO.add(testReview1);
+        drinksDAO.add(testReview2);
+        drinksDAO.add(testReview3);
+        drinksDAO.add(testReview4);
+
+        List<Drinks> reviews = drinksDAO.getAll();
+        assertEquals(4, reviews.size());
+
+        userDAO.delete(testUser.getId());
+
+        assertEquals(2, drinksDAO.getAll().size());
+    }
+
+
+    /**
+     * Test a scenario when a wine is deleted
+     */
+    @Test
+    public void testWineDeleteScenario() throws DuplicateEntryException {
+        Vineyard testVineyard = new Vineyard("Test vineyard", "Test region");
+        Wine testWine =
+                new Wine("Test Wine", "Test Wine 1 is a nice wine", 2024, 99, 7.99, "Pinot Noir",
+                        "Red", testVineyard);
+        testWine.setId(wineDAO.add(testWine));
+
+        Wine testWine2 =
+                new Wine("Test Wine 2", "Test Wine 2 is a nice wine", 2024, 99, 7.99, "Pinot Noir",
+                        "Red", testVineyard);
+        testWine2.setId(wineDAO.add(testWine2));
+
+        User testUser = new User("Test User", "password", "user", 0);
+        testUser.setId(userDAO.add(testUser));
+
+        User testUser2 = new User("Test User 2", "password", "user", 0);
+        testUser2.setId(userDAO.add(testUser2));
+
+        Drinks testReview1 = new Drinks(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Drinks testReview2 = new Drinks(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+        Drinks testReview3 = new Drinks(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+        Drinks testReview4 = new Drinks(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+
+        drinksDAO.add(testReview1);
+        drinksDAO.add(testReview2);
+        drinksDAO.add(testReview3);
+        drinksDAO.add(testReview4);
+
+        List<Drinks> reviews = drinksDAO.getAll();
+        assertEquals(4, reviews.size());
+
+        wineDAO.delete(testUser.getId());
+
+        assertEquals(2, drinksDAO.getAll().size());
+    }
 }
