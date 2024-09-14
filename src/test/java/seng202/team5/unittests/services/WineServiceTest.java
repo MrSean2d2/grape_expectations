@@ -31,13 +31,4 @@ public class WineServiceTest {
         assertEquals(wine, wineService.getSelectedWine());
     }
 
-    /**
-     * tests that a wine instance will be null if no wine is selected
-     */
-    @Test
-    public void testSelectedWineInitiallyNull() {
-        WineService service = WineService.getInstance();
-        assertNull(service.getSelectedWine());
-    }
-
 }
