@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -95,7 +96,7 @@ public class MainLayoutController {
     /**
      * Load a page with a path given as an argument
      *
-     * @param String path to fxml file
+     * @param fxml path to fxml file
      * @throws Exception
      */
     private void loadPage(String fxml) throws Exception {
