@@ -10,8 +10,10 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
@@ -52,9 +54,13 @@ public class DataLoadService {
             //String country = csvEntry[1];
 
             // Wine Description
+            // description can be empty
             String description = csvEntry[2];
 
             // Wine Rating
+            if (csvEntry[4] == null) {
+                throw new Exception();
+            }
             int ratingValue = numFromTextOr0(csvEntry[4]);
 
             // Wine Price
@@ -88,11 +94,51 @@ public class DataLoadService {
             Vineyard vineyard = new Vineyard(winery, regionName);
 
             // Return the created Wine object
-            return new Wine(name, description, year, ratingValue, price,
+            Wine resultWine = new Wine(name, description, year, ratingValue, price,
                     varietyName, "Unknown", vineyard);
+            if (isValidWine(resultWine)) {
+                return resultWine;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * checks if the created wine has valid attributes,
+     * sets defaults to some that aren't as important
+     * @param resultWine wine created by winefromtext
+     * @return boolean of whether wine can be added to database
+     */
+    private boolean isValidWine(Wine resultWine) {
+        //wine must have a name
+        if (Objects.equals(resultWine.getName(), "")) {
+            return false;
+        }
+        //description can be empty
+        int currentYear = Year.now().getValue();//gets current year for future-proofing
+        if (resultWine.getYear() < 1700 | resultWine.getYear() > currentYear) {//1700 is arbitrary boundary
+            return false;
+        }
+        if (resultWine.getRating() < 0 | resultWine.getRating() > 100) {
+            return false;
+        }
+        if (resultWine.getPrice() < 0) {
+            return false;
+        }
+        if (resultWine.getWineVariety().isEmpty()) {
+            resultWine.setVariety("Unknown Variety");
+        }
+//        if (resultWine.getVineyard().getName().isEmpty()) {
+//            resultWine.setVineyardName("Unknown Vineyard");
+//        }
+//        if (resultWine.getVineyard().getRegion().isEmpty()) {
+//            resultWine.setVineyardRegion("Unknown Region");
+//        }
+        return true;
+
     }
 
     /**

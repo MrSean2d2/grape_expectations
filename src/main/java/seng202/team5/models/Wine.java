@@ -248,4 +248,12 @@ public class Wine {
                 Objects.equals(colour, wine.colour) &&
                 (Objects.equals(vineyard.getName(), wine.vineyard.getName()));
     }
+
+    /**
+     * set the variety name of a wine
+     * @param unknownVariety string value to save as variety name
+     */
+    public void setVariety(String unknownVariety) {wineVariety = unknownVariety;}
+
+
 }
