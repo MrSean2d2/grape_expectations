@@ -47,39 +47,52 @@ public class DataLoadService {
      * @return the new wine object
      */
     private Wine wineFromText(String[] csvEntry) {
-        //String country = csvEntry[1];
+        try {
 
-        // Wine Description
-        String description = csvEntry[2];
+            //String country = csvEntry[1];
 
-        // Wine Rating
-        int ratingValue = numFromTextOr0(csvEntry[4]);
+            // Wine Description
+            String description = csvEntry[2];
 
-        // Wine Price
-        double price = numFromTextOr0(csvEntry[5]);
+            // Wine Rating
+            int ratingValue = numFromTextOr0(csvEntry[4]);
 
-        // Wine Region
-        String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
+            // Wine Price
+            if (csvEntry[5] == null) {//price is not in csv
+                throw new Exception();
+            }
+            double price = numFromTextOr0(csvEntry[5]);
 
-        // Wine Name
-        String name = csvEntry[11];
 
-        // Wine Year
-        Pattern yearPattern = Pattern.compile("\\d{4}");
-        Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);
-        boolean matchFound = yearMatcher.find();
-        int year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
+            // Wine Region
+            String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
 
-        // Wine Variety
-        String varietyName = csvEntry[12];
+            // Wine Name
+            String name = csvEntry[11];
 
-        // Winery
-        String winery = csvEntry[13];
-        Vineyard vineyard = new Vineyard(winery, regionName);
 
-        // Return the created Wine object
-        return new Wine(name, description, year, ratingValue, price,
-                varietyName, "Unknown", vineyard);
+            // Wine Year
+            Pattern yearPattern = Pattern.compile("\\d{4}");
+            Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);
+            boolean matchFound = yearMatcher.find();
+            int year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
+            if (year == 0) {//year was not in csv
+                throw new Exception();
+            }
+
+            // Wine Variety
+            String varietyName = csvEntry[12];
+
+            // Winery
+            String winery = csvEntry[13];
+            Vineyard vineyard = new Vineyard(winery, regionName);
+
+            // Return the created Wine object
+            return new Wine(name, description, year, ratingValue, price,
+                    varietyName, "Unknown", vineyard);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -137,9 +150,10 @@ public class DataLoadService {
         List<Wine> wines = new ArrayList<>();
         for (String[] entry : csvResult) {
             Wine wine = wineFromText(entry);
-            wines.add(wine);
+            if (wine != null) {
+                wines.add(wine);
+            }
         }
         return wines;
-
     }
 }

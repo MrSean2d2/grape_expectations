@@ -300,4 +300,19 @@ public class WineDAO implements DAOInterface<Wine> {
             log.error(sqlException);
         }
     }
+
+    /**
+     * deletes all wines from wine table
+     * called before populating the database to get rid of left-over wines in database
+     */
+    public void truncateWines () {
+        String sql = "Delete FROM WINE;";
+        try (Connection conn = databaseService.connect();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ){
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
+    }
 }
