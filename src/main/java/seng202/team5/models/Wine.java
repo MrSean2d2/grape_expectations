@@ -15,6 +15,7 @@ public class Wine {
     private int ratingValue = 0;
     private double price = 0.0;
     private boolean favourite = false;
+    private String notes = null;
     private String wineVariety;
     private String colour;
     private Vineyard vineyard;
@@ -72,6 +73,45 @@ public class Wine {
         this.vineyard = vineyard;
     }
 
+    /**
+     * Constructor for creating a wine object with a name,
+     * description, year, rating, price, favourite status and notes.
+     *
+     * @param id the wine's id
+     * @param name name of wine
+     * @param description description of wine
+     * @param year year of wine
+     * @param ratingValue rating value of wine
+     * @param price current market price of wine
+     * @param wineVariety variety of the wine
+     * @param vineYard the vineyard the wine comes from
+     */
+    public Wine(int id, String name, String description, int year, int ratingValue, double price,
+                String wineVariety, String colour, Vineyard vineYard, boolean favourite, String notes) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.year = year;
+        this.ratingValue = ratingValue;
+        this.price = price;
+        this.wineVariety = wineVariety;
+        this.colour = colour;
+        this.vineyard = vineYard;
+        this.favourite = favourite;
+        this.notes = notes;
+    }
+
+    /**
+     * Constructor for creating a wine object with a name and description.
+     *
+     * @param name name of wine
+     * @param description description of wine
+     */
+    public Wine(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
 
     /**
      * Gets the wine name.
@@ -115,6 +155,7 @@ public class Wine {
 
     /**
      * Gets the favourite status of the wine.
+     * TODO: get the favourite status from the database
      *
      * @return favourite
      */
@@ -122,6 +163,15 @@ public class Wine {
         return favourite;
     }
 
+    /**
+     * Gets the wine's user notes.
+     * TODO: get the notes from the database
+     *
+     * @return
+     */
+    public String getNotes() {
+        return notes;
+    }
 
     /**
      * Gets the wine id.
@@ -184,18 +234,6 @@ public class Wine {
 
 
     /**
-     * Constructor for creating a wine object with a name and description.
-     *
-     * @param name name of wine
-     * @param description description of wine
-     */
-    public Wine(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
-
-    /**
      * Set the wine's id,
      *
      * @param id the new id
@@ -222,6 +260,30 @@ public class Wine {
      */
     public void setColour(String colour) {
         this.colour = colour;
+    }
+
+    /**
+     * Set the wine's notes.
+     * TODO: make this edit the database
+     *
+     * @param notes
+     */
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    /**
+     * Toggles the wine's favourite status.
+     * TODO: make this edit the database
+     *
+     * @param favourite
+     */
+    public void toggleFavourite(boolean favourite) {
+        if (favourite) {
+            this.favourite = false;
+        } else {
+            this.favourite = true;
+        }
     }
 
 

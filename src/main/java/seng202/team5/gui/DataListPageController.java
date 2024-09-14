@@ -6,12 +6,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import seng202.team5.models.Wine;
 import seng202.team5.services.WineService;
+import javafx.fxml.FXMLLoader;
 
 /**
  * Controller for the Data List Page.
@@ -60,21 +64,41 @@ public class DataListPageController extends PageController {
             public void handle(MouseEvent mouseEvent) {
                 System.out.println(wineTable.getSelectionModel().getSelectedItem().getName());
                 if (mouseEvent.getClickCount() == 2) {
-                    System.out.println("double clicked");
-                    HeaderController mainLayoutController = new HeaderController();
                     try {
-                        System.out.println("trying to open Detailed View");
                         Wine selectedWine = wineTable.getSelectionModel().getSelectedItem();
                         if (selectedWine != null) {
-                            System.out.println("selectedWine != null");
                             WineService.getInstance().setSelectedWine(selectedWine);
-                            mainLayoutController.loadDetailedViewPage();
+                            openDetailedViewPage(selectedWine);
                         }
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
             }
+
         });
     }
+    /**
+     * Opens detailed wine view page for the wine that was double clicked
+     * @param selectedWine
+     */
+    private void openDetailedViewPage(Wine selectedWine) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DetailedViewPage.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Wine Details");
+            Scene scene = new Scene(root);
+
+            String styleSheetURL = "/fxml/style.css";
+            scene.getStylesheets().add(styleSheetURL);
+
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
