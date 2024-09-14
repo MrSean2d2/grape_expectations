@@ -178,10 +178,17 @@ public class UserDAO implements DAOInterface<User> {
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM user WHERE id=?";
+        String sqlReview = "DELETE FROM drinks WHERE userid=?";
         try (Connection conn = databaseService.connect();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                PreparedStatement rps = conn.prepareStatement(sqlReview)){
+
             ps.setInt(1, id);
             ps.executeUpdate();
+
+            rps.setInt(1, id);
+            rps.executeUpdate();
+
         } catch (SQLException sqlException) {
             log.error(sqlException);
         }

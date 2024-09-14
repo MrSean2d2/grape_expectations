@@ -255,12 +255,18 @@ public class WineDAO implements DAOInterface<Wine> {
      */
     @Override
     public void delete(int id) {
-        vineyardDAO.delete(id);
         String sql = "DELETE FROM WINE WHERE id=?";
+        String sqlReview = "DELETE FROM drinks WHERE wineid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql);
+             PreparedStatement rps = conn.prepareStatement(sqlReview)) {
+
             ps.setInt(1, id);
             ps.executeUpdate();
+
+            rps.setInt(1, id);
+            rps.executeUpdate();
+
         } catch (SQLException sqlException) {
             log.error(sqlException);
         }
