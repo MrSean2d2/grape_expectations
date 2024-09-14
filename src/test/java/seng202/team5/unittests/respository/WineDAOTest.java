@@ -108,7 +108,11 @@ public class WineDAOTest {
                 87, 200, "testVariety", "Red", testVineyard2);
         wineDAO.add(testWine1);
         wineDAO.add(testWine2);
-        List<Wine> result = wineDAO.getSearchedWines("wine");
+        String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard "
+                +  "AND (wine.name LIKE ? OR wine.description LIKE ?) ";
+        List<Wine> result = wineDAO.getSearchedWines(sql, "wine");
         System.out.println(result.get(0).getDescription());
         Assertions.assertEquals(2, result.size());
     }

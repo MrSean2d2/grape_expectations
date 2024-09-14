@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.opencsv.bean.processor.ConvertEmptyOrBlankStringsToNull;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -168,6 +170,10 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
+    /**
+     * Adds a batch of wine objects.
+     * @param toAdd list of wines to add to database
+     */
     public void batchAdd(List<Wine> toAdd) {
         String sql = "INSERT OR IGNORE INTO WINE (name, year, variety, rating, "
                 + "price, colour, vineyard, description) values (?,?,?,?,?,?,?,?);";
@@ -206,6 +212,10 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
+    /**
+     * Deletes wine entry.
+     * @param id id of wine to delete
+     */
     @Override
     public void delete(int id) {
         vineyardDAO.delete(id);
@@ -218,9 +228,35 @@ public class WineDAO implements DAOInterface<Wine> {
             log.error(sqlException);
         }
     }
+
+    /**
+     * Updates wine entry
+     * @param object Object that needs to be updated (this object must be able to identify itself and its previous self)
+     */
     @Override
     public void update(Wine object) {
         throw new NotImplementedException();
+    }
+
+    /**
+     * Builds sql query for search and filter.
+     *
+     * @param search term to search for
+     * @param year to filter
+     * @return sql string
+     */
+    public String queryBuilder(String search, String year){
+        String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard ";
+        if (search != null) {
+            sql +=  "AND (wine.name LIKE ? OR wine.description LIKE ?) ";
+        }
+        if (year != "0") {
+            sql += "AND wine.year = "+ year;
+        }
+        sql += ";";
+        return sql;
     }
 
     /**
@@ -230,13 +266,11 @@ public class WineDAO implements DAOInterface<Wine> {
      * @param search name or description of wine
      * @return list of wines matching search
      */
-    public List<Wine> getSearchedWines(String search) {
+    public List<Wine> executeSearchFilter(String querySql, String search) {
         List<Wine> searchedWines = new ArrayList<>();
-        String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
-                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard AND (wine.name LIKE ? OR wine.description LIKE ?)";
+
         try (Connection conn = databaseService.connect();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(querySql)) {
             String searchPattern = "%" + search + "%";
             ps.setString(1, searchPattern);
             ps.setString(2, searchPattern);
