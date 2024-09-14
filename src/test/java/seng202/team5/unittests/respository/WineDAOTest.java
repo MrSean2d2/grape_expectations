@@ -99,6 +99,27 @@ public class WineDAOTest {
     }
 
     @Test
+    public void testSearchQueryDescription() {
+        Vineyard testVineyard1 = new Vineyard("tv1","testreg1");
+
+        Wine testWine1 = new Wine("testWine", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
+        Wine testWine2 = new Wine("testWine2", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
+        Wine testWine3 = new Wine("testWine3", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
+
+        List<Wine> testWineList = new ArrayList<Wine>(){{add(testWine1); add(testWine2); add(testWine3);}};
+
+        wineDAO.batchAdd(testWineList);
+
+        String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard "
+                +  "AND (wine.name LIKE ? OR wine.description LIKE ?) ";
+        List<Wine> result = wineDAO.executeSearchFilter(sql, "tasty");
+
+        assertEquals(3, result.size());
+    }
+
+    @Test
     public void testGetSearchedWine() {
         Vineyard testVineyard1 = new Vineyard("Test Vineyard", "Test Region");
         Wine testWine1 = new Wine("Test Wine 1", "A very nice wine", 2024,
