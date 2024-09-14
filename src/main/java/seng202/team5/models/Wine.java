@@ -41,7 +41,6 @@ public class Wine {
         this.year = year;
         this.ratingValue = ratingValue;
         this.price = price;
-        // this.favourite = favourite;
         this.wineVariety = wineVariety;
         this.colour = colour;
         this.vineyard = vineYard;
