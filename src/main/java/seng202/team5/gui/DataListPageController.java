@@ -21,8 +21,17 @@ import java.util.List;
  */
 public class DataListPageController {
     @FXML
-
     public ComboBox yearComboBox;
+    @FXML
+    public ComboBox regionComboBox;
+    @FXML
+    public ComboBox varietyComboBox;
+    @FXML
+    public Slider priceSlider;
+    @FXML
+    public Slider ratingSlider;
+    @FXML
+    public ToggleButton favToggleButton;
     @FXML
     private TableView<Wine> wineTable;
 
@@ -56,19 +65,6 @@ public class DataListPageController {
     private double maxRatingFilter;
     private boolean favouriteFilter;
 
-    private void setUpFilterButtons() {
-        //TODO: implement better way of initialisingFixed test
-        ObservableList<String> yearOptions = FXCollections.observableArrayList();
-        yearOptions.add("Year");
-        yearOptions.add("2008");
-        yearOptions.add("2009");
-        yearOptions.add("2010");
-        yearComboBox.setItems(yearOptions);
-
-        //for (String varietyName : ) get list of varieties from DAO
-            //varietyMenuButton.getItems().add(new MenuItem(varietyName));
-    }
-
     /**
      * Initializes the data List by calling {@link seng202.team5.services.WineService}
      * to populate the list of wines.
@@ -83,15 +79,11 @@ public class DataListPageController {
 
         //favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
 
-        setUpFilterButtons();
-
         ObservableList<Wine> wines = FXCollections.observableArrayList(WineService.getInstance()
                 .getWineList());
 
-
         // Add data to TableView
         wineTable.setItems(wines);
-
 
         wineTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -114,8 +106,31 @@ public class DataListPageController {
                 }
             }
         });
+
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
+
+        setUpFilterButtons();
+    }
+
+    /**
+     * Initialises items in combo boxes.
+     */
+    private void setUpFilterButtons() {
+        List<String> yearOptions = wineDAO.getYear();
+        ObservableList<String> observableYearList = FXCollections.observableArrayList(yearOptions);
+        observableYearList.add(0, "Year");
+        yearComboBox.setItems(observableYearList);
+
+        List<String> regionOptions = vineyardDAO.getRegions();
+        ObservableList<String> observableRegionsList = FXCollections.observableArrayList(regionOptions);
+        observableRegionsList.add(0, "Region");
+        regionComboBox.setItems(observableRegionsList);
+
+        List<String> varietyOptions = wineDAO.getVariety();
+        ObservableList<String> observableVarietyList = FXCollections.observableArrayList(varietyOptions);
+        observableVarietyList.add(0, "Variety");
+        varietyComboBox.setItems(observableVarietyList);
     }
 
     /**
@@ -166,6 +181,28 @@ public class DataListPageController {
     }
 
     /**
+     * Handles action of Variety filter selected.
+     */
+    public void onVarietyComboBoxClicked() {
+        String selectedVariety = String.valueOf(varietyComboBox.getValue());
+        if (!(selectedVariety == "Variety" || selectedVariety == null)) {
+            varietyFilter = selectedVariety;
+        }
+        applySearchFilters();
+    }
+
+    /**
+     * Handles action of Region filter selected.
+     */
+    public void onRegionComboBoxClicked() {
+        String selectedRegion = String.valueOf(regionComboBox.getValue());
+        if (!(selectedRegion == "Region" || selectedRegion == null)) {
+            regionFilter = selectedRegion;
+        }
+        applySearchFilters();
+    }
+
+    /**
      * Handles action of Year filter selected.
      */
     public void onYearComboBoxClicked() {
@@ -178,7 +215,40 @@ public class DataListPageController {
     }
 
     /**
-     * Resets search and filters
+     * Handles action of price slider changing.
+     */
+    public void onPriceSliderChanged() {
+        double maxPrice = priceSlider.getValue();
+        if (maxPrice != 0.0) {
+            maxPriceFilter = maxPrice;
+        }
+        applySearchFilters();
+    }
+
+    /**
+     * Handles action of rating slider changing.
+     */
+    public void onRatingSliderChanged() {
+        double maxRating = ratingSlider.getValue();
+        if (maxRating != 0.0) {
+            maxRatingFilter = maxRating;
+        }
+        applySearchFilters();
+    }
+
+    /**
+     * Handles action of favourite toggle button being selected.
+     */
+    public void onFavToggleButtonClicked() {
+        boolean isFavourited = favToggleButton.isSelected();
+        if (isFavourited != false) {
+            favouriteFilter = true;
+        }
+        applySearchFilters();
+    }
+
+    /**
+     * Resets search and filters.
      */
     public void onResetSearchFilterButtonClicked() {
         searchTextField.clear();
@@ -186,6 +256,11 @@ public class DataListPageController {
         setDefaultFilters();
         ObservableList<Wine> observableWines = FXCollections.observableArrayList(wineDAO.getAll());
         wineTable.setItems(observableWines);
+        varietyComboBox.setValue(varietyComboBox.getItems().get(0));
+        regionComboBox.setValue(regionComboBox.getItems().get(0));
         yearComboBox.setValue(yearComboBox.getItems().get(0));
+        priceSlider.setValue(0.0);
+        ratingSlider.setValue(0.0);
+        favToggleButton.setSelected(false);
     }
 }

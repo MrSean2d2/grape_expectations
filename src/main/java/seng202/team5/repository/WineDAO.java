@@ -238,6 +238,38 @@ public class WineDAO implements DAOInterface<Wine> {
         throw new NotImplementedException();
     }
 
+    public List<String> getVariety() {
+        List<String> varieties = new ArrayList<>();
+        String sql = "SELECT DISTINCT variety FROM WINE ORDER BY variety;";
+        try (Connection conn = databaseService.connect();
+             Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                varieties.add(rs.getString("variety"));
+            }
+            return varieties;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+    public List<String> getYear() {
+        List<String> years = new ArrayList<>();
+        String sql = "SELECT DISTINCT year FROM WINE ORDER BY year;";
+        try (Connection conn = databaseService.connect();
+             Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                years.add(rs.getString("year"));
+            }
+            return years;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
     /**
      * Builds sql query for search and filter.
      *
