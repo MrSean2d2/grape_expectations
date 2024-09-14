@@ -161,7 +161,7 @@ public class DatabaseService {
                 .getLocation().getPath();
 
         path = URLDecoder.decode(path, StandardCharsets.UTF_8);
-        File jarDir = new File(path).getParentFile();
-        return "jdbc:sqlite:" + jarDir.getAbsolutePath() + "/database.db";
+        File jarDir = new File(path);
+        return "jdbc:sqlite:" + jarDir.getParentFile() + "/database.db";
     }
 }

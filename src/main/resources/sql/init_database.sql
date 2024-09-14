@@ -1,14 +1,10 @@
-DROP TABLE IF EXISTS REGION;
---SPLIT
-CREATE TABLE IF NOT EXISTS REGION (
-    name TEXT PRIMARY KEY
-);
 --SPLIT
 DROP TABLE IF EXISTS VINEYARD;
 --SPLIT
 CREATE TABLE IF NOT EXISTS VINEYARD (
-    name TEXT PRIMARY KEY,
-    region TEXT REFERENCES REGION(name),
+    id INTEGER PRIMARY KEY,
+    name TEXT UNIQUE,
+    region TEXT,
     latitude NUMERIC,
     longitude NUMERIC
 );
@@ -20,10 +16,10 @@ CREATE TABLE IF NOT EXISTS WINE (
     name TEXT UNIQUE,
     year INTEGER,
     variety TEXT,
-    rating NUMERIC,
+    rating INTEGER,
     price NUMERIC,
     colour TEXT,
-    vineyard TEXT REFERENCES VINEYARD(name),
+    vineyard INTEGER REFERENCES VINEYARD(id),
     description TEXT
 );
 --SPLIT

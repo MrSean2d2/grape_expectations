@@ -13,14 +13,19 @@ import seng202.team5.models.User;
  * Database Access Object for the User table in the SQL database.
  *
  * @author Martyn Gascoigne
+ * @author Finn Brown
  */
 public class UserDAO implements DAOInterface<User> {
     private final DatabaseService databaseService;
     private static final Logger log = LogManager.getLogger(UserDAO.class);
 
+    /**
+     * Constructor - initialise / grab the singleton of DatabaseService.
+     */
     public UserDAO() {
         databaseService = DatabaseService.getInstance();
     }
+
 
     /**
      * Gets a list of users in the user table.
@@ -49,6 +54,7 @@ public class UserDAO implements DAOInterface<User> {
             return new ArrayList<>();
         }
     }
+
 
     /**
      * Gets an individual user from database by id.
@@ -92,9 +98,9 @@ public class UserDAO implements DAOInterface<User> {
     public User getFromUserName(String username) throws NotFoundException {
         String sql = "SELECT * FROM user WHERE username=?";
         try (Connection conn = databaseService.connect();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new User(rs.getInt("id"),
                         rs.getString("username"),
@@ -108,6 +114,7 @@ public class UserDAO implements DAOInterface<User> {
         throw new NotFoundException(String.format("No user with %s found", username));
     }
 
+
     /**
      * Checks if a username is unique.
      *
@@ -117,9 +124,9 @@ public class UserDAO implements DAOInterface<User> {
     public boolean userIsUnique(String username) {
         String sql = "SELECT * FROM user WHERE username=?";
         try (Connection conn = databaseService.connect();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return false;
             }
@@ -128,6 +135,7 @@ public class UserDAO implements DAOInterface<User> {
         }
         return true;
     }
+
 
     /**
      * Adds an individual user to database.
@@ -161,6 +169,7 @@ public class UserDAO implements DAOInterface<User> {
         }
     }
 
+
     /**
      * Deletes user from database by id.
      *
@@ -177,6 +186,7 @@ public class UserDAO implements DAOInterface<User> {
             log.error(sqlException);
         }
     }
+
 
     /**
      * Updates user in database.

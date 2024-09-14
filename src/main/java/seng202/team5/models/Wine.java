@@ -1,5 +1,7 @@
 package seng202.team5.models;
 
+import java.util.Objects;
+
 /**
  * Default Wine class.
  *
@@ -7,15 +9,69 @@ package seng202.team5.models;
  */
 public class Wine {
     private int id;
-    private String name = null;
-    private String description = null;
+    private String name;
+    private final String description;
     private int year = 0;
     private int ratingValue = 0;
     private double price = 0.0;
     private boolean favourite = false;
-    private WineVariety wineVariety;
-    private Region region;
+    private String wineVariety;
+    private String colour;
     private Vineyard vineyard;
+
+    /**
+     * Constructor for creating a wine object with a name,
+     * description, year, rating, price and favourite status.
+     *
+     * @param id the wine's id
+     * @param name name of wine
+     * @param description description of wine
+     * @param year year of wine
+     * @param ratingValue rating value of wine
+     * @param price current market price of wine
+     * @param wineVariety variety of the wine
+     * @param vineYard the vineyard the wine comes from
+     */
+    public Wine(int id, String name, String description, int year, int ratingValue, double price,
+                String wineVariety, String colour, Vineyard vineYard) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.year = year;
+        this.ratingValue = ratingValue;
+        this.price = price;
+        // this.favourite = favourite;
+        this.wineVariety = wineVariety;
+        this.colour = colour;
+        this.vineyard = vineYard;
+    }
+
+    /**
+     * Constructor for creating a wine object with a name,
+     * description, year, rating, price and favourite status. The wine's id is
+     * determined by the database.
+     *
+     * @param name the name of the wine
+     * @param description the wine's description
+     * @param year the year the wine was produced
+     * @param ratingValue the wine's rating value (0 - 100)
+     * @param price the wine's price
+     * @param wineVariety the grape variety of the wine
+     * @param vineyard the vineyard which produced the wine
+     */
+    public Wine(String name, String description, int year, int ratingValue,
+                double price, String wineVariety, String colour, Vineyard vineyard) {
+        this.colour = colour;
+        this.id = 0;
+        this.name = name;
+        this.description = description;
+        this.year = year;
+        this.ratingValue = ratingValue;
+        this.price = price;
+        this.wineVariety = wineVariety;
+        this.vineyard = vineyard;
+    }
+
 
     /**
      * Gets the wine name.
@@ -26,6 +82,7 @@ public class Wine {
         return name;
     }
 
+
     /**
      * Gets the wine's current market price.
      *
@@ -34,6 +91,7 @@ public class Wine {
     public double getPrice() {
         return price;
     }
+
 
     /**
      * Gets the bottled year.
@@ -44,14 +102,16 @@ public class Wine {
         return year;
     }
 
+
     /**
      * Gets the wine's rating value.
      *
      * @return ratingValue
      */
-    public double getRating() {
+    public int getRating() {
         return ratingValue;
     }
+
 
     /**
      * Gets the favourite status of the wine.
@@ -61,6 +121,67 @@ public class Wine {
     public boolean isFavourite() {
         return favourite;
     }
+
+
+    /**
+     * Gets the wine id.
+     *
+     * @return id
+     */
+    public int getId() {
+        return id;
+    }
+
+
+    /**
+     * Gets the wine description.
+     *
+     * @return description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+
+    /**
+     * Gets the wine vineyard.
+     *
+     * @return vineyard object
+     */
+    public Vineyard getVineyard() {
+        return vineyard;
+    }
+
+
+    /**
+     * Gets the wine variety.
+     *
+     * @return wine variety
+     */
+    public String getWineVariety() {
+        return wineVariety;
+    }
+
+
+    /**
+     * Gets the wine's colour.
+     *
+     * @return the colour of the wine
+     */
+    public String getWineColour() {
+        return colour;
+    }
+
+
+    /**
+     * Gets the wine region.
+     *
+     * @return wine region
+     */
+    public String getRegion() {
+        return vineyard.getRegion();
+    }
+
 
     /**
      * Constructor for creating a wine object with a name and description.
@@ -73,30 +194,58 @@ public class Wine {
         this.description = description;
     }
 
+
     /**
-     * Constructor for creating a wine object with a name,
-     * description, year, rating, price and favourite status
+     * Set the wine's id,
      *
-     * @param name name of wine
-     * @param description description of wine
-     * @param year year of wine
-     * @param ratingValue rating value of wine
-     * @param price current market price of wine
-     * @param favourite favourite status of wine
-     * @param winevariety variety of the wine
-     * @param region the region the wine comes from
-     * @param vineYar the vineyard the wine comes from
+     * @param id the new id
      */
-    public Wine(int id, String name, String description, int year, int ratingValue, double price, WineVariety wineVariety, Region region, Vineyard vineYard) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+
+    /**
+     * Set the wine's name.
+     *
+     * @param name the wine's new name
+     */
+    public void setName(String name) {
         this.name = name;
-        this.description = description;
-        this.year = year;
-        this.ratingValue = ratingValue;
-        this.price = price;
-       // this.favourite = favourite;
-        this.wineVariety = wineVariety;
-        this.region = region;
-        this.vineyard = vineYard;
+    }
+
+
+    /**
+     * Set the wine's colour.
+     *
+     * @param colour the wine's new colour
+     */
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
+
+
+    /**
+     * Check if this object is equal to another given object.
+     *
+     * @param o the object to compare
+     * @return tue if the objects are equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Wine wine = (Wine) o;
+        return id == wine.id && year == wine.year && ratingValue == wine.ratingValue &&
+                Double.compare(price, wine.price) == 0 && favourite == wine.favourite &&
+                Objects.equals(name, wine.name) &&
+                Objects.equals(description, wine.description) &&
+                Objects.equals(wineVariety, wine.wineVariety) &&
+                Objects.equals(colour, wine.colour) &&
+                (Objects.equals(vineyard.getName(), wine.vineyard.getName()));
     }
 }

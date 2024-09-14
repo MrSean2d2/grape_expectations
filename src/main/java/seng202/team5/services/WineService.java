@@ -1,33 +1,69 @@
 package seng202.team5.services;
 
-import seng202.team5.models.Wine;
-
 import java.util.List;
+import seng202.team5.gui.AppEnvironment;
+import seng202.team5.models.Wine;
+import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
 
 /**
  * Service Class to manage wine actions.
  */
 public class WineService {
-
-    // private DataLoadService dataService;
-    // private WineDataStoreService dataStorage;
-
     private List<Wine> wineList;
+    private Wine selectedWine;
+    private final WineDAO wineDAO;
+    private static WineService instance;
 
-    /**
-     * Constructor.
-     */
-    public WineService(List<Wine> wineList) {
-        this.wineList = wineList;
+    private WineService() {
+        wineDAO = new WineDAO(new VineyardDAO());
     }
 
-
-    private Wine selectedWine;
-    private static WineService instance;
-    private WineService() {}
+    public void populateDatabase(DataLoadService dataLoadService) {
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        wineDAO.batchAdd(wines);
+    }
 
     /**
-     * returns the singleton WineService instance
+     * Get list of wines.
+     *
+     * @return Wine list
+     */
+    public List<Wine> getWineList() {
+        return wineDAO.getAll();
+    }
+
+    /**
+     * Add new Wine entry.
+     */
+    public void addWine(Wine wineEntry) {
+        wineList.add(wineEntry);
+    }
+
+    /**
+     * Delete existing Wine entry.
+     */
+    public void delWine(Wine wineEntry) {
+        wineList.remove(wineEntry);
+    }
+
+    /**
+     * Apply filter to column by input filter condition.
+     */
+    public void filter(String colName, String filter) {
+
+    }
+
+    /**
+     * Search for a wine by specified term.
+     */
+    public void search(String term) {
+
+    }
+
+    /**
+     * Returns the singleton WineService instance.
+     *
      * @return instance
      */
     public static WineService getInstance() {
@@ -39,18 +75,21 @@ public class WineService {
 
 
     /**
-     * Sets selectedWine to the wine clicked on in DataListPage
-     * @param wine
+     * Sets selectedWine to the wine clicked on in DataListPage.
+     *
+     * @param wine the
      */
     public void setSelectedWine(Wine wine) {
         this.selectedWine = wine;
     }
 
     /**
-     * Returns the wine selected in DataListPage
+     * Returns the wine selected in DataListPage.
+     *
      * @return selectedWine
      */
     public Wine getSelectedWine() {
         return selectedWine;
     }
+
 }

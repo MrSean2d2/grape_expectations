@@ -1,8 +1,6 @@
 package seng202.team5.unittests.respository;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import static org.junit.jupiter.api.Assertions.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,15 +12,20 @@ import seng202.team5.models.User;
 import seng202.team5.repository.DatabaseService;
 import seng202.team5.repository.UserDAO;
 
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the UserDAO.
+ *
+ * @author Martyn Gascoigne
+ */
 public class UserDAOTest {
     private static final Logger log = LogManager.getLogger(UserDAOTest.class);
     private static UserDAO userDAO;
     private static DatabaseService databaseService;
 
+
     /**
-     * Set up the testing scenario
+     * Set up the testing scenario.
      */
     @BeforeAll
     public static void setUp() throws InstanceAlreadyExistsException {
@@ -31,6 +34,7 @@ public class UserDAOTest {
                 "jdbc:sqlite:./src/test/resources/test.db");
         userDAO = new UserDAO();
     }
+
 
     /**
      * Reset the database before each test
@@ -41,16 +45,18 @@ public class UserDAOTest {
     }
 
 
+
     /**
-     * Test to ensure the database is reset when created
+     * Test that the database is empty on creation.
      */
     @Test
     public void testEmptyOnCreation() {
         assertEquals(0, userDAO.getAll().size());
     }
 
+
     /**
-     * Test the DAO getting one instance from the user table
+     * Test the DAO getting one instance from the user table.
      */
     @Test
     public void testGetOne() throws DuplicateEntryException {
@@ -65,8 +71,9 @@ public class UserDAOTest {
         assertEquals(0, user.getIconNumber());
     }
 
+
     /**
-     * Test the DAO getting all instances from the user table
+     * Test the DAO getting all instances from the user table.
      */
     @Test
     public void testGetAll() throws DuplicateEntryException {
@@ -80,8 +87,9 @@ public class UserDAOTest {
         assertEquals(3, userDAO.getAll().size());
     }
 
+
     /**
-     * Test the DAO adding one instance to the user table
+     * Test the DAO adding one instance to the user table.
      */
     @Test
     public void testAdd() throws DuplicateEntryException {
@@ -96,8 +104,9 @@ public class UserDAOTest {
         assertEquals(2, userDAO.getAll().size());
     }
 
+
     /**
-     * Test the DAO deleting one instance from the user table
+     * Test the DAO deleting one instance from the user table.
      */
     @Test
     public void testDelete() throws DuplicateEntryException {
@@ -112,8 +121,9 @@ public class UserDAOTest {
         assertEquals(0, userDAO.getAll().size());
     }
 
+
     /**
-     * Test the DAO updating a user
+     * Test the DAO updating a user.
      */
     @Test
     public void testUpdate() throws DuplicateEntryException {
