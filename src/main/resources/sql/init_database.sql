@@ -37,9 +37,9 @@ DROP TABLE IF EXISTS DRINKS;
 --SPLIT
 CREATE TABLE IF NOT EXISTS DRINKS (
     wineid INTEGER REFERENCES WINE(id),
-    user TEXT REFERENCES USER(id),
+    userid TEXT REFERENCES USER(id),
     favorite BOOLEAN,
     notes TEXT,
     rating INTEGER,
-    PRIMARY KEY (wineid, user)
+    PRIMARY KEY (wineid, userid)
 )

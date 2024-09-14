@@ -229,7 +229,7 @@ public class Wine {
      * Check if this object is equal to another given object.
      *
      * @param o the object to compare
-     * @return tue if the objects are equal, false otherwise
+     * @return true if the objects are equal, false otherwise
      */
     @Override
     public boolean equals(Object o) {
