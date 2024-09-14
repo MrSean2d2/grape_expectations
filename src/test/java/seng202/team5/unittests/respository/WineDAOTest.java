@@ -37,8 +37,6 @@ public class WineDAOTest {
         DatabaseService.removeInstance();
         databaseService = DatabaseService.initialiseInstanceWithUrl(
                 "jdbc:sqlite:./src/test/resources/test.db");
-        WineVarietyService wineVarietyService = new WineVarietyService();
-        RegionService regionService = new RegionService();
         VineyardDAO vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
     }
@@ -112,6 +110,7 @@ public class WineDAOTest {
     @Test
     public void testBatchAdd() {
         Vineyard testVineyard1 = new Vineyard("tv1","testreg1");
+
 
         Wine testWine1 = new Wine("testWine", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
         Wine testWine2 = new Wine("testWine2", "tasty", 2023, 85, 15.99, "testVariety","Red", testVineyard1);
