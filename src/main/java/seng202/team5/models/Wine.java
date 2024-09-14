@@ -1,6 +1,8 @@
 package seng202.team5.models;
 
 import java.util.Objects;
+import seng202.team5.repository.DrinksDAO;
+import seng202.team5.services.UserService;
 
 /**
  * Default Wine class.
@@ -10,7 +12,7 @@ import java.util.Objects;
 public class Wine {
     private int id;
     private String name;
-    private final String description;
+    private String description = null;
     private int year = 0;
     private int ratingValue = 0;
     private double price = 0.0;
@@ -19,6 +21,16 @@ public class Wine {
     private String wineVariety;
     private String colour;
     private Vineyard vineyard;
+
+    private DrinksDAO drinksDAO;
+
+    /**
+     * DrinksDAO constructor
+     */
+    {
+        this.drinksDAO = new DrinksDAO();
+    }
+
 
     /**
      * Constructor for creating a wine object with a name,
@@ -153,26 +165,6 @@ public class Wine {
 
 
     /**
-     * Gets the favourite status of the wine.
-     * TODO: get the favourite status from the database
-     *
-     * @return favourite
-     */
-    public boolean isFavourite() {
-        return favourite;
-    }
-
-    /**
-     * Gets the wine's user notes.
-     * TODO: get the notes from the database
-     *
-     * @return
-     */
-    public String getNotes() {
-        return notes;
-    }
-
-    /**
      * Gets the wine id.
      *
      * @return id
@@ -259,30 +251,6 @@ public class Wine {
      */
     public void setColour(String colour) {
         this.colour = colour;
-    }
-
-    /**
-     * Set the wine's notes.
-     * TODO: make this edit the database
-     *
-     * @param notes
-     */
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    /**
-     * Toggles the wine's favourite status.
-     * TODO: make this edit the database
-     *
-     * @param favourite
-     */
-    public void toggleFavourite(boolean favourite) {
-        if (favourite) {
-            this.favourite = false;
-        } else {
-            this.favourite = true;
-        }
     }
 
 

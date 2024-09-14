@@ -1,5 +1,7 @@
 package seng202.team5.models;
 
+import seng202.team5.repository.DrinksDAO;
+
 import java.util.Objects;
 
 /**
@@ -13,6 +15,15 @@ public class Drinks {
     private boolean favourite;
     private String notes;
     private int rating;
+
+    private DrinksDAO drinksDAO;
+
+    /**
+     * DrinksDAO constructor
+     */
+    {
+        this.drinksDAO = new DrinksDAO();
+    }
 
 
     /**
@@ -114,31 +125,38 @@ public class Drinks {
 
 
     /**
-     * Set the wine's favourite status.
+     * Toggles the wine's favourite status and updates the database.
      *
-     * @param favourite whether the wine is favourite
+     * @param favourite whether the wine is favourite or not
      */
-    public void setFavourite(boolean favourite) {
-        this.favourite = favourite;
+    public void toggleFavourite(boolean favourite) {
+        if (favourite) {
+            this.favourite = false;
+        } else {
+            this.favourite = true;
+        }
+        drinksDAO.update(this);
     }
 
 
     /**
-     * Set the notes.
+     * Set the notes and updates the database.
      *
      * @param notes the notes to set
      */
     public void setNotes(String notes) {
         this.notes = notes;
+        drinksDAO.update(this);
     }
 
     /**
-     * Set the review value.
+     * Set the review value and updates the database.
      *
      * @param rating the number of stars
      */
     public void setRating(int rating) {
         this.rating = rating;
+        drinksDAO.update(this);
     }
 
 

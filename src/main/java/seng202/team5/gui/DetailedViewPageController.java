@@ -6,8 +6,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import seng202.team5.exceptions.DuplicateEntryException;
+import seng202.team5.models.User;
 import seng202.team5.models.Wine;
+import seng202.team5.repository.DrinksDAO;
+import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
+import seng202.team5.models.Drinks;
 
 
 /**
@@ -51,14 +56,32 @@ public class DetailedViewPageController {
     @FXML
     public void initialize() {
         Wine selectedWine = WineService.getInstance().getSelectedWine();
+        int selectedWineID = selectedWine.getId();
+        int currentUserID = UserService.getInstance().getCurrentUser().getId();
+
+        DrinksDAO drinksDAO = new DrinksDAO();
+        if (drinksDAO.getWineReview(selectedWineID, currentUserID) == null) {
+            Drinks review = new Drinks(selectedWineID, currentUserID);
+            try {
+                drinksDAO.add(review);
+            } catch (DuplicateEntryException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        Drinks review = drinksDAO.getWineReview(selectedWineID, currentUserID);
+
         if (selectedWine != null) {
             nameLabel.setText("" + selectedWine.getName());
             priceLabel.setText("Price: $" + selectedWine.getPrice());
             yearLabel.setText("Year: " + selectedWine.getYear());
             ratingLabel.setText("Score: " + selectedWine.getRating());
             wineDescriptionLabel.setText(selectedWine.getDescription());
-            updateFavoriteButton(selectedWine.isFavourite());
-            if (selectedWine.isFavourite()) {
+        }
+        if (review != null) {
+            notesTextArea.setText(review.getNotes());
+            updateFavoriteButton(review.isFavourite());
+            if (review.isFavourite()) {
                 favoriteToggleButton.setStyle("-fx-background-color: #ffdd00");
             }
         }
@@ -70,10 +93,14 @@ public class DetailedViewPageController {
      */
     @FXML
     private void handleToggleFavourite(ActionEvent event) {
-        Wine selectedWine = WineService.getInstance().getSelectedWine();
-        if (selectedWine != null) {
-            selectedWine.toggleFavourite(selectedWine.isFavourite());
-            updateFavoriteButton(selectedWine.isFavourite());
+        int selectedWineID = WineService.getInstance().getSelectedWine().getId();
+        int currentUserID = UserService.getInstance().getCurrentUser().getId();
+        DrinksDAO drinksDAO = new DrinksDAO();
+        Drinks review = drinksDAO.getWineReview(selectedWineID, currentUserID);
+
+        if (review != null) {
+            review.toggleFavourite(review.isFavourite());
+            updateFavoriteButton(review.isFavourite());
         }
     }
 
@@ -84,9 +111,13 @@ public class DetailedViewPageController {
      */
     @FXML
     private void handleSaveNotes(ActionEvent event) {
-        Wine selectedWine = WineService.getInstance().getSelectedWine();
-        if (selectedWine != null) {
-            selectedWine.setNotes(notesTextArea.getText());
+        int selectedWineID = WineService.getInstance().getSelectedWine().getId();
+        int currentUserID = UserService.getInstance().getCurrentUser().getId();
+        DrinksDAO drinksDAO = new DrinksDAO();
+        Drinks review = drinksDAO.getWineReview(selectedWineID, currentUserID);
+
+        if (review != null) {
+            review.setNotes(notesTextArea.getText());
         }
     }
 
