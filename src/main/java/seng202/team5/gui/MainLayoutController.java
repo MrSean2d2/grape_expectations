@@ -9,7 +9,8 @@ import javafx.stage.Stage;
 
 
 /**
- * Controller for the Wrapper.fxml page (page header)
+ * Controller for the Wrapper.fxml page (page header).
+ *
  * @author team 5
  */
 public class MainLayoutController {
@@ -31,9 +32,9 @@ public class MainLayoutController {
 
 
     /**
-     * Load the home page
+     * Load the home page.
      *
-     * @throws Exception
+     * @throws Exception if there is an error loading the page
      */
     @FXML
     private void loadHomePage() throws Exception {
@@ -43,9 +44,9 @@ public class MainLayoutController {
 
 
     /**
-     * Load the data list page
+     * Load the data list page.
      *
-     * @throws Exception
+     * @throws Exception if there is an error loading the page
      */
     @FXML
     private void loadDataListPage() throws Exception {
@@ -55,9 +56,9 @@ public class MainLayoutController {
 
 
     /**
-     * Load the map page
+     * Load the map page.
      *
-     * @throws Exception
+     * @throws Exception if there is an error loading the page
      */
     @FXML
     private void loadMapPage() throws Exception {
@@ -67,9 +68,9 @@ public class MainLayoutController {
 
 
     /**
-     * Load the account page
+     * Load the account page.
      *
-     * @throws Exception
+     * @throws Exception if there is an error loading the page
      */
     @FXML
     private void loadAccountPage() throws Exception {
@@ -79,13 +80,14 @@ public class MainLayoutController {
 
 
     /**
-     * loads the detailed wine view page,
-     * detailed view is accessed by double-clicking on a wine in
+     * Loads the detailed wine view page.
+     * Detailed view is accessed by double-clicking on a wine in
      * the wine table in view data page -
      * WARNING!:
      * currently not working because detailed view page does not have a pagecontroller
      * so does not get called
-     * @throws Exception
+     *
+     * @throws Exception if there is an error loading the page
      */
     public void loadDetailedViewPage() throws Exception {
         loadPage("/fxml/DetailedViewPage.fxml");
@@ -93,10 +95,10 @@ public class MainLayoutController {
 
 
     /**
-     * Load a page with a path given as an argument
+     * Load a page with a path given as an argument.
      *
-     * @param String path to fxml file
-     * @throws Exception
+     * @param fxml path to fxml file
+     * @throws Exception if there is an error loading the page
      */
     private void loadPage(String fxml) throws Exception {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource(fxml));
@@ -111,7 +113,7 @@ public class MainLayoutController {
 
 
     /**
-     * Initialize the window
+     * Initialize the window.
      *
      * @param stage Top level container for this window
      */
