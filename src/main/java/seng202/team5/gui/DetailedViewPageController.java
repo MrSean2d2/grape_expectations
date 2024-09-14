@@ -10,7 +10,11 @@ import seng202.team5.models.Wine;
 import seng202.team5.services.WineService;
 
 
-
+/**
+ * Controller for the detailed view page
+ *
+ * @author Finn Brown
+ */
 public class DetailedViewPageController {
 
     @FXML
@@ -32,6 +36,9 @@ public class DetailedViewPageController {
     private Label ratingLabel;
 
     @FXML
+    private Label wineDescriptionLabel;
+
+    @FXML
     private TextArea notesTextArea;
 
     @FXML
@@ -49,7 +56,7 @@ public class DetailedViewPageController {
             priceLabel.setText("Price: $" + selectedWine.getPrice());
             yearLabel.setText("Year: " + selectedWine.getYear());
             ratingLabel.setText("Score: " + selectedWine.getRating());
-            notesTextArea.setText(selectedWine.getDescription());
+            wineDescriptionLabel.setText(selectedWine.getDescription());
             updateFavoriteButton(selectedWine.isFavourite());
             if (selectedWine.isFavourite()) {
                 favoriteToggleButton.setStyle("-fx-background-color: #ffdd00");
@@ -64,7 +71,6 @@ public class DetailedViewPageController {
     @FXML
     private void handleToggleFavourite(ActionEvent event) {
         Wine selectedWine = WineService.getInstance().getSelectedWine();
-        System.out.println("" + selectedWine.getDescription());
         if (selectedWine != null) {
             selectedWine.toggleFavourite(selectedWine.isFavourite());
             updateFavoriteButton(selectedWine.isFavourite());
@@ -73,6 +79,7 @@ public class DetailedViewPageController {
 
     /**
      * Saves the notes that are currently in the text box
+     *
      * @param event
      */
     @FXML
@@ -85,6 +92,7 @@ public class DetailedViewPageController {
 
     /**
      * Closes the page
+     *
      * @param event
      */
     @FXML
@@ -94,6 +102,7 @@ public class DetailedViewPageController {
 
     /**
      * Updates text of the toggle favorite button based on if the wine is favorited or not
+     *
      * @param isFavorited
      */
     private void updateFavoriteButton(boolean isFavorited) {
