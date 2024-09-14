@@ -112,7 +112,7 @@ public class WineDAOTest {
                 + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
                 + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard "
                 +  "AND (wine.name LIKE ? OR wine.description LIKE ?) ";
-        List<Wine> result = wineDAO.getSearchedWines(sql, "wine");
+        List<Wine> result = wineDAO.executeSearchFilter(sql, "wine");
         System.out.println(result.get(0).getDescription());
         Assertions.assertEquals(2, result.size());
     }
