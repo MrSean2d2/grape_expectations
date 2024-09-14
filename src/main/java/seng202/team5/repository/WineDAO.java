@@ -245,16 +245,32 @@ public class WineDAO implements DAOInterface<Wine> {
      * @param year to filter
      * @return sql string
      */
-    public String queryBuilder(String search, String year){
+    public String queryBuilder(String search, String variety, String region, String year, double minPrice, double maxPrice, double minRating, double maxScore, boolean favourite){
         String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
                 + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
-                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard ";
+                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard";
         if (search != null) {
-            sql +=  "AND (wine.name LIKE ? OR wine.description LIKE ?) ";
+            sql +=  " AND (wine.name LIKE ? OR wine.description LIKE ?) ";
+        }
+        if(variety != "0") {
+            sql += " AND wine.variety = "+variety;
+        }
+        if (region != "0") {
+            sql += " AND vineyard.region = "+region;
         }
         if (year != "0") {
-            sql += "AND wine.year = "+ year;
+            sql += " AND wine.year = "+ year;
         }
+        //TODO: implement minPrice sql query
+        if (maxPrice != 800.0) {
+            sql+= " AND wine.price <= "+ String.valueOf(maxPrice);
+        }
+        //TODO: implement minRating sql query
+        if(maxScore != 100.0) {
+            sql += " AND wine.rating <= " + String.valueOf(maxScore);
+        }
+        //TODO: implement favourite toggle -- wait for drinks table
+
         sql += ";";
         return sql;
     }

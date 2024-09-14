@@ -89,8 +89,8 @@
                       <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Slider fx:id="scoreSlider" GridPane.rowIndex="1" />
-                        <Label alignment="CENTER" ellipsisString="---" prefHeight="17.0" prefWidth="111.0" text="Score" textOverrun="CLIP" GridPane.halignment="CENTER" />
+                        <Slider fx:id="ratingSlider" GridPane.rowIndex="1" />
+                        <Label alignment="CENTER" ellipsisString="---" prefHeight="17.0" prefWidth="111.0" text="Rating" textOverrun="CLIP" GridPane.halignment="CENTER" />
                      </children>
                   </GridPane>
                   <GridPane GridPane.columnIndex="3">
@@ -102,7 +102,7 @@
                         <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Slider fx:id="priceSlider" GridPane.rowIndex="1" />
+                        <Slider fx:id="priceSlider" showTickLabels="true" showTickMarks="true" GridPane.rowIndex="1" />
                         <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Price" GridPane.halignment="CENTER" />
                      </children>
                   </GridPane>

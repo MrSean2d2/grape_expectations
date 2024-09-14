@@ -2,7 +2,6 @@ package seng202.team5.gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -53,12 +52,12 @@ public class DataListPageController {
     private String regionFilter;
     private double minPriceFilter;
     private double maxPriceFilter;
-    private double minScoreFilter;
-    private double maxScoreFilter;
+    private double minRatingFilter;
+    private double maxRatingFilter;
     private boolean favouriteFilter;
 
     private void setUpFilterButtons() {
-        //TODO: implement better way of initialising
+        //TODO: implement better way of initialisingFixed test
         ObservableList<String> yearOptions = FXCollections.observableArrayList();
         yearOptions.add("Year");
         yearOptions.add("2008");
@@ -128,8 +127,8 @@ public class DataListPageController {
         this.regionFilter = "0";
         this.minPriceFilter = 0.0;
         this.maxPriceFilter = 800.0;
-        this.minScoreFilter = 0.0;
-        this.maxScoreFilter = 100.0;
+        this.minRatingFilter = 0.0;
+        this.maxRatingFilter = 100.0;
         this.favouriteFilter = false;
     }
 
@@ -148,7 +147,7 @@ public class DataListPageController {
      * Apply search and filters and updates table.
      */
     public void applySearchFilters() {
-        String sql = wineDAO.queryBuilder(searchTextField.getText(), yearFilter);
+        String sql = wineDAO.queryBuilder(searchTextField.getText(), varietyFilter,regionFilter,yearFilter,minPriceFilter,maxPriceFilter,minRatingFilter,maxRatingFilter, favouriteFilter);
         List<Wine> queryResults = wineDAO.executeSearchFilter(sql, searchTextField.getText());
         ObservableList<Wine> observableQueryResults = FXCollections.observableArrayList(queryResults);
         wineTable.setItems(observableQueryResults);
