@@ -49,6 +49,13 @@ public class DataListPageController {
     private VineyardDAO vineyardDAO;
 
     private String yearFilter;
+    private String varietyFilter;
+    private String regionFilter;
+    private double minPriceFilter;
+    private double maxPriceFilter;
+    private double minScoreFilter;
+    private double maxScoreFilter;
+    private boolean favouriteFilter;
 
     private void setUpFilterButtons() {
         //TODO: implement better way of initialising
@@ -69,8 +76,7 @@ public class DataListPageController {
      */
     @FXML
     public void initialize() {
-        this.yearFilter = "0";
-
+        setDefaultFilters();
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
@@ -114,6 +120,20 @@ public class DataListPageController {
     }
 
     /**
+     * Sets filters to default values.
+     */
+    private void setDefaultFilters() {
+        this.yearFilter = "0";
+        this.varietyFilter = "0";
+        this.regionFilter = "0";
+        this.minPriceFilter = 0.0;
+        this.maxPriceFilter = 800.0;
+        this.minScoreFilter = 0.0;
+        this.maxScoreFilter = 100.0;
+        this.favouriteFilter = false;
+    }
+
+    /**
      * Gets text from search bar and uses wineDAO to get matching wines
      * to display on table.
      */
@@ -148,15 +168,25 @@ public class DataListPageController {
 
     /**
      * Handles action of Year filter selected.
-     *
-     * @param actionEvent
      */
-    public void onYearComboBoxClicked(ActionEvent actionEvent) {
+    public void onYearComboBoxClicked() {
         //TODO: come back to - string vs int
         String selectedYear = String.valueOf(yearComboBox.getValue());
         if (!(selectedYear == "Year" || selectedYear == null)) {
             yearFilter = selectedYear;
         }
         applySearchFilters();
+    }
+
+    /**
+     * Resets search and filters
+     */
+    public void onResetSearchFilterButtonClicked() {
+        searchTextField.clear();
+        wineTable.getItems().clear();
+        setDefaultFilters();
+        ObservableList<Wine> observableWines = FXCollections.observableArrayList(wineDAO.getAll());
+        wineTable.setItems(observableWines);
+        yearComboBox.setValue(yearComboBox.getItems().get(0));
     }
 }
