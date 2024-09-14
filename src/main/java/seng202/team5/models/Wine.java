@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public class Wine {
     private int id;
-    private final String name;
+    private String name;
     private final String description;
     private int year = 0;
     private int ratingValue = 0;
@@ -18,111 +18,6 @@ public class Wine {
     private String wineVariety;
     private String colour;
     private Vineyard vineyard;
-
-    /**
-     * Gets the wine name.
-     *
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets the wine's current market price.
-     *
-     * @return price
-     */
-    public double getPrice() {
-        return price;
-    }
-
-    /**
-     * Gets the bottled year.
-     *
-     * @return year
-     */
-    public int getYear() {
-        return year;
-    }
-
-    /**
-     * Gets the wine's rating value.
-     *
-     * @return ratingValue
-     */
-    public int getRating() {
-        return ratingValue;
-    }
-
-    /**
-     * Gets the favourite status of the wine.
-     *
-     * @return favourite
-     */
-    public boolean isFavourite() {
-        return favourite;
-    }
-
-    /**
-     * Gets the wine id.
-     *
-     * @return id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Gets the wine description.
-     *
-     * @return description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Gets the wine vineyard.
-     *
-     * @return vineyard object
-     */
-    public Vineyard getVineyard() {
-        return vineyard;
-    }
-
-    /**
-     * Gets the wine variety.
-     *
-     * @return wine variety
-     */
-    public String getWineVariety() {
-        return wineVariety;
-    }
-
-    public String getWineColour() {
-        return colour;
-    }
-
-    /**
-     * Gets the wine region.
-     *
-     * @return wine region
-     */
-    public String getRegion() {
-        return vineyard.getRegion();
-    }
-
-    /**
-     * Constructor for creating a wine object with a name and description.
-     *
-     * @param name name of wine
-     * @param description description of wine
-     */
-    public Wine(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
 
     /**
      * Constructor for creating a wine object with a name,
@@ -177,8 +72,131 @@ public class Wine {
         this.vineyard = vineyard;
     }
 
+
     /**
-     * Set the wine's id
+     * Gets the wine name.
+     *
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
+
+
+    /**
+     * Gets the wine's current market price.
+     *
+     * @return price
+     */
+    public double getPrice() {
+        return price;
+    }
+
+
+    /**
+     * Gets the bottled year.
+     *
+     * @return year
+     */
+    public int getYear() {
+        return year;
+    }
+
+
+    /**
+     * Gets the wine's rating value.
+     *
+     * @return ratingValue
+     */
+    public int getRating() {
+        return ratingValue;
+    }
+
+
+    /**
+     * Gets the favourite status of the wine.
+     *
+     * @return favourite
+     */
+    public boolean isFavourite() {
+        return favourite;
+    }
+
+
+    /**
+     * Gets the wine id.
+     *
+     * @return id
+     */
+    public int getId() {
+        return id;
+    }
+
+
+    /**
+     * Gets the wine description.
+     *
+     * @return description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+
+    /**
+     * Gets the wine vineyard.
+     *
+     * @return vineyard object
+     */
+    public Vineyard getVineyard() {
+        return vineyard;
+    }
+
+
+    /**
+     * Gets the wine variety.
+     *
+     * @return wine variety
+     */
+    public String getWineVariety() {
+        return wineVariety;
+    }
+
+
+    /**
+     * Gets the wine's colour.
+     *
+     * @return the colour of the wine
+     */
+    public String getWineColour() {
+        return colour;
+    }
+
+
+    /**
+     * Gets the wine region.
+     *
+     * @return wine region
+     */
+    public String getRegion() {
+        return vineyard.getRegion();
+    }
+
+
+    /**
+     * Constructor for creating a wine object with a name and description.
+     *
+     * @param name name of wine
+     * @param description description of wine
+     */
+    public Wine(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+
+    /**
+     * Set the wine's id,
      *
      * @param id the new id
      */
@@ -186,6 +204,33 @@ public class Wine {
         this.id = id;
     }
 
+
+    /**
+     * Set the wine's name.
+     *
+     * @param name the wine's new name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    /**
+     * Set the wine's colour.
+     *
+     * @param colour the wine's new colour
+     */
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
+
+
+    /**
+     * Check if this object is equal to another given object.
+     *
+     * @param o the object to compare
+     * @return tue if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {

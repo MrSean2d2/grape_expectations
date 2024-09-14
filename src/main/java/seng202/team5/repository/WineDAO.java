@@ -6,10 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import org.apache.commons.lang3.NotImplementedException;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 
@@ -19,6 +22,7 @@ import seng202.team5.models.Wine;
  *
  * @author Caitlin Tam
  * @author Sean Reitsma
+ * @author Martyn Gascoigne
  */
 public class WineDAO implements DAOInterface<Wine> {
     private final DatabaseService databaseService;
@@ -47,7 +51,7 @@ public class WineDAO implements DAOInterface<Wine> {
         String sql =
                 "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
                         + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
-                        + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard ";
+                        + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard;";
         try (Connection conn = databaseService.connect();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
@@ -81,37 +85,70 @@ public class WineDAO implements DAOInterface<Wine> {
      */
     @Override
     public Wine getOne(int id) {
-        Wine wine = null;
         String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
                 + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
-                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard AND wine.id=? ";
+                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard AND wine.id=?;";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    wine = new Wine(
-                            rs.getInt("id"),
-                            rs.getString("name"),
-                            rs.getString("description"),
-                            rs.getInt("year"),
-                            rs.getInt("rating"),
-                            rs.getDouble("price"),
-                            rs.getString("variety"),
-                            rs.getString("colour"),
-                            new Vineyard(rs.getString("vineyardName"), rs.getString("region"))
-                    );
-                }
-                return wine;
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Wine(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("year"),
+                        rs.getInt("rating"),
+                        rs.getDouble("price"),
+                        rs.getString("variety"),
+                        rs.getString("colour"),
+                        new Vineyard(rs.getString("vineyardName"), rs.getString("region")));
             }
         } catch (SQLException e) {
             log.error(e);
             return null;
         }
+        return null;
     }
 
+
     /**
-     * Add a wine to the database.
+     * Gets the id of a wine from its name,
+     * throws not found exception if wine does not exist.
+     *
+     * @param name the id of the object
+     * @return the id of the wine object
+     * @throws NotFoundException no user found with that username
+     */
+    public Wine getWineFromName(String name) throws NotFoundException {
+        String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard AND wine.name=?;";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Wine(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("year"),
+                        rs.getInt("rating"),
+                        rs.getDouble("price"),
+                        rs.getString("variety"),
+                        rs.getString("colour"),
+                        new Vineyard(rs.getString("vineyardName"), rs.getString("region")));
+            }
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
+        throw new NotFoundException(String.format("No wine with name %s found", name));
+    }
+
+
+    /**
+     * Add a single wine to the database.
      *
      * @param toAdd object of type Wine to add
      * @return the id of the added wine
@@ -153,9 +190,21 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
+
+    /**
+     * Add a batch of wines to the database.
+     * The wines get lumped together and then pushed, making it more efficient
+     * for larger batches of data, such as the initial data step.
+     *
+     * @param toAdd the list of wines to be added
+     */
     public void batchAdd(List<Wine> toAdd) {
         String sql = "INSERT OR IGNORE INTO WINE (name, year, variety, rating, "
                 + "price, colour, vineyard, description) values (?,?,?,?,?,?,?,?);";
+
+        // Cache for vineyard names and IDs
+        Map<String, Integer> vineyardCache = new HashMap<>();
+
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             conn.setAutoCommit(false);
@@ -166,14 +215,25 @@ public class WineDAO implements DAOInterface<Wine> {
                 ps.setInt(4, wine.getRating());
                 ps.setDouble(5, wine.getPrice());
                 ps.setString(6, wine.getWineColour());
-                //System.out.println(wine.getVineyard().getName());
 
-                int vineyardIndex = vineyardDAO.getIdFromName(wine.getVineyard().getName());
-                if (vineyardIndex == 0) {
-                    wine.getVineyard().setId(vineyardDAO.add(wine.getVineyard()));
-                } else {
+                // We need to make this more efficient -
+                // I have implemented a hash map which hopefully increases the performance
+                // However we could further improve it by initialising this at the start
+                // of the app so that if any more wines are added they can just reference
+                // the hash map, rather than query the db.
+                Vineyard curVineyard = wine.getVineyard();
+                int vineyardIndex;
+                if(vineyardCache.containsKey(curVineyard.getName())) {
+                    vineyardIndex = vineyardCache.get(curVineyard.getName());
                     wine.getVineyard().setId(vineyardIndex);
-                    //log.info(wine.getVineyard().getName());
+                } else {
+                    vineyardIndex = vineyardDAO.getIdFromName(wine.getVineyard().getName());
+                    if (vineyardIndex == 0) {
+                        wine.getVineyard().setId(vineyardDAO.add(wine.getVineyard()));
+                    } else {
+                        wine.getVineyard().setId(vineyardIndex);
+                    }
+                    vineyardCache.put(curVineyard.getName(), curVineyard.getId());
                 }
 
                 ps.setInt(7, wine.getVineyard().getId());
@@ -187,6 +247,12 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
+
+    /**
+     * Delete a wine from the database.
+     *
+     * @param id id of the wine to delete
+     */
     @Override
     public void delete(int id) {
         vineyardDAO.delete(id);
@@ -200,8 +266,38 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
+
+    /**
+     * Update a wine in the database.
+     *
+     * @param toUpdate Object that needs to be updated
+     *                 (this object must be able to identify itself and its previous self)
+     */
     @Override
-    public void update(Wine object) {
-        throw new NotImplementedException();
+    public void update(Wine toUpdate) {
+        String sql  = "UPDATE wine SET name=?, "
+                + "year=?, "
+                + "variety=?, "
+                + "rating=?, "
+                + "price=?, "
+                + "colour=?, "
+                + "vineyard=?, "
+                + "description=? "
+                + "WHERE id=?";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, toUpdate.getName());
+            ps.setInt(2, toUpdate.getYear());
+            ps.setString(3, toUpdate.getWineVariety());
+            ps.setInt(4, toUpdate.getRating());
+            ps.setDouble(5, toUpdate.getPrice());
+            ps.setString(6, toUpdate.getWineColour());
+            ps.setInt(7, toUpdate.getVineyard().getId());
+            ps.setString(8, toUpdate.getDescription());
+            ps.setInt(9, toUpdate.getId());
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
     }
 }

@@ -98,9 +98,9 @@ public class UserDAO implements DAOInterface<User> {
     public User getFromUserName(String username) throws NotFoundException {
         String sql = "SELECT * FROM user WHERE username=?";
         try (Connection conn = databaseService.connect();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new User(rs.getInt("id"),
                         rs.getString("username"),
@@ -124,9 +124,9 @@ public class UserDAO implements DAOInterface<User> {
     public boolean userIsUnique(String username) {
         String sql = "SELECT * FROM user WHERE username=?";
         try (Connection conn = databaseService.connect();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return false;
             }
