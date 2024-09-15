@@ -64,14 +64,15 @@ public class DataLoadService {
             int ratingValue = numFromTextOr0(csvEntry[4]);
 
             // Wine Price
-            if (csvEntry[5] == null) {//price is not in csv
+            if (csvEntry[5] == null) {
+                //price is not in csv
                 throw new Exception();
             }
             double price = numFromTextOr0(csvEntry[5]);
 
 
             // Wine Region
-            String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
+            String regionName = csvEntry[6] != null ? csvEntry[6] : "NoRegion";
 
             // Wine Name
             String name = csvEntry[11];
@@ -82,7 +83,8 @@ public class DataLoadService {
             Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);
             boolean matchFound = yearMatcher.find();
             int year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
-            if (year == 0) {//year was not in csv
+            if (year == 0) {
+                //year was not in csv
                 throw new Exception();
             }
 
