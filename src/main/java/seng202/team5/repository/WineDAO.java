@@ -449,31 +449,6 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
-    public List<Double> getMinMaxPrice(){
-        List<Double> prices = new ArrayList<>();
-        double minPrice = 0;
-        double maxPrice = 800;
-        String sqlMAX = "SELECT MAX(price) FROM WINE;";
-        String sqlMIN = "SELECT MAX(price) FROM WINE;";
-        List<Double> minMaxPrices = new ArrayList<>();
-        try (Connection conn = databaseService.connect();
-             Statement statement = conn.createStatement()) {
-            ResultSet rsMAX = statement.executeQuery(sqlMAX);
-            ResultSet rsMIN = statement.executeQuery(sqlMIN);
-            while (rsMAX.next()) {
-                maxPrice = (rsMAX.getDouble("price"));
-            }
-            while (rsMAX.next()) {
-                minPrice = (rsMIN.getDouble("price"));
-            }
-            minMaxPrices.add(minPrice);
-            minMaxPrices.add(maxPrice);
-            return prices;
-        } catch (SQLException e) {
-            log.error(e);
-            return new ArrayList<>();
-        }
-    }
 
     /**
      * Builds sql query for search and filter.
