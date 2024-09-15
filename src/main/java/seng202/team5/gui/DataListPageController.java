@@ -67,7 +67,7 @@ public class DataListPageController extends PageController {
                 if (mouseEvent.getClickCount() == 2) {
                     try {
                         Wine selectedWine = wineTable.getSelectionModel().getSelectedItem();
-                        if (selectedWine != null && UserService.getInstance().getCurrentUser() != null) {
+                        if (selectedWine != null) {  // && UserService.getInstance().getCurrentUser() != null
                             WineService.getInstance().setSelectedWine(selectedWine);
                             openDetailedViewPage(selectedWine);
                         }
@@ -99,6 +99,7 @@ public class DataListPageController extends PageController {
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
+            System.out.println(e);
             e.printStackTrace();
         }
     }

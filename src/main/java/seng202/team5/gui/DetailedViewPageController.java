@@ -48,6 +48,9 @@ public class DetailedViewPageController {
     private Label wineDescriptionLabel;
 
     @FXML
+    private Label logInMessageLabel;
+
+    @FXML
     private TextArea notesTextArea;
 
     @FXML
@@ -75,8 +78,8 @@ public class DetailedViewPageController {
     private int selectedWineID;
     private int userId;
 
-    private Image emptyStar = new Image(getClass().getResourceAsStream("/images/empty_star.png"));
-    private Image filledStar = new Image(getClass().getResourceAsStream("/images/filled_star.png"));
+    private final Image emptyStar = new Image(getClass().getResourceAsStream("/images/empty_star.png"));
+    private final Image filledStar = new Image(getClass().getResourceAsStream("/images/filled_star.png"));
 
     /**
      * Initializes DetailedViewPage.
@@ -85,19 +88,6 @@ public class DetailedViewPageController {
     public void initialize() {
         Wine selectedWine = WineService.getInstance().getSelectedWine();
         selectedWineID = selectedWine.getId();
-        userId = UserService.getInstance().getCurrentUser().getId();
-
-        DrinksDAO drinksDAO = new DrinksDAO();
-        if (drinksDAO.getWineReview(selectedWineID, userId) == null) {
-            Drinks review = new Drinks(selectedWineID, userId);
-            try {
-                drinksDAO.add(review);
-            } catch (DuplicateEntryException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
 
         if (selectedWine != null) {
             nameLabel.setText("" + selectedWine.getName());
@@ -106,34 +96,55 @@ public class DetailedViewPageController {
             ratingLabel.setText("Score: " + selectedWine.getRating());
             wineDescriptionLabel.setText(selectedWine.getDescription());
         }
-        if (review != null) {
+
+        if (UserService.getInstance().getCurrentUser() != null) {
+            userId = UserService.getInstance().getCurrentUser().getId();
+            DrinksDAO drinksDAO = new DrinksDAO();
+            Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
+
+            if (review == null) {
+                review = new Drinks(selectedWineID, userId);
+                try {
+                    drinksDAO.add(review);
+                } catch (DuplicateEntryException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            logInMessageLabel.setText("");
             notesTextArea.setText(review.getNotes());
             updateFavoriteButton(review.isFavourite());
             updateStarDisplay(review.getRating());
-            if (review.isFavourite()) {
-                favoriteToggleButton.setStyle("-fx-background-color: #ffdd00");
-            }
+
+            favoriteToggleButton.setDisable(false);
+            saveNotesButton.setDisable(false);
+            notesTextArea.setEditable(true);
+        } else {
+            logInMessageLabel.setText("Log in or register to save your notes!");
+            favoriteToggleButton.setDisable(true);
+            saveNotesButton.setDisable(true);
+            notesTextArea.setEditable(false);
         }
     }
 
+
+    /**
+     * handles a user clicking on one of the star icons, changing their review of the wine.
+     *
+     * @param event mouse event
+     */
     @FXML
     public void handleStarClick(javafx.scene.input.MouseEvent event) {
-        ImageView clickedStar = (ImageView) event.getSource(); // Get the clicked star
-        int clickedStarIndex = Integer.parseInt(clickedStar.getId().substring(4)); // Get star number (e.g., star1 -> 1)
+            ImageView clickedStar = (ImageView) event.getSource(); // Get the clicked star
+            int clickedStarIndex = Integer.parseInt(clickedStar.getId().substring(4)); // Get star number (e.g., star1 -> 1)
 
-        DrinksDAO drinksDAO = new DrinksDAO();
-        Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
-        review.setRating(clickedStarIndex);
+            DrinksDAO drinksDAO = new DrinksDAO();
+            Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
 
-        updateStarDisplay(clickedStarIndex);
-    }
-
-    private void updateStarDisplay(int rating) {
-        star1.setImage(rating >= 1 ? filledStar : emptyStar);
-        star2.setImage(rating >= 2 ? filledStar : emptyStar);
-        star3.setImage(rating >= 3 ? filledStar : emptyStar);
-        star4.setImage(rating >= 4 ? filledStar : emptyStar);
-        star5.setImage(rating >= 5 ? filledStar : emptyStar);
+            if (review != null) {
+                review.setRating(clickedStarIndex);
+                updateStarDisplay(clickedStarIndex);
+            }
     }
 
     /**
@@ -194,6 +205,19 @@ public class DetailedViewPageController {
         backButton.getScene().getWindow().hide();
     }
 
+
+    /**
+     * Updates the 5-star rating graphic based on the rating of the wine.
+     *
+     * @param rating
+     */
+    private void updateStarDisplay(int rating) {
+        star1.setImage(rating >= 1 ? filledStar : emptyStar);
+        star2.setImage(rating >= 2 ? filledStar : emptyStar);
+        star3.setImage(rating >= 3 ? filledStar : emptyStar);
+        star4.setImage(rating >= 4 ? filledStar : emptyStar);
+        star5.setImage(rating >= 5 ? filledStar : emptyStar);
+    }
 
     /**
      * Updates text of the toggle favorite button based on if the wine is favorited or not.

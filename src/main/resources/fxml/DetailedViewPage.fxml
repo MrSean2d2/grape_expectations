@@ -198,6 +198,14 @@
             </ImageView>
          </children>
       </HBox>
+      <Label fx:id="logInMessageLabel" style="-fx-font-weight: 700;" text="Log in or register to save your notes!" textFill="RED" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <GridPane.margin>
+            <Insets right="20.0" />
+         </GridPane.margin>
+      </Label>
     </children>
    <opaqueInsets>
       <Insets />
