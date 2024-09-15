@@ -96,7 +96,7 @@ public class DataLoadService {
             // Return the created Wine object
             Wine resultWine = new Wine(name, description, year, ratingValue, price,
                     varietyName, "Unknown", vineyard);
-            if (isValidWine(resultWine)) {
+            if (resultWine.isValidWine()) {
                 return resultWine;
             } else {
                 return null;
@@ -104,41 +104,6 @@ public class DataLoadService {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    /**
-     * checks if the created wine has valid attributes,
-     * sets defaults to some that aren't as important
-     * @param resultWine wine created by winefromtext
-     * @return boolean of whether wine can be added to database
-     */
-    private boolean isValidWine(Wine resultWine) {
-        //wine must have a name
-        if (Objects.equals(resultWine.getName(), "")) {
-            return false;
-        }
-        //description can be empty
-        int currentYear = Year.now().getValue();//gets current year for future-proofing
-        if (resultWine.getYear() < 1700 | resultWine.getYear() > currentYear) {//1700 is arbitrary boundary
-            return false;
-        }
-        if (resultWine.getRating() < 0 | resultWine.getRating() > 100) {
-            return false;
-        }
-        if (resultWine.getPrice() < 0) {
-            return false;
-        }
-        if (resultWine.getWineVariety().isEmpty()) {
-            resultWine.setVariety("Unknown Variety");
-        }
-//        if (resultWine.getVineyard().getName().isEmpty()) {
-//            resultWine.setVineyardName("Unknown Vineyard");
-//        }
-//        if (resultWine.getVineyard().getRegion().isEmpty()) {
-//            resultWine.setVineyardRegion("Unknown Region");
-//        }
-        return true;
-
     }
 
     /**

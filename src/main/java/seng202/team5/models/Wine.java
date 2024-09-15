@@ -1,5 +1,6 @@
 package seng202.team5.models;
 
+import java.time.Year;
 import java.util.Objects;
 
 /**
@@ -255,5 +256,33 @@ public class Wine {
      */
     public void setVariety(String unknownVariety) {wineVariety = unknownVariety;}
 
+
+    /**
+     * checks if a wine has valid values for its attributes.
+     * eg: year and price aren't 0
+     * @return boolean whether given wine is valid enough to be added to database
+     */
+    public boolean isValidWine() {
+        //wine must have a name
+        if (name.isEmpty()) {
+            return false;
+        }
+        //description can be empty
+        int currentYear = Year.now().getValue();//gets current year for future-proofing
+        if (year < 1700 | year > currentYear) {//1700 is arbitrary boundary
+            return false;
+        }
+        if (ratingValue < 0 | ratingValue > 100) {
+            return false;
+        }
+        if (price < 0) {
+            return false;
+        }
+        if (wineVariety.isEmpty()) {
+            wineVariety = "Unknown Variety";
+        }
+        return true;
+
+    }
 
 }

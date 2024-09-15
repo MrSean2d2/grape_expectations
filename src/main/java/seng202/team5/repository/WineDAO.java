@@ -155,6 +155,9 @@ public class WineDAO implements DAOInterface<Wine> {
      */
     @Override
     public int add(Wine toAdd) {
+        if (!toAdd.isValidWine()) {
+            return -1;
+        }
         String sqlWine = "INSERT OR IGNORE INTO WINE(name, description, year, rating, "
                 + "price, vineyard, variety, colour) values (?,?,?,?,?,?,?,?);";
         try (Connection conn = databaseService.connect();
@@ -209,39 +212,41 @@ public class WineDAO implements DAOInterface<Wine> {
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             conn.setAutoCommit(false);
             for (Wine wine : toAdd) {
-                ps.setString(1, wine.getName());
-                ps.setInt(2, wine.getYear());
-                ps.setString(3, wine.getWineVariety());
-                ps.setInt(4, wine.getRating());
-                ps.setDouble(5, wine.getPrice());
-                ps.setString(6, wine.getWineColour());
+                if (wine.isValidWine()) {//checks if wine attributes are valid
+                    ps.setString(1, wine.getName());
+                    ps.setInt(2, wine.getYear());
+                    ps.setString(3, wine.getWineVariety());
+                    ps.setInt(4, wine.getRating());
+                    ps.setDouble(5, wine.getPrice());
+                    ps.setString(6, wine.getWineColour());
 
-                // We need to make this more efficient -
-                // I have implemented a hash map which hopefully increases the performance
-                // However we could further improve it by initialising this at the start
-                // of the app so that if any more wines are added they can just reference
-                // the hash map, rather than query the db.
-                Vineyard curVineyard = wine.getVineyard();
-                int vineyardIndex;
-                if(vineyardCache.containsKey(curVineyard.getName())) {
-                    vineyardIndex = vineyardCache.get(curVineyard.getName());
-                    wine.getVineyard().setId(vineyardIndex);
-                } else {
-                    vineyardIndex = vineyardDAO.getIdFromName(wine.getVineyard().getName());
-                    if (vineyardIndex == 0) {
-                        wine.getVineyard().setId(vineyardDAO.add(wine.getVineyard()));
-                    } else {
+                    // We need to make this more efficient -
+                    // I have implemented a hash map which hopefully increases the performance
+                    // However we could further improve it by initialising this at the start
+                    // of the app so that if any more wines are added they can just reference
+                    // the hash map, rather than query the db.
+                    Vineyard curVineyard = wine.getVineyard();
+                    int vineyardIndex;
+                    if (vineyardCache.containsKey(curVineyard.getName())) {
+                        vineyardIndex = vineyardCache.get(curVineyard.getName());
                         wine.getVineyard().setId(vineyardIndex);
+                    } else {
+                        vineyardIndex = vineyardDAO.getIdFromName(wine.getVineyard().getName());
+                        if (vineyardIndex == 0) {
+                            wine.getVineyard().setId(vineyardDAO.add(wine.getVineyard()));
+                        } else {
+                            wine.getVineyard().setId(vineyardIndex);
+                        }
+                        vineyardCache.put(curVineyard.getName(), curVineyard.getId());
                     }
-                    vineyardCache.put(curVineyard.getName(), curVineyard.getId());
-                }
 
-                ps.setInt(7, wine.getVineyard().getId());
-                ps.setString(8, wine.getDescription());
-                ps.addBatch();
+                    ps.setInt(7, wine.getVineyard().getId());
+                    ps.setString(8, wine.getDescription());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+                conn.commit();
             }
-            ps.executeBatch();
-            conn.commit();
         } catch (SQLException e) {
             log.error(e);
         }
