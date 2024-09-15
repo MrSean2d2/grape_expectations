@@ -13,8 +13,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.RangeSlider?>
 
-<GridPane alignment="TOP_CENTER" prefHeight="450.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+<GridPane alignment="TOP_CENTER" prefHeight="450.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -78,9 +79,9 @@
                       <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Slider fx:id="ratingSlider" blockIncrement="1.0" majorTickUnit="10.0" maxWidth="-Infinity" minorTickCount="1" showTickLabels="true" showTickMarks="true" GridPane.rowIndex="1" />
+                        <Slider fx:id="ratingSlider" blockIncrement="1.0" majorTickUnit="10.0" maxWidth="-Infinity" minorTickCount="1" showTickLabels="true" showTickMarks="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                         <Label alignment="CENTER" ellipsisString="---" prefHeight="17.0" prefWidth="111.0" text="Rating" textOverrun="CLIP" GridPane.halignment="CENTER" />
-                        <Label fx:id="ratingSliderValue" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                        <Label fx:id="ratingSliderValue" text="0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER">
                            <padding>
                               <Insets right="10.0" />
                            </padding>
@@ -96,11 +97,20 @@
                         <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Slider fx:id="priceSlider" blockIncrement="1.0" majorTickUnit="100.0" max="800.0" maxWidth="-Infinity" minWidth="-Infinity" minorTickCount="10" prefHeight="38.0" prefWidth="183.0" showTickLabels="true" showTickMarks="true" GridPane.rowIndex="1" />
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Price" GridPane.halignment="CENTER" />
-                        <Label fx:id="priceSliderValue" minHeight="-Infinity" minWidth="-Infinity" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                        <RangeSlider fx:id="priceRangeSlider" highValue="1.0" highValueChanging="true" lowValue="0.0" lowValueChanging="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="1" prefHeight="30.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </RangeSlider>
+                        <Label fx:id="maxPriceLabel" minHeight="-Infinity" minWidth="-Infinity" text="0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER">
                            <padding>
                               <Insets right="10.0" />
+                           </padding>
+                        </Label>
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Price" GridPane.halignment="CENTER" />
+                        <Label fx:id="minPriceLabel" text="0" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                           <padding>
+                              <Insets left="7.0" />
                            </padding>
                         </Label>
                      </children>
