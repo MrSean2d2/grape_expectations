@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import org.controlsfx.control.RangeSlider;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
@@ -30,16 +31,19 @@ public class DataListPageController extends PageController{
     public ComboBox regionComboBox;
     @FXML
     public ComboBox varietyComboBox;
-    @FXML
-    public Slider priceSlider;
+
     @FXML
     public Slider ratingSlider;
     @FXML
     public ToggleButton favToggleButton;
     @FXML
-    public Label priceSliderValue;
-    @FXML
     public Label ratingSliderValue;
+    @FXML
+    public RangeSlider priceRangeSlider;
+    @FXML
+    public Label maxPriceLabel;
+    @FXML
+    public Label minPriceLabel;
 
     @FXML
     private TableView<Wine> wineTable;
@@ -80,10 +84,19 @@ public class DataListPageController extends PageController{
      */
     @FXML
     public void initialize() {
+        vineyardDAO = new VineyardDAO();
+        wineDAO = new WineDAO(vineyardDAO);
+
+        initializeSliderListeners();
+
         // sets value of price/rating labels in real time
-        priceSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+        priceRangeSlider.highValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
             Float value = Float.valueOf(String.format("%.1f", newVal));
-            priceSliderValue.setText(String.valueOf(value));
+            maxPriceLabel.setText(String.valueOf(value));
+        });
+        priceRangeSlider.lowValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+            Float value = Float.valueOf(String.format("%.1f", newVal));
+            minPriceLabel.setText(String.valueOf(value));
         });
         ratingSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
             Float value = Float.valueOf(String.format("%.1f", newVal));
@@ -91,9 +104,9 @@ public class DataListPageController extends PageController{
         });
 
         // initialises listeners on sliders
-        initializeSliderListeners();
 
-        setDefaultFilters();
+
+        setDefaults();
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
@@ -130,19 +143,24 @@ public class DataListPageController extends PageController{
             }
         });
 
-        vineyardDAO = new VineyardDAO();
-        wineDAO = new WineDAO(vineyardDAO);
+
 
         setUpFilterButtons();
     }
 
     /**
-     * Adds listeners to price and rating slider filters, to handle action of such filters
+     * Adds listeners to price and rating slider filters, to handle action of such filters.
      */
     private void initializeSliderListeners() {
-        priceSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+        priceRangeSlider.highValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
             Float value = Float.valueOf(String.format("%.1f", newVal));
             maxPriceFilter = value;
+            applySearchFilters();
+        });
+
+        priceRangeSlider.lowValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+            Float value = Float.valueOf(String.format("%.1f", newVal));
+            minPriceFilter = value;
             applySearchFilters();
         });
 
@@ -174,9 +192,17 @@ public class DataListPageController extends PageController{
     }
 
     /**
-     * Sets filters to default values.
+     * Sets filters, sliders, and labels to default values.
      */
-    private void setDefaultFilters() {
+    private void setDefaults() {
+        priceRangeSlider.setHighValue(wineDAO.getMaxPrice());
+        priceRangeSlider.setLowValue(wineDAO.getMinPrice());
+        ratingSlider.setMin(wineDAO.getMinRating());
+        ratingSlider.setMax(wineDAO.getMaxRating());
+        priceRangeSlider.setMin(wineDAO.getMinPrice());
+        priceRangeSlider.setMax(wineDAO.getMaxPrice());
+        minPriceLabel.setText(String.valueOf(wineDAO.getMinPrice()));
+        maxPriceLabel.setText(String.valueOf(wineDAO.getMaxPrice()));
         this.yearFilter = "0";
         this.varietyFilter = "0";
         this.regionFilter = "0";
@@ -271,11 +297,11 @@ public class DataListPageController extends PageController{
      * Resets search and filters.
      */
     public void onResetSearchFilterButtonClicked() {
-        priceSlider.setValue(0.0);
         ratingSlider.setValue(0.0);
+        ratingSliderValue.setText("0");
         searchTextField.clear();
         wineTable.getItems().clear();
-        setDefaultFilters();
+        setDefaults();
         ObservableList<Wine> observableWines = FXCollections.observableArrayList(wineDAO.getAll());
         wineTable.setItems(observableWines);
         varietyComboBox.setValue(varietyComboBox.getItems().get(0));
