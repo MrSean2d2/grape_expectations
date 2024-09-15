@@ -2,6 +2,8 @@ package seng202.team5.unittests.services;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -17,9 +19,7 @@ public class DataLoadServiceTest {
     @BeforeEach
     public void setUp() {
         csvFilePath = System.getProperty("user.dir") + "/src/test/resources/test.csv";
-        dataLoadService = new DataLoadService(csvFilePath
-        );
-        dataLoadService.externalDependencies = false;
+        dataLoadService = spy(new DataLoadService());
     }
 
 //    @Test

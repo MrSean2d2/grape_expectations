@@ -6,18 +6,26 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvException;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.yaml.snakeyaml.Yaml;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 
@@ -31,15 +39,35 @@ public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
     private final String fileName;
-    public boolean externalDependencies = true;
 
     /**
      * DataLoadService constructor.
      *
-     * @param fileName the name of the csv file to use
      */
-    public DataLoadService(String fileName) {
-        this.fileName = fileName;
+    public DataLoadService() {
+        this.fileName = parseFileName();
+    }
+
+    private String parseFileName() {
+        Yaml yaml = new Yaml();
+        String configPath = this.getClass().getProtectionDomain()
+                .getCodeSource().getLocation().getPath();
+        configPath = URLDecoder.decode(configPath, StandardCharsets.UTF_8);
+        File jarDir = new File(configPath);
+        configPath = jarDir.getParentFile() + "/config.yaml";
+        try (InputStream inputStream = Files.newInputStream(Paths.get(configPath))) {
+            Map<String, Object> obj = yaml.load(inputStream);
+            Object result = obj.get("csvPath");
+            if (result instanceof String) {
+                return (String) result;
+            } else {
+                log.error("Unable to parse config file, 'csvPath' value is not a string");
+                return this.getClass().getClassLoader().getResource("nzcsv.csv").getPath();
+            }
+        } catch (IOException e) {
+            log.error(e);
+            return this.getClass().getClassLoader().getResource("nzcsv.csv").getPath();
+        }
     }
 
     /**
@@ -133,12 +161,12 @@ public class DataLoadService {
     /**
      * Reads the specified file and returns all the csv records as a list of String[]s.
      *
-     * @param fileName the URI of the file to read
+     * @param filePath the URI of the file to read
      * @return all csv records from the file as a list of String[]s
      */
-    public List<String[]> loadFile(String fileName) {
+    public List<String[]> loadFile(String filePath) {
         List<String[]> result;
-        try (Reader reader = Files.newBufferedReader(Paths.get(fileName))) {
+        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
             CSVParser csvParser = new CSVParserBuilder().withSeparator(',')
                     .withQuoteChar('"')
                     .withFieldAsNull(CSVReaderNullFieldIndicator.EMPTY_SEPARATORS).build();
