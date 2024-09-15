@@ -176,4 +176,12 @@ public class WineDAOTest {
         assertEquals("Evil Wine", wineDAO.getOne(toUpdateID).getName());
         assertEquals("Blue", wineDAO.getOne(toUpdateID).getWineColour());
     }
+
+    @Test
+    public void testTruncateDatabase() {
+        wineDAO.add(new Wine(1, "wine name", "description", 2014, 85, 20, "pinot noir", "white", new Vineyard("vineyard", "region")));
+        assertEquals(1, wineDAO.getAll().size());
+        wineDAO.truncateWines();
+        assertEquals(0, wineDAO.getAll().size());
+    }
 }
