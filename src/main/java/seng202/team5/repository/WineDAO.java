@@ -318,6 +318,11 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
+    /**
+     * Gets list of different varieties of wine.
+     *
+     * @return list of varieties
+     */
     public List<String> getVariety() {
         List<String> varieties = new ArrayList<>();
         String sql = "SELECT DISTINCT variety FROM WINE ORDER BY variety;";
@@ -334,6 +339,11 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
+    /**
+     * Gets list of different years of wine.
+     *
+     * @return list of years
+     */
     public List<String> getYear() {
         List<String> years = new ArrayList<>();
         String sql = "SELECT DISTINCT year FROM WINE ORDER BY year;";
@@ -347,6 +357,90 @@ public class WineDAO implements DAOInterface<Wine> {
         } catch (SQLException e) {
             log.error(e);
             return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Gets the minimum rating of a wine.
+     *
+     * @return minimum rating
+     */
+    public int getMinRating() {
+        int minRating = 0;
+        String sql = "SELECT min(rating) FROM WINE";
+        try (Connection conn = databaseService.connect();
+             Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                minRating = rs.getInt(1);
+            }
+            return minRating;
+        } catch (SQLException e) {
+            log.error(e);
+            return minRating;
+        }
+    }
+
+    /**
+     * Gets max rating of a wine.
+     *
+     * @return max rating
+     */
+    public int getMaxRating() {
+        int maxRating = 0;
+        String sql = "SELECT max(rating) FROM WINE";
+        try (Connection conn = databaseService.connect();
+             Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                maxRating = rs.getInt(1);
+            }
+            return maxRating;
+        } catch (SQLException e) {
+            log.error(e);
+            return maxRating;
+        }
+    }
+
+    /**
+     * Gets minimum price of a wine.
+     *
+     * @return minimum price
+     */
+    public int getMinPrice() {
+        int minPrice = 0;
+        String sql = "SELECT min(price) FROM WINE";
+        try (Connection conn = databaseService.connect();
+             Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                minPrice = rs.getInt(1);
+            }
+            return minPrice;
+        } catch (SQLException e) {
+            log.error(e);
+            return minPrice;
+        }
+    }
+
+    /**
+     * Gets max price of a wine.
+     *
+     * @return max price
+     */
+    public int getMaxPrice() {
+        int maxPrice = 0;
+        String sql = "SELECT max(price) FROM WINE";
+        try (Connection conn = databaseService.connect();
+             Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                maxPrice = rs.getInt(1);
+            }
+            return maxPrice;
+        } catch (SQLException e) {
+            log.error(e);
+            return maxPrice;
         }
     }
 

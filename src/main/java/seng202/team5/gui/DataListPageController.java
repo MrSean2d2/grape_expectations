@@ -80,6 +80,12 @@ public class DataListPageController extends PageController{
      */
     @FXML
     public void initialize() {
+        vineyardDAO = new VineyardDAO();
+        wineDAO = new WineDAO(vineyardDAO);
+        ratingSlider.setMin(wineDAO.getMinRating());
+        ratingSlider.setMax(wineDAO.getMaxRating());
+        priceSlider.setMin(wineDAO.getMinPrice());
+        priceSlider.setMax(wineDAO.getMaxPrice());
         // sets value of price/rating labels in real time
         priceSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
             Float value = Float.valueOf(String.format("%.1f", newVal));
@@ -130,14 +136,13 @@ public class DataListPageController extends PageController{
             }
         });
 
-        vineyardDAO = new VineyardDAO();
-        wineDAO = new WineDAO(vineyardDAO);
+
 
         setUpFilterButtons();
     }
 
     /**
-     * Adds listeners to price and rating slider filters, to handle action of such filters
+     * Adds listeners to price and rating slider filters, to handle action of such filters.
      */
     private void initializeSliderListeners() {
         priceSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
@@ -273,6 +278,8 @@ public class DataListPageController extends PageController{
     public void onResetSearchFilterButtonClicked() {
         priceSlider.setValue(0.0);
         ratingSlider.setValue(0.0);
+        ratingSliderValue.setText("0");
+        priceSliderValue.setText("0");
         searchTextField.clear();
         wineTable.getItems().clear();
         setDefaultFilters();
