@@ -293,8 +293,41 @@ public class WineDAOTest {
             }
             Assertions.assertEquals(2, result.size());
         }
-
     }
 
+
+    /**
+     * test adding a list including some invalid wines.
+     * eg :wines with negative values
+     * wineDAO should only include the valid wines from the list
+     */
+    @Test
+    public void testBatchaddInvalidWine() {
+
+        List<Wine> someInvalidWines = new ArrayList<>();
+        someInvalidWines.add(new Wine(1, "regular valid wine", "description", 2014, 85, 20, "pinot noir", "white", new Vineyard("vineyard", "region")));
+        someInvalidWines.add(new Wine(2, "", "a wine with an empty name", 2014, 85, 20, "pinot noir", "white", new Vineyard("vineyard", "region")));
+        someInvalidWines.add(new Wine(3, "0 year wine", "wine from year 0", 0, 85, 20, "pinot noir", "white", new Vineyard("vineyard", "region")));
+        someInvalidWines.add(new Wine(4, "20 year wine", "wine from year 20", 20, 85, 20, "pinot noir", "white", new Vineyard("vineyard", "region")));
+        someInvalidWines.add(new Wine(5, "future wine", "wine from year 10000", 10000, 85, 20, "pinot noir", "white", new Vineyard("vineyard", "region")));
+        someInvalidWines.add(new Wine(6, "negative price wine", "wine with price -10", 2000, 85, -10, "pinot noir", "white", new Vineyard("vineyard", "region")));
+        someInvalidWines.add(new Wine(7, "negative score wine", "wine with score -1", 2000, -1, 10, "pinot noir", "white", new Vineyard("vineyard", "region")));
+        someInvalidWines.add(new Wine(8, "101 score wine", "wine with score 101", 2000, 101, 10, "pinot noir", "white", new Vineyard("vineyard", "region")));
+        wineDAO.batchAdd(someInvalidWines);
+        assertEquals(1, wineDAO.getAll().size());
+    }
+
+    /**
+     * test adding invalid wines individually using the wineDAO add method
+     * should only add the wine if it has valid attributes
+     */
+    @Test
+    public void testAddSingleInvalidWine() {
+        Wine emptyWineName = new Wine(2, "", "a wine with an empty name", 2014, 85, 20, "pinot noir", "white", new Vineyard("vineyard", "region"));
+        wineDAO.add(emptyWineName);
+        Wine year0Wine = new Wine(3, "0 year wine", "wine from year 0", 0, 85, 20, "pinot noir", "white", new Vineyard("vineyard", "region"));
+        wineDAO.add(year0Wine);
+        assertEquals(0, wineDAO.getAll().size());
+    }
 
 }
