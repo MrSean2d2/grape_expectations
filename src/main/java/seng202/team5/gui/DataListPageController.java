@@ -14,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import seng202.team5.models.Wine;
+import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
 import javafx.fxml.FXMLLoader;
 
@@ -66,7 +67,7 @@ public class DataListPageController extends PageController {
                 if (mouseEvent.getClickCount() == 2) {
                     try {
                         Wine selectedWine = wineTable.getSelectionModel().getSelectedItem();
-                        if (selectedWine != null) {
+                        if (selectedWine != null && UserService.getInstance().getCurrentUser() != null) {
                             WineService.getInstance().setSelectedWine(selectedWine);
                             openDetailedViewPage(selectedWine);
                         }
@@ -79,8 +80,9 @@ public class DataListPageController extends PageController {
         });
     }
     /**
-     * Opens detailed wine view page for the wine that was double clicked
-     * @param selectedWine
+     * Opens detailed wine view page for the wine that was double-clicked.
+     *
+     * @param selectedWine the currently selected wine
      */
     private void openDetailedViewPage(Wine selectedWine) {
         try {

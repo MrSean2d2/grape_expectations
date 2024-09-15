@@ -49,19 +49,22 @@ public class DetailedViewPageController {
     @FXML
     private Button saveNotesButton;
 
+    private int selectedWineID;
+    private int userId;
+
 
     /**
-     * Initializes DetailedViewPage
+     * Initializes DetailedViewPage.
      */
     @FXML
     public void initialize() {
         Wine selectedWine = WineService.getInstance().getSelectedWine();
-        int selectedWineID = selectedWine.getId();
-        int currentUserID = UserService.getInstance().getCurrentUser().getId();
+        selectedWineID = selectedWine.getId();
+        userId = UserService.getInstance().getCurrentUser().getId();
 
         DrinksDAO drinksDAO = new DrinksDAO();
-        if (drinksDAO.getWineReview(selectedWineID, currentUserID) == null) {
-            Drinks review = new Drinks(selectedWineID, currentUserID);
+        if (drinksDAO.getWineReview(selectedWineID, userId) == null) {
+            Drinks review = new Drinks(selectedWineID, userId);
             try {
                 drinksDAO.add(review);
             } catch (DuplicateEntryException e) {
@@ -69,7 +72,7 @@ public class DetailedViewPageController {
             }
         }
 
-        Drinks review = drinksDAO.getWineReview(selectedWineID, currentUserID);
+        Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
 
         if (selectedWine != null) {
             nameLabel.setText("" + selectedWine.getName());
@@ -87,44 +90,52 @@ public class DetailedViewPageController {
         }
     }
 
+
     /**
-     * handles the event where the toggle favorite button is pressed
-     * @param event
+     * handles the event where the toggle favorite button is pressed.
+     *
+     * @param event action event
      */
     @FXML
     private void handleToggleFavourite(ActionEvent event) {
-        int selectedWineID = WineService.getInstance().getSelectedWine().getId();
-        int currentUserID = UserService.getInstance().getCurrentUser().getId();
         DrinksDAO drinksDAO = new DrinksDAO();
-        Drinks review = drinksDAO.getWineReview(selectedWineID, currentUserID);
+        Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
 
-        if (review != null) {
-            review.toggleFavourite(review.isFavourite());
-            updateFavoriteButton(review.isFavourite());
+        if(UserService.getInstance().getCurrentUser() == null) {
+            close();
+        } else {
+            if (review != null) {
+                review.toggleFavourite(review.isFavourite());
+                updateFavoriteButton(review.isFavourite());
+            }
         }
     }
 
+
     /**
-     * Saves the notes that are currently in the text box
+     * Saves the notes that are currently in the text box.
      *
-     * @param event
+     * @param event action event
      */
     @FXML
     private void handleSaveNotes(ActionEvent event) {
-        int selectedWineID = WineService.getInstance().getSelectedWine().getId();
-        int currentUserID = UserService.getInstance().getCurrentUser().getId();
         DrinksDAO drinksDAO = new DrinksDAO();
-        Drinks review = drinksDAO.getWineReview(selectedWineID, currentUserID);
+        Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
 
-        if (review != null) {
-            review.setNotes(notesTextArea.getText());
+        if(UserService.getInstance().getCurrentUser() == null) {
+            close();
+        } else {
+            if (review != null) {
+                review.setNotes(notesTextArea.getText());
+            }
         }
     }
 
+
     /**
-     * Closes the page
+     * Closes the page.
      *
-     * @param event
+     * @param event action event
      */
     @FXML
     private void handleBackButtonAction(ActionEvent event) {
@@ -132,17 +143,30 @@ public class DetailedViewPageController {
     }
 
     /**
-     * Updates text of the toggle favorite button based on if the wine is favorited or not
+     * Closes the page.
+     */
+    private void close() {
+        backButton.getScene().getWindow().hide();
+    }
+
+
+    /**
+     * Updates text of the toggle favorite button based on if the wine is favorited or not.
      *
-     * @param isFavorited
+     * @param isFavorited whether the wine is currently favourited
      */
     private void updateFavoriteButton(boolean isFavorited) {
-        if (isFavorited) {
-            favoriteToggleButton.setText("Unfavorite");
-            favoriteToggleButton.setStyle("-fx-background-color: #ffdd00");
+
+        if(UserService.getInstance().getCurrentUser() == null) {
+            close();
         } else {
-            favoriteToggleButton.setText("Favorite");
-            favoriteToggleButton.setStyle(null);
+            if (isFavorited) {
+                favoriteToggleButton.setText("Unfavorite");
+                favoriteToggleButton.setStyle("-fx-background-color: #ffdd00");
+            } else {
+                favoriteToggleButton.setText("Favorite");
+                favoriteToggleButton.setStyle(null);
+            }
         }
     }
 }
