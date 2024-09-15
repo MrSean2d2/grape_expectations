@@ -166,7 +166,7 @@ public class DataListPageController extends PageController{
 
         ratingSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
             Float value = Float.valueOf(String.format("%.1f", newVal));
-            maxRatingFilter = value;
+            minRatingFilter = value;
             applySearchFilters();
         });
     }
