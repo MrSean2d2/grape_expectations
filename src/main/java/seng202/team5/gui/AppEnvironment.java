@@ -16,7 +16,7 @@ public class AppEnvironment {
      * be one instance of AppEnvironment in use.
      */
     public AppEnvironment() {
-        String filepath = System.getProperty("user.dir") + "/src/main/resources/test_dataset.csv";
+        String filepath = System.getProperty("user.dir") + "/src/main/resources/nzcsv.csv";
         dataService = new DataLoadService(filepath);
         // populate database with wines
         wineService = WineService.getInstance();
