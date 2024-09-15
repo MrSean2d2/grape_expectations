@@ -5,6 +5,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.GridPane;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.User;
@@ -49,9 +53,30 @@ public class DetailedViewPageController {
     @FXML
     private Button saveNotesButton;
 
+
+    @FXML
+    private HBox ratingStars;
+
+    @FXML
+    private ImageView star1;
+
+    @FXML
+    private ImageView star2;
+
+    @FXML
+    private ImageView star3;
+
+    @FXML
+    private ImageView star4;
+
+    @FXML
+    private ImageView star5;
+
     private int selectedWineID;
     private int userId;
 
+    private Image emptyStar = new Image(getClass().getResourceAsStream("/images/empty_star.png"));
+    private Image filledStar = new Image(getClass().getResourceAsStream("/images/filled_star.png"));
 
     /**
      * Initializes DetailedViewPage.
@@ -84,12 +109,32 @@ public class DetailedViewPageController {
         if (review != null) {
             notesTextArea.setText(review.getNotes());
             updateFavoriteButton(review.isFavourite());
+            updateStarDisplay(review.getRating());
             if (review.isFavourite()) {
                 favoriteToggleButton.setStyle("-fx-background-color: #ffdd00");
             }
         }
     }
 
+    @FXML
+    public void handleStarClick(javafx.scene.input.MouseEvent event) {
+        ImageView clickedStar = (ImageView) event.getSource(); // Get the clicked star
+        int clickedStarIndex = Integer.parseInt(clickedStar.getId().substring(4)); // Get star number (e.g., star1 -> 1)
+
+        DrinksDAO drinksDAO = new DrinksDAO();
+        Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
+        review.setRating(clickedStarIndex);
+
+        updateStarDisplay(clickedStarIndex);
+    }
+
+    private void updateStarDisplay(int rating) {
+        star1.setImage(rating >= 1 ? filledStar : emptyStar);
+        star2.setImage(rating >= 2 ? filledStar : emptyStar);
+        star3.setImage(rating >= 3 ? filledStar : emptyStar);
+        star4.setImage(rating >= 4 ? filledStar : emptyStar);
+        star5.setImage(rating >= 5 ? filledStar : emptyStar);
+    }
 
     /**
      * handles the event where the toggle favorite button is pressed.
