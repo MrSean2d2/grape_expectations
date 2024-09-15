@@ -1,7 +1,14 @@
-junit:
+test:
   stage: test
   script:
-    - ./gradlew test
+    - ./gradlew check
+  artifacts:
+    when: always
+    paths:
+      - build/test-results/
+    reports:
+      junit: build/test-results/**/*.xml
+    expire_in: 1 week
 
 generate_artifacts:
   stage: deploy

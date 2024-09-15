@@ -10,16 +10,16 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team5.models.Region;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-import seng202.team5.models.WineVariety;
 
 
 /**
@@ -31,24 +31,15 @@ public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
     private final String fileName;
-    private final WineVarietyService wineVarietyService;
-    private final RegionService regionService;
     public boolean externalDependencies = true;
 
     /**
      * DataLoadService constructor.
      *
      * @param fileName the name of the csv file to use
-     * @param wineVarietyService the instance of WineVarietyService which
-     *                           manages the state of WineVariety objects
-     * @param regionService the instance of RegionService which manages the state
-     *                      of Region objects
      */
-    public DataLoadService(String fileName, WineVarietyService wineVarietyService,
-                           RegionService regionService) {
+    public DataLoadService(String fileName) {
         this.fileName = fileName;
-        this.wineVarietyService = wineVarietyService;
-        this.regionService = regionService;
     }
 
     /**
@@ -58,40 +49,96 @@ public class DataLoadService {
      * @return the new wine object
      */
     private Wine wineFromText(String[] csvEntry) {
-        //String country = csvEntry[1];
+        try {
 
-        // Wine Description
-        String description = csvEntry[2];
+            //String country = csvEntry[1];
 
-        // Wine Rating
-        int ratingValue = numFromTextOr0(csvEntry[4]);
+            // Wine Description
+            // description can be empty
+            String description = csvEntry[2];
 
-        // Wine Price
-        double price = numFromTextOr0(csvEntry[5]);
+            // Wine Rating
+            if (csvEntry[4] == null) {
+                throw new Exception();
+            }
+            int ratingValue = numFromTextOr0(csvEntry[4]);
 
-        // Wine Region
-        String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
+            // Wine Price
+            if (csvEntry[5] == null) {//price is not in csv
+                throw new Exception();
+            }
+            double price = numFromTextOr0(csvEntry[5]);
 
 
-        // Wine Name
-        String name = csvEntry[11];
+            // Wine Region
+            String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
 
-        // Wine Year
-        Pattern yearPattern = Pattern.compile("\\d{4}");
-        Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);
-        boolean matchFound = yearMatcher.find();
-        int year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
+            // Wine Name
+            String name = csvEntry[11];
 
-        // Wine Variety
-        String varietyName = csvEntry[12];
 
-        // Winery
-        String winery = csvEntry[13];
-        Vineyard vineyard = new Vineyard(winery, regionName);
+            // Wine Year
+            Pattern yearPattern = Pattern.compile("\\d{4}");
+            Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);
+            boolean matchFound = yearMatcher.find();
+            int year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
+            if (year == 0) {//year was not in csv
+                throw new Exception();
+            }
 
-        // Return the created Wine object
-        return new Wine(name, description, year, ratingValue, price,
-                varietyName, "Unknown", vineyard);
+            // Wine Variety
+            String varietyName = csvEntry[12];
+
+            // Winery
+            String winery = csvEntry[13];
+            Vineyard vineyard = new Vineyard(winery, regionName);
+
+            // Return the created Wine object
+            Wine resultWine = new Wine(name, description, year, ratingValue, price,
+                    varietyName, "Unknown", vineyard);
+            if (isValidWine(resultWine)) {
+                return resultWine;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * checks if the created wine has valid attributes,
+     * sets defaults to some that aren't as important
+     * @param resultWine wine created by winefromtext
+     * @return boolean of whether wine can be added to database
+     */
+    private boolean isValidWine(Wine resultWine) {
+        //wine must have a name
+        if (Objects.equals(resultWine.getName(), "")) {
+            return false;
+        }
+        //description can be empty
+        int currentYear = Year.now().getValue();//gets current year for future-proofing
+        if (resultWine.getYear() < 1700 | resultWine.getYear() > currentYear) {//1700 is arbitrary boundary
+            return false;
+        }
+        if (resultWine.getRating() < 0 | resultWine.getRating() > 100) {
+            return false;
+        }
+        if (resultWine.getPrice() < 0) {
+            return false;
+        }
+        if (resultWine.getWineVariety().isEmpty()) {
+            resultWine.setVariety("Unknown Variety");
+        }
+//        if (resultWine.getVineyard().getName().isEmpty()) {
+//            resultWine.setVineyardName("Unknown Vineyard");
+//        }
+//        if (resultWine.getVineyard().getRegion().isEmpty()) {
+//            resultWine.setVineyardRegion("Unknown Region");
+//        }
+        return true;
+
     }
 
     /**
@@ -149,9 +196,10 @@ public class DataLoadService {
         List<Wine> wines = new ArrayList<>();
         for (String[] entry : csvResult) {
             Wine wine = wineFromText(entry);
-            wines.add(wine);
+            if (wine != null) {
+                wines.add(wine);
+            }
         }
         return wines;
-
     }
 }

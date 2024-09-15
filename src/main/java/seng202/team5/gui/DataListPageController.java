@@ -1,5 +1,7 @@
 package seng202.team5.gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,12 +18,12 @@ import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
 import seng202.team5.services.WineService;
 
-import java.util.List;
+
 
 /**
  * Controller for the Data List Page.
  */
-public class DataListPageController {
+public class DataListPageController extends PageController{
     @FXML
     public ComboBox yearComboBox;
     @FXML
@@ -38,6 +40,7 @@ public class DataListPageController {
     public Label priceSliderValue;
     @FXML
     public Label ratingSliderValue;
+
     @FXML
     private TableView<Wine> wineTable;
 
@@ -95,7 +98,6 @@ public class DataListPageController {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-
         //favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
 
         ObservableList<Wine> wines = FXCollections.observableArrayList(WineService.getInstance()
@@ -103,6 +105,8 @@ public class DataListPageController {
 
         // Add data to TableView
         wineTable.setItems(wines);
+        System.out.println(wines.size());
+
 
         wineTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -110,7 +114,7 @@ public class DataListPageController {
                 System.out.println(wineTable.getSelectionModel().getSelectedItem().getName());
                 if (mouseEvent.getClickCount() == 2) {
                     System.out.println("double clicked");
-                    MainLayoutController mainLayoutController = new MainLayoutController();
+                    HeaderController mainLayoutController = new HeaderController();
                     try {
                         System.out.println("trying to open Detailed View");
                         Wine selectedWine = wineTable.getSelectionModel().getSelectedItem();

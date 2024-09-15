@@ -36,6 +36,7 @@ public class DatabaseService {
         } else {
             this.url = url;
         }
+
         if (!checkDataBaseExists(this.url)) {
             createDatabaseFile(this.url);
             resetDb();
@@ -158,6 +159,7 @@ public class DatabaseService {
     private String getDataBasePath() {
         String path = DatabaseService.class.getProtectionDomain().getCodeSource()
                 .getLocation().getPath();
+
         path = URLDecoder.decode(path, StandardCharsets.UTF_8);
         File jarDir = new File(path);
         return "jdbc:sqlite:" + jarDir.getParentFile() + "/database.db";
