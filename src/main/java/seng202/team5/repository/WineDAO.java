@@ -487,7 +487,7 @@ public class WineDAO implements DAOInterface<Wine> {
             sql += " AND wine.price >= " + minPrice;
         }
         if (maxRating != 100.0) {
-            sql += " AND wine.rating <= " + maxRating;
+            sql += " AND wine.rating >= " + maxRating;
         }
         //TODO: implement favourite toggle -- wait for drinks table
 
