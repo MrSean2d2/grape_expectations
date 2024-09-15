@@ -15,10 +15,22 @@ public class Wine {
     private int year = 0;
     private int ratingValue = 0;
     private double price = 0.0;
-    private boolean favourite = false;
     private String wineVariety;
     private String colour;
     private Vineyard vineyard;
+
+
+    /**
+     * Constructor for creating a wine object with a name and description.
+     *
+     * @param name name of wine
+     * @param description description of wine
+     */
+    public Wine(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
 
     /**
      * Constructor for creating a wine object with a name,
@@ -41,7 +53,6 @@ public class Wine {
         this.year = year;
         this.ratingValue = ratingValue;
         this.price = price;
-        // this.favourite = favourite;
         this.wineVariety = wineVariety;
         this.colour = colour;
         this.vineyard = vineYard;
@@ -115,16 +126,6 @@ public class Wine {
 
 
     /**
-     * Gets the favourite status of the wine.
-     *
-     * @return favourite
-     */
-    public boolean isFavourite() {
-        return favourite;
-    }
-
-
-    /**
      * Gets the wine id.
      *
      * @return id
@@ -185,19 +186,7 @@ public class Wine {
 
 
     /**
-     * Constructor for creating a wine object with a name and description.
-     *
-     * @param name name of wine
-     * @param description description of wine
-     */
-    public Wine(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
-
-    /**
-     * Set the wine's id,
+     * Set the wine's id.
      *
      * @param id the new id
      */
@@ -230,7 +219,7 @@ public class Wine {
      * Check if this object is equal to another given object.
      *
      * @param o the object to compare
-     * @return tue if the objects are equal, false otherwise
+     * @return true if the objects are equal, false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -241,12 +230,20 @@ public class Wine {
             return false;
         }
         Wine wine = (Wine) o;
-        return id == wine.id && year == wine.year && ratingValue == wine.ratingValue &&
-                Double.compare(price, wine.price) == 0 && favourite == wine.favourite &&
-                Objects.equals(name, wine.name) &&
-                Objects.equals(description, wine.description) &&
-                Objects.equals(wineVariety, wine.wineVariety) &&
-                Objects.equals(colour, wine.colour) &&
+        return id == wine.id && year == wine.year
+                &&
+                ratingValue == wine.ratingValue
+                &&
+                Double.compare(price, wine.price) == 0
+                &&
+                Objects.equals(name, wine.name)
+                &&
+                Objects.equals(description, wine.description)
+                &&
+                Objects.equals(wineVariety, wine.wineVariety)
+                &&
+                Objects.equals(colour, wine.colour)
+                &&
                 (Objects.equals(vineyard.getName(), wine.vineyard.getName()));
     }
 

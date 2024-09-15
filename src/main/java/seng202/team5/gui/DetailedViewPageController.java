@@ -38,7 +38,7 @@ public class DetailedViewPageController extends PageController {
             priceLabel.setText("Price: $" + selectedWine.getPrice());
             yearLabel.setText("Year: " + selectedWine.getYear());
             ratingLabel.setText(selectedWine.getRating() + " stars");
-            favouriteLabel.setText(selectedWine.isFavourite() ? "Yes" : "No");
+//            favouriteLabel.setText(selectedWine.isFavourite() ? "Yes" : "No");
         }
     }
 }
