@@ -1,13 +1,15 @@
 package seng202.team5.unittests.respository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Nested;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Vineyard;
@@ -29,8 +31,10 @@ public class WineDAOTest {
 
 
     /**
-     * Set up the testing scenario.
+     * Set up service classes for tests.
+     * @throws InstanceAlreadyExistsException
      */
+
     @BeforeAll
     public static void setUp() throws InstanceAlreadyExistsException {
         DatabaseService.removeInstance();
@@ -40,9 +44,8 @@ public class WineDAOTest {
         wineDAO = new WineDAO(vineyardDAO);
     }
 
-
     /**
-     * Reset the database before each test
+     * Resets the database before each test.
      */
     @BeforeEach
     public void resetDb() {
@@ -58,7 +61,23 @@ public class WineDAOTest {
         assertEquals(0, wineDAO.getAll().size());
     }
 
+    /**
+     * Tests the getAll() method. Asssertion of number of entries, and first entry is correct.
+     */
+    @Test
+    public void testGetAll() {
+        Vineyard testVineyard = new Vineyard("Test vineyard", "Test region");
+        Wine testWine1 = new Wine("Test Wine 1", "Test Wine is a nice wine", 2024, 99, 7.99, "Pinot Noir", "Red", testVineyard);
+        Wine testWine2 = new Wine("Test Wine 2", "Test Wine is a nice wine", 2013, 43, 5.99, "Pinot gris", "White", testVineyard);
+        Wine testWine3 = new Wine("Test Wine 3", "Test Wine is a nice wine", 2007, 45, 3.99, "Pinot grigio", "Red", testVineyard);
+        wineDAO.add(testWine1);
+        wineDAO.add(testWine2);
+        wineDAO.add(testWine3);
 
+        assertEquals(3, wineDAO.getAll().size());
+        assertEquals("Test Wine 1", wineDAO.getAll().get(0).getName());
+
+    }
     /**
      * Test getting a single wine from the database.
      */
@@ -177,6 +196,10 @@ public class WineDAOTest {
         assertEquals("Blue", wineDAO.getOne(toUpdateID).getWineColour());
     }
 
+    /**
+     * Tests the clearing of database.
+     */
+
     @Test
     public void testTruncateDatabase() {
         wineDAO.add(new Wine(1, "wine name", "description", 2014, 85, 20, "pinot noir", "white", new Vineyard("vineyard", "region")));
@@ -184,4 +207,94 @@ public class WineDAOTest {
         wineDAO.truncateWines();
         assertEquals(0, wineDAO.getAll().size());
     }
+
+    /**
+     * Tests the executeQuery function for various search / filters.
+     */
+    @org.junit.jupiter.api.Nested
+    class testNest {
+
+        /**
+         * Set up test wine entries and base sql statement.
+         */
+        String sql;
+        @BeforeEach
+        public void init(){
+            Vineyard testVineyard1 = new Vineyard("Test Vineyard", "Test Region");
+            Vineyard testVineyard2 = new Vineyard("Test Vineyard", "Test Region");
+
+            Wine testWine1 = new Wine("Test Wine 1 delish", "YUMMY", 2005,
+                    88, 32, "testVariety", "Red", testVineyard1);
+            Wine testWine2 = new Wine("Test Wine 2 delish", "OKAY", 2005,
+                    88, 98, "testVariety", "White", testVineyard2);
+            Wine testWine3 = new Wine("Test Wine 3", "YUCK", 2021,
+                    96, 54, "testVariety", "Red", testVineyard1);
+            Wine testWine4 = new Wine("Test Wine 4 delish", "GROSS", 2005,
+                    65, 34, "testVariety", "White", testVineyard2);
+            Wine testWine5 = new Wine("Test Wine 5", "PERFECT", 2008,
+                    88, 25, "testVariety", "Red", testVineyard1);
+            wineDAO.add(testWine1);
+            wineDAO.add(testWine2);
+            wineDAO.add(testWine3);
+            wineDAO.add(testWine4);
+            wineDAO.add(testWine5);
+            sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                    + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard"
+                    + " AND (wine.name LIKE ? OR wine.description LIKE ?) ";
+        }
+        /**
+         * Tests the executeSearchFilter method for no filters applied
+         */
+        @Test
+        public void testExecuteSearchFilter(){
+            List<Wine> result = wineDAO.executeSearchFilter(sql, "");
+            Assertions.assertEquals(5, result.size());
+        }
+
+        /**
+         * Tests executeSearchFilter method for single search term in wine description
+         */
+        @Test
+        public void testSearchFilter(){
+            List<Wine> result = wineDAO.executeSearchFilter(sql, "YUMMY");
+            System.out.println(result.get(0).getDescription());
+            Assertions.assertEquals(1, result.size());
+            Assertions.assertTrue(result.get(0).getDescription().contains("YUMMY"));
+        }
+
+        /**
+         * Test executeSearchFilter method for single year filter
+         */
+        @Test
+        public void testYearFilter() {
+            sql += " AND wine.year = 2005;";
+            List<Wine> result = wineDAO.executeSearchFilter(sql, "");
+            for (Wine wine: result) {
+                Assertions.assertEquals("2005", String.valueOf(wine.getYear()));
+            }
+            Assertions.assertEquals(3, result.size());
+        }
+
+
+        /**
+         * Tests executeSearchFilter method for search and multiple filter values
+         */
+        @Test
+        public void testSearchAndFilter() {
+            sql += " AND wine.year = 2005 ";
+            sql += " AND wine.rating = 88;";
+
+            List<Wine> result = wineDAO.executeSearchFilter(sql, "delish");
+            for (Wine wine: result) {
+                Assertions.assertEquals(2005, wine.getYear());
+                Assertions.assertEquals(88, wine.getRating());
+                Assertions.assertTrue(wine.getName().contains("delish"));
+            }
+            Assertions.assertEquals(2, result.size());
+        }
+
+    }
+
+
 }

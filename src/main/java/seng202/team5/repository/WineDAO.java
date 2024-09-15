@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import com.opencsv.bean.processor.ConvertEmptyOrBlankStringsToNull;
+import org.apache.commons.lang3.NotImplementedException;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -145,7 +148,6 @@ public class WineDAO implements DAOInterface<Wine> {
         }
         throw new NotFoundException(String.format("No wine with name %s found", name));
     }
-
 
     /**
      * Add a single wine to the database.
@@ -313,6 +315,113 @@ public class WineDAO implements DAOInterface<Wine> {
             ps.executeUpdate();
         } catch (SQLException sqlException) {
             log.error(sqlException);
+        }
+    }
+
+    public List<String> getVariety() {
+        List<String> varieties = new ArrayList<>();
+        String sql = "SELECT DISTINCT variety FROM WINE ORDER BY variety;";
+        try (Connection conn = databaseService.connect();
+             Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                varieties.add(rs.getString("variety"));
+            }
+            return varieties;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+    public List<String> getYear() {
+        List<String> years = new ArrayList<>();
+        String sql = "SELECT DISTINCT year FROM WINE ORDER BY year;";
+        try (Connection conn = databaseService.connect();
+             Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                years.add(rs.getString("year"));
+            }
+            return years;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Builds sql query for search and filter.
+     *
+     * @param search term to search for
+     * @param year to filter
+     * @return sql string
+     */
+    public String queryBuilder(String search, String variety, String region, String year, double minPrice, double maxPrice, double minRating, double maxRating, boolean favourite){
+        String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard";
+        if (search != null) {
+            sql +=  " AND (wine.name LIKE ? OR wine.description LIKE ?) ";
+        }
+        if(variety != "0") {
+            sql += " AND wine.variety = '" + variety + "'";
+        }
+        if (region != "0") {
+            sql += " AND vineyard.region = '" + region + "'";
+        }
+        if (year != "0") {
+            sql += " AND wine.year = "+ year;
+        }
+        //TODO: implement minPrice sql query
+        if (maxPrice != 800.0) {
+            sql+= " AND wine.price <= "+ String.valueOf(maxPrice);
+        }
+        //TODO: implement minRating sql query
+        if(maxRating != 100.0) {
+
+            sql += " AND wine.rating <= " + String.valueOf(maxRating);
+        }
+        //TODO: implement favourite toggle -- wait for drinks table
+
+        sql += ";";
+        System.out.println(sql);
+        return sql;
+    }
+
+    /**
+     * Searches for wines by name or description and
+     * returns list of wines matching search.
+     *
+     * @param search name or description of wine
+     * @return list of wines matching search
+     */
+    public List<Wine> executeSearchFilter(String querySql, String search) {
+        List<Wine> searchedWines = new ArrayList<>();
+
+        try (Connection conn = databaseService.connect();
+                PreparedStatement ps = conn.prepareStatement(querySql)) {
+            String searchPattern = "%" + search + "%";
+            ps.setString(1, searchPattern);
+            ps.setString(2, searchPattern);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                searchedWines.add(new Wine(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("year"),
+                        rs.getInt("rating"),
+                        rs.getInt("price"),
+                        rs.getString("variety"),
+                        rs.getString("colour"),
+                        new Vineyard(rs.getString("vineyardName"), rs.getString("Region"))
+                ));
+            }
+            return searchedWines;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
         }
     }
 }

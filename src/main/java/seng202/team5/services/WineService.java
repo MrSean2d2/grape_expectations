@@ -35,34 +35,6 @@ public class WineService {
     }
 
     /**
-     * Add new Wine entry.
-     */
-    public void addWine(Wine wineEntry) {
-        wineList.add(wineEntry);
-    }
-
-    /**
-     * Delete existing Wine entry.
-     */
-    public void delWine(Wine wineEntry) {
-        wineList.remove(wineEntry);
-    }
-
-    /**
-     * Apply filter to column by input filter condition.
-     */
-    public void filter(String colName, String filter) {
-
-    }
-
-    /**
-     * Search for a wine by specified term.
-     */
-    public void search(String term) {
-
-    }
-
-    /**
      * Returns the singleton WineService instance.
      *
      * @return instance
@@ -92,5 +64,6 @@ public class WineService {
     public Wine getSelectedWine() {
         return selectedWine;
     }
+
 
 }
