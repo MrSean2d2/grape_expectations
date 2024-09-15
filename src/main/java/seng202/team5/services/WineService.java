@@ -1,7 +1,6 @@
 package seng202.team5.services;
 
 import java.util.List;
-import seng202.team5.gui.AppEnvironment;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
@@ -32,7 +31,12 @@ public class WineService {
      * @return Wine list
      */
     public List<Wine> getWineList() {
-        return wineDAO.getAll();
+        List<Wine> dbWines = wineDAO.getAll();
+        if (dbWines.isEmpty()) {
+            populateDatabase(new DataLoadService());
+            dbWines = wineDAO.getAll();
+        }
+        return dbWines;
     }
 
     /**

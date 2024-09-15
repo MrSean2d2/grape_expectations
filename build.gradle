@@ -26,6 +26,7 @@ repositories {
 
 
 dependencies {
+    implementation 'org.yaml:snakeyaml:2.3'
     implementation 'com.opencsv:opencsv:5.9'
 
     // https://mvnrepository.com/artifact/org.openjfx/javafx-controls
