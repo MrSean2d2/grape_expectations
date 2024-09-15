@@ -40,6 +40,14 @@ public class WineDAO implements DAOInterface<Wine> {
     }
 
     /**
+     * gets vineyardDAO
+     * @return the vineyardDAO
+     */
+    public VineyardDAO getVineyardDAO() {
+        return vineyardDAO;
+    }
+
+    /**
      * Get all wine objects from the database and put them in a list.
      *
      * @return the list of all the wine objects in the database

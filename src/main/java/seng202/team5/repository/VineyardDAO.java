@@ -170,4 +170,17 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
     public void update(Vineyard toUpdate) {
         throw new NotImplementedException();
     }
+
+    /**
+     * clear all vineyards from the database
+     */
+    public void truncateVineyards() {
+        String sql = "Delete FROM vineyard;";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
+    }
 }
