@@ -2,6 +2,7 @@ package seng202.team5.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import seng202.team5.models.User;
@@ -24,6 +25,9 @@ public class AccountPageController extends PageController {
     private TextField usernameField;
 
     @FXML
+    private Label errorLabel;
+
+    @FXML
     private PasswordField passwordField;
 
     /**
@@ -31,7 +35,7 @@ public class AccountPageController extends PageController {
      */
     @FXML
     public void initialize() {
-
+        errorLabel.setText(""); //Blank error message
     }
 
     /**
@@ -41,6 +45,23 @@ public class AccountPageController extends PageController {
     public void attemptLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
+
+        usernameField.getStyleClass().remove("field_error");
+        passwordField.getStyleClass().remove("field_error");
+
+        if (username.isEmpty()) {
+            // Show error
+            errorLabel.setText("Username cannot be empty!");
+            usernameField.getStyleClass().add("field_error");
+            return;
+        }
+
+        if (password.isEmpty()) {
+            // Show error
+            errorLabel.setText("Password cannot be empty!");
+            passwordField.getStyleClass().add("field_error");
+            return;
+        }
 
         UserService userManager = UserService.getInstance();
         User user = userManager.signinUser(username, password);
@@ -52,6 +73,10 @@ public class AccountPageController extends PageController {
 
             // Go to the homepage
             swapPage("/fxml/newHomePage.fxml");
+        } else {
+            errorLabel.setText("Username or password is incorrect!");
+            usernameField.getStyleClass().add("field_error");
+            passwordField.getStyleClass().add("field_error");
         }
     }
 
@@ -67,13 +92,26 @@ public class AccountPageController extends PageController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        usernameField.getStyleClass().remove("field_error");
+        passwordField.getStyleClass().remove("field_error");
+
         if (username.isEmpty()) {
             // Show error
+            errorLabel.setText("Username cannot be empty!");
+            usernameField.getStyleClass().add("field_error");
+            return;
+        }
+
+        if (password.isEmpty()) {
+            // Show error
+            errorLabel.setText("Password cannot be empty!");
+            passwordField.getStyleClass().add("field_error");
             return;
         }
 
         UserService userManager = UserService.getInstance();
         User user = userManager.registerUser(username, password);
+
 
         if (user != null) {
             userManager.setCurrentUser(user);
@@ -84,6 +122,8 @@ public class AccountPageController extends PageController {
             swapPage("/fxml/newHomePage.fxml");
         } else {
             // Show error
+            errorLabel.setText("Account with that username already exists!");
+            usernameField.getStyleClass().add("field_error");
         }
     }
 }
