@@ -69,11 +69,11 @@
     -fx-background-color: #bbbbbb;
 }
 
-#homepage {
+#homepage{
     -fx-background-image: url("../images/vineyard_background.jpg");
     -fx-background-repeat: no-repeat;
-    -fx-background-size: auto;
-    -fx-background-position: center center;
+    -fx-background-size: cover;
+    -fx-background-position: center;
 }
 
 .table-view {
