@@ -203,6 +203,7 @@ public class DataListPageController extends PageController{
         priceRangeSlider.setMax(wineDAO.getMaxPrice());
         minPriceLabel.setText(String.valueOf(wineDAO.getMinPrice()));
         maxPriceLabel.setText(String.valueOf(wineDAO.getMaxPrice()));
+        ratingSliderValue.setText(String.valueOf(wineDAO.getMinRating()));
         this.yearFilter = "0";
         this.varietyFilter = "0";
         this.regionFilter = "0";
