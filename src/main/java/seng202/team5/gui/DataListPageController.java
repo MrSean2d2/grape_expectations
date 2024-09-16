@@ -130,15 +130,10 @@ public class DataListPageController extends PageController{
         wineTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println(wineTable.getSelectionModel().getSelectedItem().getName());
                 if (mouseEvent.getClickCount() == 2) {
-                    System.out.println("double clicked");
-                    HeaderController mainLayoutController = new HeaderController();
                     try {
-                        System.out.println("trying to open Detailed View");
                         Wine selectedWine = wineTable.getSelectionModel().getSelectedItem();
                         if (selectedWine != null) {
-                            System.out.println("selectedWine != null");
                             WineService.getInstance().setSelectedWine(selectedWine);
                             openDetailedViewPage(selectedWine);
                         }
