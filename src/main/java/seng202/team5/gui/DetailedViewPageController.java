@@ -51,6 +51,12 @@ public class DetailedViewPageController {
     private Label logInMessageLabel;
 
     @FXML
+    private Label provinceLabel;
+
+    @FXML
+    private Label varietyLabel;
+
+    @FXML
     private TextArea notesTextArea;
 
     @FXML
@@ -95,6 +101,8 @@ public class DetailedViewPageController {
             yearLabel.setText("Year: " + selectedWine.getYear());
             ratingLabel.setText("Score: " + selectedWine.getRating());
             wineDescriptionLabel.setText(selectedWine.getDescription());
+            provinceLabel.setText("Province: " + selectedWine.getRegion());
+            varietyLabel.setText("Variety: " + selectedWine.getWineVariety());
         }
 
         if (UserService.getInstance().getCurrentUser() != null) {
