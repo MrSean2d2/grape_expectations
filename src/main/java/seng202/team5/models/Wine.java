@@ -1,5 +1,6 @@
 package seng202.team5.models;
 
+import java.time.Year;
 import java.util.Objects;
 import seng202.team5.repository.DrinksDAO;
 import seng202.team5.services.UserService;
@@ -30,6 +31,9 @@ public class Wine {
     {
         this.drinksDAO = new DrinksDAO();
     }
+
+
+
 
 
     /**
@@ -112,16 +116,6 @@ public class Wine {
         this.notes = notes;
     }
 
-    /**
-     * Constructor for creating a wine object with a name and description.
-     *
-     * @param name name of wine
-     * @param description description of wine
-     */
-    public Wine(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
 
 
     /**
@@ -225,7 +219,7 @@ public class Wine {
 
 
     /**
-     * Set the wine's id,
+     * Set the wine's id.
      *
      * @param id the new id
      */
@@ -269,12 +263,56 @@ public class Wine {
             return false;
         }
         Wine wine = (Wine) o;
-        return id == wine.id && year == wine.year && ratingValue == wine.ratingValue &&
-                Double.compare(price, wine.price) == 0 && favourite == wine.favourite &&
-                Objects.equals(name, wine.name) &&
-                Objects.equals(description, wine.description) &&
-                Objects.equals(wineVariety, wine.wineVariety) &&
-                Objects.equals(colour, wine.colour) &&
+        return id == wine.id && year == wine.year
+                &&
+                ratingValue == wine.ratingValue
+                &&
+                Double.compare(price, wine.price) == 0
+                &&
+                Objects.equals(name, wine.name)
+                &&
+                Objects.equals(description, wine.description)
+                &&
+                Objects.equals(wineVariety, wine.wineVariety)
+                &&
+                Objects.equals(colour, wine.colour)
+                &&
                 (Objects.equals(vineyard.getName(), wine.vineyard.getName()));
     }
+
+    /**
+     * set the variety name of a wine
+     * @param unknownVariety string value to save as variety name
+     */
+    public void setVariety(String unknownVariety) {wineVariety = unknownVariety;}
+
+
+    /**
+     * checks if a wine has valid values for its attributes.
+     * eg: year and price aren't 0
+     * @return boolean whether given wine is valid enough to be added to database
+     */
+    public boolean isValidWine() {
+        //wine must have a name
+        if (name.isEmpty()) {
+            return false;
+        }
+        //description can be empty
+        int currentYear = Year.now().getValue();//gets current year for future-proofing
+        if (year < 1700 | year > currentYear) {//1700 is arbitrary boundary
+            return false;
+        }
+        if (ratingValue < 0 | ratingValue > 100) {
+            return false;
+        }
+        if (price < 0) {
+            return false;
+        }
+        if (wineVariety.isEmpty()) {
+            wineVariety = "Unknown Variety";
+        }
+        return true;
+
+    }
+
 }

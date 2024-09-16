@@ -14,7 +14,6 @@ import java.io.IOException;
  * @author seng202 teaching team
  */
 public class MainWindow extends Application {
-    public static AppEnvironment appEnvironment; // we can change this later, not sure where to put it exactly
 
     public MainWindow() { }
 
@@ -25,7 +24,6 @@ public class MainWindow extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        appEnvironment = new AppEnvironment();
         System.setProperty("prism.lcdtext", "false");
 
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/Header.fxml"));

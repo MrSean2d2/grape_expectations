@@ -144,8 +144,43 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
         }
     }
 
+
+    /**
+     * Get all the distinct regions in the database by alphabetical order.
+     *
+     * @return the list of distinct region names
+     */
+    public List<String> getRegions() {
+        List<String> regions = new ArrayList<>();
+        String sql = "SELECT DISTINCT region FROM VINEYARD ORDER BY region;";
+        try (Connection conn = databaseService.connect();
+                Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                regions.add(rs.getString("region"));
+            }
+            return regions;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
     @Override
     public void update(Vineyard toUpdate) {
         throw new NotImplementedException();
+    }
+
+    /**
+     * clear all vineyards from the database
+     */
+    public void truncateVineyards() {
+        String sql = "Delete FROM vineyard;";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
     }
 }

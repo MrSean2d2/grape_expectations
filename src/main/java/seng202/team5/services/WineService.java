@@ -1,7 +1,6 @@
 package seng202.team5.services;
 
 import java.util.List;
-import seng202.team5.gui.AppEnvironment;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
@@ -20,6 +19,8 @@ public class WineService {
     }
 
     public void populateDatabase(DataLoadService dataLoadService) {
+        wineDAO.truncateWines();
+        wineDAO.getVineyardDAO().truncateVineyards();
         List<Wine> wines = dataLoadService.processWinesFromCsv();
         wineDAO.batchAdd(wines);
     }
@@ -30,35 +31,12 @@ public class WineService {
      * @return Wine list
      */
     public List<Wine> getWineList() {
-        return wineDAO.getAll();
-    }
-
-    /**
-     * Add new Wine entry.
-     */
-    public void addWine(Wine wineEntry) {
-        wineList.add(wineEntry);
-    }
-
-    /**
-     * Delete existing Wine entry.
-     */
-    public void delWine(Wine wineEntry) {
-        wineList.remove(wineEntry);
-    }
-
-    /**
-     * Apply filter to column by input filter condition.
-     */
-    public void filter(String colName, String filter) {
-
-    }
-
-    /**
-     * Search for a wine by specified term.
-     */
-    public void search(String term) {
-
+        List<Wine> dbWines = wineDAO.getAll();
+        if (dbWines.isEmpty()) {
+            populateDatabase(new DataLoadService());
+            dbWines = wineDAO.getAll();
+        }
+        return dbWines;
     }
 
     /**
@@ -91,5 +69,6 @@ public class WineService {
     public Wine getSelectedWine() {
         return selectedWine;
     }
+
 
 }

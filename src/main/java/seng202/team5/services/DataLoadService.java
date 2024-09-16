@@ -6,16 +6,26 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvException;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.yaml.snakeyaml.Yaml;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 
@@ -29,15 +39,35 @@ public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
     private final String fileName;
-    public boolean externalDependencies = true;
 
     /**
      * DataLoadService constructor.
      *
-     * @param fileName the name of the csv file to use
      */
-    public DataLoadService(String fileName) {
-        this.fileName = fileName;
+    public DataLoadService() {
+        this.fileName = parseFileName();
+    }
+
+    private String parseFileName() {
+        Yaml yaml = new Yaml();
+        String configPath = this.getClass().getProtectionDomain()
+                .getCodeSource().getLocation().getPath();
+        configPath = URLDecoder.decode(configPath, StandardCharsets.UTF_8);
+        File jarDir = new File(configPath);
+        configPath = jarDir.getParentFile() + "/config.yaml";
+        try (InputStream inputStream = Files.newInputStream(Paths.get(configPath))) {
+            Map<String, Object> obj = yaml.load(inputStream);
+            Object result = obj.get("csvPath");
+            if (result instanceof String) {
+                return (String) result;
+            } else {
+                log.error("Unable to parse config file, 'csvPath' value is not a string");
+                return this.getClass().getClassLoader().getResource("nzcsv.csv").getPath();
+            }
+        } catch (IOException e) {
+            log.error(e);
+            return this.getClass().getClassLoader().getResource("nzcsv.csv").getPath();
+        }
     }
 
     /**
@@ -47,39 +77,63 @@ public class DataLoadService {
      * @return the new wine object
      */
     private Wine wineFromText(String[] csvEntry) {
-        //String country = csvEntry[1];
+        try {
 
-        // Wine Description
-        String description = csvEntry[2];
+            //String country = csvEntry[1];
 
-        // Wine Rating
-        int ratingValue = numFromTextOr0(csvEntry[4]);
+            // Wine Description
+            // description can be empty
+            String description = csvEntry[2];
 
-        // Wine Price
-        double price = numFromTextOr0(csvEntry[5]);
+            // Wine Rating
+            if (csvEntry[4] == null) {
+                throw new Exception();
+            }
+            int ratingValue = numFromTextOr0(csvEntry[4]);
 
-        // Wine Region
-        String regionName = csvEntry[7] != null ? csvEntry[7] : "NoRegion";
+            // Wine Price
+            if (csvEntry[5] == null) {
+                //price is not in csv
+                throw new Exception();
+            }
+            double price = numFromTextOr0(csvEntry[5]);
 
-        // Wine Name
-        String name = csvEntry[11];
 
-        // Wine Year
-        Pattern yearPattern = Pattern.compile("\\d{4}");
-        Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);
-        boolean matchFound = yearMatcher.find();
-        int year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
+            // Wine Region
+            String regionName = csvEntry[6] != null ? csvEntry[6] : "NoRegion";
 
-        // Wine Variety
-        String varietyName = csvEntry[12];
+            // Wine Name
+            String name = csvEntry[11];
 
-        // Winery
-        String winery = csvEntry[13];
-        Vineyard vineyard = new Vineyard(winery, regionName);
 
-        // Return the created Wine object
-        return new Wine(name, description, year, ratingValue, price,
-                varietyName, "Unknown", vineyard);
+            // Wine Year
+            Pattern yearPattern = Pattern.compile("\\d{4}");
+            Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);
+            boolean matchFound = yearMatcher.find();
+            int year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
+            if (year == 0) {
+                //year was not in csv
+                throw new Exception();
+            }
+
+            // Wine Variety
+            String varietyName = csvEntry[12];
+
+            // Winery
+            String winery = csvEntry[13];
+            Vineyard vineyard = new Vineyard(winery, regionName);
+
+            // Return the created Wine object
+            Wine resultWine = new Wine(name, description, year, ratingValue, price,
+                    varietyName, "Unknown", vineyard);
+            if (resultWine.isValidWine()) {
+                return resultWine;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -107,12 +161,12 @@ public class DataLoadService {
     /**
      * Reads the specified file and returns all the csv records as a list of String[]s.
      *
-     * @param fileName the URI of the file to read
+     * @param filePath the URI of the file to read
      * @return all csv records from the file as a list of String[]s
      */
-    public List<String[]> loadFile(String fileName) {
+    public List<String[]> loadFile(String filePath) {
         List<String[]> result;
-        try (Reader reader = Files.newBufferedReader(Paths.get(fileName))) {
+        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
             CSVParser csvParser = new CSVParserBuilder().withSeparator(',')
                     .withQuoteChar('"')
                     .withFieldAsNull(CSVReaderNullFieldIndicator.EMPTY_SEPARATORS).build();
@@ -137,9 +191,10 @@ public class DataLoadService {
         List<Wine> wines = new ArrayList<>();
         for (String[] entry : csvResult) {
             Wine wine = wineFromText(entry);
-            wines.add(wine);
+            if (wine != null) {
+                wines.add(wine);
+            }
         }
         return wines;
-
     }
 }

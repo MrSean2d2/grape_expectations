@@ -1,14 +1,17 @@
 package seng202.team5.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.Drinks;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Database Access Object for the Drinks table in the SQL database.
@@ -38,8 +41,8 @@ public class DrinksDAO implements DAOInterface<Drinks> {
         List<Drinks> drinks = new ArrayList<>();
         String sql = "SELECT * FROM drinks";
         try (Connection conn = databaseService.connect();
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Drinks review = new Drinks(
                         rs.getInt("wineid"),
@@ -56,9 +59,21 @@ public class DrinksDAO implements DAOInterface<Drinks> {
         }
     }
 
+    /**
+     * Not implemented, this table has a two column primary key.
+     *
+     * @param id id of object to get
+     * @return Nothing, this method should not be used
+     * @throws NotImplementedException because this method doesn't make sense
+     *                                 in this context
+     * @deprecated Don't use this method for this implementation of DAOInterface
+     *             as this table has a two attribute primary key.
+     */
+    @Deprecated
     @Override
-    public Drinks getOne(int id) {
-        throw new NotImplementedException("Don't use this method! You must specify a wineId and a userId!");
+    public Drinks getOne(int id) throws NotImplementedException {
+        throw new NotImplementedException(
+                "Don't use this method! You must specify a wineId and a userId!");
     }
 
 
@@ -72,7 +87,7 @@ public class DrinksDAO implements DAOInterface<Drinks> {
         List<Drinks> drinks = new ArrayList<>();
         String sql = "SELECT * FROM drinks WHERE userid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -102,7 +117,7 @@ public class DrinksDAO implements DAOInterface<Drinks> {
         List<Drinks> drinks = new ArrayList<>();
         String sql = "SELECT * FROM drinks WHERE wineid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -133,7 +148,7 @@ public class DrinksDAO implements DAOInterface<Drinks> {
         Drinks review;
         String sql = "SELECT * FROM drinks WHERE wineid=? AND userid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, wineId);
             ps.setInt(2, userId);
             ResultSet rs = ps.executeQuery();
@@ -162,9 +177,10 @@ public class DrinksDAO implements DAOInterface<Drinks> {
      */
     @Override
     public int add(Drinks toAdd) throws DuplicateEntryException {
-        String sql = "INSERT INTO drinks (wineid, userid, favorite, notes, rating) VALUES (?,?,?,?,?)";
+        String sql =
+                "INSERT INTO drinks (wineid, userid, favorite, notes, rating) VALUES (?,?,?,?,?)";
         try (Connection conn = databaseService.connect();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, toAdd.getWineId());
             ps.setInt(2, toAdd.getUserId());
             ps.setBoolean(3, toAdd.isFavourite());
@@ -172,11 +188,11 @@ public class DrinksDAO implements DAOInterface<Drinks> {
             ps.setInt(5, toAdd.getRating());
             ps.executeUpdate();
 
-//            ResultSet rs = ps.getGeneratedKeys();
-//            int insertId = -1;
-//            if (rs.next()) {
-//                insertId = rs.getInt(1);
-//            }
+            //            ResultSet rs = ps.getGeneratedKeys();
+            //            int insertId = -1;
+            //            if (rs.next()) {
+            //                insertId = rs.getInt(1);
+            //            }
             return 1;
         } catch (SQLException sqlException) {
             log.error(sqlException);
@@ -186,7 +202,8 @@ public class DrinksDAO implements DAOInterface<Drinks> {
 
     @Override
     public void delete(int id) {
-        throw new NotImplementedException("Don't use this method! You must specify a wineId and a userId!");
+        throw new NotImplementedException(
+                "Don't use this method! You must specify a wineId and a userId!");
     }
 
 
@@ -199,7 +216,7 @@ public class DrinksDAO implements DAOInterface<Drinks> {
     public void delete(int wineId, int userId) {
         String sql = "DELETE FROM drinks WHERE wineid=? AND userid=?";
         try (Connection conn = databaseService.connect();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, wineId);
             ps.setInt(2, userId);
             ps.executeUpdate();
@@ -213,16 +230,16 @@ public class DrinksDAO implements DAOInterface<Drinks> {
      * Updates a review in the database.
      *
      * @param toUpdate user that needs to be updated
-     *        (this object must be able to identify itself and its previous self)
+     *                 (this object must be able to identify itself and its previous self)
      */
     @Override
     public void update(Drinks toUpdate) {
-        String sql  = "UPDATE drinks SET favorite=?, "
-                    + "notes=?, "
-                    + "rating=? "
-                    + "WHERE wineid=? AND userid=?";
+        String sql = "UPDATE drinks SET favorite=?, "
+                + "notes=?, "
+                + "rating=? "
+                + "WHERE wineid=? AND userid=?";
         try (Connection conn = databaseService.connect();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setBoolean(1, toUpdate.isFavourite());
             ps.setString(2, toUpdate.getNotes());
             ps.setInt(3, toUpdate.getRating());
