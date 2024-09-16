@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="214.0" prefWidth="378.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.MapPageController">
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1000.0" prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.MapPageController">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
       <ColumnConstraints hgrow="ALWAYS" maxWidth="-Infinity" minWidth="250.0" prefWidth="250.0" />
@@ -25,6 +25,9 @@
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
+         <GridPane.margin>
+            <Insets right="10.0" />
+         </GridPane.margin>
       </GridPane>
       <GridPane GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
         <rowConstraints>
@@ -60,4 +63,7 @@
          </padding>
       </GridPane>
    </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="80.0" />
+   </padding>
 </GridPane>
