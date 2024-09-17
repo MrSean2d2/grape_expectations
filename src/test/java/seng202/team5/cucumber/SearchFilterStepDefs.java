@@ -40,6 +40,27 @@ public class SearchFilterStepDefs {
         }
     }
 
+    @When("the user searches for {string} in the search bar")
+    public void theUserSearchesForInTheSearchBar(String search) {
+        String query = wineDAO.queryBuilder(search, "0","0","0", 0.0, 800.0, 0.0, 100.0, false);
+        filteredWines = wineDAO.executeSearchFilter(query, null);
+    }
+    @Then("the system displays a filtered dataset which only contains {string} wine entries")
+    public void theSystemDisplaysAFilteredDatasetWhichOnlyContainsWineEntries(String search) {
+        for(Wine wine: filteredWines) {
+            Assert.assertTrue(wine.getName().contains(search)||wine.getDescription().contains(search));
+        }
+    }
+    @When("the user inputs non existent search {string}")
+    public void theUserInputs(String nonExistentSearch) {
+        String query = wineDAO.queryBuilder(nonExistentSearch, "0","0","0", 0.0, 800.0, 0.0, 100.0, false);
+        filteredWines = wineDAO.executeSearchFilter(query, null);
+    }
+    @Then("the system displays no entries in table")
+    public void theSystemDisplaysNoEntriesInTable() {
+        Assert.assertEquals(0, filteredWines.size());
+    }
+
     @When("the user applies a variety filter {string}")
     public void theUserAppliesAVarietyFilter(String variety) {
             String query = wineDAO.queryBuilder("0",variety,"0","0", 0.0, 800.0, 0.0, 100.0, false);
@@ -118,6 +139,8 @@ public class SearchFilterStepDefs {
     public void noEntriesAreShown() {
         Assert.assertEquals(0,filteredWines.size());
     }
+
+
 
 }
 

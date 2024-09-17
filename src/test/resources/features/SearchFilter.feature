@@ -4,6 +4,16 @@ Feature: Filter feature
     When the user applies a year 2012 filter
     Then the system displays results of wine entries from 2012.
 
+  Scenario: User searches for "Plume Pinot Noir"
+    Given the user is on the base search page,
+    When the user searches for "Plume Pinot Noir" in the search bar
+    Then the system displays a filtered dataset which only contains "Plume Pinot Noir" wine entries
+
+  Scenario: User searches for a wine that doesnt exist in the data set
+    Given the user is on the base search page,
+    When the user inputs non existent search "Non-Existent Wine"
+    Then the system displays no entries in table
+
   Scenario: I want to be able to search by variety
     Given the user is on the base search page,
     When the user applies a variety filter "Chardonnay"
