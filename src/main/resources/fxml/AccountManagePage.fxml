@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" maxWidth="1000.0" prefHeight="896.0" prefWidth="996.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.AccountManagePageController">
+<GridPane alignment="CENTER" maxWidth="1000.0" prefHeight="896.0" prefWidth="996.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.AccountManagePageController">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" maxWidth="1000.0" minWidth="10.0" />
    </columnConstraints>
@@ -98,7 +98,7 @@
           <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete Account" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER">
+            <Button fx:id="deleteAccountButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete Account" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets bottom="20.0" left="10.0" right="10.0" />
                </GridPane.margin>
@@ -106,7 +106,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="signOutButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#signOut" text="Sign Out" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER">
+            <Button fx:id="signOutButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#signOut" text="Sign Out" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets bottom="20.0" left="10.0" right="10.0" />
                </GridPane.margin>
@@ -114,7 +114,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Access Admin Page" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER">
+            <Button accessibleText="Access the admin page" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Access Admin Page" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets bottom="20.0" left="10.0" right="10.0" />
                </GridPane.margin>
@@ -157,6 +157,6 @@
       </Label>
    </children>
    <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="80.0" />
+      <Insets bottom="10.0" left="10.0" right="10.0" top="50.0" />
    </padding>
 </GridPane>

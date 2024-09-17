@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import org.controlsfx.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.RangeSlider?>
 
-<GridPane alignment="TOP_CENTER" prefHeight="450.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+<GridPane alignment="TOP_CENTER" prefHeight="853.0" prefWidth="776.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
    <rowConstraints>
+      <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="179.99999237060547" minHeight="100.0" prefHeight="112.00000508626303" vgrow="NEVER" />
       <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="404.66666158040357" vgrow="ALWAYS" />
    </rowConstraints>
    <children>
-      <GridPane maxWidth="1000.0" prefHeight="129.0" prefWidth="1000.0" GridPane.halignment="CENTER">
+      <GridPane maxWidth="1000.0" prefHeight="129.0" prefWidth="1000.0" GridPane.halignment="CENTER" GridPane.rowIndex="1">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -37,14 +49,15 @@
                      <GridPane.margin>
                         <Insets left="10.0" right="10.0" />
                      </GridPane.margin></TextField>
-                  <Button fx:id="searchButton" maxWidth="1.7976931348623157E308" minWidth="10.0" mnemonicParsing="false" onAction="#searchClicked" prefHeight="24.0" prefWidth="157.0" text="Search" GridPane.columnIndex="1">
+                  <Button fx:id="searchButton" maxWidth="1.7976931348623157E308" minWidth="10.0" mnemonicParsing="false" onAction="#searchClicked" prefHeight="24.0" prefWidth="157.0" text="Search" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                      <GridPane.margin>
                         <Insets left="10.0" right="10.0" />
                      </GridPane.margin></Button>
-                  <Button fx:id="resetSearchFilterButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onResetSearchFilterButtonClicked" prefHeight="32.0" prefWidth="176.0" text="Reset Search and Filter" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER">
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding></Button>
+                  <Button fx:id="resetSearchFilterButton" maxWidth="1.7976931348623157E308" minWidth="10.0" mnemonicParsing="false" onAction="#onResetSearchFilterButtonClicked" prefHeight="24.0" prefWidth="157.0" text="Reset Search and Filter" GridPane.columnIndex="2">
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </Button>
                </children>
             </GridPane>
             <GridPane maxWidth="1000.0" prefHeight="101.0" prefWidth="1000.0" GridPane.rowIndex="1">
@@ -119,7 +132,7 @@
             </GridPane>
          </children>
       </GridPane>
-      <VBox alignment="CENTER" spacing="20" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="TOP">
+      <VBox alignment="CENTER" spacing="20" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP">
          <TableView fx:id="wineTable" maxWidth="1000.0" prefHeight="290.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
            <columns>
              <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="589.3333486318588" resizable="false" text="Wine Name" />
@@ -130,8 +143,31 @@
            </columns>
          </TableView>
       </VBox>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefWidth="1000.0" GridPane.halignment="CENTER" GridPane.vgrow="SOMETIMES">
+         <children>
+            <Label style="-fx-font-weight: 700;" text="Wine Database">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </Label>
+            <Label text="Here you can see a list of the wines currently in the database and filter them!" wrapText="true">
+               <padding>
+                  <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
    </children>
    <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="80.0" />
+      <Insets bottom="10.0" left="10.0" right="10.0" top="50.0" />
    </padding>
 </GridPane>

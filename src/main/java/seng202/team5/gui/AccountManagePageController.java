@@ -4,6 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -21,6 +22,9 @@ import seng202.team5.services.UserService;
 public class AccountManagePageController extends PageController {
     @FXML
     private Button signOutButton;
+
+    @FXML
+    private Button deleteAccountButton;
 
     @FXML
     private Label usernameLabel;
@@ -45,6 +49,10 @@ public class AccountManagePageController extends PageController {
      */
     @FXML
     public void initialize() {
+
+        signOutButton.setTooltip(new Tooltip("Sign out of account"));
+        deleteAccountButton.setTooltip(new Tooltip("Delete account"));
+
         // Current user
         User curUser = UserService.getInstance().getCurrentUser();
 

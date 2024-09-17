@@ -68,6 +68,7 @@ public class DataLoadService {
             Map<String, Object> obj = yaml.load(inputStream);
             Object result = obj.get("csvPath");
             if (result instanceof String) {
+                log.info(result);
                 return (String) result;
             } else {
                 log.error("Unable to parse config file, 'csvPath' value is not a string");

@@ -9,13 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -69,6 +63,14 @@ public class DataListPageController extends PageController {
     @FXML
     private TableColumn<Wine, Double> ratingColumn;
 
+    @FXML
+    private TableColumn<Wine, Boolean> favouriteColumn;
+
+    @FXML
+    private Button searchButton;
+
+    @FXML
+    private Button resetSearchFilterButton;
 
     @FXML
     private TextField searchTextField;
@@ -96,6 +98,37 @@ public class DataListPageController extends PageController {
 
         favToggleButton.setDisable(true);
         favToggleButton.setText("Coming Soon");
+
+        varietyComboBox.setTooltip(new Tooltip("Filter by variety"));
+        regionComboBox.setTooltip(new Tooltip("Filter by region"));
+        yearComboBox.setTooltip(new Tooltip("Filter by year"));
+        priceRangeSlider.setTooltip(new Tooltip("Select a price range"));
+        ratingSlider.setTooltip(new Tooltip("Select a minimum price"));
+        searchButton.setTooltip(new Tooltip("Enter search query"));
+        resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
+
+        setDefaults();
+        setUpFilterButtons();
+        // initialises listeners on sliders
+        initializeSliderListeners();
+        initializeSliderValueListeners();
+
+        // sets value of price/rating labels in real time
+        priceRangeSlider.highValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+            Float value = Float.valueOf(String.format("%.1f", newVal));
+            maxPriceLabel.setText(String.valueOf(value));
+        });
+        priceRangeSlider.lowValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+            Float value = Float.valueOf(String.format("%.1f", newVal));
+            minPriceLabel.setText(String.valueOf(value));
+        });
+        ratingSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+            Float value = Float.valueOf(String.format("%.1f", newVal));
+            ratingSliderValue.setText(String.valueOf(value));
+        });
+
+        // initialises listeners on sliders
+
 
         setDefaults();
         setUpFilterButtons();
