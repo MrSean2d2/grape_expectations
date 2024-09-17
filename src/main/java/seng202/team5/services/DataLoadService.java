@@ -6,21 +6,22 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvException;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
@@ -39,25 +40,32 @@ import seng202.team5.models.Wine;
 public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
-    private final String fileName;
+    private final Path fileName;
 
     /**
      * DataLoadService constructor.
      *
      */
     public DataLoadService() {
-        this.fileName = parseFileName();
+        this.fileName = pathFromConfig();
+        log.info(fileName);
     }
 
     /**
      * DataLoadService constructor with string of file path
-     * used for testing with separate csv
+     * used for testing with separate csv.
      */
     public DataLoadService(String specifiedFileName) {
-        this.fileName = specifiedFileName;
+        this.fileName = Path.of(specifiedFileName);
     }
 
-    private String parseFileName() {
+    /**
+     * Gets the csv file path from the config file if it exists returning null
+     * otherwise.
+     *
+     * @return the Path of the csv file (null if not found).
+     */
+    private Path pathFromConfig() {
         Yaml yaml = new Yaml();
         String configPath = this.getClass().getProtectionDomain()
                 .getCodeSource().getLocation().getPath();
@@ -69,32 +77,26 @@ public class DataLoadService {
             Object result = obj.get("csvPath");
             if (result instanceof String) {
                 log.info(result);
-                return (String) result;
+                return Path.of((String) result);
             } else {
                 log.error("Unable to parse config file, 'csvPath' value is not a string");
-                return this.getClass().getClassLoader().getResource("nz.csv").getPath();
+                return null;
             }
         } catch (IOException e) {
             log.error(e);
-            return this.getClass().getClassLoader().getResource("nz.csv").getPath();
+            return null;
         }
     }
 
     /**
-     * Creates a wine object from a csv entry parsed by {@link DataLoadService#loadFile(String)}.
+     * Creates a wine object from a csv entry parsed by
+     * {@link DataLoadService#loadFile(InputStream)}.
      *
      * @param csvEntry a String[] representing one csv record
      * @return the new wine object
      */
     private Wine wineFromText(String[] csvEntry) {
         try {
-
-            //String country = csvEntry[1];
-
-            // Wine Description
-            // description can be empty
-            String description = csvEntry[2];
-
             // Wine Rating
             if (csvEntry[4] == null) {
                 throw new InvalidCsvEntryException("Invalid rating");
@@ -132,6 +134,10 @@ public class DataLoadService {
             // Winery
             String winery = csvEntry[13];
             Vineyard vineyard = new Vineyard(winery, regionName);
+
+            // Wine Description.
+            // Description can be empty
+            String description = csvEntry[2];
 
             // Return the created Wine object
             Wine resultWine = new Wine(name, description, year, ratingValue, price,
@@ -171,12 +177,13 @@ public class DataLoadService {
     /**
      * Reads the specified file and returns all the csv records as a list of String[]s.
      *
-     * @param filePath the URI of the file to read
+     * @param fileInputStream the InputStream of the file to read
      * @return all csv records from the file as a list of String[]s
      */
-    public List<String[]> loadFile(String filePath) {
+    public List<String[]> loadFile(InputStream fileInputStream) {
         List<String[]> result;
-        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
+        try (Reader reader = new BufferedReader(
+                new InputStreamReader(fileInputStream, StandardCharsets.UTF_8))) {
             CSVParser csvParser = new CSVParserBuilder().withSeparator(',')
                     .withQuoteChar('"')
                     .withFieldAsNull(CSVReaderNullFieldIndicator.EMPTY_SEPARATORS).build();
@@ -197,7 +204,13 @@ public class DataLoadService {
      * @return a list of wines from the csv file
      */
     public List<Wine> processWinesFromCsv() {
-        List<String[]> csvResult = loadFile(fileName);
+        List<String[]> csvResult = new ArrayList<>();
+        try (InputStream fileInputStream = (fileName != null)
+                ? Files.newInputStream(fileName) : this.getClass().getResourceAsStream("/nz.csv")) {
+            csvResult = loadFile(fileInputStream);
+        } catch (IOException e) {
+            log.error(e);
+        }
         List<Wine> wines = new ArrayList<>();
         for (String[] entry : csvResult) {
             Wine wine = wineFromText(entry);
