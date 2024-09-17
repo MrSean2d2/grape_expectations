@@ -238,10 +238,10 @@ public class DetailedViewPageController {
             close();
         } else {
             if (isFavorited) {
-                favoriteToggleButton.setText("Unfavorite");
+                favoriteToggleButton.setText("Unfavourite");
                 favoriteToggleButton.setStyle("-fx-background-color: #ffdd00");
             } else {
-                favoriteToggleButton.setText("Favorite");
+                favoriteToggleButton.setText("Favourite");
                 favoriteToggleButton.setStyle(null);
             }
         }
