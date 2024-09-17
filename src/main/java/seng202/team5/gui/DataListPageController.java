@@ -99,6 +99,10 @@ public class DataListPageController extends PageController {
 
         setDefaults();
         setUpFilterButtons();
+
+
+        initializeSliderValueListeners();
+
         // initialises listeners on sliders
         initializeSliderListeners();
 
@@ -131,6 +135,29 @@ public class DataListPageController extends PageController {
 
 
 
+    }
+
+    /**
+     * Initialize listeners to change the slider values in real time to reflect
+     * the current selection.
+     */
+    private void initializeSliderValueListeners() {
+        // sets value of price/rating labels in real time
+        priceRangeSlider.highValueProperty().addListener(
+                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+                    Float value = Float.valueOf(String.format("%.1f", newVal));
+                    maxPriceLabel.setText(String.valueOf(value));
+                });
+        priceRangeSlider.lowValueProperty().addListener(
+                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+                    Float value = Float.valueOf(String.format("%.1f", newVal));
+                    minPriceLabel.setText(String.valueOf(value));
+                });
+        ratingSlider.valueProperty().addListener(
+                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+                    Float value = Float.valueOf(String.format("%.1f", newVal));
+                    ratingSliderValue.setText(String.valueOf(value));
+                });
     }
 
     /**
