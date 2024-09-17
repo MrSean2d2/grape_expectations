@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.NotFoundException;
@@ -482,7 +483,7 @@ public class WineDAO implements DAOInterface<Wine> {
         if (variety != "0") {
             sql += " AND wine.variety = '" + variety + "'";
         }
-        if (region != "0") {
+        if (!Objects.equals(region, "0") && region != null) {
             region = region.replace("'", "''");
             sql += " AND vineyard.region = '" + region + "'";
         }
