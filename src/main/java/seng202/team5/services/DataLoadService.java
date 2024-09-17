@@ -6,8 +6,10 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvException;
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -164,7 +166,7 @@ public class DataLoadService {
      */
     public List<String[]> loadFile(String filePath) {
         List<String[]> result;
-        try (Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
+        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
             CSVParser csvParser = new CSVParserBuilder().withSeparator(',')
                     .withQuoteChar('"')
                     .withFieldAsNull(CSVReaderNullFieldIndicator.EMPTY_SEPARATORS).build();
