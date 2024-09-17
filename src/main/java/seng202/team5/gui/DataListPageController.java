@@ -94,6 +94,9 @@ public class DataListPageController extends PageController{
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
 
+        favToggleButton.setDisable(true);
+        favToggleButton.setText("Coming Soon");
+
         initializeSliderListeners();
 
         // sets value of price/rating labels in real time
