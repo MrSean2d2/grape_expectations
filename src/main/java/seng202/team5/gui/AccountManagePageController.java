@@ -2,9 +2,7 @@ package seng202.team5.gui;
 
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -12,7 +10,10 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import seng202.team5.models.User;
 import seng202.team5.repository.DrinksDAO;
+import seng202.team5.repository.UserDAO;
 import seng202.team5.services.UserService;
+
+import java.util.Optional;
 
 /**
  * Controller for the account page.
@@ -94,12 +95,46 @@ public class AccountManagePageController extends PageController {
         );
     }
 
+    private void signOutUserInstance() {
+        UserService.getInstance().signOut();
+        swapPage("/fxml/LoginPage.fxml");
+    }
+
     /**
      * Sign the user out of their account.
      */
     @FXML
     private void signOut() {
-        UserService.getInstance().signOut();
-        swapPage("/fxml/newHomePage.fxml");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Sign Out?");
+        alert.setHeaderText("Are you sure you want to sign out of your account?");
+        alert.setContentText("We'll really miss you!");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // Sign out of user account
+            signOutUserInstance();
+        }
+    }
+
+    /**
+     * Delete the user's account
+     */
+    @FXML
+    private void deleteAccount() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Account?");
+        alert.setHeaderText("Are you sure you want to delete your account?");
+        alert.setContentText("All of your reviews will be automatically wiped!");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // Delete the user's account
+            UserDAO userDAO = new UserDAO();
+            userDAO.delete(UserService.getInstance().getCurrentUser().getId());
+            signOutUserInstance();
+        }
     }
 }
