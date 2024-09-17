@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
+import seng202.team5.exceptions.InvalidCsvEntryException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 
@@ -87,14 +88,14 @@ public class DataLoadService {
 
             // Wine Rating
             if (csvEntry[4] == null) {
-                throw new Exception();
+                throw new InvalidCsvEntryException("Invalid rating");
             }
             int ratingValue = numFromTextOr0(csvEntry[4]);
 
             // Wine Price
             if (csvEntry[5] == null) {
                 //price is not in csv
-                throw new Exception();
+                throw new InvalidCsvEntryException("Invalid price");
             }
             double price = numFromTextOr0(csvEntry[5]);
 
@@ -113,7 +114,7 @@ public class DataLoadService {
             int year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
             if (year == 0) {
                 //year was not in csv
-                throw new Exception();
+                throw new InvalidCsvEntryException("Invalid year");
             }
 
             // Wine Variety
@@ -131,7 +132,7 @@ public class DataLoadService {
             } else {
                 return null;
             }
-        } catch (Exception e) {
+        } catch (InvalidCsvEntryException e) {
             return null;
         }
     }
