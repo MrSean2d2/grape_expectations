@@ -32,18 +32,13 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox prefHeight="400.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.HeaderController">
+<VBox prefHeight="400.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.HeaderController">
   <children>
       <ToolBar AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
           <HBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0">
@@ -69,7 +64,7 @@
               <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor></Button>
-          <Button fx:id="mapButton" onAction="#loadMapPage" prefHeight="40.0" prefWidth="150.0" text="Map">
+          <Button fx:id="mapButton" disable="true" onAction="#loadMapPage" prefHeight="40.0" prefWidth="150.0" text="Coming Soon: Map">
               <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor></Button>
