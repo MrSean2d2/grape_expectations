@@ -1,5 +1,6 @@
 package seng202.team5.gui;
 
+import java.util.Objects;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,20 +8,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.GridPane;
 import seng202.team5.exceptions.DuplicateEntryException;
-import seng202.team5.models.User;
+import seng202.team5.models.Drinks;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.DrinksDAO;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
-import seng202.team5.models.Drinks;
+
+
 
 
 /**
- * Controller for the detailed view page
+ * Controller for the detailed view page.
  *
  * @author Finn Brown
  */
@@ -81,11 +81,14 @@ public class DetailedViewPageController {
     @FXML
     private ImageView star5;
 
+    @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
     private int selectedWineID;
     private int userId;
 
-    private final Image emptyStar = new Image(getClass().getResourceAsStream("/images/empty_star.png"));
-    private final Image filledStar = new Image(getClass().getResourceAsStream("/images/filled_star.png"));
+    private final Image emptyStar = new Image(
+            Objects.requireNonNull(getClass().getResourceAsStream("/images/empty_star.png")));
+    private final Image filledStar = new Image(
+            Objects.requireNonNull(getClass().getResourceAsStream("/images/filled_star.png")));
 
     /**
      * Initializes DetailedViewPage.
@@ -143,16 +146,16 @@ public class DetailedViewPageController {
      */
     @FXML
     public void handleStarClick(javafx.scene.input.MouseEvent event) {
-            ImageView clickedStar = (ImageView) event.getSource(); // Get the clicked star
-            int clickedStarIndex = Integer.parseInt(clickedStar.getId().substring(4)); // Get star number (e.g., star1 -> 1)
+        ImageView clickedStar = (ImageView) event.getSource(); // Get the clicked star
+        int clickedStarIndex = Integer.parseInt(clickedStar.getId().substring(4));
 
-            DrinksDAO drinksDAO = new DrinksDAO();
-            Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
+        DrinksDAO drinksDAO = new DrinksDAO();
+        Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
 
-            if (review != null) {
-                review.setRating(clickedStarIndex);
-                updateStarDisplay(clickedStarIndex);
-            }
+        if (review != null) {
+            review.setRating(clickedStarIndex);
+            updateStarDisplay(clickedStarIndex);
+        }
     }
 
     /**
@@ -165,7 +168,7 @@ public class DetailedViewPageController {
         DrinksDAO drinksDAO = new DrinksDAO();
         Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
 
-        if(UserService.getInstance().getCurrentUser() == null) {
+        if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
             if (review != null) {
@@ -186,7 +189,7 @@ public class DetailedViewPageController {
         DrinksDAO drinksDAO = new DrinksDAO();
         Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
 
-        if(UserService.getInstance().getCurrentUser() == null) {
+        if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
             if (review != null) {
@@ -217,7 +220,7 @@ public class DetailedViewPageController {
     /**
      * Updates the 5-star rating graphic based on the rating of the wine.
      *
-     * @param rating
+     * @param rating rating value
      */
     private void updateStarDisplay(int rating) {
         star1.setImage(rating >= 1 ? filledStar : emptyStar);
@@ -234,7 +237,7 @@ public class DetailedViewPageController {
      */
     private void updateFavoriteButton(boolean isFavorited) {
 
-        if(UserService.getInstance().getCurrentUser() == null) {
+        if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
             if (isFavorited) {
