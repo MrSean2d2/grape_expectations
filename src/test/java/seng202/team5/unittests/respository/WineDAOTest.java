@@ -271,7 +271,6 @@ public class WineDAOTest {
         @Test
         public void testSearchFilter() {
             List<Wine> result = wineDAO.executeSearchFilter(sql, "YUMMY");
-            System.out.println(result.get(0).getDescription());
             Assertions.assertEquals(1, result.size());
             Assertions.assertTrue(result.get(0).getDescription().contains("YUMMY"));
         }

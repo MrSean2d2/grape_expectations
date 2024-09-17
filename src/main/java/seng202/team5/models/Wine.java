@@ -33,9 +33,6 @@ public class Wine {
     }
 
 
-
-
-
     /**
      * Constructor for creating a wine object with a name,
      * description, year, rating, price and favourite status.

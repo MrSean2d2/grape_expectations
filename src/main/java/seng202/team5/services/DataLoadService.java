@@ -57,6 +57,10 @@ public class DataLoadService {
         this.fileName = specifiedFileName;
     }
 
+    /**
+     * gets the path and filename of the csv
+     * @return the filepath of the dataset csv
+     */
     private String parseFileName() {
         Yaml yaml = new Yaml();
         String configPath = this.getClass().getProtectionDomain()

@@ -2,6 +2,9 @@ package seng202.team5.gui;
 
 import java.io.IOException;
 
+/**
+ * controller for swapping between pages
+ */
 public class PageController {
     private HeaderController headerController;
 

@@ -176,7 +176,6 @@ public class WineDAO implements DAOInterface<Wine> {
                 toAdd.getVineyard().setId(vineyardDAO.add(toAdd.getVineyard()));
             } else {
                 toAdd.getVineyard().setId(vineyardIndex);
-                //log.info(toAdd.getVineyard().getName());
             }
 
             psWine.setString(1, toAdd.getName());

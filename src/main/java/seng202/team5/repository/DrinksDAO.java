@@ -187,12 +187,6 @@ public class DrinksDAO implements DAOInterface<Drinks> {
             ps.setString(4, toAdd.getNotes());
             ps.setInt(5, toAdd.getRating());
             ps.executeUpdate();
-
-            //            ResultSet rs = ps.getGeneratedKeys();
-            //            int insertId = -1;
-            //            if (rs.next()) {
-            //                insertId = rs.getInt(1);
-            //            }
             return 1;
         } catch (SQLException sqlException) {
             log.error(sqlException);
@@ -200,6 +194,10 @@ public class DrinksDAO implements DAOInterface<Drinks> {
         }
     }
 
+    /**
+     * implementation of DAOInterface delete
+     * @param id id of object to delete
+     */
     @Override
     public void delete(int id) {
         throw new NotImplementedException(
