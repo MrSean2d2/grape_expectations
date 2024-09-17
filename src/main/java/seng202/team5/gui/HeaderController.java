@@ -23,6 +23,9 @@ public class HeaderController {
     private StackPane pageContainer;
 
     @FXML
+    private Button logoButton;
+
+    @FXML
     private Button homeButton;
 
     @FXML
@@ -36,6 +39,7 @@ public class HeaderController {
 
     @FXML
     private ScrollPane scrollPane;
+
 
     private final HeaderController headerController = this;
 
@@ -52,6 +56,12 @@ public class HeaderController {
 
         scrollPane.setOnMousePressed(Event::consume);
         pageContainer.setOnMousePressed(Event::consume);
+
+        logoButton.setTooltip(new Tooltip("Home page"));
+        homeButton.setTooltip(new Tooltip("Home page"));
+        dataListButton.setTooltip(new Tooltip("Data list page"));
+        mapButton.setTooltip(new Tooltip("Map page"));
+        accountButton.setTooltip(new Tooltip("Account page"));
 
         // Make the account button change text
         //        accountButton.textProperty().bind(
