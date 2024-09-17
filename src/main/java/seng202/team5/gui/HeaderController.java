@@ -1,10 +1,12 @@
 package seng202.team5.gui;
 
 import javafx.beans.binding.Bindings;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import seng202.team5.services.UserService;
@@ -32,6 +34,9 @@ public class HeaderController {
     @FXML
     private Button accountButton;
 
+    @FXML
+    private ScrollPane scrollPane;
+
     /**
      * Initialize the window.
      *
@@ -40,11 +45,14 @@ public class HeaderController {
     public void init(Stage stage) throws Exception {
         loadHomePage();
 
+        scrollPane.setOnMousePressed(Event::consume);
+        pageContainer.setOnMousePressed(Event::consume);
+
         // Make the account button change text
         accountButton.textProperty().bind(
                 Bindings.createStringBinding(() ->
-                                UserService.getInstance().getCurrentUser() != null ?
-                                        "Account" : "Sign In",
+                                UserService.getInstance().getCurrentUser() != null
+                                        ? "Account" : "Sign In",
                         UserService.getInstance().getUserProperty()
                 )
         );

@@ -39,6 +39,7 @@ public class AccountManagePageController extends PageController {
 
     @FXML
     private Label userJoinDateLabel;
+
     /**
      * Initialize the account manage page.
      */
@@ -61,7 +62,7 @@ public class AccountManagePageController extends PageController {
         DrinksDAO drinksDAO = new DrinksDAO();
         int numWines = drinksDAO.getFromUser(curUser.getId()).size();
         String wineLabel = "wine";
-        if(numWines != 1) {
+        if (numWines != 1) {
             wineLabel = "wines";
         }
         winesExploredLabel.setText(String.format("%d %s explored", numWines, wineLabel));
@@ -79,10 +80,7 @@ public class AccountManagePageController extends PageController {
         usernameLabel.textProperty().bind(
                 Bindings.createStringBinding(() ->
                     curUser != null
-                    ?
-                    curUser.getUsername()
-                    :
-                    "Null user!",
+                    ? curUser.getUsername() : "Null user!",
                     UserService.getInstance().getUserProperty()
                 )
         );
