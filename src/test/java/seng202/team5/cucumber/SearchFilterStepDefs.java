@@ -1,25 +1,26 @@
 package seng202.team5.cucumber;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
+import seng202.team5.gui.DataListPageController;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
 
-import java.awt.*;
 import java.util.List;
 
 /**
  * Basic step definitions for filter feature
  */
 
-public class FilterStepDefs {
+public class SearchFilterStepDefs {
     private WineDAO wineDAO;
     private VineyardDAO vineyardDAO;
     private List<Wine> filteredWines;
+    private DataListPageController dataListPageController;
 
     @Given("the user is on the base search page,")
     public void theUserIsOnTheBaseSearchPage() {
@@ -101,8 +102,22 @@ public class FilterStepDefs {
     }
 
 
+    @When("the user applies filters variety “Syrah” and region “Wairarapa”")
+    public void theUserAppliesFiltersVarietySyrahAndRegionWairarapa() {
+        
+    }
+
+    @When("the user applies filters variety {string} and region {string}")
+    public void theUserAppliesFiltersVarietyAndRegion(String variety, String region) {
+        String query = wineDAO.queryBuilder("",variety,region,"0", 0.0, 800.0, 0, 100.0, false);
+        filteredWines = wineDAO.executeSearchFilter(query, null);
+    }
 
 
+    @Then("no entries are shown")
+    public void noEntriesAreShown() {
+        Assert.assertEquals(0,filteredWines.size());
+    }
 
 }
 
