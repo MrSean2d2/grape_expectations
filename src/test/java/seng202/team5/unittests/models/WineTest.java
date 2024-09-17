@@ -1,11 +1,8 @@
 package seng202.team5.unittests.models;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import org.junit.jupiter.api.Test;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-import seng202.team5.repository.DatabaseService;
 
 import static org.junit.jupiter.api.Assertions.*;
 
