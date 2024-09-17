@@ -1,10 +1,7 @@
 package seng202.team5.gui;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import seng202.team5.models.User;
 import seng202.team5.services.UserService;
 
@@ -36,6 +33,9 @@ public class AccountPageController extends PageController {
     @FXML
     public void initialize() {
         errorLabel.setText(""); //Blank error message
+
+        loginButton.setTooltip(new Tooltip("Log in to account"));
+        registerButton.setTooltip(new Tooltip("Register a new account"));
     }
 
     /**

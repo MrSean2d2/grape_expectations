@@ -65,15 +65,6 @@ public class HeaderController {
         dataListButton.setTooltip(new Tooltip("Data list page"));
         mapButton.setTooltip(new Tooltip("Map page"));
         accountButton.setTooltip(new Tooltip("Account page"));
-
-        // Make the account button change text
-        //        accountButton.textProperty().bind(
-        //                Bindings.createStringBinding(() ->
-        //                                UserService.getInstance().getCurrentUser() != null
-        //                                        ? "Account" : "Sign In",
-        //                        UserService.getInstance().getUserProperty()
-        //                )
-        //        );
     }
 
     /**

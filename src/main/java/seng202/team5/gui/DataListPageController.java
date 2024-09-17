@@ -70,6 +70,11 @@ public class DataListPageController extends PageController{
     @FXML
     private TableColumn<Wine, Boolean> favouriteColumn;
 
+    @FXML
+    private Button searchButton;
+
+    @FXML
+    private Button resetSearchFilterButton;
 
     @FXML
     private TextField searchTextField;
@@ -96,6 +101,14 @@ public class DataListPageController extends PageController{
 
         favToggleButton.setDisable(true);
         favToggleButton.setText("Coming Soon");
+
+        varietyComboBox.setTooltip(new Tooltip("Filter by variety"));
+        regionComboBox.setTooltip(new Tooltip("Filter by region"));
+        yearComboBox.setTooltip(new Tooltip("Filter by year"));
+        priceRangeSlider.setTooltip(new Tooltip("Select a price range"));
+        ratingSlider.setTooltip(new Tooltip("Select a minimum price"));
+        searchButton.setTooltip(new Tooltip("Enter search query"));
+        resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
 
         initializeSliderListeners();
 
