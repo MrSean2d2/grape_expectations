@@ -62,11 +62,11 @@ public class DataLoadService {
                 return (String) result;
             } else {
                 log.error("Unable to parse config file, 'csvPath' value is not a string");
-                return this.getClass().getClassLoader().getResource("nzcsv.csv").getPath();
+                return this.getClass().getClassLoader().getResource("nz.csv").getPath();
             }
         } catch (IOException e) {
             log.error(e);
-            return this.getClass().getClassLoader().getResource("nzcsv.csv").getPath();
+            return this.getClass().getClassLoader().getResource("nz.csv").getPath();
         }
     }
 
