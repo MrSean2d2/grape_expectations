@@ -16,15 +16,16 @@ import seng202.team5.services.WineService;
 public class DataLoadServiceTest {
     private DataLoadService dataLoadService;
     private String csvFilePath;
-    private WineService wineservice;
 
     @BeforeEach
     public void setUp() {
-        wineservice = WineService.getInstance();
         csvFilePath = System.getProperty("user.dir") + "/src/test/resources/test.csv";
-        dataLoadService = spy(new DataLoadService());
+        dataLoadService = spy(new DataLoadService(csvFilePath));
     }
 
+    /**
+     * test that the list given from loadfile has the correct amount of lines and the expected first value.
+     */
     @Test
     public void loadFileTestFirst() {
         List<String[]> records = dataLoadService.loadFile(csvFilePath);
@@ -37,27 +38,32 @@ public class DataLoadServiceTest {
         assertArrayEquals(expectedFirst, records.getFirst());
     }
 
-//    @Test
-//    public void loadWinesTestFirst() {
-//        List<Wine> wines = wineservice.getWineList();
-//        System.out.println(wines.size());
-//
-//        List<Wine> wines = dataLoadService.processWinesFromCsv();
-//
-//        Wine wine = wines.getFirst();
-//        String expected = new String("Quinta dos Avidagos 2011 Avidagos Red (Douro)".getBytes(), StandardCharsets.UTF_8);
-//
-//        String wineName = wine.getName();
-//
-//        assertEquals(wineName, expected);
-//
-//        assertEquals(2013, wine.getYear());
-//        assertEquals(87, wine.getRating());
-//    }
+    /**
+     * test that the first item from the list gotten from processcsv gives the correct item
+     */
+    @Test
+    public void loadWinesTestFirst() {
 
-//    @Test
-//    public void loadWinesSizeTest() {
-//        List<Wine> wines = dataLoadService.processWinesFromCsv();
-//        assertEquals(16, wines.size());
-//    }
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+
+        Wine wine = wines.getFirst();
+        String expected = new String("Quinta dos Avidagos 2011 Avidagos Red (Douro)".getBytes(), StandardCharsets.UTF_8);
+
+        String wineName = wine.getName();
+
+        assertEquals(wineName, expected);
+
+        assertEquals(2011, wine.getYear());
+        assertEquals(87, wine.getRating());
+    }
+
+    /**
+     * test that the size of the list gotten from process wines is correct
+     */
+    @Test
+    public void loadWinesSizeTest() {
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        //2 have no price so 14/16 will be in the list
+        assertEquals(14, wines.size());
+    }
 }
