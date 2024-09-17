@@ -1,12 +1,12 @@
 package seng202.team5.gui;
 
-import javafx.beans.binding.Bindings;
+import java.io.IOException;
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import seng202.team5.services.UserService;
@@ -37,6 +37,11 @@ public class HeaderController {
     @FXML
     private ScrollPane scrollPane;
 
+    private final HeaderController headerController = this;
+
+    // Used to handle loading
+    Task<Node> createScene = null;
+
     /**
      * Initialize the window.
      *
@@ -49,13 +54,13 @@ public class HeaderController {
         pageContainer.setOnMousePressed(Event::consume);
 
         // Make the account button change text
-        accountButton.textProperty().bind(
-                Bindings.createStringBinding(() ->
-                                UserService.getInstance().getCurrentUser() != null
-                                        ? "Account" : "Sign In",
-                        UserService.getInstance().getUserProperty()
-                )
-        );
+        //        accountButton.textProperty().bind(
+        //                Bindings.createStringBinding(() ->
+        //                                UserService.getInstance().getCurrentUser() != null
+        //                                        ? "Account" : "Sign In",
+        //                        UserService.getInstance().getUserProperty()
+        //                )
+        //        );
     }
 
     /**
@@ -114,39 +119,55 @@ public class HeaderController {
 
 
     /**
-     * loads the detailed wine view page,
-     * detailed view is accessed by double-clicking on a wine in
-     * the wine table in view data page.
-     *
-     * @throws Exception if loading the page fails
-     */
-    public void loadDetailedViewPage() throws Exception {
-        System.out.println("loading Detailed View page:");
-        loadPage("/fxml/DetailedViewPage.fxml");
-    }
-
-
-    /**
      * Load a page with a path given as an argument.
      *
      * @param fxml path to fxml file
      * @throws Exception if loading the page fails
      */
     public void loadPage(String fxml) throws Exception {
-        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource(fxml));
-        Node page = baseLoader.load();
-
-        // Set the header controller reference to the new page controller
-        PageController pageController = baseLoader.getController();
-        if (pageController != null) {
-            pageController.setHeaderController(this);
+        // Cancel an in-progress task if it is currently running
+        if (createScene != null && createScene.isRunning()) {
+            createScene.cancel(true);
         }
-        pageContainer.getChildren().setAll(page);
 
-        // Reset the active
+        // Begin a new task
+        createScene = new Task<>() {
+            @Override
+            public Node call() throws IOException {
+                FXMLLoader baseLoader = new FXMLLoader(getClass().getResource(fxml));
+                Node page = baseLoader.load();
+
+                // Set the header controller reference to the new page controller
+                PageController pageController = baseLoader.getController();
+                if (pageController != null) {
+                    pageController.setHeaderController(headerController);
+                }
+
+                return page;
+
+            }
+        };
+
+        // Remove the button styles from the header
         homeButton.getStyleClass().remove("active");
         dataListButton.getStyleClass().remove("active");
         mapButton.getStyleClass().remove("active");
         accountButton.getStyleClass().remove("active");
+
+        // Load the loading page :)
+        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
+        Node loader = baseLoader.load();
+
+        pageContainer.getChildren().setAll(loader);
+
+        ProgressIndicator node = (ProgressIndicator) loader.lookup("#progressSpinner");
+
+        node.progressProperty().bind(createScene.progressProperty());
+
+        // Update the scene
+        createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
+
+        // Begin loading
+        new Thread(createScene).start();
     }
 }

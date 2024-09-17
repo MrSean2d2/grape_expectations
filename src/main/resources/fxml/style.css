@@ -17,24 +17,35 @@
 }
 
 
-.tool-bar {
+#toolBar {
     -fx-background-color: #ffffff;
-    -fx-padding: 5;
 }
 
 .button {
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
     -fx-padding: 8 15;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-border-color: #fff;
 }
+
 
 .button:hover {
-    -fx-background-color: #dddddd;
+    -fx-border-color: #ddd;
     -fx-text-fill: #000000;
+    -fx-border-width: 3;
+    -fx-border-insets: -1;
 }
 
+
 .button.active {
-    -fx-background-color: #4db265;
+    -fx-border-color: #4db265;
+    -fx-border-radius: 5;
+}
+
+.button.active .image-view {
 }
 
 .text-field.field_error {
@@ -80,7 +91,7 @@
     -fx-background-color: #cccccc;
 }
 
-#homepage{
+#backgroundImage{
     -fx-background-image: url("../images/vineyard_background.jpg");
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
