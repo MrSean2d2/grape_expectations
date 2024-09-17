@@ -97,7 +97,7 @@ public class DataListPageController extends PageController {
         favToggleButton.setDisable(true);
         favToggleButton.setText("Coming Soon");
 
-        initializeSliderListeners();
+
 
         // sets value of price/rating labels in real time
         priceRangeSlider.highValueProperty().addListener(
@@ -120,6 +120,7 @@ public class DataListPageController extends PageController {
 
 
         setDefaults();
+        initializeSliderListeners();
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
