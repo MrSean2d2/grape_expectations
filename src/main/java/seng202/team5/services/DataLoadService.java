@@ -49,6 +49,14 @@ public class DataLoadService {
         this.fileName = parseFileName();
     }
 
+    /**
+     * DataLoadService constructor with string of file path
+     * used for testing with separate csv
+     */
+    public DataLoadService(String specifiedFileName) {
+        this.fileName = specifiedFileName;
+    }
+
     private String parseFileName() {
         Yaml yaml = new Yaml();
         String configPath = this.getClass().getProtectionDomain()

@@ -10,8 +10,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.Vineyard;
+import seng202.team5.models.Wine;
 import seng202.team5.repository.DatabaseService;
 import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
 
 /**
  * Unit tests for the VineyardDAO
@@ -19,6 +21,7 @@ import seng202.team5.repository.VineyardDAO;
 public class VineyardDAOTest {
     static VineyardDAO vineyardDAO;
     static DatabaseService databaseService;
+    private static WineDAO wineDAO;
 
 
     /**
@@ -114,5 +117,16 @@ public class VineyardDAOTest {
         vineyardDAO.add(vineyard2);
         List<String> regions = vineyardDAO.getRegions();
         Assertions.assertEquals(1, regions.size());
+    }
+
+    @Test
+    public void testVineyardAddedFromWine() {
+        Vineyard vineyard1 = new Vineyard("Vineyard 1", "A region");
+        Wine wine = new Wine("", "invalid wine with valid vineyard, shouldn't be added", 0, -1, -1, "",
+                "white",  vineyard1);
+        wineDAO = new WineDAO(vineyardDAO);
+        wineDAO.add(wine);
+        Assertions.assertEquals(0, wineDAO.getAll().size());
+        Assertions.assertEquals(0, vineyardDAO.getAll().size());
     }
 }

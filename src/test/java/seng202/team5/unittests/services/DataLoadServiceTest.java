@@ -2,8 +2,6 @@ package seng202.team5.unittests.services;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -11,10 +9,8 @@ import static org.mockito.Mockito.when;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import seng202.team5.exceptions.InvalidCsvEntryException;
 import seng202.team5.models.Wine;
 import seng202.team5.services.DataLoadService;
 import seng202.team5.services.WineService;
@@ -22,16 +18,16 @@ import seng202.team5.services.WineService;
 public class DataLoadServiceTest {
     private DataLoadService dataLoadService;
     private String csvFilePath;
-    private WineService wineservice;
 
     @BeforeEach
     public void setUp() {
-        wineservice = WineService.getInstance();
-        csvFilePath = Objects.requireNonNull(getClass().getClassLoader()
-                .getResource("test.csv")).getPath();
-        dataLoadService = spy(new DataLoadService());
+        csvFilePath = System.getProperty("user.dir") + "/src/test/resources/test.csv";
+        dataLoadService = spy(new DataLoadService(csvFilePath));
     }
 
+    /**
+     * test that the list given from loadfile has the correct amount of lines and the expected first value.
+     */
     @Test
     public void loadFileTestFirst() {
         List<String[]> records = dataLoadService.loadFile(csvFilePath);
@@ -42,6 +38,25 @@ public class DataLoadServiceTest {
                 "White Blend", "Nicosia"};
         assertEquals(16, records.size());
         assertArrayEquals(expectedFirst, records.getFirst());
+    }
+
+    /**
+     * test that the first item from the list gotten from processcsv gives the correct item
+     */
+    @Test
+    public void loadWinesTestFirst() {
+
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+
+        Wine wine = wines.getFirst();
+        String expected = new String("Quinta dos Avidagos 2011 Avidagos Red (Douro)".getBytes(), StandardCharsets.UTF_8);
+
+        String wineName = wine.getName();
+
+        assertEquals(wineName, expected);
+
+        assertEquals(2011, wine.getYear());
+        assertEquals(87, wine.getRating());
     }
 
     @Test
@@ -57,27 +72,13 @@ public class DataLoadServiceTest {
         assertEquals(0, dataLoadService.processWinesFromCsv().size());
     }
 
-//    @Test
-//    public void loadWinesTestFirst() {
-//        List<Wine> wines = wineservice.getWineList();
-//        System.out.println(wines.size());
-//
-//        List<Wine> wines = dataLoadService.processWinesFromCsv();
-//
-//        Wine wine = wines.getFirst();
-//        String expected = new String("Quinta dos Avidagos 2011 Avidagos Red (Douro)".getBytes(), StandardCharsets.UTF_8);
-//
-//        String wineName = wine.getName();
-//
-//        assertEquals(wineName, expected);
-//
-//        assertEquals(2013, wine.getYear());
-//        assertEquals(87, wine.getRating());
-//    }
-
-//    @Test
-//    public void loadWinesSizeTest() {
-//        List<Wine> wines = dataLoadService.processWinesFromCsv();
-//        assertEquals(16, wines.size());
-//    }
+    /**
+     * test that the size of the list gotten from process wines is correct
+     */
+    @Test
+    public void loadWinesSizeTest() {
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        //2 have no price so 14/16 will be in the list
+        assertEquals(14, wines.size());
+    }
 }
