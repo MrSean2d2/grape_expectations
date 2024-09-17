@@ -483,6 +483,7 @@ public class WineDAO implements DAOInterface<Wine> {
             sql += " AND wine.variety = '" + variety + "'";
         }
         if (region != "0") {
+            region = region.replace("'", "''");
             sql += " AND vineyard.region = '" + region + "'";
         }
         if (year != "0") {
