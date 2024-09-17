@@ -99,12 +99,9 @@ public class DataListPageController extends PageController {
 
         setDefaults();
         setUpFilterButtons();
-
-
-        initializeSliderValueListeners();
-
         // initialises listeners on sliders
         initializeSliderListeners();
+        initializeSliderValueListeners();
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
