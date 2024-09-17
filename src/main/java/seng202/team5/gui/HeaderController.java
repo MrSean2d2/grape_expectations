@@ -164,10 +164,6 @@ public class HeaderController {
 
         pageContainer.getChildren().setAll(loader);
 
-        ProgressIndicator node = (ProgressIndicator) loader.lookup("#progressSpinner");
-
-        node.progressProperty().bind(createScene.progressProperty());
-
         // Update the scene
         createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
 
