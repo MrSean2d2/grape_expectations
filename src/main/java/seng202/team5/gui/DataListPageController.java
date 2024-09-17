@@ -1,6 +1,7 @@
 package seng202.team5.gui;
 
 import java.util.List;
+import java.util.Objects;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,11 +34,11 @@ import seng202.team5.services.WineService;
  */
 public class DataListPageController extends PageController {
     @FXML
-    public ComboBox yearComboBox;
+    public ComboBox<String> yearComboBox;
     @FXML
-    public ComboBox regionComboBox;
+    public ComboBox<String> regionComboBox;
     @FXML
-    public ComboBox varietyComboBox;
+    public ComboBox<String> varietyComboBox;
 
     @FXML
     public Slider ratingSlider;
@@ -97,29 +98,11 @@ public class DataListPageController extends PageController {
         favToggleButton.setDisable(true);
         favToggleButton.setText("Coming Soon");
 
+        setDefaults();
+        setUpFilterButtons();
+        // initialises listeners on sliders
         initializeSliderListeners();
 
-        // sets value of price/rating labels in real time
-        priceRangeSlider.highValueProperty().addListener(
-                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                Float value = Float.valueOf(String.format("%.1f", newVal));
-                maxPriceLabel.setText(String.valueOf(value));
-            });
-        priceRangeSlider.lowValueProperty().addListener(
-                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                Float value = Float.valueOf(String.format("%.1f", newVal));
-                minPriceLabel.setText(String.valueOf(value));
-            });
-        ratingSlider.valueProperty().addListener(
-                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                Float value = Float.valueOf(String.format("%.1f", newVal));
-                ratingSliderValue.setText(String.valueOf(value));
-            });
-
-        // initialises listeners on sliders
-
-
-        setDefaults();
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
@@ -149,7 +132,6 @@ public class DataListPageController extends PageController {
 
 
 
-        setUpFilterButtons();
     }
 
     /**
@@ -158,22 +140,19 @@ public class DataListPageController extends PageController {
     private void initializeSliderListeners() {
         priceRangeSlider.highValueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                Float value = Float.valueOf(String.format("%.1f", newVal));
-                maxPriceFilter = value;
+                maxPriceFilter = Float.parseFloat(String.format("%.1f", newVal.floatValue()));
                 applySearchFilters();
             });
 
         priceRangeSlider.lowValueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                Float value = Float.valueOf(String.format("%.1f", newVal));
-                minPriceFilter = value;
+                minPriceFilter = Float.parseFloat(String.format("%.1f", newVal.floatValue()));
                 applySearchFilters();
             });
 
         ratingSlider.valueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                Float value = Float.valueOf(String.format("%.1f", newVal));
-                minRatingFilter = value;
+                minRatingFilter = Float.parseFloat(String.format("%.1f", newVal.floatValue()));
                 applySearchFilters();
             });
     }
@@ -277,7 +256,7 @@ public class DataListPageController extends PageController {
      */
     public void onRegionComboBoxClicked() {
         String selectedRegion = String.valueOf(regionComboBox.getValue());
-        if (!(selectedRegion == "Region" || selectedRegion == null)) {
+        if (!(Objects.equals(selectedRegion, "Region") || selectedRegion == null)) {
             regionFilter = selectedRegion;
         }
         applySearchFilters();
