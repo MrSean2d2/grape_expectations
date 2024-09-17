@@ -142,4 +142,5 @@ public class UserDAOTest {
         assertEquals("user2", userDAO.getOne(1).getUsername());
         assertEquals("admin", userDAO.getOne(1).getRole());
     }
+
 }
