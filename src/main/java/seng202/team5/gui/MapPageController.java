@@ -1,13 +1,13 @@
 package seng202.team5.gui;
 
-import javafx.fxml.FXML;
 import com.gluonhq.maps.MapPoint;
 import com.gluonhq.maps.MapView;
+import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 
 /**
- * Controller class for MapPage.fxml
+ * Controller class for MapPage.fxml.
+ *
  * @author Martyn Gascoigne
  */
 public class MapPageController extends PageController {
@@ -16,8 +16,7 @@ public class MapPageController extends PageController {
     private GridPane viewMap;
 
     /**
-     * Initialize the map page
-     * 
+     * Initialize the map page.
      */
     @FXML
     public void initialize() {

@@ -14,7 +14,7 @@ public class WineService {
     private final WineDAO wineDAO;
     private static WineService instance;
 
-    private WineService() {
+    public WineService() {
         wineDAO = new WineDAO(new VineyardDAO());
     }
 

@@ -7,7 +7,7 @@ import javafx.scene.layout.BorderPane;
 
 /**
  * controller for the loading page
- * contains a spinning gif
+ * contains a spinning gif.
  */
 public class LoadingPageController {
 

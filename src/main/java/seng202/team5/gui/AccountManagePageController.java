@@ -1,8 +1,13 @@
 package seng202.team5.gui;
 
+import java.util.Optional;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -12,8 +17,6 @@ import seng202.team5.models.User;
 import seng202.team5.repository.DrinksDAO;
 import seng202.team5.repository.UserDAO;
 import seng202.team5.services.UserService;
-
-import java.util.Optional;
 
 /**
  * Controller for the account page.
@@ -96,7 +99,7 @@ public class AccountManagePageController extends PageController {
     }
 
     /**
-     * signs the user out and swaps to log in page
+     * signs the user out and swaps to log in page.
      */
     private void signOutUserInstance() {
         UserService.getInstance().signOut();
@@ -122,7 +125,7 @@ public class AccountManagePageController extends PageController {
     }
 
     /**
-     * Delete the user's account
+     * Delete the user's account.
      */
     @FXML
     private void deleteAccount() {
