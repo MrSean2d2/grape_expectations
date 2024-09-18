@@ -65,5 +65,6 @@ header values (note the first blank column):
 ```
 
 ## References
-Brown, F., Gascoigne, M., Miguel, A., Reitsma, S., Tam, C., & Wills, M. (2024).
+- Brown, F., Gascoigne, M., Miguel, A., Reitsma, S., Tam, C., & Wills, M. (2024).
 _Grape Expectations - Phase II_. SENG202 Team 5.
+- winemag-data-130k. (2018). Www.kaggle.com. https://www.kaggle.com/datasets/christopheiv/winemagdata130k
