@@ -3,15 +3,11 @@ package seng202.team5.unittests.services;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,15 +25,21 @@ public class DataLoadServiceTest {
     }
 
     /**
-     * test that the list given from loadfile has the correct amount of lines and the expected first value.
+     * Test that the list given from loadfile has the correct amount of lines
+     * and the expected first value.
      */
     @Test
     public void loadFileTestFirst() throws IOException {
-        List<String[]> records = dataLoadService.loadFile(Files.newInputStream(Path.of(csvFilePath)));
-        String[] expectedFirst = {"0", "Italy", "Aromas include tropical fruit, broom, brimstone and dried herb. The palate isn't overly expressive, offering unripened apple, citrus and dried sage alongside brisk acidity.",
-                new String("Vulkà Bianco".getBytes(), StandardCharsets.UTF_8), "87", null, "Sicily & Sardinia",
+        List<String[]> records = dataLoadService.loadFile(Files.newInputStream(
+                Path.of(csvFilePath)));
+        String[] expectedFirst = {"0", "Italy", "Aromas include tropical fruit, broom, "
+                + "brimstone and dried herb. The palate isn't overly expressive, offering "
+                + "unripened apple, citrus and dried sage alongside brisk acidity.",
+                new String("Vulkà Bianco".getBytes(), StandardCharsets.UTF_8),
+                "87", null, "Sicily & Sardinia",
                 "Etna", null, new String("Kerin O’Keefe".getBytes(), StandardCharsets.UTF_8),
-                "@kerinokeefe", new String("Nicosia 2013 Vulkà Bianco  (Etna)".getBytes(), StandardCharsets.UTF_8),
+                "@kerinokeefe", new String("Nicosia 2013 Vulkà Bianco  (Etna)".getBytes(),
+                                           StandardCharsets.UTF_8),
                 "White Blend", "Nicosia"};
         assertEquals(16, records.size());
         assertArrayEquals(expectedFirst, records.getFirst());
@@ -52,7 +54,8 @@ public class DataLoadServiceTest {
         List<Wine> wines = dataLoadService.processWinesFromCsv();
 
         Wine wine = wines.getFirst();
-        String expected = new String("Quinta dos Avidagos 2011 Avidagos Red (Douro)".getBytes(), StandardCharsets.UTF_8);
+        String expected = new String("Quinta dos Avidagos 2011 Avidagos Red (Douro)".getBytes(),
+                StandardCharsets.UTF_8);
 
         String wineName = wine.getName();
 

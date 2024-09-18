@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -44,7 +42,6 @@ public class DataLoadService {
 
     /**
      * DataLoadService constructor.
-     *
      */
     public DataLoadService() {
         this.fileName = pathFromConfig();
