@@ -107,34 +107,7 @@ public class DataListPageController extends PageController {
         searchButton.setTooltip(new Tooltip("Enter search query"));
         resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
 
-        setDefaults();
-        setUpFilterButtons();
-        // initialises listeners on sliders
-        initializeSliderListeners();
-        initializeSliderValueListeners();
 
-        // sets value of price/rating labels in real time
-        priceRangeSlider.highValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            maxPriceLabel.setText(String.valueOf(value));
-        });
-        priceRangeSlider.lowValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            minPriceLabel.setText(String.valueOf(value));
-        });
-        ratingSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            ratingSliderValue.setText(String.valueOf(value));
-        });
-
-        // initialises listeners on sliders
-
-
-        setDefaults();
-        setUpFilterButtons();
-        // initialises listeners on sliders
-        initializeSliderListeners();
-        initializeSliderValueListeners();
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -160,6 +133,11 @@ public class DataListPageController extends PageController {
                 }
             }
         });
+        setDefaults();
+        setUpFilterButtons();
+        // initialises listeners on sliders
+        initializeSliderListeners();
+        initializeSliderValueListeners();
     }
 
     /**
