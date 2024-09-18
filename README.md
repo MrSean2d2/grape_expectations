@@ -14,7 +14,7 @@ enable you to explore wine data, take notes, rate wines, and keep track of your 
 - Matthew Wills
 
 ## Prerequisites
-- JDK >= 21 [click here to get the latest stable OpenJDK release (as of writing this README)](https://jdk.java.net/18/)
+- JDK >= 21 [click here to get the latest stable OpenJDK release (as of writing this README)](https://jdk.java.net/)
 - Gradle [Download](https://gradle.org/releases/) and [Install](https://gradle.org/install/)
 
 
@@ -37,11 +37,11 @@ IntelliJ has built-in support for Gradle. To import your project:
 
 ## Build Project 
 1. Open a command line interface inside the project directory and run `./gradlew jar` to build a .jar file. 
-The file is located at target/wino-1.0.jar
+The file is located at build/libs/wino-1.0.jar
 
 ## Run App
 1. If you haven't already, Build the project.
-2. Open a command line interface inside the project directory and run `cd target` to change into the target directory.
+2. Open a command line interface inside the project directory and run `cd build/libs` to change into the target directory.
 3. Run the command `java -jar wino-1.0.jar` to open the application.
 
 ## Configuration
