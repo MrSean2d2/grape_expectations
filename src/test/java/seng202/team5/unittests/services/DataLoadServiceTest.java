@@ -59,6 +59,9 @@ public class DataLoadServiceTest {
         assertEquals(87, wine.getRating());
     }
 
+    /**
+     * test that a wine is not made from an object with invalid price attribute
+     */
     @Test
     public void loadWinesTestInvalidPrice() {
         String[] data = {"0", "Italy", "Aromas include tropical fruit, broom, brimstone and dried herb. The palate isn't overly expressive, offering unripened apple, citrus and dried sage alongside brisk acidity.",

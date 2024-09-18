@@ -17,6 +17,10 @@ public class UserServiceTest {
     private UserService userService;
     private static DatabaseService databaseService;
 
+    /**
+     * set up the background info for each test
+     * @throws InstanceAlreadyExistsException
+     */
     @BeforeEach
     public void setUp() throws InstanceAlreadyExistsException {
         DatabaseService.removeInstance();
