@@ -31,7 +31,8 @@ public class DatabaseService {
     private final String url;
 
     /**
-     * gets or creates the database depending on whether it already exists
+     * gets or creates the database depending on whether it already exists.
+     *
      * @param url of the database
      */
     private DatabaseService(String url) {
@@ -117,7 +118,8 @@ public class DatabaseService {
     }
 
     /**
-     * executes the given sql query
+     * executes the given sql query.
+     *
      * @param in input string of sql query
      */
     private void executeSql(InputStream in) {

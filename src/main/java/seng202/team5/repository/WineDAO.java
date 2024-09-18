@@ -41,7 +41,8 @@ public class WineDAO implements DAOInterface<Wine> {
     }
 
     /**
-     * gets vineyardDAO
+     * gets vineyardDAO.
+     *
      * @return the vineyardDAO
      */
     public VineyardDAO getVineyardDAO() {
