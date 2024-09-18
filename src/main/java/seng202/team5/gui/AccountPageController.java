@@ -31,7 +31,7 @@ public class AccountPageController extends PageController {
      * Initialize the user page.
      */
     @FXML
-    public void initialize() {
+    private void initialize() {
         errorLabel.setText(""); //Blank error message
 
         loginButton.setTooltip(new Tooltip("Log in to account"));
@@ -42,7 +42,7 @@ public class AccountPageController extends PageController {
      * Attempt to log in with the provided details.
      */
     @FXML
-    public void attemptLogin() {
+    private void attemptLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
@@ -88,7 +88,7 @@ public class AccountPageController extends PageController {
      * the app will remain on the login page.
      */
     @FXML
-    public void attemptRegister() {
+    private void attemptRegister() {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
