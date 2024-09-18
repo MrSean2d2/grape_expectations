@@ -35,7 +35,7 @@ public class AccountPageController extends PageController {
      * Initialize the user page.
      */
     @FXML
-    public void initialize() {
+    private void initialize() {
         errorLabel.setText(""); //Blank error message
 
         loginButton.setTooltip(new Tooltip("Log in to account"));

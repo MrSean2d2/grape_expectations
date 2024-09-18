@@ -52,7 +52,7 @@ public class AccountManagePageController extends PageController {
      * Initialize the account manage page.
      */
     @FXML
-    public void initialize() {
+    private void initialize() {
 
         signOutButton.setTooltip(new Tooltip("Sign out of account"));
         deleteAccountButton.setTooltip(new Tooltip("Delete account"));

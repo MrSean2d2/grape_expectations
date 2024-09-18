@@ -19,7 +19,7 @@ public class MapPageController extends PageController {
      * Initialize the map page.
      */
     @FXML
-    public void initialize() {
+    private void initialize() {
         MapPoint centerPoint = new MapPoint(-41, 174.886);
 
         MapView sampleMap = new MapView();
