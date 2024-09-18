@@ -13,135 +13,173 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.RangeSlider?>
 
-<GridPane alignment="TOP_CENTER" prefHeight="450.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
-   <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints maxHeight="179.99999237060547" minHeight="100.0" prefHeight="112.00000508626303" vgrow="NEVER" />
-      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="404.66666158040357" vgrow="ALWAYS" />
-   </rowConstraints>
-   <children>
-      <GridPane maxWidth="1000.0" prefHeight="129.0" prefWidth="1000.0" GridPane.halignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <GridPane maxWidth="979.0" prefHeight="50.0" prefWidth="979.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="644.0" />
-                <ColumnConstraints hgrow="NEVER" maxWidth="185.0" minWidth="10.0" prefWidth="133.0" />
-                  <ColumnConstraints hgrow="NEVER" maxWidth="202.0" minWidth="10.0" prefWidth="202.0" />
-              </columnConstraints>
-              <rowConstraints>
+<GridPane alignment="TOP_CENTER" prefHeight="877.0" prefWidth="921.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="179.99999237060547" minHeight="100.0" prefHeight="112.00000508626303" vgrow="NEVER" />
+        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="404.66666158040357" vgrow="ALWAYS" />
+    </rowConstraints>
+    <children>
+        <GridPane maxWidth="1000.0" prefHeight="129.0" prefWidth="1000.0" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <TextField fx:id="searchTextField" onKeyReleased="#enterPressed" promptText="Input Search...">
-                     <GridPane.margin>
-                        <Insets left="10.0" right="10.0" />
-                     </GridPane.margin></TextField>
-                  <Button fx:id="searchButton" maxWidth="1.7976931348623157E308" minWidth="10.0" mnemonicParsing="false" onAction="#searchClicked" prefHeight="24.0" prefWidth="157.0" text="Search" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets left="10.0" right="10.0" />
-                     </GridPane.margin></Button>
-                  <Button fx:id="resetSearchFilterButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onResetSearchFilterButtonClicked" prefHeight="24.0" prefWidth="176.0" text="Reset Search and Filter" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER">
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding></Button>
-               </children>
-            </GridPane>
-            <GridPane maxWidth="1000.0" prefHeight="101.0" prefWidth="1000.0" GridPane.rowIndex="1">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="169.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="165.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="226.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="194.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="145.0" />
-              </columnConstraints>
-              <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <ComboBox fx:id="varietyComboBox" onAction="#onVarietyComboBoxClicked" prefWidth="150.0" promptText="Variety" GridPane.halignment="CENTER" />
-                  <ComboBox fx:id="yearComboBox" onAction="#onYearComboBoxClicked" prefHeight="24.0" prefWidth="85.0" promptText="Year" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-                  <ToggleButton fx:id="favToggleButton" mnemonicParsing="false" onAction="#onFavToggleButtonClicked" prefHeight="24.0" prefWidth="136.0" text="Toggle Favourites" GridPane.columnIndex="5" />
-                  <GridPane GridPane.columnIndex="4">
+            </rowConstraints>
+            <children>
+                <GridPane maxWidth="979.0" prefHeight="50.0" prefWidth="979.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="644.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="185.0" minWidth="10.0" prefWidth="133.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="202.0" minWidth="10.0" prefWidth="202.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints maxHeight="30.666661580403645" minHeight="10.0" prefHeight="23.999989827473957" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
-                     <children>
-                        <Slider fx:id="ratingSlider" blockIncrement="1.0" majorTickUnit="10.0" maxWidth="-Infinity" minorTickCount="1" prefHeight="38.0" prefWidth="155.0" showTickLabels="true" showTickMarks="true" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding></Slider>
-                        <Label alignment="CENTER" ellipsisString="---" prefHeight="17.0" prefWidth="111.0" text="Minimum Rating" textOverrun="CLIP" GridPane.halignment="CENTER" />
-                        <Label fx:id="ratingSliderValue" text="0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER">
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                        </Label>
-                     </children>
-                  </GridPane>
-                  <GridPane prefHeight="50.0" prefWidth="208.0" GridPane.columnIndex="3">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints maxHeight="30.666661580403645" minHeight="10.0" prefHeight="23.999989827473957" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <RangeSlider fx:id="priceRangeSlider" highValue="1.0" highValueChanging="true" lowValue="0.0" lowValueChanging="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="1" prefHeight="30.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
-                           <padding>
-                              <Insets top="5.0" />
-                           </padding>
-                        </RangeSlider>
-                        <Label fx:id="maxPriceLabel" minHeight="-Infinity" minWidth="-Infinity" text="0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER">
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                        </Label>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Price Range" GridPane.halignment="CENTER" />
-                        <Label fx:id="minPriceLabel" text="0" GridPane.rowSpan="2" GridPane.valignment="CENTER">
-                           <padding>
-                              <Insets left="7.0" />
-                           </padding>
-                        </Label>
-                     </children>
-                  </GridPane>
-                  <ComboBox fx:id="regionComboBox" onAction="#onRegionComboBoxClicked" prefHeight="24.0" prefWidth="148.0" promptText="Region" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-               </children>
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </GridPane>
-         </children>
-      </GridPane>
-      <VBox alignment="CENTER" spacing="20" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="TOP">
-         <TableView fx:id="wineTable" maxWidth="1000.0" prefHeight="290.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
-           <columns>
-             <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="589.3333486318588" resizable="false" text="Wine Name" />
-             <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="91.0" resizable="false" text="Price" />
-               <TableColumn fx:id="yearColumn" prefWidth="73.0" resizable="false" text="Year" />
-               <TableColumn fx:id="ratingColumn" prefWidth="79.0" resizable="false" text="Rating" />
-               <TableColumn fx:id="favouriteColumn" prefWidth="170.0" resizable="false" text="Coming Soon: Favourite" />
-           </columns>
-         </TableView>
-      </VBox>
-   </children>
-   <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="80.0" />
-   </padding>
+                    <children>
+                        <TextField fx:id="searchTextField" onKeyReleased="#enterPressed" promptText="Input Search...">
+                            <GridPane.margin>
+                                <Insets right="10.0" />
+                            </GridPane.margin></TextField>
+                        <Button fx:id="searchButton" maxWidth="1.7976931348623157E308" minWidth="10.0" mnemonicParsing="false" onAction="#searchClicked" prefHeight="24.0" prefWidth="157.0" text="Search" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                            <GridPane.margin>
+                                <Insets left="10.0" right="10.0" />
+                            </GridPane.margin></Button>
+                        <Button fx:id="resetSearchFilterButton" maxWidth="1.7976931348623157E308" minWidth="10.0" mnemonicParsing="false" onAction="#onResetSearchFilterButtonClicked" prefHeight="24.0" prefWidth="157.0" text="Reset Search and Filter" GridPane.columnIndex="2">
+                            <GridPane.margin>
+                                <Insets left="10.0" />
+                            </GridPane.margin>
+                        </Button>
+                    </children>
+                </GridPane>
+                <GridPane maxWidth="1000.0" prefHeight="101.0" prefWidth="1000.0" GridPane.rowIndex="1">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="120.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="187.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="194.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="145.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <ComboBox fx:id="varietyComboBox" onAction="#onVarietyComboBoxClicked" prefWidth="150.0" promptText="Variety" GridPane.halignment="CENTER">
+                            <GridPane.margin>
+                                <Insets right="10.0" />
+                            </GridPane.margin></ComboBox>
+                        <ComboBox fx:id="yearComboBox" onAction="#onYearComboBoxClicked" prefHeight="24.0" prefWidth="150.0" promptText="Year" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                            <GridPane.margin>
+                                <Insets right="10.0" />
+                            </GridPane.margin></ComboBox>
+                        <ToggleButton fx:id="favToggleButton" mnemonicParsing="false" onAction="#onFavToggleButtonClicked" prefHeight="24.0" prefWidth="136.0" text="Toggle Favourites" GridPane.columnIndex="5">
+                            <GridPane.margin>
+                                <Insets left="10.0" />
+                            </GridPane.margin></ToggleButton>
+                        <GridPane GridPane.columnIndex="4">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="30.666661580403645" minHeight="10.0" prefHeight="23.999989827473957" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Slider fx:id="ratingSlider" blockIncrement="1.0" majorTickUnit="10.0" maxWidth="-Infinity" minorTickCount="1" prefHeight="38.0" prefWidth="155.0" showTickLabels="true" showTickMarks="true" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                    <padding>
+                                        <Insets left="20.0" />
+                                    </padding></Slider>
+                                <Label alignment="CENTER" ellipsisString="---" prefHeight="17.0" prefWidth="111.0" text="Minimum Rating" textOverrun="CLIP" GridPane.halignment="CENTER" />
+                                <Label fx:id="ratingSliderValue" text="0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                                    <padding>
+                                        <Insets right="10.0" />
+                                    </padding>
+                                </Label>
+                            </children>
+                        </GridPane>
+                        <GridPane prefHeight="50.0" prefWidth="208.0" GridPane.columnIndex="3">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="30.666661580403645" minHeight="10.0" prefHeight="23.999989827473957" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <RangeSlider fx:id="priceRangeSlider" highValue="1.0" highValueChanging="true" lowValue="0.0" lowValueChanging="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="1" prefHeight="30.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                                    <padding>
+                                        <Insets top="5.0" />
+                                    </padding>
+                                </RangeSlider>
+                                <Label fx:id="maxPriceLabel" minHeight="-Infinity" minWidth="-Infinity" text="0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                                    <padding>
+                                        <Insets right="10.0" />
+                                    </padding>
+                                </Label>
+                                <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Price Range" GridPane.halignment="CENTER" />
+                                <Label fx:id="minPriceLabel" text="0" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                                    <padding>
+                                        <Insets left="7.0" />
+                                    </padding>
+                                </Label>
+                            </children>
+                        </GridPane>
+                        <ComboBox fx:id="regionComboBox" onAction="#onRegionComboBoxClicked" prefHeight="24.0" prefWidth="148.0" promptText="Region" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                            <GridPane.margin>
+                                <Insets right="10.0" />
+                            </GridPane.margin></ComboBox>
+                    </children>
+                    <GridPane.margin>
+                        <Insets />
+                    </GridPane.margin>
+                </GridPane>
+            </children>
+        </GridPane>
+        <VBox alignment="CENTER" spacing="20" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP">
+            <TableView fx:id="wineTable" maxWidth="1000.0" prefHeight="290.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="589.3333486318588" resizable="false" text="Wine Name" />
+                    <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="91.0" resizable="false" text="Price" />
+                    <TableColumn fx:id="yearColumn" prefWidth="73.0" resizable="false" text="Year" />
+                    <TableColumn fx:id="ratingColumn" prefWidth="79.0" resizable="false" text="Rating" />
+                    <TableColumn fx:id="favouriteColumn" prefWidth="170.0" resizable="false" text="Coming Soon: Favourite" />
+                </columns>
+            </TableView>
+        </VBox>
+        <VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefWidth="1000.0" GridPane.halignment="CENTER" GridPane.vgrow="SOMETIMES">
+            <children>
+                <Label style="-fx-font-weight: 700;" text="Wine Database">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                    <padding>
+                        <Insets left="10.0" right="10.0" />
+                    </padding>
+                </Label>
+                <Label text="Here you can see a list of the wines currently in the database and filter them! Double click on a wine to view more information about it!" wrapText="true">
+                    <padding>
+                        <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </Label>
+            </children>
+        </VBox>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="50.0" />
+    </padding>
 </GridPane>
