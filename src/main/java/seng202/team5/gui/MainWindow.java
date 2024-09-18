@@ -29,6 +29,9 @@ public class MainWindow extends Application {
 
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/Header.fxml"));
         Parent root = baseLoader.load();
+        Scene scene = new Scene(root, 1200, 800);
+        String styleSheetUrl = "/fxml/style.css";
+        scene.getStylesheets().add(styleSheetUrl);
 
         HeaderController baseController = baseLoader.getController();
         baseController.init(primaryStage);
@@ -36,12 +39,6 @@ public class MainWindow extends Application {
         primaryStage.setTitle("Grape Expectations");
         primaryStage.getIcons().add(
                 new Image(getClass().getResource("/images/favicon.png").toExternalForm()));
-
-
-        Scene scene = new Scene(root, 1200, 800);
-
-        String styleSheetUrl = "/fxml/style.css";
-        scene.getStylesheets().add(styleSheetUrl);
 
         primaryStage.setScene(scene);
         primaryStage.show();
