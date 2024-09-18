@@ -9,7 +9,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -64,9 +72,6 @@ public class DataListPageController extends PageController {
     private TableColumn<Wine, Double> ratingColumn;
 
     @FXML
-    private TableColumn<Wine, Boolean> favouriteColumn;
-
-    @FXML
     private Button searchButton;
 
     @FXML
@@ -107,35 +112,6 @@ public class DataListPageController extends PageController {
         searchButton.setTooltip(new Tooltip("Enter search query"));
         resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
 
-        setDefaults();
-        setUpFilterButtons();
-        // initialises listeners on sliders
-        initializeSliderListeners();
-        initializeSliderValueListeners();
-
-        // sets value of price/rating labels in real time
-        priceRangeSlider.highValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            maxPriceLabel.setText(String.valueOf(value));
-        });
-        priceRangeSlider.lowValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            minPriceLabel.setText(String.valueOf(value));
-        });
-        ratingSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            ratingSliderValue.setText(String.valueOf(value));
-        });
-
-        // initialises listeners on sliders
-
-
-        setDefaults();
-        setUpFilterButtons();
-        // initialises listeners on sliders
-        initializeSliderListeners();
-        initializeSliderValueListeners();
-
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
@@ -160,6 +136,14 @@ public class DataListPageController extends PageController {
                 }
             }
         });
+
+        // Sets up default filter buttons
+        setDefaults();
+        setUpFilterButtons();
+
+        // Initialises listeners on sliders
+        initializeSliderListeners();
+        initializeSliderValueListeners();
     }
 
     /**
@@ -170,17 +154,17 @@ public class DataListPageController extends PageController {
         // sets value of price/rating labels in real time
         priceRangeSlider.highValueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    Float value = Float.valueOf(String.format("%.1f", newVal));
+                    Float value = Float.valueOf(String.format("%.1f", newVal.floatValue()));
                     maxPriceLabel.setText(String.valueOf(value));
                 });
         priceRangeSlider.lowValueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    Float value = Float.valueOf(String.format("%.1f", newVal));
+                    Float value = Float.valueOf(String.format("%.1f", newVal.floatValue()));
                     minPriceLabel.setText(String.valueOf(value));
                 });
         ratingSlider.valueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    Float value = Float.valueOf(String.format("%.1f", newVal));
+                    Float value = Float.valueOf(String.format("%.1f", newVal.floatValue()));
                     ratingSliderValue.setText(String.valueOf(value));
                 });
     }
