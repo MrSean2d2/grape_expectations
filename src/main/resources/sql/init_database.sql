@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS VINEYARD (
     name TEXT,
     region TEXT,
     latitude NUMERIC,
-    longitude NUMERIC
+    longitude NUMERIC,
+    UNIQUE (name, region)
 );
 --SPLIT
 CREATE TABLE IF NOT EXISTS WINE (

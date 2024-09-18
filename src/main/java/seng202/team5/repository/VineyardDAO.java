@@ -58,12 +58,13 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      * @param vineyardName the name of the vineyard to look up
      * @return the database id of the vineyard
      */
-    public int getIdFromName(String vineyardName) {
+    public int getIdFromNameRegion(String vineyardName, String region) {
         int id = 0;
-        String sql = "SELECT * FROM vineyard WHERE name=?";
+        String sql = "SELECT * FROM vineyard WHERE name=? AND region=?";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, vineyardName);
+            ps.setString(2, region);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     id = rs.getInt("id");
