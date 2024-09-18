@@ -9,20 +9,13 @@ import seng202.team5.repository.ReviewDAO;
  * @author Martyn Gascoigne
  */
 public class Review {
-    private int wineId;
-    private int userId;
+    private final int wineId;
+    private final int userId;
     private boolean favourite;
     private String notes;
     private int rating;
 
-    private ReviewDAO reviewDAO;
-
-    /**
-     * ReviewDAO constructor
-     */
-    {
-        this.reviewDAO = new ReviewDAO();
-    }
+    private final ReviewDAO reviewDAO;
 
 
     /**
@@ -34,6 +27,7 @@ public class Review {
         this.favourite = false;
         this.notes = "";
         this.rating = -1; // Not set
+        this.reviewDAO = new ReviewDAO();
     }
 
 
@@ -46,6 +40,7 @@ public class Review {
         this.favourite = favourite;
         this.notes = notes;
         this.rating = rating;
+        this.reviewDAO = new ReviewDAO();
     }
 
 
@@ -102,25 +97,6 @@ public class Review {
 
 
     // Setters
-
-    /**
-     * Set the user ID.
-     *
-     * @param userId the ID to set
-     */
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-
-    /**
-     * Set the wine ID.
-     *
-     * @param wineId the ID to set
-     */
-    public void setWineId(int wineId) {
-        this.wineId = wineId;
-    }
 
 
     /**

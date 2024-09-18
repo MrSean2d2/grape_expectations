@@ -2,7 +2,6 @@ package seng202.team5.models;
 
 import java.time.Year;
 import java.util.Objects;
-import seng202.team5.repository.ReviewDAO;
 
 /**
  * Default Wine class.
@@ -12,24 +11,13 @@ import seng202.team5.repository.ReviewDAO;
 public class Wine {
     private int id;
     private String name;
-    private String description = null;
-    private int year = 0;
-    private int ratingValue = 0;
-    private double price = 0.0;
-    private boolean favourite = false;
-    private String notes = null;
+    private final String description;
+    private final int year;
+    private final int ratingValue;
+    private final double price;
     private String wineVariety;
     private String colour;
-    private Vineyard vineyard;
-    private ReviewDAO reviewDAO;
-
-    /**
-     * ReviewDAO constructor
-     */
-    {
-        this.reviewDAO = new ReviewDAO();
-    }
-
+    private final Vineyard vineyard;
 
     /**
      * Constructor for creating a wine object with a name,
@@ -82,37 +70,6 @@ public class Wine {
         this.wineVariety = wineVariety;
         this.vineyard = vineyard;
     }
-
-    /**
-     * Constructor for creating a wine object with a name,
-     * description, year, rating, price, favourite status and notes.
-     *
-     * @param id the wine's id
-     * @param name name of wine
-     * @param description description of wine
-     * @param year year of wine
-     * @param ratingValue rating value of wine
-     * @param price current market price of wine
-     * @param wineVariety variety of the wine
-     * @param vineYard the vineyard the wine comes from
-     */
-    public Wine(int id, String name, String description, int year, int ratingValue, double price,
-                String wineVariety, String colour, Vineyard vineYard,
-                boolean favourite, String notes) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.year = year;
-        this.ratingValue = ratingValue;
-        this.price = price;
-        this.wineVariety = wineVariety;
-        this.colour = colour;
-        this.vineyard = vineYard;
-        this.favourite = favourite;
-        this.notes = notes;
-    }
-
-
 
     /**
      * Gets the wine name.

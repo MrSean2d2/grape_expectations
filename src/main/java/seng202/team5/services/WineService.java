@@ -9,7 +9,6 @@ import seng202.team5.repository.WineDAO;
  * Service Class to manage wine actions.
  */
 public class WineService {
-    private List<Wine> wineList;
     private Wine selectedWine;
     private final WineDAO wineDAO;
     private static WineService instance;
@@ -31,7 +30,7 @@ public class WineService {
     }
 
     /**
-     * Get list of wines from the database
+     * Get list of wines from the database.
      *
      * @return Wine list
      */

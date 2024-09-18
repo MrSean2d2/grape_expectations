@@ -250,9 +250,8 @@ public class WineDAOTest {
             wineDAO.add(testWine4);
             wineDAO.add(testWine5);
             sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                    +
-                    "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
-                    + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard"
+                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, "
+                    + "vineyard.region FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard"
                     + " AND (wine.name LIKE ? OR wine.description LIKE ?) ";
         }
 

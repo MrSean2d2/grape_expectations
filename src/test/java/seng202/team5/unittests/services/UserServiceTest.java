@@ -1,7 +1,11 @@
 package seng202.team5.unittests.services;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -18,6 +22,7 @@ public class UserServiceTest {
 
     /**
      * set up the background info for each test
+     *
      * @throws InstanceAlreadyExistsException if the instance already exists
      */
     @BeforeEach
@@ -35,7 +40,7 @@ public class UserServiceTest {
      * Reset the database before each test.
      */
     @BeforeEach
-    void resetDB() {
+    void resetDb() {
         databaseService.resetDb();
     }
 
@@ -69,15 +74,15 @@ public class UserServiceTest {
      */
     @Test
     public void hashPasswordTest() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] salt = userService.generateSalt();
+        byte[] salt = UserService.generateSalt();
         String pass1String = "password";
         String pass2String = "password";
         String pass3String = "notPassword";
-        String hashedPassword = userService.hashPassword(pass1String, salt);
+        String hashedPassword = UserService.hashPassword(pass1String, salt);
 
         // Check if password 1 and 2 are equal, and that 1 and 3 are not
-        assertTrue(userService.verifyPassword(pass2String, hashedPassword));
-        assertFalse(userService.verifyPassword(pass3String, hashedPassword));
+        assertTrue(UserService.verifyPassword(pass2String, hashedPassword));
+        assertFalse(UserService.verifyPassword(pass3String, hashedPassword));
     }
 
     /**
@@ -116,7 +121,7 @@ public class UserServiceTest {
     public void registerDifferentUsersTest() {
         User testUser1 = userService.registerUser("testUser1", "pass1");
         User testUser2 = userService.registerUser("testUser2", "pass2");
-        assertFalse(testUser1.getId() == testUser2.getId());
+        assertNotEquals(testUser1.getId(), testUser2.getId());
     }
 
     /**
@@ -124,7 +129,7 @@ public class UserServiceTest {
      */
     @Test
     public void correctSignInTest() {
-        userService.registerUser("testUser1","pass");
+        userService.registerUser("testUser1", "pass");
 
         User signedInUser = userService.signinUser("testUser1", "pass");
 
@@ -136,7 +141,7 @@ public class UserServiceTest {
      */
     @Test
     public void incorrectSignInTest() {
-        userService.registerUser("testUser","pass");
+        userService.registerUser("testUser", "pass");
 
         User signedInUser = userService.signinUser("testUser", "wrongPass");
 

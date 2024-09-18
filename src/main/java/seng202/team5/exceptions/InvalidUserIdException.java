@@ -5,13 +5,13 @@ package seng202.team5.exceptions;
  *
  * @author Martyn Gascoigne
  */
-public class InvalidUserIDException extends Exception {
+public class InvalidUserIdException extends Exception {
     /**
      * Simple constructor that passes to parent Exception class.
      *
      * @param message error message
      */
-    public InvalidUserIDException(String message) {
+    public InvalidUserIdException(String message) {
         super(message);
     }
 }
