@@ -97,7 +97,7 @@ public class DataListPageController extends PageController {
      * to populate the list of wines.
      */
     @FXML
-    public void initialize() {
+    private void initialize() {
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
 
@@ -243,7 +243,7 @@ public class DataListPageController extends PageController {
      * to display on table.
      */
     @FXML
-    public void searchClicked() {
+    private void searchClicked() {
         String searching = searchTextField.getText();
         applySearchFilters();
     }
@@ -267,7 +267,7 @@ public class DataListPageController extends PageController {
      * @param event KeyEvent that triggered the method, pressing of a key
      */
     @FXML
-    public void enterPressed(KeyEvent event) {
+    private void enterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             searchClicked();
         }

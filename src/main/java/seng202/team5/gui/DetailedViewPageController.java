@@ -91,7 +91,7 @@ public class DetailedViewPageController {
      * Initializes DetailedViewPage.
      */
     @FXML
-    public void initialize() {
+    private void initialize() {
         Wine selectedWine = WineService.getInstance().getSelectedWine();
         selectedWineID = selectedWine.getId();
 
@@ -142,7 +142,7 @@ public class DetailedViewPageController {
      * @param event mouse event
      */
     @FXML
-    public void handleStarClick(javafx.scene.input.MouseEvent event) {
+    private void handleStarClick(javafx.scene.input.MouseEvent event) {
             ImageView clickedStar = (ImageView) event.getSource(); // Get the clicked star
             int clickedStarIndex = Integer.parseInt(clickedStar.getId().substring(4)); // Get star number (e.g., star1 -> 1)
 

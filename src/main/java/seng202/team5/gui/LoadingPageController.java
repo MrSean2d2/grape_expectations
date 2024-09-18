@@ -19,7 +19,7 @@ public class LoadingPageController {
      * Initialize the loading page.
      */
     @FXML
-    public void initialize() {
+    private void initialize() {
 
         Image gifImage = new Image(getClass().getResourceAsStream("/images/animation.gif"));
 
