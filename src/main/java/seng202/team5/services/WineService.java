@@ -18,6 +18,11 @@ public class WineService {
         wineDAO = new WineDAO(new VineyardDAO());
     }
 
+    /**
+     * Populates the database.
+     *
+     * @param dataLoadService instance
+     */
     public void populateDatabase(DataLoadService dataLoadService) {
         wineDAO.truncateWines();
         wineDAO.getVineyardDAO().truncateVineyards();
