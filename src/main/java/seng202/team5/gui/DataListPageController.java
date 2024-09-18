@@ -1,43 +1,47 @@
 package seng202.team5.gui;
 
-import java.util.ArrayList;
 import java.util.List;
-import javafx.beans.value.ChangeListener;
+import java.util.Objects;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.*;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.RangeSlider;
 import seng202.team5.models.Wine;
-import seng202.team5.services.UserService;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
 import seng202.team5.services.WineService;
-import javafx.fxml.FXMLLoader;
 
 
 
 /**
  * Controller for the Data List Page.
  */
-public class DataListPageController extends PageController{
+public class DataListPageController extends PageController {
     @FXML
-    public ComboBox yearComboBox;
+    public ComboBox<String> yearComboBox;
     @FXML
-    public ComboBox regionComboBox;
+    public ComboBox<String> regionComboBox;
     @FXML
-    public ComboBox varietyComboBox;
+    public ComboBox<String> varietyComboBox;
 
     @FXML
     public Slider ratingSlider;
@@ -68,8 +72,10 @@ public class DataListPageController extends PageController{
     private TableColumn<Wine, Double> ratingColumn;
 
     @FXML
-    private TableColumn<Wine, Boolean> favouriteColumn;
+    private Button searchButton;
 
+    @FXML
+    private Button resetSearchFilterButton;
 
     @FXML
     private TextField searchTextField;
@@ -84,92 +90,106 @@ public class DataListPageController extends PageController{
     private double minRatingFilter;
     private double maxRatingFilter;
     private boolean favouriteFilter;
+    private static final Logger log = LogManager.getLogger(DataListPageController.class);
 
     /**
      * Initializes the data List by calling {@link seng202.team5.services.WineService}
      * to populate the list of wines.
      */
     @FXML
-    public void initialize() {
+    private void initialize() {
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
 
-        initializeSliderListeners();
+        favToggleButton.setDisable(true);
+        favToggleButton.setText("Coming Soon");
 
-        // sets value of price/rating labels in real time
-        priceRangeSlider.highValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            maxPriceLabel.setText(String.valueOf(value));
-        });
-        priceRangeSlider.lowValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            minPriceLabel.setText(String.valueOf(value));
-        });
-        ratingSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            ratingSliderValue.setText(String.valueOf(value));
-        });
+        varietyComboBox.setTooltip(new Tooltip("Filter by variety"));
+        regionComboBox.setTooltip(new Tooltip("Filter by region"));
+        yearComboBox.setTooltip(new Tooltip("Filter by year"));
+        priceRangeSlider.setTooltip(new Tooltip("Select a price range"));
+        ratingSlider.setTooltip(new Tooltip("Select a minimum price"));
+        searchButton.setTooltip(new Tooltip("Enter search query"));
+        resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
 
-        // initialises listeners on sliders
-
-
-        setDefaults();
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        //favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
 
         ObservableList<Wine> wines = FXCollections.observableArrayList(WineService.getInstance()
                 .getWineList());
 
         // Add data to TableView
         wineTable.setItems(wines);
-        System.out.println(wines.size());
 
-        wineTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (mouseEvent.getClickCount() == 2) {
-                    try {
-                        Wine selectedWine = wineTable.getSelectionModel().getSelectedItem();
-                        if (selectedWine != null) {
-                            WineService.getInstance().setSelectedWine(selectedWine);
-                            openDetailedViewPage(selectedWine);
-                        }
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
+        wineTable.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getClickCount() == 2) {
+                try {
+                    Wine selectedWine = wineTable.getSelectionModel().getSelectedItem();
+                    if (selectedWine != null) {
+                        WineService.getInstance().setSelectedWine(selectedWine);
+                        openDetailedViewPage();
                     }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
 
-
-
+        // Sets up default filter buttons
+        setDefaults();
         setUpFilterButtons();
+
+        // Initialises listeners on sliders
+        initializeSliderListeners();
+        initializeSliderValueListeners();
+    }
+
+    /**
+     * Initialize listeners to change the slider values in real time to reflect
+     * the current selection.
+     */
+    private void initializeSliderValueListeners() {
+        // sets value of price/rating labels in real time
+        priceRangeSlider.highValueProperty().addListener(
+                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+                    Float value = Float.valueOf(String.format("%.1f", newVal.floatValue()));
+                    maxPriceLabel.setText(String.valueOf(value));
+                });
+        priceRangeSlider.lowValueProperty().addListener(
+                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+                    Float value = Float.valueOf(String.format("%.1f", newVal.floatValue()));
+                    minPriceLabel.setText(String.valueOf(value));
+                });
+        ratingSlider.valueProperty().addListener(
+                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+                    Float value = Float.valueOf(String.format("%.1f", newVal.floatValue()));
+                    ratingSliderValue.setText(String.valueOf(value));
+                });
     }
 
     /**
      * Adds listeners to price and rating slider filters, to handle action of such filters.
      */
     private void initializeSliderListeners() {
-        priceRangeSlider.highValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            maxPriceFilter = value;
-            applySearchFilters();
-        });
+        priceRangeSlider.highValueProperty().addListener(
+                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+                maxPriceFilter = Float.parseFloat(String.format("%.1f", newVal.floatValue()));
+                applySearchFilters();
+            });
 
-        priceRangeSlider.lowValueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            minPriceFilter = value;
-            applySearchFilters();
-        });
+        priceRangeSlider.lowValueProperty().addListener(
+                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+                minPriceFilter = Float.parseFloat(String.format("%.1f", newVal.floatValue()));
+                applySearchFilters();
+            });
 
-        ratingSlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-            Float value = Float.valueOf(String.format("%.1f", newVal));
-            minRatingFilter = value;
-            applySearchFilters();
-        });
+        ratingSlider.valueProperty().addListener(
+                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+                minRatingFilter = Float.parseFloat(String.format("%.1f", newVal.floatValue()));
+                applySearchFilters();
+            });
     }
 
     /**
@@ -177,18 +197,21 @@ public class DataListPageController extends PageController{
      */
     private void setUpFilterButtons() {
         List<String> yearOptions = wineDAO.getYear();
-        ObservableList<String> observableYearList = FXCollections.observableArrayList(yearOptions);
-        observableYearList.add(0, "Year");
+        ObservableList<String> observableYearList =
+                FXCollections.observableArrayList(yearOptions);
+        observableYearList.addFirst("Year");
         yearComboBox.setItems(observableYearList);
 
         List<String> regionOptions = vineyardDAO.getRegions();
-        ObservableList<String> observableRegionsList = FXCollections.observableArrayList(regionOptions);
-        observableRegionsList.add(0, "Region");
+        ObservableList<String> observableRegionsList =
+                FXCollections.observableArrayList(regionOptions);
+        observableRegionsList.addFirst("Region");
         regionComboBox.setItems(observableRegionsList);
 
         List<String> varietyOptions = wineDAO.getVariety();
-        ObservableList<String> observableVarietyList = FXCollections.observableArrayList(varietyOptions);
-        observableVarietyList.add(0, "Variety");
+        ObservableList<String> observableVarietyList =
+                FXCollections.observableArrayList(varietyOptions);
+        observableVarietyList.addFirst("Variety");
         varietyComboBox.setItems(observableVarietyList);
     }
 
@@ -220,9 +243,8 @@ public class DataListPageController extends PageController{
      * to display on table.
      */
     @FXML
-    public void searchClicked() {
+    private void searchClicked() {
         String searching = searchTextField.getText();
-        System.out.println(searching);
         applySearchFilters();
     }
 
@@ -230,9 +252,12 @@ public class DataListPageController extends PageController{
      * Apply search and filters and updates table.
      */
     public void applySearchFilters() {
-        String sql = wineDAO.queryBuilder(searchTextField.getText(), varietyFilter,regionFilter,yearFilter,minPriceFilter,maxPriceFilter,minRatingFilter,maxRatingFilter, favouriteFilter);
+        String sql = wineDAO.queryBuilder(searchTextField.getText(), varietyFilter, regionFilter,
+                yearFilter, minPriceFilter, maxPriceFilter, minRatingFilter,
+                maxRatingFilter, favouriteFilter);
         List<Wine> queryResults = wineDAO.executeSearchFilter(sql, searchTextField.getText());
-        ObservableList<Wine> observableQueryResults = FXCollections.observableArrayList(queryResults);
+        ObservableList<Wine> observableQueryResults =
+                FXCollections.observableArrayList(queryResults);
         wineTable.setItems(observableQueryResults);
     }
 
@@ -242,7 +267,7 @@ public class DataListPageController extends PageController{
      * @param event KeyEvent that triggered the method, pressing of a key
      */
     @FXML
-    public void enterPressed(KeyEvent event) {
+    private void enterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             searchClicked();
         }
@@ -253,10 +278,9 @@ public class DataListPageController extends PageController{
      */
     public void onVarietyComboBoxClicked() {
         String selectedVariety = String.valueOf(varietyComboBox.getValue());
-        if (!(selectedVariety == "Variety" || selectedVariety == null)) {
+        if (!(Objects.equals(selectedVariety, "Variety") || selectedVariety == null)) {
             varietyFilter = selectedVariety;
         }
-        System.out.println(varietyFilter);
         applySearchFilters();
     }
 
@@ -265,7 +289,7 @@ public class DataListPageController extends PageController{
      */
     public void onRegionComboBoxClicked() {
         String selectedRegion = String.valueOf(regionComboBox.getValue());
-        if (!(selectedRegion == "Region" || selectedRegion == null)) {
+        if (!(Objects.equals(selectedRegion, "Region") || selectedRegion == null)) {
             regionFilter = selectedRegion;
         }
         applySearchFilters();
@@ -277,7 +301,7 @@ public class DataListPageController extends PageController{
     public void onYearComboBoxClicked() {
         //TODO: come back to - string vs int
         String selectedYear = String.valueOf(yearComboBox.getValue());
-        if (!(selectedYear == "Year" || selectedYear == null)) {
+        if (!(Objects.equals(selectedYear, "Year") || selectedYear == null)) {
             yearFilter = selectedYear;
         }
         applySearchFilters();
@@ -289,7 +313,7 @@ public class DataListPageController extends PageController{
      */
     public void onFavToggleButtonClicked() {
         boolean isFavourited = favToggleButton.isSelected();
-        if (isFavourited != false) {
+        if (isFavourited) {
             favouriteFilter = true;
         }
         applySearchFilters();
@@ -306,34 +330,34 @@ public class DataListPageController extends PageController{
         setDefaults();
         ObservableList<Wine> observableWines = FXCollections.observableArrayList(wineDAO.getAll());
         wineTable.setItems(observableWines);
-        varietyComboBox.setValue(varietyComboBox.getItems().get(0));
-        regionComboBox.setValue(regionComboBox.getItems().get(0));
-        yearComboBox.setValue(yearComboBox.getItems().get(0));
+        varietyComboBox.setValue(varietyComboBox.getItems().getFirst());
+        regionComboBox.setValue(regionComboBox.getItems().getFirst());
+        yearComboBox.setValue(yearComboBox.getItems().getFirst());
 
         favToggleButton.setSelected(false);
     }
+
     /**
      * Opens detailed wine view page for the wine that was double-clicked.
      *
-     * @param selectedWine the currently selected wine
      */
-    private void openDetailedViewPage(Wine selectedWine) {
+    private void openDetailedViewPage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DetailedViewPage.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/DetailedViewPage.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
             stage.setTitle("Wine Details");
             Scene scene = new Scene(root);
 
-            String styleSheetURL = "/fxml/style.css";
-            scene.getStylesheets().add(styleSheetURL);
+            String styleSheetUrl = "/fxml/style.css";
+            scene.getStylesheets().add(styleSheetUrl);
 
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
-            System.out.println(e);
-            e.printStackTrace();
+            log.error(e);
         }
     }
 

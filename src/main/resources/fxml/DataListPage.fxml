@@ -51,7 +51,7 @@
                      <GridPane.margin>
                         <Insets left="10.0" right="10.0" />
                      </GridPane.margin></Button>
-                  <Button fx:id="resetSearchFilterButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onResetSearchFilterButtonClicked" prefHeight="32.0" prefWidth="176.0" text="Reset Search and Filter" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                  <Button fx:id="resetSearchFilterButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onResetSearchFilterButtonClicked" prefHeight="24.0" prefWidth="176.0" text="Reset Search and Filter" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                      <padding>
                         <Insets left="20.0" />
                      </padding></Button>
@@ -133,12 +133,15 @@
          <TableView fx:id="wineTable" maxWidth="1000.0" prefHeight="290.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
            <columns>
              <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="589.3333486318588" resizable="false" text="Wine Name" />
-             <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" resizable="false" text="Price" />
-               <TableColumn fx:id="yearColumn" prefWidth="86.00003051757812" resizable="false" text="Year" />
-               <TableColumn fx:id="ratingColumn" prefWidth="88.00006103515625" resizable="false" text="Rating" />
-               <TableColumn fx:id="favouriteColumn" prefWidth="136.66668701171875" resizable="false" text="Favourite" />
+             <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="91.0" resizable="false" text="Price" />
+               <TableColumn fx:id="yearColumn" prefWidth="73.0" resizable="false" text="Year" />
+               <TableColumn fx:id="ratingColumn" prefWidth="79.0" resizable="false" text="Rating" />
+               <TableColumn fx:id="favouriteColumn" prefWidth="170.0" resizable="false" text="Coming Soon: Favourite" />
            </columns>
          </TableView>
       </VBox>
    </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="80.0" />
+   </padding>
 </GridPane>

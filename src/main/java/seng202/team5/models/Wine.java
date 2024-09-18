@@ -2,8 +2,7 @@ package seng202.team5.models;
 
 import java.time.Year;
 import java.util.Objects;
-import seng202.team5.repository.DrinksDAO;
-import seng202.team5.services.UserService;
+import seng202.team5.repository.ReviewDAO;
 
 /**
  * Default Wine class.
@@ -22,18 +21,14 @@ public class Wine {
     private String wineVariety;
     private String colour;
     private Vineyard vineyard;
-
-    private DrinksDAO drinksDAO;
+    private ReviewDAO reviewDAO;
 
     /**
-     * DrinksDAO constructor
+     * ReviewDAO constructor
      */
     {
-        this.drinksDAO = new DrinksDAO();
+        this.reviewDAO = new ReviewDAO();
     }
-
-
-
 
 
     /**
@@ -102,7 +97,8 @@ public class Wine {
      * @param vineYard the vineyard the wine comes from
      */
     public Wine(int id, String name, String description, int year, int ratingValue, double price,
-                String wineVariety, String colour, Vineyard vineYard, boolean favourite, String notes) {
+                String wineVariety, String colour, Vineyard vineYard,
+                boolean favourite, String notes) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -281,15 +277,19 @@ public class Wine {
     }
 
     /**
-     * set the variety name of a wine
+     * set the variety name of a wine.
+     *
      * @param unknownVariety string value to save as variety name
      */
-    public void setVariety(String unknownVariety) {wineVariety = unknownVariety;}
+    public void setVariety(String unknownVariety) {
+        wineVariety = unknownVariety;
+    }
 
 
     /**
      * checks if a wine has valid values for its attributes.
      * eg: year and price aren't 0
+     *
      * @return boolean whether given wine is valid enough to be added to database
      */
     public boolean isValidWine() {
@@ -298,8 +298,8 @@ public class Wine {
             return false;
         }
         //description can be empty
-        int currentYear = Year.now().getValue();//gets current year for future-proofing
-        if (year < 1700 | year > currentYear) {//1700 is arbitrary boundary
+        int currentYear = Year.now().getValue(); //gets current year for future-proofing
+        if (year < 1700 | year > currentYear) { //1700 is arbitrary boundary
             return false;
         }
         if (ratingValue < 0 | ratingValue > 100) {

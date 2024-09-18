@@ -89,6 +89,7 @@ public class UserService {
         try {
             String hashedPassword = hashPassword(password, UserService.generateSalt());
             if (username.isEmpty() || password.isEmpty()) {
+
                 return null;
             }
 
@@ -111,6 +112,7 @@ public class UserService {
 
             // Update user ID
             user.setId(userId);
+
             return user;
         } catch (DuplicateEntryException
                  | NoSuchAlgorithmException

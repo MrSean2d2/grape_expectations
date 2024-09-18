@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.junit.jupiter.api.Test;
-import seng202.team5.repository.DatabaseService;
+import seng202.team5.services.DatabaseService;
 
 /**
  * Tests for DatabaseService.

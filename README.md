@@ -1,6 +1,6 @@
 # Grape Expectations
 ## Your Guide to Wine
-Welcome to _Grape Expectations_ a desktop application which aims "to eliminate
+Welcome to _Grape Expectations_, a desktop application which aims "to eliminate
 the uncertainty and confusion by providing an organised and cohesive guide to the
 complex world of wine tasting" (Finn Brown et al., 2024). This application will
 enable you to explore wine data, take notes, rate wines, and keep track of your favourites.
@@ -35,6 +35,8 @@ IntelliJ has built-in support for Gradle. To import your project:
 
 **Note:** *If you run into dependency issues when running the app or the Gradle pop up doesn't appear then open the Gradle sidebar and click the Refresh icon.*
 
+**Note 2:** *If you are attempting to load data on Windows, you will need to set up a config.yaml file (discussed below). This is due to a pathing discrepancy between Linux and Windows. By default (on Linux), if no config.yaml file is present, the application will attempt to load the default dataset.*
+
 ## Build Project 
 1. Open a command line interface inside the project directory and run `./gradlew jar` to build a .jar file. 
 The file is located at build/libs/grape_expectatoins-1.0.jar
@@ -67,5 +69,6 @@ header values (note the first blank column):
 ```
 
 ## References
-Brown, F., Gascoigne, M., Miguel, A., Reitsma, S., Tam, C., & Wills, M. (2023).
+- Brown, F., Gascoigne, M., Miguel, A., Reitsma, S., Tam, C., & Wills, M. (2024).
 _Grape Expectations - Phase II_. SENG202 Team 5.
+- winemag-data-130k. (2018). Www.kaggle.com. https://www.kaggle.com/datasets/christopheiv/winemagdata130k

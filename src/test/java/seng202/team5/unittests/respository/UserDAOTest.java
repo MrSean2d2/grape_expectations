@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.User;
-import seng202.team5.repository.DatabaseService;
+import seng202.team5.services.DatabaseService;
 import seng202.team5.repository.UserDAO;
 
 
@@ -142,4 +142,5 @@ public class UserDAOTest {
         assertEquals("user2", userDAO.getOne(1).getUsername());
         assertEquals("admin", userDAO.getOne(1).getRole());
     }
+
 }

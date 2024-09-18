@@ -1,17 +1,17 @@
 package seng202.team5.unittests.respository;
 
 import java.util.List;
-import kotlin.NotImplementedError;
 import org.apache.commons.lang3.NotImplementedException;
-import org.junit.Assert;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.Vineyard;
-import seng202.team5.repository.DatabaseService;
+import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
+import seng202.team5.services.DatabaseService;
 
 /**
  * Unit tests for the VineyardDAO
@@ -19,6 +19,7 @@ import seng202.team5.repository.VineyardDAO;
 public class VineyardDAOTest {
     static VineyardDAO vineyardDAO;
     static DatabaseService databaseService;
+    private static WineDAO wineDAO;
 
 
     /**
@@ -97,6 +98,9 @@ public class VineyardDAOTest {
         Assertions.assertThrows(NotImplementedException.class, () -> vineyardDAO.update(vineyard));
     }
 
+    /**
+     * test getting a region of a vineyard
+     */
     @Test
     public void testGetRegions() {
         Vineyard vineyard = new Vineyard("Test", "A region");
@@ -106,6 +110,9 @@ public class VineyardDAOTest {
         Assertions.assertEquals("A region", regions.getFirst());
     }
 
+    /**
+     * test that regions with same name are distinct
+     */
     @Test
     public void testGetRegionsDistinct() {
         Vineyard vineyard1 = new Vineyard("Vineyard 1", "A region");
@@ -114,5 +121,33 @@ public class VineyardDAOTest {
         vineyardDAO.add(vineyard2);
         List<String> regions = vineyardDAO.getRegions();
         Assertions.assertEquals(1, regions.size());
+    }
+
+    /**
+     * test that vineyards are not added from an invalid wine with a valid vineyard
+     */
+    @Test
+    public void testVineyardAddedFromInvalidWine() {
+        Vineyard vineyard1 = new Vineyard("Vineyard 1", "A region");
+        Wine wine = new Wine("", "invalid wine with valid vineyard, shouldn't be added", 0, -1, -1, "",
+                "white",  vineyard1);
+        wineDAO = new WineDAO(vineyardDAO);
+        wineDAO.add(wine);
+        Assertions.assertEquals(0, wineDAO.getAll().size());
+        Assertions.assertEquals(0, vineyardDAO.getAll().size());
+    }
+
+    /**
+     * test that a vineyard is added to the database from a valid wine
+     */
+    @Test
+    public void testVineyardAddedFromWine() {
+        Vineyard vineyard1 = new Vineyard("Vineyard 1", "A region");
+        Wine wine = new Wine("wine", "valid wine with valid vineyard, shouldn't be added", 2000, 86, 20, "variety",
+                "white",  vineyard1);
+        wineDAO = new WineDAO(vineyardDAO);
+        wineDAO.add(wine);
+        Assertions.assertEquals(1, wineDAO.getAll().size());
+        Assertions.assertEquals(1, vineyardDAO.getAll().size());
     }
 }
