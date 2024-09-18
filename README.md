@@ -37,12 +37,12 @@ IntelliJ has built-in support for Gradle. To import your project:
 
 ## Build Project 
 1. Open a command line interface inside the project directory and run `./gradlew jar` to build a .jar file. 
-The file is located at build/libs/wino-1.0.jar
+The file is located at build/libs/grape_expectatoins-1.0.jar
 
 ## Run App
 1. If you haven't already, Build the project.
 2. Open a command line interface inside the project directory and run `cd build/libs` to change into the target directory.
-3. Run the command `java -jar wino-1.0.jar` to open the application.
+3. Run the command `java -jar grape_expectations-1.0.jar` to open the application.
 
 ## Configuration
 In order to select your dataset, make a configuration file name `config.yaml`
@@ -53,6 +53,10 @@ be used by default if no config file is present.
 ```yaml
 # config.yaml
 csvPath: /home/me/files/data.csv
+```
+```yaml
+# you can also do relative paths:
+csvPath: ./data.csv
 ```
 
 ## CSV Format
