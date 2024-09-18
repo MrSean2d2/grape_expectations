@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
+import seng202.team5.services.DatabaseService;
 
 /**
  * Wine Data Access Object class. This class implements DAOInterface and handles
@@ -41,7 +42,8 @@ public class WineDAO implements DAOInterface<Wine> {
     }
 
     /**
-     * gets vineyardDAO
+     * Gets vineyardDAO.
+     *
      * @return the vineyardDAO
      */
     public VineyardDAO getVineyardDAO() {
@@ -270,7 +272,7 @@ public class WineDAO implements DAOInterface<Wine> {
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM WINE WHERE id=?";
-        String sqlReview = "DELETE FROM drinks WHERE wineid=?";
+        String sqlReview = "DELETE FROM review WHERE wineid=?";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql);
                  PreparedStatement rps = conn.prepareStatement(sqlReview)) {
@@ -498,7 +500,7 @@ public class WineDAO implements DAOInterface<Wine> {
         if (minRating > 0 && minRating <= 100) {
             sql += " AND wine.rating >= " + minRating;
         }
-        //TODO: implement favourite toggle -- wait for drinks table
+        //TODO: implement favourite toggle -- wait for review table
 
         sql += ";";
         return sql;

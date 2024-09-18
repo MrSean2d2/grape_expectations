@@ -1,19 +1,17 @@
 package seng202.team5.unittests.respository;
 
 import java.util.List;
-import kotlin.NotImplementedError;
 import org.apache.commons.lang3.NotImplementedException;
-import org.junit.Assert;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-import seng202.team5.repository.DatabaseService;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
+import seng202.team5.services.DatabaseService;
 
 /**
  * Unit tests for the VineyardDAO

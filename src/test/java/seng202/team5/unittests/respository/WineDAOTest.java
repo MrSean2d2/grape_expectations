@@ -14,9 +14,9 @@ import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-import seng202.team5.repository.DatabaseService;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
+import seng202.team5.services.DatabaseService;
 
 /**
  * Unit tests for the WineDAO.
@@ -272,7 +272,7 @@ public class WineDAOTest {
         public void testSearchFilter() {
             List<Wine> result = wineDAO.executeSearchFilter(sql, "YUMMY");
             Assertions.assertEquals(1, result.size());
-            Assertions.assertTrue(result.get(0).getDescription().contains("YUMMY"));
+            Assertions.assertTrue(result.getFirst().getDescription().contains("YUMMY"));
         }
 
         /**

@@ -11,48 +11,49 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
-import seng202.team5.models.Drinks;
+import seng202.team5.models.Review;
+import seng202.team5.services.DatabaseService;
 
 /**
- * Database Access Object for the Drinks table in the SQL database.
+ * Database Access Object for the Review table in the SQL database.
  *
  * @author Martyn Gascoigne
  */
-public class DrinksDAO implements DAOInterface<Drinks> {
+public class ReviewDAO implements DAOInterface<Review> {
     private final DatabaseService databaseService;
-    private static final Logger log = LogManager.getLogger(DrinksDAO.class);
+    private static final Logger log = LogManager.getLogger(ReviewDAO.class);
 
 
     /**
      * Constructor - initialise / grab the singleton of DatabaseService.
      */
-    public DrinksDAO() {
+    public ReviewDAO() {
         databaseService = DatabaseService.getInstance();
     }
 
 
     /**
-     * Gets all the reviews in the Drinks table.
+     * Gets all the reviews in the Review table.
      *
-     * @return list of all drinks objects in the table
+     * @return list of all review objects in the table
      */
     @Override
-    public List<Drinks> getAll() {
-        List<Drinks> drinks = new ArrayList<>();
-        String sql = "SELECT * FROM drinks";
+    public List<Review> getAll() {
+        List<Review> reviews = new ArrayList<>();
+        String sql = "SELECT * FROM review";
         try (Connection conn = databaseService.connect();
                  Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Drinks review = new Drinks(
+                Review review = new Review(
                         rs.getInt("wineid"),
                         rs.getInt("userid"),
                         rs.getBoolean("favorite"),
                         rs.getString("notes"),
                         rs.getInt("rating"));
-                drinks.add(review);
+                reviews.add(review);
             }
-            return drinks;
+            return reviews;
         } catch (SQLException sqlException) {
             log.error(sqlException);
             return new ArrayList<>();
@@ -71,7 +72,7 @@ public class DrinksDAO implements DAOInterface<Drinks> {
      */
     @Deprecated
     @Override
-    public Drinks getOne(int id) throws NotImplementedException {
+    public Review getOne(int id) throws NotImplementedException {
         throw new NotImplementedException(
                 "Don't use this method! You must specify a wineId and a userId!");
     }
@@ -83,23 +84,23 @@ public class DrinksDAO implements DAOInterface<Drinks> {
      * @param id id of the user
      * @return list of reviews from the given user
      */
-    public List<Drinks> getFromUser(int id) {
-        List<Drinks> drinks = new ArrayList<>();
-        String sql = "SELECT * FROM drinks WHERE userid=?";
+    public List<Review> getFromUser(int id) {
+        List<Review> reviews = new ArrayList<>();
+        String sql = "SELECT * FROM review WHERE userid=?";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Drinks review = new Drinks(
+                Review review = new Review(
                         rs.getInt("wineid"),
                         rs.getInt("userid"),
                         rs.getBoolean("favorite"),
                         rs.getString("notes"),
                         rs.getInt("rating"));
-                drinks.add(review);
+                reviews.add(review);
             }
-            return drinks;
+            return reviews;
         } catch (SQLException sqlException) {
             log.error(sqlException);
             return new ArrayList<>();
@@ -113,23 +114,23 @@ public class DrinksDAO implements DAOInterface<Drinks> {
      * @param id id of the wine
      * @return list of reviews of the given wine
      */
-    public List<Drinks> getFromWine(int id) {
-        List<Drinks> drinks = new ArrayList<>();
-        String sql = "SELECT * FROM drinks WHERE wineid=?";
+    public List<Review> getFromWine(int id) {
+        List<Review> reviews = new ArrayList<>();
+        String sql = "SELECT * FROM review WHERE wineid=?";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Drinks review = new Drinks(
+                Review review = new Review(
                         rs.getInt("wineid"),
                         rs.getInt("userid"),
                         rs.getBoolean("favorite"),
                         rs.getString("notes"),
                         rs.getInt("rating"));
-                drinks.add(review);
+                reviews.add(review);
             }
-            return drinks;
+            return reviews;
         } catch (SQLException sqlException) {
             log.error(sqlException);
             return new ArrayList<>();
@@ -144,16 +145,16 @@ public class DrinksDAO implements DAOInterface<Drinks> {
      * @param userId id of the user
      * @return The review of the given wine from a given user
      */
-    public Drinks getWineReview(int wineId, int userId) {
-        Drinks review;
-        String sql = "SELECT * FROM drinks WHERE wineid=? AND userid=?";
+    public Review getWineReview(int wineId, int userId) {
+        Review review;
+        String sql = "SELECT * FROM review WHERE wineid=? AND userid=?";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, wineId);
             ps.setInt(2, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                review = new Drinks(
+                review = new Review(
                         rs.getInt("wineid"),
                         rs.getInt("userid"),
                         rs.getBoolean("favorite"),
@@ -176,9 +177,9 @@ public class DrinksDAO implements DAOInterface<Drinks> {
      * @return return 1 if it could be created, -1 otherwise.
      */
     @Override
-    public int add(Drinks toAdd) throws DuplicateEntryException {
+    public int add(Review toAdd) throws DuplicateEntryException {
         String sql =
-                "INSERT INTO drinks (wineid, userid, favorite, notes, rating) VALUES (?,?,?,?,?)";
+                "INSERT INTO review (wineid, userid, favorite, notes, rating) VALUES (?,?,?,?,?)";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, toAdd.getWineId());
@@ -195,7 +196,8 @@ public class DrinksDAO implements DAOInterface<Drinks> {
     }
 
     /**
-     * implementation of DAOInterface delete
+     * implementation of DAOInterface delete.
+     *
      * @param id id of object to delete
      */
     @Override
@@ -212,7 +214,7 @@ public class DrinksDAO implements DAOInterface<Drinks> {
      * @param userId id of the user
      */
     public void delete(int wineId, int userId) {
-        String sql = "DELETE FROM drinks WHERE wineid=? AND userid=?";
+        String sql = "DELETE FROM review WHERE wineid=? AND userid=?";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, wineId);
@@ -231,8 +233,8 @@ public class DrinksDAO implements DAOInterface<Drinks> {
      *                 (this object must be able to identify itself and its previous self)
      */
     @Override
-    public void update(Drinks toUpdate) {
-        String sql = "UPDATE drinks SET favorite=?, "
+    public void update(Review toUpdate) {
+        String sql = "UPDATE review SET favorite=?, "
                 + "notes=?, "
                 + "rating=? "
                 + "WHERE wineid=? AND userid=?";
