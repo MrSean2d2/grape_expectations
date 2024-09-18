@@ -28,7 +28,8 @@ public class VineyardDAOTest {
     @BeforeAll
     static void setup() throws InstanceAlreadyExistsException {
         DatabaseService.removeInstance();
-        databaseService = DatabaseService.initialiseInstanceWithUrl("jdbc:sqlite:./src/test/resources/test_database.db");
+        databaseService = DatabaseService.initialiseInstanceWithUrl(
+                "jdbc:sqlite:./src/test/resources/test_database.db");
         vineyardDAO = new VineyardDAO();
     }
 
@@ -37,7 +38,7 @@ public class VineyardDAOTest {
      * Reset the database before each test.
      */
     @BeforeEach
-    void resetDB() {
+    void resetDb() {
         databaseService.resetDb();
     }
 
@@ -55,7 +56,7 @@ public class VineyardDAOTest {
      * Test adding a Vineyard.
      */
     @Test
-    public void testAddVineyardOK() {
+    public void testAddVineyardOk() {
         Vineyard toAdd = new Vineyard("test1", "region1");
         vineyardDAO.add(toAdd);
         Assertions.assertEquals(1, vineyardDAO.getAll().size());
@@ -80,11 +81,22 @@ public class VineyardDAOTest {
      * Test getting a vineyard from its id.
      */
     @Test
-    public void testGetVineyardByID() {
+    public void testGetVineyardById() {
         Vineyard toAdd = new Vineyard("test", "region1");
         int id = vineyardDAO.add(toAdd);
         Vineyard vineyard = vineyardDAO.getOne(id);
         Assertions.assertEquals(toAdd.getName(), vineyard.getName());
+    }
+
+    /**
+     * Test getting a vineyard from its name and region.
+     */
+    @Test
+    public void testGetByNameRegion() {
+        Vineyard toAdd = new Vineyard("Test", "Region1");
+        int id = vineyardDAO.add(toAdd);
+        int actual = vineyardDAO.getIdFromNameRegion(toAdd.getName(), toAdd.getRegion());
+        Assertions.assertEquals(id, actual);
     }
 
 
@@ -129,8 +141,9 @@ public class VineyardDAOTest {
     @Test
     public void testVineyardAddedFromInvalidWine() {
         Vineyard vineyard1 = new Vineyard("Vineyard 1", "A region");
-        Wine wine = new Wine("", "invalid wine with valid vineyard, shouldn't be added", 0, -1, -1, "",
-                "white",  vineyard1);
+        Wine wine =
+                new Wine("", "invalid wine with valid vineyard, shouldn't be added", 0, -1, -1, "",
+                        "white", vineyard1);
         wineDAO = new WineDAO(vineyardDAO);
         wineDAO.add(wine);
         Assertions.assertEquals(0, wineDAO.getAll().size());
@@ -143,8 +156,10 @@ public class VineyardDAOTest {
     @Test
     public void testVineyardAddedFromWine() {
         Vineyard vineyard1 = new Vineyard("Vineyard 1", "A region");
-        Wine wine = new Wine("wine", "valid wine with valid vineyard, shouldn't be added", 2000, 86, 20, "variety",
-                "white",  vineyard1);
+        Wine wine =
+                new Wine("wine", "valid wine with valid vineyard, shouldn't be added", 2000, 86, 20,
+                        "variety",
+                        "white", vineyard1);
         wineDAO = new WineDAO(vineyardDAO);
         wineDAO.add(wine);
         Assertions.assertEquals(1, wineDAO.getAll().size());
