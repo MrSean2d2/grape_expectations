@@ -195,7 +195,8 @@ public class DrinksDAO implements DAOInterface<Drinks> {
     }
 
     /**
-     * implementation of DAOInterface delete
+     * implementation of DAOInterface delete.
+     *
      * @param id id of object to delete
      */
     @Override

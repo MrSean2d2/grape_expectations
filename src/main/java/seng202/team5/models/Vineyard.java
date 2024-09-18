@@ -24,7 +24,8 @@ public class Vineyard {
 
     /**
      * constructor for a vineyard object,
-     * contains the ID of the vineyard
+     * contains the ID of the vineyard.
+     *
      * @param id the id of the vineyard (unique)
      * @param name the name of the vineyard
      * @param region where vineyard is located
@@ -43,7 +44,8 @@ public class Vineyard {
     }
 
     /**
-     * gets the region of the vineyard
+     * gets the region of the vineyard.
+     *
      * @return String name of vineyard
      */
     public String getRegion() {
@@ -51,7 +53,8 @@ public class Vineyard {
     }
 
     /**
-     * gets the id of the vineyard
+     * gets the id of the vineyard.
+     *
      * @return int id of vineyard
      */
     public int getId() {
@@ -59,7 +62,8 @@ public class Vineyard {
     }
 
     /**
-     * sets the vineyard id to the given value
+     * sets the vineyard id to the given value.
+     *
      * @param id specified value to change id to
      */
     public void setId(int id) {
@@ -68,7 +72,8 @@ public class Vineyard {
 
     /**
      * checks if the vineyard is equal to another vineyard object
-     * does this by checking each attribute of vineyards against each other
+     * does this by checking each attribute of vineyards against each other.
+     *
      * @param o vineyard object that is compared to the vineyard
      * @return boolean whether all attributes of the 2 vineyards are the same
      */
@@ -81,7 +86,7 @@ public class Vineyard {
             return false;
         }
         Vineyard vineyard = (Vineyard) o;
-        return id == vineyard.id && Objects.equals(name, vineyard.name) &&
-                Objects.equals(region, vineyard.region);
+        return id == vineyard.id && Objects.equals(name, vineyard.name)
+                && Objects.equals(region, vineyard.region);
     }
 }

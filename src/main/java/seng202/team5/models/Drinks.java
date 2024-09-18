@@ -1,8 +1,7 @@
 package seng202.team5.models;
 
-import seng202.team5.repository.DrinksDAO;
-
 import java.util.Objects;
+import seng202.team5.repository.DrinksDAO;
 
 /**
  * Class to record drink review information.
@@ -16,15 +15,7 @@ public class Drinks {
     private String notes;
     private int rating;
 
-    private DrinksDAO drinksDAO;
-
-    /**
-     * DrinksDAO constructor
-     */
-    {
-        this.drinksDAO = new DrinksDAO();
-    }
-
+    private DrinksDAO drinksDAO = new DrinksDAO();
 
     /**
      * Constructor with IDs only.

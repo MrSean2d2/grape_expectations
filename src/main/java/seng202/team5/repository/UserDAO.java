@@ -1,6 +1,10 @@
 package seng202.team5.repository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -181,7 +185,7 @@ public class UserDAO implements DAOInterface<User> {
         String sqlReview = "DELETE FROM drinks WHERE userid=?";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql);
-                PreparedStatement rps = conn.prepareStatement(sqlReview)){
+                PreparedStatement rps = conn.prepareStatement(sqlReview)) {
 
             ps.setInt(1, id);
             ps.executeUpdate();
