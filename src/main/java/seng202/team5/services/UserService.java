@@ -94,7 +94,6 @@ public class UserService {
             }
 
             if (!userDAO.userIsUnique(username)) {
-                System.out.println("here");
                 return null;
             }
 

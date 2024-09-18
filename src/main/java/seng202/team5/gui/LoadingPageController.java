@@ -3,9 +3,12 @@ package seng202.team5.gui;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
+/**
+ * controller for the loading page
+ * contains a spinning gif
+ */
 public class LoadingPageController {
 
     @FXML

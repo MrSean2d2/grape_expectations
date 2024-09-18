@@ -65,6 +65,9 @@ public class DataLoadServiceTest {
         assertEquals(87, wine.getRating());
     }
 
+    /**
+     * test that a wine is not made from an object with invalid price attribute
+     */
     @Test
     public void loadWinesTestInvalidPrice() {
         csvFilePath = System.getProperty("user.dir") + "/src/test/resources/test_small.csv";

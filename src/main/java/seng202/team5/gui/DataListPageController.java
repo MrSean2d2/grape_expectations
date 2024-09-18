@@ -140,14 +140,12 @@ public class DataListPageController extends PageController {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        //favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
 
         ObservableList<Wine> wines = FXCollections.observableArrayList(WineService.getInstance()
                 .getWineList());
 
         // Add data to TableView
         wineTable.setItems(wines);
-        System.out.println(wines.size());
 
         wineTable.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
@@ -162,9 +160,6 @@ public class DataListPageController extends PageController {
                 }
             }
         });
-
-
-
     }
 
     /**
@@ -266,7 +261,6 @@ public class DataListPageController extends PageController {
     @FXML
     public void searchClicked() {
         String searching = searchTextField.getText();
-        System.out.println(searching);
         applySearchFilters();
     }
 
@@ -303,7 +297,6 @@ public class DataListPageController extends PageController {
         if (!(Objects.equals(selectedVariety, "Variety") || selectedVariety == null)) {
             varietyFilter = selectedVariety;
         }
-        System.out.println(varietyFilter);
         applySearchFilters();
     }
 

@@ -150,9 +150,9 @@ public class WineDAOTest {
         Wine testWine1 =
                 new Wine("testWine", "tasty", 2023, 85, 15.99, "testVariety", "Red", testVineyard1);
         Wine testWine2 = new Wine("testWine2", "tasty", 2023, 85, 15.99, "testVariety", "Red",
-                testVineyard1);
+                testVineyard2);
         Wine testWine3 = new Wine("testWine3", "tasty", 2023, 85, 15.99, "testVariety", "Red",
-                testVineyard1);
+                testVineyard3);
 
         List<Wine> testWineList = new ArrayList<>() {{
                 add(testWine1);
@@ -271,7 +271,6 @@ public class WineDAOTest {
         @Test
         public void testSearchFilter() {
             List<Wine> result = wineDAO.executeSearchFilter(sql, "YUMMY");
-            System.out.println(result.get(0).getDescription());
             Assertions.assertEquals(1, result.size());
             Assertions.assertTrue(result.get(0).getDescription().contains("YUMMY"));
         }
