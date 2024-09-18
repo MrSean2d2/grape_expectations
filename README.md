@@ -35,7 +35,6 @@ IntelliJ has built-in support for Gradle. To import your project:
 
 **Note:** *If you run into dependency issues when running the app or the Gradle pop up doesn't appear then open the Gradle sidebar and click the Refresh icon.*
 
-**Note 2:** *If you are attempting to load data on Windows, you will need to set up a config.yaml file (discussed below). This is due to a pathing discrepancy between Linux and Windows. By default (on Linux), if no config.yaml file is present, the application will attempt to load the default dataset.*
 
 ## Build Project 
 1. Open a command line interface inside the project directory and run `./gradlew jar` to build a .jar file. 
