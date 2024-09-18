@@ -28,7 +28,7 @@ public class MainWindow extends Application {
         System.setProperty("prism.lcdtext", "false");
 
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/Header.fxml"));
-
+        Parent root = baseLoader.load();
 
         HeaderController baseController = baseLoader.getController();
         baseController.init(primaryStage);
@@ -37,7 +37,7 @@ public class MainWindow extends Application {
         primaryStage.getIcons().add(
                 new Image(getClass().getResource("/images/favicon.png").toExternalForm()));
 
-        Parent root = baseLoader.load();
+
         Scene scene = new Scene(root, 1200, 800);
 
         String styleSheetUrl = "/fxml/style.css";
