@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import seng202.team5.models.User;
-import seng202.team5.repository.DrinksDAO;
+import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.UserDAO;
 import seng202.team5.services.UserService;
 
@@ -71,8 +71,8 @@ public class AccountManagePageController extends PageController {
         userIconField.setCenter(circleCutout);
 
         // Update favourite count text
-        DrinksDAO drinksDAO = new DrinksDAO();
-        int numWines = drinksDAO.getFromUser(curUser.getId()).size();
+        ReviewDAO reviewDAO = new ReviewDAO();
+        int numWines = reviewDAO.getFromUser(curUser.getId()).size();
         String wineLabel = "wine";
         if (numWines != 1) {
             wineLabel = "wines";

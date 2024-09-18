@@ -9,8 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.User;
-import seng202.team5.repository.DatabaseService;
-import seng202.team5.repository.UserDAO;
+import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
 
 public class UserServiceTest {
@@ -19,7 +18,7 @@ public class UserServiceTest {
 
     /**
      * set up the background info for each test
-     * @throws InstanceAlreadyExistsException
+     * @throws InstanceAlreadyExistsException if the instance already exists
      */
     @BeforeEach
     public void setUp() throws InstanceAlreadyExistsException {
@@ -85,8 +84,8 @@ public class UserServiceTest {
      * Test sucessful register of user.
      */
     @Test
-    public void registerUserTest(){
-        User testUser = userService.registerUser("testUser3","password");
+    public void registerUserTest() {
+        User testUser = userService.registerUser("testUser3", "password");
         assertEquals("testUser3", testUser.getUsername());
     }
 
@@ -95,35 +94,36 @@ public class UserServiceTest {
      * Test username and password is empty.
      */
     @Test
-    public void registerNullUserTest(){
-    User testUser = userService.registerUser("","");
-    assertNull(testUser);
+    public void registerNullUserTest() {
+        User testUser = userService.registerUser("", "");
+        assertNull(testUser);
     }
 
     /**
      * Register non-unique username test.
      */
     @Test
-    public void registerNotUniqueUserTest(){
-        userService.registerUser("testUser","pass");
-        User testUser1 = userService.registerUser("testUser","pass2");
+    public void registerNotUniqueUserTest() {
+        userService.registerUser("testUser", "pass");
+        User testUser1 = userService.registerUser("testUser", "pass2");
         assertNull(testUser1);
     }
+
     /**
      * Test register user has unique id.
      */
     @Test
-    public void registerDifferentUsersTest(){
-        User testUser1 = userService.registerUser("testUser1","pass1");
-        User testUser2 = userService.registerUser("testUser2","pass2");
-        assertFalse(testUser1.getId()== testUser2.getId());
+    public void registerDifferentUsersTest() {
+        User testUser1 = userService.registerUser("testUser1", "pass1");
+        User testUser2 = userService.registerUser("testUser2", "pass2");
+        assertFalse(testUser1.getId() == testUser2.getId());
     }
 
     /**
      * Test user sign in with correct credentials.
      */
     @Test
-    public void correctSignInTest(){
+    public void correctSignInTest() {
         userService.registerUser("testUser1","pass");
 
         User signedInUser = userService.signinUser("testUser1", "pass");
@@ -135,13 +135,11 @@ public class UserServiceTest {
      * Test user sign in with incorrect credentials.
      */
     @Test
-    public void incorrectSignInTest(){
+    public void incorrectSignInTest() {
         userService.registerUser("testUser","pass");
 
         User signedInUser = userService.signinUser("testUser", "wrongPass");
 
         assertNull(signedInUser);
     }
-
-
 }

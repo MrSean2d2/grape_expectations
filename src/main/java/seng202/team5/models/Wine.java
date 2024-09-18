@@ -2,7 +2,7 @@ package seng202.team5.models;
 
 import java.time.Year;
 import java.util.Objects;
-import seng202.team5.repository.DrinksDAO;
+import seng202.team5.repository.ReviewDAO;
 
 /**
  * Default Wine class.
@@ -21,6 +21,14 @@ public class Wine {
     private String wineVariety;
     private String colour;
     private Vineyard vineyard;
+    private ReviewDAO reviewDAO;
+
+    /**
+     * ReviewDAO constructor
+     */
+    {
+        this.reviewDAO = new ReviewDAO();
+    }
 
 
     /**

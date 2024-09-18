@@ -9,9 +9,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import seng202.team5.exceptions.DuplicateEntryException;
-import seng202.team5.models.Drinks;
+import seng202.team5.models.Review;
 import seng202.team5.models.Wine;
-import seng202.team5.repository.DrinksDAO;
+import seng202.team5.repository.ReviewDAO;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
 
@@ -106,13 +106,13 @@ public class DetailedViewPageController {
 
         if (UserService.getInstance().getCurrentUser() != null) {
             userId = UserService.getInstance().getCurrentUser().getId();
-            DrinksDAO drinksDAO = new DrinksDAO();
-            Drinks review = drinksDAO.getWineReview(selectedWineId, userId);
+            ReviewDAO reviewDAO = new ReviewDAO();
+            Review review = reviewDAO.getWineReview(selectedWineId, userId);
 
             if (review == null) {
-                review = new Drinks(selectedWineId, userId);
+                review = new Review(selectedWineId, userId);
                 try {
-                    drinksDAO.add(review);
+                    reviewDAO.add(review);
                 } catch (DuplicateEntryException e) {
                     e.printStackTrace();
                 }
@@ -146,8 +146,8 @@ public class DetailedViewPageController {
         int clickedStarIndex = Integer.parseInt(
                 clickedStar.getId().substring(4)); // Get star number (e.g., star1 -> 1)
 
-        DrinksDAO drinksDAO = new DrinksDAO();
-        Drinks review = drinksDAO.getWineReview(selectedWineId, userId);
+        ReviewDAO reviewDAO = new ReviewDAO();
+        Review review = reviewDAO.getWineReview(selectedWineId, userId);
 
         if (review != null) {
             review.setRating(clickedStarIndex);
@@ -162,8 +162,8 @@ public class DetailedViewPageController {
      */
     @FXML
     private void handleToggleFavourite(ActionEvent event) {
-        DrinksDAO drinksDAO = new DrinksDAO();
-        Drinks review = drinksDAO.getWineReview(selectedWineId, userId);
+        ReviewDAO reviewDAO = new ReviewDAO();
+        Review review = reviewDAO.getWineReview(selectedWineId, userId);
 
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
@@ -183,8 +183,8 @@ public class DetailedViewPageController {
      */
     @FXML
     private void handleSaveNotes(ActionEvent event) {
-        DrinksDAO drinksDAO = new DrinksDAO();
-        Drinks review = drinksDAO.getWineReview(selectedWineId, userId);
+        ReviewDAO reviewDAO = new ReviewDAO();
+        Review review = reviewDAO.getWineReview(selectedWineId, userId);
 
         if (UserService.getInstance().getCurrentUser() == null) {
             close();

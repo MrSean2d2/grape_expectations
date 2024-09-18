@@ -11,6 +11,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Vineyard;
+import seng202.team5.services.DatabaseService;
 
 /**
  * Implementation of Database Access Object for Vineyard related actions.
@@ -172,7 +173,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
     }
 
     /**
-     * clear all vineyards from the database.
+     * Clear all vineyards from the database.
      */
     public void truncateVineyards() {
         String sql = "Delete FROM vineyard;";
