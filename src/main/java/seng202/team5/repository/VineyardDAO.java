@@ -167,6 +167,10 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
         }
     }
 
+    /**
+     * Update the vineyard in the database
+     * Not currently implemented.
+     */
     @Override
     public void update(Vineyard toUpdate) {
         throw new NotImplementedException();
