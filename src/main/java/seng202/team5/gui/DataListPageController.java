@@ -112,8 +112,6 @@ public class DataListPageController extends PageController {
         searchButton.setTooltip(new Tooltip("Enter search query"));
         resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
 
-
-
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
@@ -138,9 +136,12 @@ public class DataListPageController extends PageController {
                 }
             }
         });
+
+        // Sets up default filter buttons
         setDefaults();
         setUpFilterButtons();
-        // initialises listeners on sliders
+
+        // Initialises listeners on sliders
         initializeSliderListeners();
         initializeSliderValueListeners();
     }
