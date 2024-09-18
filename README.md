@@ -14,7 +14,7 @@ enable you to explore wine data, take notes, rate wines, and keep track of your 
 - Matthew Wills
 
 ## Prerequisites
-- JDK >= 21 [click here to get the latest stable OpenJDK release (as of writing this README)](https://jdk.java.net/18/)
+- JDK >= 21 [click here to get the latest stable OpenJDK release (as of writing this README)](https://jdk.java.net/)
 - Gradle [Download](https://gradle.org/releases/) and [Install](https://gradle.org/install/)
 
 
@@ -35,16 +35,15 @@ IntelliJ has built-in support for Gradle. To import your project:
 
 **Note:** *If you run into dependency issues when running the app or the Gradle pop up doesn't appear then open the Gradle sidebar and click the Refresh icon.*
 
-**Note 2:** *If you are attempting to load data on Windows, you will need to set up a config.yaml file (discussed below). This is due to a pathing discrepancy between Linux and Windows. By default (on Linux), if no config.yaml file is present, the application will attempt to load the default dataset.*
 
 ## Build Project 
 1. Open a command line interface inside the project directory and run `./gradlew jar` to build a .jar file. 
-The file is located at target/wino-1.0.jar
+The file is located at build/libs/grape_expectatoins-1.0.jar
 
 ## Run App
 1. If you haven't already, Build the project.
-2. Open a command line interface inside the project directory and run `cd target` to change into the target directory.
-3. Run the command `java -jar wino-1.0.jar` to open the application.
+2. Open a command line interface inside the project directory and run `cd build/libs` to change into the target directory.
+3. Run the command `java -jar grape_expectations-1.0.jar` to open the application.
 
 ## Configuration
 In order to select your dataset, make a configuration file name `config.yaml`
@@ -55,6 +54,10 @@ be used by default if no config file is present.
 ```yaml
 # config.yaml
 csvPath: /home/me/files/data.csv
+```
+```yaml
+# you can also do relative paths:
+csvPath: ./data.csv
 ```
 
 ## CSV Format
