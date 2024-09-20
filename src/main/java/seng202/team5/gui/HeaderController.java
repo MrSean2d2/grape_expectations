@@ -1,18 +1,18 @@
 package seng202.team5.gui;
 
-import java.io.IOException;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import seng202.team5.services.UserService;
+
+import java.io.IOException;
 
 
 /**
@@ -59,6 +59,10 @@ public class HeaderController {
 
         scrollPane.setOnMousePressed(Event::consume);
         pageContainer.setOnMousePressed(Event::consume);
+
+        scrollPane.setOnMousePressed((Event) -> { // remove weird focus...
+            pageContainer.requestFocus();
+        });
 
         logoButton.setTooltip(new Tooltip("Home page"));
         homeButton.setTooltip(new Tooltip("Home page"));
