@@ -17,24 +17,54 @@
 }
 
 
-.tool-bar {
+#toolBar {
     -fx-background-color: #ffffff;
-    -fx-padding: 5;
 }
 
 .button {
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
     -fx-padding: 8 15;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-border-color: #fff;
 }
+
 
 .button:hover {
-    -fx-background-color: #dddddd;
+    -fx-border-color: #bbb;
     -fx-text-fill: #000000;
+    -fx-border-width: 3;
+    -fx-border-insets: -1;
 }
 
+.toggle-button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-padding: 8 15;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-border-color: #fff;
+}
+
+
+.toggle-button:hover {
+    -fx-border-color: #bbb;
+    -fx-text-fill: #000000;
+    -fx-border-width: 3;
+    -fx-border-insets: -1;
+}
+
+
+
 .button.active {
-    -fx-background-color: #4db265;
+    -fx-border-color: #4db265;
+    -fx-border-radius: 5;
+}
+
+.button.active .image-view {
 }
 
 .text-field.field_error {
@@ -47,18 +77,39 @@
 .text-field {
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
-    -fx-padding: 8 15;
+    -fx-background-radius: 5;
+    -fx-padding: 10 10;
 }
 
-.menu-button {
+.combo-box {
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
-    -fx-padding: 2;
+    -fx-padding: 4 10;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-border-color: #fff;
 }
 
-.menu-button:hover {
-    -fx-background-color: #dddddd;
+.combo-box:hover {
+    -fx-border-color: #bbb;
     -fx-text-fill: #000000;
+    -fx-border-width: 3;
+    -fx-border-insets: -1;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-padding: 4 10;
+}
+
+.combo-box .list-cell:odd {
+    -fx-background-color: #eee;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #bbb;
 }
 
 .menu-item {
@@ -80,7 +131,7 @@
     -fx-background-color: #cccccc;
 }
 
-#homepage{
+#backgroundImage{
     -fx-background-image: url("../images/vineyard_background.jpg");
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
@@ -89,6 +140,7 @@
 
 .table-view {
     -fx-background-color: transparent;
+    -fx-table-cell-border-color: #ddd;
 }
 
 .table-view:focused {
@@ -115,9 +167,21 @@
     -fx-background-color: #eeeeee;
 }
 
-.table-row-cell:selected {
-    -fx-background-color: #4db265;
-    -fx-text-fill: #ffffff;
+.table-row-cell:hover .table-cell{
+    -fx-background-color: #bbb;
+    -fx-text-fill: #000;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
+}
+
+.table-row-cell:selected .table-cell{
+    -fx-background-color: #4db265;
+    -fx-text-fill: #000;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+    -fx-border-width: 0;
+}
+
+.table-row-cell {
+    -fx-text-fill: #000;
 }

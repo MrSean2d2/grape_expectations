@@ -16,4 +16,4 @@ generate_artifacts:
     - ./gradlew clean jar
   artifacts:
     paths:
-      - build/libs/wino-1.0-SNAPSHOT.jar
+      - build/libs/grape_expectations-1.0.jar

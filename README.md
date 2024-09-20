@@ -1,31 +1,30 @@
-# SENG202 Template Project Overview
-Welcome to the template project for SENG202-2024 which you will transform into your own.
-This README file includes some useful information to help you get started.
-However, we expect that this README becomes your own
+# Grape Expectations
+## Your Guide to Wine
+Welcome to _Grape Expectations_, a desktop application which aims "to eliminate
+the uncertainty and confusion by providing an organised and cohesive guide to the
+complex world of wine tasting" (Finn Brown et al., 2024). This application will
+enable you to explore wine data, take notes, rate wines, and keep track of your favourites.
 
 ## Authors
-- SENG202 Teaching team
+- Finn Brown
+- Martyn Gascoigne
+- Amiele Miguel
+- Sean Reitsma
+- Caitlin Tam
+- Matthew Wills
 
 ## Prerequisites
-- JDK >= 21 [click here to get the latest stable OpenJDK release (as of writing this README)](https://jdk.java.net/18/)
+- JDK >= 21 [click here to get the latest stable OpenJDK release (as of writing this README)](https://jdk.java.net/)
 - Gradle [Download](https://gradle.org/releases/) and [Install](https://gradle.org/install/)
 
 
-## What's Included
-This project comes with some basic examples of the following (including dependencies in the build.gradle file):
+## Dependencies
+This project requires the following (use gradle to download dependencies).
 - JavaFX
 - Logging (with Log4J)
 - Junit 5
 - Mockito (mocking unit tests)
 - Cucumber (for acceptance testing)
-
-We have also included a basic setup of the Gradle project and Tasks required for the course including:
-- Required dependencies for the functionality above
-- Build plugins:
-    - JavaFX Gradle plugin for working with (and packaging) JavaFX applications easily
-
-You are expected to understand the content provided and build your application on top of it. If there is anything you
-would like more information about please reach out to the tutors.
 
 ## Importing Project (Using IntelliJ)
 IntelliJ has built-in support for Gradle. To import your project:
@@ -36,16 +35,39 @@ IntelliJ has built-in support for Gradle. To import your project:
 
 **Note:** *If you run into dependency issues when running the app or the Gradle pop up doesn't appear then open the Gradle sidebar and click the Refresh icon.*
 
-# TODO
-
-## Rename Project
-- Open `build.gradle` and change all references to `team0` with your team number eg. `team13`
-- Rename the directory `src/main/java/seng202/team0` to your team number eg. `src/main/java/seng202/team13`
 
 ## Build Project 
-1. Open a command line interface inside the project directory and run `./gradlew run` to build a .jar file. The file is located at target/wino-1.0-SNAPSHOT.jar
+1. Open a command line interface inside the project directory and run `./gradlew jar` to build a .jar file. 
+The file is located at build/libs/grape_expectatoins-1.0.jar
 
 ## Run App
-- If you haven't already, Build the project.
-- Open a command line interface inside the project directory and run `cd target` to change into the target directory.
-- Run the command `java -jar wino-1.0-SNAPSHOT.jar` to open the application.
+1. If you haven't already, Build the project.
+2. Open a command line interface inside the project directory and run `cd build/libs` to change into the target directory.
+3. Run the command `java -jar grape_expectations-1.0.jar` to open the application.
+
+## Configuration
+In order to select your dataset, make a configuration file name `config.yaml`
+in the same directory as the built jar file. A bundled New Zealand dataset will
+be used by default if no config file is present.
+
+### Config Example
+```yaml
+# config.yaml
+csvPath: /home/me/files/data.csv
+```
+```yaml
+# you can also do relative paths:
+csvPath: ./data.csv
+```
+
+## CSV Format
+The CSV file used must conform to the schema of the WineMag dataset, which has
+header values (note the first blank column):
+```
+,country,description,designation,points,price,province,region_1,region_2,taster_name,taster_twitter_handle,title,variety,winery
+```
+
+## References
+- Brown, F., Gascoigne, M., Miguel, A., Reitsma, S., Tam, C., & Wills, M. (2024).
+_Grape Expectations - Phase II_. SENG202 Team 5.
+- winemag-data-130k. (2018). Www.kaggle.com. https://www.kaggle.com/datasets/christopheiv/winemagdata130k

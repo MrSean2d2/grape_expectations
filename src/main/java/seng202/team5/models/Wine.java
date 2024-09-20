@@ -2,8 +2,6 @@ package seng202.team5.models;
 
 import java.time.Year;
 import java.util.Objects;
-import seng202.team5.repository.DrinksDAO;
-import seng202.team5.services.UserService;
 
 /**
  * Default Wine class.
@@ -13,28 +11,13 @@ import seng202.team5.services.UserService;
 public class Wine {
     private int id;
     private String name;
-    private String description = null;
-    private int year = 0;
-    private int ratingValue = 0;
-    private double price = 0.0;
-    private boolean favourite = false;
-    private String notes = null;
+    private final String description;
+    private final int year;
+    private final int ratingValue;
+    private final double price;
     private String wineVariety;
     private String colour;
-    private Vineyard vineyard;
-
-    private DrinksDAO drinksDAO;
-
-    /**
-     * DrinksDAO constructor
-     */
-    {
-        this.drinksDAO = new DrinksDAO();
-    }
-
-
-
-
+    private final Vineyard vineyard;
 
     /**
      * Constructor for creating a wine object with a name,
@@ -87,36 +70,6 @@ public class Wine {
         this.wineVariety = wineVariety;
         this.vineyard = vineyard;
     }
-
-    /**
-     * Constructor for creating a wine object with a name,
-     * description, year, rating, price, favourite status and notes.
-     *
-     * @param id the wine's id
-     * @param name name of wine
-     * @param description description of wine
-     * @param year year of wine
-     * @param ratingValue rating value of wine
-     * @param price current market price of wine
-     * @param wineVariety variety of the wine
-     * @param vineYard the vineyard the wine comes from
-     */
-    public Wine(int id, String name, String description, int year, int ratingValue, double price,
-                String wineVariety, String colour, Vineyard vineYard, boolean favourite, String notes) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.year = year;
-        this.ratingValue = ratingValue;
-        this.price = price;
-        this.wineVariety = wineVariety;
-        this.colour = colour;
-        this.vineyard = vineYard;
-        this.favourite = favourite;
-        this.notes = notes;
-    }
-
-
 
     /**
      * Gets the wine name.
@@ -281,15 +234,19 @@ public class Wine {
     }
 
     /**
-     * set the variety name of a wine
+     * set the variety name of a wine.
+     *
      * @param unknownVariety string value to save as variety name
      */
-    public void setVariety(String unknownVariety) {wineVariety = unknownVariety;}
+    public void setVariety(String unknownVariety) {
+        wineVariety = unknownVariety;
+    }
 
 
     /**
      * checks if a wine has valid values for its attributes.
      * eg: year and price aren't 0
+     *
      * @return boolean whether given wine is valid enough to be added to database
      */
     public boolean isValidWine() {
@@ -298,8 +255,8 @@ public class Wine {
             return false;
         }
         //description can be empty
-        int currentYear = Year.now().getValue();//gets current year for future-proofing
-        if (year < 1700 | year > currentYear) {//1700 is arbitrary boundary
+        int currentYear = Year.now().getValue(); //gets current year for future-proofing
+        if (year < 1700 | year > currentYear) { //1700 is arbitrary boundary
             return false;
         }
         if (ratingValue < 0 | ratingValue > 100) {

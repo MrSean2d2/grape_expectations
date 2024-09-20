@@ -1,8 +1,7 @@
 package seng202.team5.repository;
 
-import seng202.team5.exceptions.DuplicateEntryException;
-
 import java.util.List;
+import seng202.team5.exceptions.DuplicateEntryException;
 
 /**
  * Data Access Objects interface for common database operations. Inspired by

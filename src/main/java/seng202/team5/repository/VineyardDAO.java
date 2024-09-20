@@ -11,6 +11,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Vineyard;
+import seng202.team5.services.DatabaseService;
 
 /**
  * Implementation of Database Access Object for Vineyard related actions.
@@ -57,12 +58,13 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      * @param vineyardName the name of the vineyard to look up
      * @return the database id of the vineyard
      */
-    public int getIdFromName(String vineyardName) {
+    public int getIdFromNameRegion(String vineyardName, String region) {
         int id = 0;
-        String sql = "SELECT * FROM vineyard WHERE name=?";
+        String sql = "SELECT * FROM vineyard WHERE name=? AND region=?";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, vineyardName);
+            ps.setString(2, region);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     id = rs.getInt("id");
@@ -166,18 +168,22 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
         }
     }
 
+    /**
+     * Update the vineyard in the database
+     * Not currently implemented.
+     */
     @Override
     public void update(Vineyard toUpdate) {
         throw new NotImplementedException();
     }
 
     /**
-     * clear all vineyards from the database
+     * Clear all vineyards from the database.
      */
     public void truncateVineyards() {
         String sql = "Delete FROM vineyard;";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.executeUpdate();
         } catch (SQLException sqlException) {
             log.error(sqlException);

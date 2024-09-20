@@ -12,7 +12,7 @@ import javax.crypto.spec.PBEKeySpec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
-import seng202.team5.exceptions.InvalidUserIDException;
+import seng202.team5.exceptions.InvalidUserIdException;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
@@ -94,7 +94,6 @@ public class UserService {
             }
 
             if (!userDAO.userIsUnique(username)) {
-                System.out.println("here");
                 return null;
             }
 
@@ -108,7 +107,7 @@ public class UserService {
 
             // Check if the user id is valid
             if (userId == -1) {
-                throw new InvalidUserIDException("User id is invalid! = -1");
+                throw new InvalidUserIdException("User id is invalid! = -1");
             }
 
             // Update user ID
@@ -118,7 +117,7 @@ public class UserService {
         } catch (DuplicateEntryException
                  | NoSuchAlgorithmException
                  | InvalidKeySpecException
-                 | InvalidUserIDException e) {
+                 | InvalidUserIdException e) {
             log.error(e);
             return null;
         }

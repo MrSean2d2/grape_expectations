@@ -9,23 +9,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
-import seng202.team5.models.Drinks;
+import seng202.team5.models.Review;
 import seng202.team5.models.User;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-import seng202.team5.repository.DatabaseService;
-import seng202.team5.repository.DrinksDAO;
+import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.UserDAO;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
+import seng202.team5.services.DatabaseService;
 
 /**
- * Unit tests for the DrinksDAO.
+ * Unit tests for the ReviewDAO.
  *
  * @author Martyn Gascoigne
  */
-public class DrinksDAOTest {
-    private static DrinksDAO drinksDAO;
+public class ReviewDAOTest {
+    private static ReviewDAO reviewDAO;
     private static WineDAO wineDAO;
     private static UserDAO userDAO;
     private static DatabaseService databaseService;
@@ -43,7 +43,7 @@ public class DrinksDAOTest {
 
         wineDAO = new WineDAO(vineyardDAO);
         userDAO = new UserDAO();
-        drinksDAO = new DrinksDAO();
+        reviewDAO = new ReviewDAO();
     }
 
 
@@ -61,7 +61,7 @@ public class DrinksDAOTest {
      */
     @Test
     public void testEmptyOnCreation() {
-        assertEquals(0, drinksDAO.getAll().size());
+        assertEquals(0, reviewDAO.getAll().size());
     }
 
 
@@ -87,20 +87,20 @@ public class DrinksDAOTest {
         User testUser2 = new User("Test User 2", "password", "user", 0);
         testUser2.setId(userDAO.add(testUser2));
 
-        Drinks testReview1 = new Drinks(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
-        Drinks testReview2 =
-                new Drinks(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
-        Drinks testReview3 =
-                new Drinks(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
-        Drinks testReview4 =
-                new Drinks(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+        Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Review testReview2 =
+                new Review(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+        Review testReview3 =
+                new Review(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+        Review testReview4 =
+                new Review(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
 
-        drinksDAO.add(testReview1);
-        drinksDAO.add(testReview2);
-        drinksDAO.add(testReview3);
-        drinksDAO.add(testReview4);
+        reviewDAO.add(testReview1);
+        reviewDAO.add(testReview2);
+        reviewDAO.add(testReview3);
+        reviewDAO.add(testReview4);
 
-        List<Drinks> reviews = drinksDAO.getAll();
+        List<Review> reviews = reviewDAO.getAll();
         assertEquals(4, reviews.size());
     }
 
@@ -119,11 +119,11 @@ public class DrinksDAOTest {
         User testUser = new User("Test User", "password", "user", 0);
         testUser.setId(userDAO.add(testUser));
 
-        Drinks testReview = new Drinks(testWine.getId(), testUser.getId(), true, "Great wine", 5);
+        Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
 
-        drinksDAO.add(testReview);
+        reviewDAO.add(testReview);
 
-        Drinks review = drinksDAO.getWineReview(testWine.getId(), testUser.getId());
+        Review review = reviewDAO.getWineReview(testWine.getId(), testUser.getId());
         assertNotNull(review);
 
         assertEquals(testReview, review);
@@ -157,26 +157,26 @@ public class DrinksDAOTest {
         User testUser2 = new User("Test User 2", "password", "user", 0);
         testUser2.setId(userDAO.add(testUser2));
 
-        Drinks testReview1 = new Drinks(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
-        Drinks testReview2 =
-                new Drinks(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
-        Drinks testReview3 =
-                new Drinks(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
-        Drinks testReview4 =
-                new Drinks(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
-        Drinks testReview5 =
-                new Drinks(testWine3.getId(), testUser.getId(), true, "Great wine5", 5);
+        Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Review testReview2 =
+                new Review(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+        Review testReview3 =
+                new Review(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+        Review testReview4 =
+                new Review(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+        Review testReview5 =
+                new Review(testWine3.getId(), testUser.getId(), true, "Great wine5", 5);
 
-        drinksDAO.add(testReview1);
-        drinksDAO.add(testReview2);
-        drinksDAO.add(testReview3);
-        drinksDAO.add(testReview4);
-        drinksDAO.add(testReview5);
+        reviewDAO.add(testReview1);
+        reviewDAO.add(testReview2);
+        reviewDAO.add(testReview3);
+        reviewDAO.add(testReview4);
+        reviewDAO.add(testReview5);
 
-        List<Drinks> reviews1 = drinksDAO.getFromUser(testUser.getId());
+        List<Review> reviews1 = reviewDAO.getFromUser(testUser.getId());
         assertEquals(3, reviews1.size());
 
-        List<Drinks> reviews2 = drinksDAO.getFromUser(testUser2.getId());
+        List<Review> reviews2 = reviewDAO.getFromUser(testUser2.getId());
         assertEquals(2, reviews2.size());
     }
 
@@ -208,29 +208,29 @@ public class DrinksDAOTest {
         User testUser2 = new User("Test User 2", "password", "user", 0);
         testUser2.setId(userDAO.add(testUser2));
 
-        Drinks testReview1 = new Drinks(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
-        Drinks testReview2 =
-                new Drinks(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
-        Drinks testReview3 =
-                new Drinks(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
-        Drinks testReview4 =
-                new Drinks(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
-        Drinks testReview5 =
-                new Drinks(testWine3.getId(), testUser.getId(), true, "Great wine5", 5);
+        Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Review testReview2 =
+                new Review(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+        Review testReview3 =
+                new Review(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+        Review testReview4 =
+                new Review(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+        Review testReview5 =
+                new Review(testWine3.getId(), testUser.getId(), true, "Great wine5", 5);
 
-        drinksDAO.add(testReview1);
-        drinksDAO.add(testReview2);
-        drinksDAO.add(testReview3);
-        drinksDAO.add(testReview4);
-        drinksDAO.add(testReview5);
+        reviewDAO.add(testReview1);
+        reviewDAO.add(testReview2);
+        reviewDAO.add(testReview3);
+        reviewDAO.add(testReview4);
+        reviewDAO.add(testReview5);
 
-        List<Drinks> reviews1 = drinksDAO.getFromWine(testWine.getId());
+        List<Review> reviews1 = reviewDAO.getFromWine(testWine.getId());
         assertEquals(2, reviews1.size());
 
-        List<Drinks> reviews2 = drinksDAO.getFromWine(testWine2.getId());
+        List<Review> reviews2 = reviewDAO.getFromWine(testWine2.getId());
         assertEquals(2, reviews2.size());
 
-        List<Drinks> reviews3 = drinksDAO.getFromWine(testWine3.getId());
+        List<Review> reviews3 = reviewDAO.getFromWine(testWine3.getId());
         assertEquals(1, reviews3.size());
     }
 
@@ -248,10 +248,10 @@ public class DrinksDAOTest {
         User testUser = new User("Test User", "password", "user", 0);
         testUser.setId(userDAO.add(testUser));
 
-        Drinks testReview = new Drinks(testWine.getId(), testUser.getId(), true, "Great wine", 5);
+        Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
 
-        drinksDAO.add(testReview);
-        assertEquals(1, drinksDAO.getAll().size());
+        reviewDAO.add(testReview);
+        assertEquals(1, reviewDAO.getAll().size());
     }
 
 
@@ -269,14 +269,14 @@ public class DrinksDAOTest {
         User testUser = new User("Test User", "password", "user", 0);
         testUser.setId(userDAO.add(testUser));
 
-        Drinks testReview = new Drinks(testWine.getId(), testUser.getId(), true, "Great wine", 5);
+        Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
 
-        drinksDAO.add(testReview);
-        assertEquals(1, drinksDAO.getAll().size());
+        reviewDAO.add(testReview);
+        assertEquals(1, reviewDAO.getAll().size());
 
-        drinksDAO.delete(testWine.getId(), testUser.getId());
+        reviewDAO.delete(testWine.getId(), testUser.getId());
 
-        assertEquals(0, drinksDAO.getAll().size());
+        assertEquals(0, reviewDAO.getAll().size());
     }
 
     /**
@@ -293,18 +293,18 @@ public class DrinksDAOTest {
         User testUser = new User("Test User", "password", "user", 0);
         testUser.setId(userDAO.add(testUser));
 
-        Drinks testReview = new Drinks(testWine.getId(), testUser.getId(), true, "Great wine", 5);
+        Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
 
-        drinksDAO.add(testReview);
+        reviewDAO.add(testReview);
 
         assertEquals("Great wine",
-                drinksDAO.getWineReview(testWine.getId(), testUser.getId()).getNotes());
+                reviewDAO.getWineReview(testWine.getId(), testUser.getId()).getNotes());
         testReview.setNotes("Could be better");
 
-        drinksDAO.update(testReview);
+        reviewDAO.update(testReview);
 
         assertEquals("Could be better",
-                drinksDAO.getWineReview(testWine.getId(), testUser.getId()).getNotes());
+                reviewDAO.getWineReview(testWine.getId(), testUser.getId()).getNotes());
     }
 
 
@@ -330,25 +330,25 @@ public class DrinksDAOTest {
         User testUser2 = new User("Test User 2", "password", "user", 0);
         testUser2.setId(userDAO.add(testUser2));
 
-        Drinks testReview1 = new Drinks(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
-        Drinks testReview2 =
-                new Drinks(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
-        Drinks testReview3 =
-                new Drinks(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
-        Drinks testReview4 =
-                new Drinks(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+        Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Review testReview2 =
+                new Review(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+        Review testReview3 =
+                new Review(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+        Review testReview4 =
+                new Review(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
 
-        drinksDAO.add(testReview1);
-        drinksDAO.add(testReview2);
-        drinksDAO.add(testReview3);
-        drinksDAO.add(testReview4);
+        reviewDAO.add(testReview1);
+        reviewDAO.add(testReview2);
+        reviewDAO.add(testReview3);
+        reviewDAO.add(testReview4);
 
-        List<Drinks> reviews = drinksDAO.getAll();
+        List<Review> reviews = reviewDAO.getAll();
         assertEquals(4, reviews.size());
 
         userDAO.delete(testUser.getId());
 
-        assertEquals(2, drinksDAO.getAll().size());
+        assertEquals(2, reviewDAO.getAll().size());
     }
 
 
@@ -374,24 +374,24 @@ public class DrinksDAOTest {
         User testUser2 = new User("Test User 2", "password", "user", 0);
         testUser2.setId(userDAO.add(testUser2));
 
-        Drinks testReview1 = new Drinks(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
-        Drinks testReview2 =
-                new Drinks(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
-        Drinks testReview3 =
-                new Drinks(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
-        Drinks testReview4 =
-                new Drinks(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+        Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Review testReview2 =
+                new Review(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+        Review testReview3 =
+                new Review(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+        Review testReview4 =
+                new Review(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
 
-        drinksDAO.add(testReview1);
-        drinksDAO.add(testReview2);
-        drinksDAO.add(testReview3);
-        drinksDAO.add(testReview4);
+        reviewDAO.add(testReview1);
+        reviewDAO.add(testReview2);
+        reviewDAO.add(testReview3);
+        reviewDAO.add(testReview4);
 
-        List<Drinks> reviews = drinksDAO.getAll();
+        List<Review> reviews = reviewDAO.getAll();
         assertEquals(4, reviews.size());
 
         wineDAO.delete(testUser.getId());
 
-        assertEquals(2, drinksDAO.getAll().size());
+        assertEquals(2, reviewDAO.getAll().size());
     }
 }

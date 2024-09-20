@@ -9,15 +9,19 @@ import seng202.team5.repository.WineDAO;
  * Service Class to manage wine actions.
  */
 public class WineService {
-    private List<Wine> wineList;
     private Wine selectedWine;
     private final WineDAO wineDAO;
     private static WineService instance;
 
-    private WineService() {
+    public WineService() {
         wineDAO = new WineDAO(new VineyardDAO());
     }
 
+    /**
+     * Populates the database.
+     *
+     * @param dataLoadService instance
+     */
     public void populateDatabase(DataLoadService dataLoadService) {
         wineDAO.truncateWines();
         wineDAO.getVineyardDAO().truncateVineyards();
@@ -26,7 +30,7 @@ public class WineService {
     }
 
     /**
-     * Get list of wines.
+     * Get list of wines from the database.
      *
      * @return Wine list
      */
@@ -42,7 +46,7 @@ public class WineService {
     /**
      * Returns the singleton WineService instance.
      *
-     * @return instance
+     * @return instance of wine service class
      */
     public static WineService getInstance() {
         if (instance == null) {
@@ -55,7 +59,7 @@ public class WineService {
     /**
      * Sets selectedWine to the wine clicked on in DataListPage.
      *
-     * @param wine the
+     * @param wine the selected wine
      */
     public void setSelectedWine(Wine wine) {
         this.selectedWine = wine;

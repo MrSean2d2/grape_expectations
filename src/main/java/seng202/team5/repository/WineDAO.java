@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
+import seng202.team5.services.DatabaseService;
 
 /**
  * Wine Data Access Object class. This class implements DAOInterface and handles
@@ -40,7 +43,8 @@ public class WineDAO implements DAOInterface<Wine> {
     }
 
     /**
-     * gets vineyardDAO
+     * Gets vineyardDAO.
+     *
      * @return the vineyardDAO
      */
     public VineyardDAO getVineyardDAO() {
@@ -170,12 +174,12 @@ public class WineDAO implements DAOInterface<Wine> {
                 + "price, vineyard, variety, colour) values (?,?,?,?,?,?,?,?);";
         try (Connection conn = databaseService.connect();
                 PreparedStatement psWine = conn.prepareStatement(sqlWine)) {
-            int vineyardIndex = vineyardDAO.getIdFromName(toAdd.getVineyard().getName());
+            int vineyardIndex = vineyardDAO.getIdFromNameRegion(toAdd.getVineyard().getName(),
+                    toAdd.getVineyard().getRegion());
             if (vineyardIndex == 0) {
                 toAdd.getVineyard().setId(vineyardDAO.add(toAdd.getVineyard()));
             } else {
                 toAdd.getVineyard().setId(vineyardIndex);
-                //log.info(toAdd.getVineyard().getName());
             }
 
             psWine.setString(1, toAdd.getName());
@@ -214,7 +218,7 @@ public class WineDAO implements DAOInterface<Wine> {
                 + "price, colour, vineyard, description) values (?,?,?,?,?,?,?,?);";
 
         // Cache for vineyard names and IDs
-        Map<String, Integer> vineyardCache = new HashMap<>();
+        Map<Pair<String, String>, Integer> vineyardCache = new HashMap<>();
 
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -235,18 +239,22 @@ public class WineDAO implements DAOInterface<Wine> {
                     // of the app so that if any more wines are added they can just reference
                     // the hash map, rather than query the db.
                     Vineyard curVineyard = wine.getVineyard();
+                    Pair<String, String> vineyardSecondaryKey = Pair.of(curVineyard.getName(),
+                            curVineyard.getRegion());
                     int vineyardIndex;
-                    if (vineyardCache.containsKey(curVineyard.getName())) {
-                        vineyardIndex = vineyardCache.get(curVineyard.getName());
+                    if (vineyardCache.containsKey(vineyardSecondaryKey)) {
+                        vineyardIndex = vineyardCache.get(vineyardSecondaryKey);
                         wine.getVineyard().setId(vineyardIndex);
                     } else {
-                        vineyardIndex = vineyardDAO.getIdFromName(wine.getVineyard().getName());
+                        vineyardIndex = vineyardDAO.getIdFromNameRegion(
+                                wine.getVineyard().getName(),
+                                wine.getVineyard().getRegion());
                         if (vineyardIndex == 0) {
                             wine.getVineyard().setId(vineyardDAO.add(wine.getVineyard()));
                         } else {
                             wine.getVineyard().setId(vineyardIndex);
                         }
-                        vineyardCache.put(curVineyard.getName(), curVineyard.getId());
+                        vineyardCache.put(vineyardSecondaryKey, curVineyard.getId());
                     }
 
                     ps.setInt(7, wine.getVineyard().getId());
@@ -270,7 +278,7 @@ public class WineDAO implements DAOInterface<Wine> {
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM WINE WHERE id=?";
-        String sqlReview = "DELETE FROM drinks WHERE wineid=?";
+        String sqlReview = "DELETE FROM review WHERE wineid=?";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql);
                  PreparedStatement rps = conn.prepareStatement(sqlReview)) {
@@ -482,7 +490,7 @@ public class WineDAO implements DAOInterface<Wine> {
         if (variety != "0") {
             sql += " AND wine.variety = '" + variety + "'";
         }
-        if (region != "0") {
+        if (!Objects.equals(region, "0") && region != null) {
             region = region.replace("'", "''");
             sql += " AND vineyard.region = '" + region + "'";
         }
@@ -498,7 +506,7 @@ public class WineDAO implements DAOInterface<Wine> {
         if (minRating > 0 && minRating <= 100) {
             sql += " AND wine.rating >= " + minRating;
         }
-        //TODO: implement favourite toggle -- wait for drinks table
+        //TODO: implement favourite toggle -- wait for review table
 
         sql += ";";
         return sql;

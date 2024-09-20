@@ -1,52 +1,46 @@
 package seng202.team5.models;
 
-import seng202.team5.repository.DrinksDAO;
-
 import java.util.Objects;
+import seng202.team5.repository.ReviewDAO;
 
 /**
  * Class to record drink review information.
  *
  * @author Martyn Gascoigne
  */
-public class Drinks {
-    private int wineId;
-    private int userId;
+public class Review {
+    private final int wineId;
+    private final int userId;
     private boolean favourite;
     private String notes;
     private int rating;
 
-    private DrinksDAO drinksDAO;
-
-    /**
-     * DrinksDAO constructor
-     */
-    {
-        this.drinksDAO = new DrinksDAO();
-    }
+    private final ReviewDAO reviewDAO;
 
 
     /**
      * Constructor with IDs only.
      */
-    public Drinks(int wineId, int userId) {
+    public Review(int wineId, int userId) {
         this.wineId = wineId;
         this.userId = userId;
         this.favourite = false;
         this.notes = "";
         this.rating = -1; // Not set
+        this.reviewDAO = new ReviewDAO();
     }
 
 
     /**
      * Constructor with all the parameters.
      */
-    public Drinks(int wineId, int userId, boolean favourite, String notes, int rating) {
+    public Review(int wineId, int userId, boolean favourite, String notes, int rating) {
         this.wineId = wineId;
         this.userId = userId;
         this.favourite = favourite;
         this.notes = notes;
         this.rating = rating;
+        this.reviewDAO = new ReviewDAO();
     }
 
 
@@ -104,25 +98,6 @@ public class Drinks {
 
     // Setters
 
-    /**
-     * Set the user ID.
-     *
-     * @param userId the ID to set
-     */
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-
-    /**
-     * Set the wine ID.
-     *
-     * @param wineId the ID to set
-     */
-    public void setWineId(int wineId) {
-        this.wineId = wineId;
-    }
-
 
     /**
      * Toggles the wine's favourite status and updates the database.
@@ -130,12 +105,8 @@ public class Drinks {
      * @param favourite whether the wine is favourite or not
      */
     public void toggleFavourite(boolean favourite) {
-        if (favourite) {
-            this.favourite = false;
-        } else {
-            this.favourite = true;
-        }
-        drinksDAO.update(this);
+        this.favourite = !favourite;
+        reviewDAO.update(this);
     }
 
 
@@ -146,7 +117,7 @@ public class Drinks {
      */
     public void setNotes(String notes) {
         this.notes = notes;
-        drinksDAO.update(this);
+        reviewDAO.update(this);
     }
 
     /**
@@ -156,7 +127,7 @@ public class Drinks {
      */
     public void setRating(int rating) {
         this.rating = rating;
-        drinksDAO.update(this);
+        reviewDAO.update(this);
     }
 
 
@@ -174,12 +145,12 @@ public class Drinks {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Drinks drinks = (Drinks) o;
-        return wineId == drinks.wineId
-                && userId == drinks.userId
-                && favourite == drinks.favourite
-                && rating == drinks.rating
-                && Objects.equals(notes, drinks.notes);
+        Review review = (Review) o;
+        return wineId == review.wineId
+                && userId == review.userId
+                && favourite == review.favourite
+                && rating == review.rating
+                && Objects.equals(notes, review.notes);
     }
 
 }

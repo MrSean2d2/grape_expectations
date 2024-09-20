@@ -14,9 +14,9 @@ import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-import seng202.team5.repository.DatabaseService;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
+import seng202.team5.services.DatabaseService;
 
 /**
  * Unit tests for the WineDAO.
@@ -150,9 +150,9 @@ public class WineDAOTest {
         Wine testWine1 =
                 new Wine("testWine", "tasty", 2023, 85, 15.99, "testVariety", "Red", testVineyard1);
         Wine testWine2 = new Wine("testWine2", "tasty", 2023, 85, 15.99, "testVariety", "Red",
-                testVineyard1);
+                testVineyard2);
         Wine testWine3 = new Wine("testWine3", "tasty", 2023, 85, 15.99, "testVariety", "Red",
-                testVineyard1);
+                testVineyard3);
 
         List<Wine> testWineList = new ArrayList<>() {{
                 add(testWine1);
@@ -250,9 +250,8 @@ public class WineDAOTest {
             wineDAO.add(testWine4);
             wineDAO.add(testWine5);
             sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                    +
-                    "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
-                    + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard"
+                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, "
+                    + "vineyard.region FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard"
                     + " AND (wine.name LIKE ? OR wine.description LIKE ?) ";
         }
 
@@ -271,9 +270,8 @@ public class WineDAOTest {
         @Test
         public void testSearchFilter() {
             List<Wine> result = wineDAO.executeSearchFilter(sql, "YUMMY");
-            System.out.println(result.get(0).getDescription());
             Assertions.assertEquals(1, result.size());
-            Assertions.assertTrue(result.get(0).getDescription().contains("YUMMY"));
+            Assertions.assertTrue(result.getFirst().getDescription().contains("YUMMY"));
         }
 
         /**

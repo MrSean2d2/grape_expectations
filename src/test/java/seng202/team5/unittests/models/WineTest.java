@@ -1,10 +1,11 @@
 package seng202.team5.unittests.models;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * tests for wine model
@@ -19,6 +20,7 @@ public class WineTest {
                 "white", new Vineyard("vineyard", "region"));
         assertTrue(validWine.isValidWine());
     }
+
     /**
      * create an unnamed wine, test that it is invalid
      */
@@ -28,6 +30,7 @@ public class WineTest {
                 "white", new Vineyard("vineyard", "region"));
         assertFalse(invalidWine.isValidWine());
     }
+
     /**
      * create a wine without a description, test that it is invalid
      * wines do not need description to be valid
@@ -38,6 +41,7 @@ public class WineTest {
                 "white", new Vineyard("vineyard", "region"));
         assertTrue(validWine.isValidWine());
     }
+
     /**
      * create a wine with year of -10, test that it is invalid
      */
@@ -47,6 +51,7 @@ public class WineTest {
                 "white", new Vineyard("vineyard", "region"));
         assertFalse(invalidWine.isValidWine());
     }
+
     /**
      * create a wine with year 1000, test that it is invalid
      * wine from year 100 is too old to realistically be in the database
@@ -57,6 +62,7 @@ public class WineTest {
                 "white", new Vineyard("vineyard", "region"));
         assertFalse(invalidWine.isValidWine());
     }
+
     /**
      * create a valid wine, test that it is valid
      */
@@ -66,6 +72,7 @@ public class WineTest {
                 "white", new Vineyard("vineyard", "region"));
         assertFalse(invalidWine.isValidWine());
     }
+
     /**
      * create a wine with negative score, test that it is invalid
      */
@@ -75,6 +82,7 @@ public class WineTest {
                 "white", new Vineyard("vineyard", "region"));
         assertFalse(invalidWine.isValidWine());
     }
+
     /**
      * create a wine with score over 100, test that it is valid
      */
@@ -84,6 +92,7 @@ public class WineTest {
                 "white", new Vineyard("vineyard", "region"));
         assertFalse(validWine.isValidWine());
     }
+
     /**
      * create a wine with negative price, test that it is invalid
      */
@@ -93,6 +102,7 @@ public class WineTest {
                 "white", new Vineyard("vineyard", "region"));
         assertFalse(invalidWine.isValidWine());
     }
+
     /**
      * create a wine with empty variety, test that it is valid
      */

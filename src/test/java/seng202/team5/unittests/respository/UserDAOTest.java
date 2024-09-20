@@ -1,16 +1,16 @@
 package seng202.team5.unittests.respository;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.User;
-import seng202.team5.repository.DatabaseService;
 import seng202.team5.repository.UserDAO;
+import seng202.team5.services.DatabaseService;
 
 
 /**
@@ -19,7 +19,6 @@ import seng202.team5.repository.UserDAO;
  * @author Martyn Gascoigne
  */
 public class UserDAOTest {
-    private static final Logger log = LogManager.getLogger(UserDAOTest.class);
     private static UserDAO userDAO;
     private static DatabaseService databaseService;
 
@@ -43,7 +42,6 @@ public class UserDAOTest {
     public void resetDb() {
         databaseService.resetDb();
     }
-
 
 
     /**

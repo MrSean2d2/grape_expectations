@@ -1,6 +1,5 @@
 package seng202.team5.gui;
 
-import java.util.Objects;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,13 +9,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import seng202.team5.exceptions.DuplicateEntryException;
-import seng202.team5.models.Drinks;
+import seng202.team5.models.Review;
 import seng202.team5.models.Wine;
-import seng202.team5.repository.DrinksDAO;
+import seng202.team5.repository.ReviewDAO;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
-
-
 
 
 /**
@@ -81,22 +78,21 @@ public class DetailedViewPageController {
     @FXML
     private ImageView star5;
 
-    @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
-    private int selectedWineID;
+    private int selectedWineId;
     private int userId;
 
-    private final Image emptyStar = new Image(
-            Objects.requireNonNull(getClass().getResourceAsStream("/images/empty_star.png")));
-    private final Image filledStar = new Image(
-            Objects.requireNonNull(getClass().getResourceAsStream("/images/filled_star.png")));
+    private final Image emptyStar =
+            new Image(getClass().getResourceAsStream("/images/empty_star.png"));
+    private final Image filledStar =
+            new Image(getClass().getResourceAsStream("/images/filled_star.png"));
 
     /**
      * Initializes DetailedViewPage.
      */
     @FXML
-    public void initialize() {
+    private void initialize() {
         Wine selectedWine = WineService.getInstance().getSelectedWine();
-        selectedWineID = selectedWine.getId();
+        selectedWineId = selectedWine.getId();
 
         if (selectedWine != null) {
             nameLabel.setText("" + selectedWine.getName());
@@ -110,13 +106,13 @@ public class DetailedViewPageController {
 
         if (UserService.getInstance().getCurrentUser() != null) {
             userId = UserService.getInstance().getCurrentUser().getId();
-            DrinksDAO drinksDAO = new DrinksDAO();
-            Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
+            ReviewDAO reviewDAO = new ReviewDAO();
+            Review review = reviewDAO.getWineReview(selectedWineId, userId);
 
             if (review == null) {
-                review = new Drinks(selectedWineID, userId);
+                review = new Review(selectedWineId, userId);
                 try {
-                    drinksDAO.add(review);
+                    reviewDAO.add(review);
                 } catch (DuplicateEntryException e) {
                     e.printStackTrace();
                 }
@@ -145,12 +141,13 @@ public class DetailedViewPageController {
      * @param event mouse event
      */
     @FXML
-    public void handleStarClick(javafx.scene.input.MouseEvent event) {
+    private void handleStarClick(javafx.scene.input.MouseEvent event) {
         ImageView clickedStar = (ImageView) event.getSource(); // Get the clicked star
-        int clickedStarIndex = Integer.parseInt(clickedStar.getId().substring(4));
+        int clickedStarIndex = Integer.parseInt(
+                clickedStar.getId().substring(4)); // Get star number (e.g., star1 -> 1)
 
-        DrinksDAO drinksDAO = new DrinksDAO();
-        Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
+        ReviewDAO reviewDAO = new ReviewDAO();
+        Review review = reviewDAO.getWineReview(selectedWineId, userId);
 
         if (review != null) {
             review.setRating(clickedStarIndex);
@@ -165,8 +162,8 @@ public class DetailedViewPageController {
      */
     @FXML
     private void handleToggleFavourite(ActionEvent event) {
-        DrinksDAO drinksDAO = new DrinksDAO();
-        Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
+        ReviewDAO reviewDAO = new ReviewDAO();
+        Review review = reviewDAO.getWineReview(selectedWineId, userId);
 
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
@@ -186,8 +183,8 @@ public class DetailedViewPageController {
      */
     @FXML
     private void handleSaveNotes(ActionEvent event) {
-        DrinksDAO drinksDAO = new DrinksDAO();
-        Drinks review = drinksDAO.getWineReview(selectedWineID, userId);
+        ReviewDAO reviewDAO = new ReviewDAO();
+        Review review = reviewDAO.getWineReview(selectedWineId, userId);
 
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
@@ -220,7 +217,7 @@ public class DetailedViewPageController {
     /**
      * Updates the 5-star rating graphic based on the rating of the wine.
      *
-     * @param rating rating value
+     * @param rating of wine
      */
     private void updateStarDisplay(int rating) {
         star1.setImage(rating >= 1 ? filledStar : emptyStar);
@@ -241,10 +238,10 @@ public class DetailedViewPageController {
             close();
         } else {
             if (isFavorited) {
-                favoriteToggleButton.setText("Unfavorite");
+                favoriteToggleButton.setText("Unfavourite");
                 favoriteToggleButton.setStyle("-fx-background-color: #ffdd00");
             } else {
-                favoriteToggleButton.setText("Favorite");
+                favoriteToggleButton.setText("Favourite");
                 favoriteToggleButton.setStyle(null);
             }
         }

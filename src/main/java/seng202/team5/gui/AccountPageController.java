@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import seng202.team5.models.User;
 import seng202.team5.services.UserService;
 
@@ -34,8 +35,11 @@ public class AccountPageController extends PageController {
      * Initialize the user page.
      */
     @FXML
-    public void initialize() {
+    private void initialize() {
         errorLabel.setText(""); //Blank error message
+
+        loginButton.setTooltip(new Tooltip("Log in to account"));
+        registerButton.setTooltip(new Tooltip("Register a new account"));
     }
 
     /**
@@ -43,11 +47,10 @@ public class AccountPageController extends PageController {
      */
     @FXML
     public void attemptLogin() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-
         usernameField.getStyleClass().remove("field_error");
         passwordField.getStyleClass().remove("field_error");
+
+        String username = usernameField.getText();
 
         if (username.isEmpty()) {
             // Show error
@@ -55,6 +58,8 @@ public class AccountPageController extends PageController {
             usernameField.getStyleClass().add("field_error");
             return;
         }
+
+        String password = passwordField.getText();
 
         if (password.isEmpty()) {
             // Show error
@@ -89,11 +94,10 @@ public class AccountPageController extends PageController {
      */
     @FXML
     public void attemptRegister() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-
         usernameField.getStyleClass().remove("field_error");
         passwordField.getStyleClass().remove("field_error");
+
+        String username = usernameField.getText();
 
         if (username.isEmpty()) {
             // Show error
@@ -101,6 +105,8 @@ public class AccountPageController extends PageController {
             usernameField.getStyleClass().add("field_error");
             return;
         }
+
+        String password = passwordField.getText();
 
         if (password.isEmpty()) {
             // Show error

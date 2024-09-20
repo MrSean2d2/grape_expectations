@@ -1,11 +1,12 @@
 package seng202.team5.unittests.services;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
 import org.junit.jupiter.api.Test;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.services.WineService;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class WineServiceTest {
 
@@ -26,7 +27,8 @@ public class WineServiceTest {
     public void testSetAndGetSelectedWine() {
         WineService wineService = WineService.getInstance();
         Vineyard testVineyard = null;
-        Wine wine = new Wine(1, "Test Wine", "Fruity", 2020, 99, 15.99, "Chardonnay", "White", testVineyard, true, "I like this wine");
+        Wine wine = new Wine(1, "Test Wine", "Fruity", 2020, 99, 15.99, "Chardonnay", "White",
+                testVineyard);
         wineService.setSelectedWine(wine);
         assertEquals(wine, wineService.getSelectedWine());
     }

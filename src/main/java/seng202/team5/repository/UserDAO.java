@@ -1,6 +1,10 @@
 package seng202.team5.repository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -8,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.User;
+import seng202.team5.services.DatabaseService;
 
 /**
  * Database Access Object for the User table in the SQL database.
@@ -178,10 +183,10 @@ public class UserDAO implements DAOInterface<User> {
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM user WHERE id=?";
-        String sqlReview = "DELETE FROM drinks WHERE userid=?";
+        String sqlReview = "DELETE FROM review WHERE userid=?";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql);
-                PreparedStatement rps = conn.prepareStatement(sqlReview)){
+                PreparedStatement rps = conn.prepareStatement(sqlReview)) {
 
             ps.setInt(1, id);
             ps.executeUpdate();

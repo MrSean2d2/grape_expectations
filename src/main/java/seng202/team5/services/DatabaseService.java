@@ -1,4 +1,4 @@
-package seng202.team5.repository;
+package seng202.team5.services;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,6 +30,11 @@ public class DatabaseService {
     private static final Logger log = LogManager.getLogger(DatabaseService.class);
     private final String url;
 
+    /**
+     * gets or creates the database depending on whether it already exists.
+     *
+     * @param url of the database
+     */
     private DatabaseService(String url) {
         if (url == null || url.isEmpty()) {
             this.url = getDataBasePath();
@@ -112,6 +117,11 @@ public class DatabaseService {
         }
     }
 
+    /**
+     * executes the given sql query.
+     *
+     * @param in input string of sql query
+     */
     private void executeSql(InputStream in) {
         String s;
         StringBuilder sb = new StringBuilder();
