@@ -34,7 +34,7 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 
 .textbox.field_error {
     -fx-border-width: 2;
-    -fx-border-color: #d05b5b;
+    -fx-border-color: #e95958;
     -fx-border-radius: 5;
     -fx-border-insets: -5;
 }

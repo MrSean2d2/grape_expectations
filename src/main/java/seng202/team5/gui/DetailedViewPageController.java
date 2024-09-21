@@ -40,7 +40,7 @@ import static seng202.team5.services.ColourLookupService.getTagLabelColour;
  *
  * @author Finn Brown
  */
-public class DetailedViewPageController {
+public class DetailedViewPageController extends PageController {
 
     private final Image emptyStar =
             new Image(getClass().getResourceAsStream("/images/empty_star.png"));
@@ -416,7 +416,6 @@ public class DetailedViewPageController {
      * Closes the page.
      */
     private void close() {
-
         try {
             if (UserService.getInstance().getCurrentUser() != null) {
                 assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
@@ -430,6 +429,7 @@ public class DetailedViewPageController {
             throw new RuntimeException(e);
         }
         backButton.getScene().getWindow().hide();
+        addNotification("Closed Detailed View", "#d5e958");
     }
 
 
