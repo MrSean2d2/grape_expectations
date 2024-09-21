@@ -130,6 +130,12 @@ public class UserService {
         }
     }
 
+    public void deleteUser(User user) {
+        if (!user.getIsAdmin() || userDAO.getAdminCount() > 1) {
+            userDAO.delete(user.getId());
+        }
+    }
+
     /**
      * Attempt to sign in to an account if they exist.
      *

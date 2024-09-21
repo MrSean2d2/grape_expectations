@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.EditUserPopup">
+   <children>
+      <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="192.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="344.0" minHeight="10.0" prefHeight="344.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="290.0" minWidth="10.0" prefWidth="90.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="565.0" minWidth="10.0" prefWidth="510.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button mnemonicParsing="false" text="Button">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <Label styleClass="header-label" stylesheets="@style.css" text="Edit User &lt;name&gt;" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </Label>
+               </children>
+            </GridPane>
+            <GridPane GridPane.rowIndex="1">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="294.0" minWidth="10.0" prefWidth="203.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="415.0" minWidth="10.0" prefWidth="397.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="109.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="242.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="223.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="223.0" minHeight="10.0" prefHeight="73.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="223.0" minHeight="10.0" prefHeight="164.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Username:">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField promptText="bob..." GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <Label text="Password:" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Confirm password:" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <Label text="Role" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </ComboBox>
+               </children>
+            </GridPane>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

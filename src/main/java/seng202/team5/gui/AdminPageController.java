@@ -43,7 +43,7 @@ public class AdminPageController extends PageController {
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
         //actionColumn.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
-        actionColumn.setCellFactory(new ActionCellFactory());
+        actionColumn.setCellFactory(new ManageUserActionCellFactory());
         actionColumn.setSortable(false);
 
         ObservableList<User> users = FXCollections.observableArrayList(userDAO.getAll());
