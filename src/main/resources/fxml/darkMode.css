@@ -1,0 +1,135 @@
+/*
+Light mode for the application
+ */
+
+@import url(baseStyle.css);
+
+.root {
+    -fx-background-color: #32323c;
+    -fx-text-fill: #fff;
+}
+
+#pageContainer {
+    -fx-background-color: #32323c;
+}
+
+.label {
+    -fx-text-fill: #fff;
+}
+
+
+#backgroundImage{
+    -fx-background-image: url("../images/vineyard_background_night.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
+
+#toolBar {
+    -fx-background-color: #212128;
+}
+
+.button {
+    -fx-background-color: #212128;
+    -fx-text-fill: #fff;
+    -fx-border-color: #212128;
+}
+
+.button:hover {
+    -fx-border-color: #27272f;
+    -fx-text-fill: #fff;
+}
+
+.toggle-button {
+    -fx-background-color: #212128;
+    -fx-text-fill: #fff;
+    -fx-border-color: #212128;
+}
+
+.toggle-button:hover {
+    -fx-border-color: #27272f;
+    -fx-text-fill: #fff;
+}
+
+.text-field {
+    -fx-background-color: #212128;
+    -fx-text-fill: #fff;
+}
+
+.text-area {
+    -fx-background-color: #212128;
+    -fx-text-fill: #fff;
+}
+
+.combo-box {
+    -fx-background-color: #212128;
+    -fx-text-fill: #fff;
+    -fx-border-color: #212128;
+}
+.combo-box:hover {
+    -fx-border-color: #27272f;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #212128;
+    -fx-text-fill: #fff;
+}
+.combo-box .list-cell:odd {
+    -fx-background-color: #eee;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #bbb;
+}
+
+.menu-item {
+    -fx-background-color: #212128;
+    -fx-text-fill: #fff;
+}
+
+.menu-item:hover {
+    -fx-background-color: #27272f;
+    -fx-text-fill: #fff;
+}
+
+.stack-pane {
+    -fx-background-color: #32323c;
+}
+
+.anchor-pane {
+    -fx-background-color: #32323c;
+}
+
+.table-view {
+    -fx-table-cell-border-color: #27272f;
+}
+
+
+.table-row-cell{
+    -fx-background-color: #212128;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: #1c1c23;
+}
+
+.table-row-cell .table-cell {
+    -fx-text-fill: #fff;
+}
+
+.table-row-cell:hover .table-cell {
+    -fx-background-color: #27272f;
+    -fx-text-fill: #fff;
+}
+
+
+.table-row-cell:selected .table-cell {
+    -fx-background-color: #4db265;
+    -fx-text-fill: #fff;
+}
+
+.table-row-cell {
+    -fx-text-fill: #fff;
+}
+

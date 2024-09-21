@@ -15,6 +15,7 @@ import javafx.stage.Stage;
  */
 public class MainWindow extends Application {
 
+    static String styleSheet = "/fxml/lightMode.css";
     public MainWindow() { }
 
     /**
@@ -30,7 +31,7 @@ public class MainWindow extends Application {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/Header.fxml"));
         Parent root = baseLoader.load();
         Scene scene = new Scene(root, 1200, 800);
-        String styleSheetUrl = "/fxml/style.css";
+        String styleSheetUrl = styleSheet;
         scene.getStylesheets().add(styleSheetUrl);
 
         HeaderController baseController = baseLoader.getController();

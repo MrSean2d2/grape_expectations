@@ -351,7 +351,7 @@ public class DataListPageController extends PageController {
             stage.setTitle("Wine Details");
             Scene scene = new Scene(root);
 
-            String styleSheetUrl = "/fxml/style.css";
+            String styleSheetUrl = MainWindow.styleSheet;
             scene.getStylesheets().add(styleSheetUrl);
 
             stage.setScene(scene);

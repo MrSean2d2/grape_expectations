@@ -1,14 +1,12 @@
+/*
+The basic stylesheet for the project. Light and dark mode will inherit these
+ */
+
 @import url('https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&family=Space+Mono:wght@400;700&display=swap');
 
 .root {
-    -fx-background-color: #cccccc;
-    -fx-text-fill: #000000;
     -fx-font-family: "Radio Canada Big";
     -fx-font-weight: 400;
-}
-
-#pageContainer {
-    -fx-background-color: #cccccc;
 }
 
 .label {
@@ -17,41 +15,26 @@
 }
 
 
-#toolBar {
-    -fx-background-color: #ffffff;
-}
-
 .button {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
     -fx-padding: 8 15;
     -fx-border-width: 2;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-border-color: #fff;
 }
 
 .button:hover {
-    -fx-border-color: #bbb;
-    -fx-text-fill: #000000;
     -fx-border-width: 3;
     -fx-border-insets: -1;
 }
 
 .toggle-button {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
     -fx-padding: 8 15;
     -fx-border-width: 2;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-border-color: #fff;
 }
 
-
 .toggle-button:hover {
-    -fx-border-color: #bbb;
-    -fx-text-fill: #000000;
     -fx-border-width: 3;
     -fx-border-insets: -1;
 }
@@ -59,9 +42,6 @@
 .button.active {
     -fx-border-color: #4db265;
     -fx-border-radius: 5;
-}
-
-.button.active .image-view {
 }
 
 .text-field.field_error {
@@ -72,79 +52,37 @@
 }
 
 .text-field {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
     -fx-background-radius: 5;
     -fx-padding: 10 10;
 }
 
 .text-area {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
     -fx-background-radius: 5;
     -fx-padding: 10 10;
 }
 
 .combo-box {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
     -fx-padding: 4 10;
     -fx-border-width: 2;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-border-color: #fff;
 }
 
 .combo-box:hover {
-    -fx-border-color: #bbb;
-    -fx-text-fill: #000000;
     -fx-border-width: 3;
     -fx-border-insets: -1;
 }
 
 .combo-box .list-cell {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
     -fx-padding: 4 10;
 }
 
-.combo-box .list-cell:odd {
-    -fx-background-color: #eee;
-}
-
-.combo-box .list-cell:hover {
-    -fx-background-color: #bbb;
-}
-
-.menu-item {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
-}
-
-.menu-item:hover {
-    -fx-background-color: #dddddd;
-    -fx-text-fill: #000000;
-}
-
 .stack-pane {
-    -fx-background-color: #cccccc;
     -fx-padding: 10;
-}
-
-.anchor-pane {
-    -fx-background-color: #cccccc;
-}
-
-#backgroundImage{
-    -fx-background-image: url("../images/vineyard_background.jpg");
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: cover;
-    -fx-background-position: center;
 }
 
 .table-view {
     -fx-background-color: transparent;
-    -fx-table-cell-border-color: #ddd;
 }
 
 .table-view:focused {
@@ -163,32 +101,18 @@
     -fx-padding: 2 0 2 10px;
 }
 
-.table-row-cell{
-    -fx-background-color: #ffffff;
-}
-
-.table-row-cell:odd{
-    -fx-background-color: #eeeeee;
-}
 
 .table-row-cell:hover .table-cell{
-    -fx-background-color: #bbb;
-    -fx-text-fill: #000;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
 
 .table-row-cell:selected .table-cell{
-    -fx-background-color: #4db265;
-    -fx-text-fill: #000;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
     -fx-border-width: 0;
 }
 
-.table-row-cell {
-    -fx-text-fill: #000;
-}
 
 /* TAGS */
 .tag {

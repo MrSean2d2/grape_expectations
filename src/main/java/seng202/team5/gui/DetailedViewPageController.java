@@ -93,102 +93,6 @@ public class DetailedViewPageController {
     private int userId;
     private PopOver tagPopover;
 
-    // Method to show the popover-like popup for tag selection
-    @FXML
-    public void showTagPopover() {
-        if (UserService.getInstance().getCurrentUser() != null) {
-            if (tagPopover == null || !tagPopover.isShowing()) {
-                canAddTag = true;
-
-                try {
-                    FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/TagPopover.fxml"));
-                    Node content = baseLoader.load();
-
-                    // Create the Popup
-                    tagPopover = new PopOver(content);
-                    tagPopover.getStyleClass().add("popover");
-                    tagPopover.setDetachable(false);
-                    tagPopover.setAutoHide(true);
-                    tagPopover.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
-
-                    // Set the Popup to close when clicking outside
-                    tagPopover.setAutoHide(true);
-
-                    VBox existingBox = ((VBox) content.lookup("#tester"));
-                    List<Tag> tags = tagsDAO.getFromUser(userId);
-                    List<Label> labels = new ArrayList<>();
-                    for (Tag tag : tags) {
-                        if (tagsList.contains(tag)) continue;
-
-                        // Add non-existing ones :D
-                        Label newTag = new Label(tag.getName());
-                        newTag.getStyleClass().add("tag");
-                        newTag.getStyleClass().add("max-width");
-
-                        newTag.getStyleClass().add(getTagLabelColour(tag.getColour()));
-
-
-                        // Remove on click
-                        newTag.setOnMouseClicked(event -> {
-                            if (!(tagsList.contains(tag)) && tagPopover.isShowing()) {
-                                addTag(tag);
-                                updateTags();
-                                closePopOver();
-                            }
-                        });
-
-                        labels.add(newTag);
-                    }
-                    existingBox.getChildren().addAll(labels);
-
-                    content.lookup("#closeButton").setOnMouseClicked(event -> {
-                        closePopOver();
-                    });
-
-                    // Add a button to confirm selection
-                    Button confirmButton = (Button) content.lookup("#submitButton");
-                    confirmButton.setOnAction(event -> {
-                        if (canAddTag && tagPopover.isShowing()) {
-//                            Tag selectedTag = (Tag) existingBox.getValue();
-                            String customTag = ((TextField) content.lookup("#addField")).getText();
-
-                            // Determine which tag to add
-                            if (customTag != null && !customTag.isEmpty()) {
-                                Random rand = new Random();
-                                Tag newTag = new Tag(userId, customTag, rand.nextInt(5));
-
-                                // Try to add the new tag to the db
-                                try {
-                                    newTag.setTagId(tagsDAO.add(newTag));
-                                } catch (DuplicateEntryException e) {
-                                    throw new RuntimeException(e);
-                                }
-
-                                addTag(newTag);
-                            }
-
-                            canAddTag = false;
-
-                            closePopOver();
-                        }
-                    });
-
-                    // Show the Popup below the button
-                    tagPopover.show(addLabel);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    /**
-     * Close Pop Over
-     */
-    private void closePopOver() {
-        tagPopover.hide();
-    }
-
     /**
      * Initializes DetailedViewPage.
      */
@@ -255,6 +159,84 @@ public class DetailedViewPageController {
         }
     }
 
+    // Method to show the popover-like popup for tag selection
+    @FXML
+    public void showTagPopover() {
+        if (UserService.getInstance().getCurrentUser() != null) {
+            if (tagPopover == null || !tagPopover.isShowing()) {
+                canAddTag = true;
+
+                try {
+                    FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/TagPopover.fxml"));
+                    Node content = baseLoader.load();
+
+                    // Create the Popup
+                    tagPopover = new PopOver(content);
+                    tagPopover.getStyleClass().add("popover");
+                    tagPopover.setDetachable(false);
+                    tagPopover.setAutoHide(true);
+                    tagPopover.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
+
+                    // Set the Popup to close when clicking outside
+                    tagPopover.setAutoHide(true);
+
+                    VBox existingBox = ((VBox) content.lookup("#tester"));
+                    List<Tag> tags = tagsDAO.getFromUser(userId);
+                    List<Label> labels = new ArrayList<>();
+
+                    for (Tag tag : tags) {
+                        if (tagsList.contains(tag)) continue;
+
+                        // Add non-existing ones :D
+                        Label newTag = new Label(tag.getName());
+                        newTag.getStyleClass().add("tag");
+                        newTag.getStyleClass().add("max-width");
+
+                        newTag.getStyleClass().add(getTagLabelColour(tag.getColour()));
+
+                        // Remove on click
+                        newTag.setOnMouseClicked(event -> {
+                            if (!(tagsList.contains(tag)) && tagPopover.isShowing()) {
+                                addTag(tag);
+                                updateTags();
+                                closePopOver();
+                            }
+                        });
+
+                        labels.add(newTag);
+                    }
+                    existingBox.getChildren().addAll(labels);
+
+                    content.lookup("#closeButton").setOnMouseClicked(event -> {
+                        closePopOver();
+                    });
+
+                    // Add a button to confirm selection
+                    Button confirmButton = (Button) content.lookup("#submitButton");
+                    confirmButton.setOnAction(event -> {
+                        try {
+                            addTagWithCustomName(content);
+                        } catch (DuplicateEntryException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+
+                    // Show the Popup below the button
+                    tagPopover.show(addLabel);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Close Pop Over
+     */
+    private void closePopOver() {
+        tagPopover.hide();
+    }
+
     /**
      * Handles a BASIC tag getting added to this wine
      *
@@ -308,6 +290,45 @@ public class DetailedViewPageController {
 
         updateTags();
         return newTag;
+    }
+
+    /**
+     * Handles adding a tag with a custom name (from the custom name field)
+     */
+    public void addTagWithCustomName(Node content) throws DuplicateEntryException {
+        if (canAddTag && tagPopover.isShowing()) {
+            String customTag = ((TextField) content.lookup("#addField")).getText();
+            customTag = customTag.trim();
+
+            // Name validity checks
+            boolean nameIsValid = true;
+            if(customTag.isEmpty()){
+                nameIsValid = false;
+            } else {
+                // Check that this tag doesn't already exist
+                List<Tag> userTags = tagsDAO.getFromUser(userId);
+                for(Tag tag : userTags) {
+                    if(customTag.equals(tag.getName())) {
+                        nameIsValid = false;
+                        break;
+                    }
+                }
+            }
+
+            // Determine which tag to add
+            if (nameIsValid) {
+                Random rand = new Random();
+                Tag newTag = new Tag(userId, customTag, rand.nextInt(5));
+
+                // Try to add the new tag to the db
+                newTag.setTagId(tagsDAO.add(newTag));
+                addTag(newTag);
+            }
+
+            canAddTag = false;
+
+            closePopOver();
+        }
     }
 
     /**
