@@ -5,18 +5,17 @@ Light mode for the application
 @import url(baseStyle.css);
 
 .root {
-    -fx-background-color: #32323c;
-    -fx-text-fill: #fff;
+    -fx-background-color: #3f424d;
+    -fx-text-fill: #000000;
 }
 
-#pageContainer {
-    -fx-background-color: #32323c;
+.primary {
+    -fx-background-color: #3f424d;
 }
 
-.label {
-    -fx-text-fill: #fff;
+.accent {
+    -fx-background-color: #2e3036;
 }
-
 
 #backgroundImage{
     -fx-background-image: url("../images/vineyard_background_night.jpg");
@@ -25,101 +24,73 @@ Light mode for the application
     -fx-background-position: center;
 }
 
-
-#toolBar {
-    -fx-background-color: #212128;
+.label {
+    -fx-text-fill: #eeeeee;
 }
 
+
 .button {
-    -fx-background-color: #212128;
+    -fx-background-color: #2e3036;
     -fx-text-fill: #fff;
-    -fx-border-color: #212128;
+    -fx-border-color: #2e3036;
 }
 
 .button:hover {
-    -fx-border-color: #27272f;
+    -fx-border-color: #3e3f46;
     -fx-text-fill: #fff;
 }
 
-.toggle-button {
-    -fx-background-color: #212128;
-    -fx-text-fill: #fff;
-    -fx-border-color: #212128;
+.textbox {
+    -fx-background-color: #2e3036;
+    -fx-text-fill: #000;
 }
 
-.toggle-button:hover {
-    -fx-border-color: #27272f;
+.dropdown {
+    -fx-background-color: #2e3036;
     -fx-text-fill: #fff;
+    -fx-border-color: #2e3036;
 }
 
-.text-field {
-    -fx-background-color: #212128;
-    -fx-text-fill: #fff;
+.dropdown:hover {
+    -fx-border-color: #3e3f46;
 }
 
-.text-area {
-    -fx-background-color: #212128;
+.dropdown .list-cell {
+    -fx-background-color: #2e3036;
     -fx-text-fill: #fff;
 }
-
-.combo-box {
-    -fx-background-color: #212128;
-    -fx-text-fill: #fff;
-    -fx-border-color: #212128;
-}
-.combo-box:hover {
-    -fx-border-color: #27272f;
+.dropdown .list-cell:odd {
+    -fx-background-color: #34363d;
 }
 
-.combo-box .list-cell {
-    -fx-background-color: #212128;
-    -fx-text-fill: #fff;
-}
-.combo-box .list-cell:odd {
-    -fx-background-color: #eee;
-}
-
-.combo-box .list-cell:hover {
-    -fx-background-color: #bbb;
+.dropdown .list-cell:hover {
+    -fx-background-color: #3e3f46;
 }
 
 .menu-item {
-    -fx-background-color: #212128;
+    -fx-background-color: #2e3036;
     -fx-text-fill: #fff;
 }
 
 .menu-item:hover {
-    -fx-background-color: #27272f;
-    -fx-text-fill: #fff;
-}
-
-.stack-pane {
-    -fx-background-color: #32323c;
-}
-
-.anchor-pane {
-    -fx-background-color: #32323c;
+    -fx-background-color: #3e3f46;
+    -fx-text-fill: #000000;
 }
 
 .table-view {
-    -fx-table-cell-border-color: #27272f;
+    -fx-table-cell-border-color: #2e3036;
 }
 
-
 .table-row-cell{
-    -fx-background-color: #212128;
+    -fx-background-color: #2e3036;
 }
 
 .table-row-cell:odd{
-    -fx-background-color: #1c1c23;
-}
-
-.table-row-cell .table-cell {
-    -fx-text-fill: #fff;
+    -fx-background-color: #34363d;
 }
 
 .table-row-cell:hover .table-cell {
-    -fx-background-color: #27272f;
+    -fx-background-color: #3e3f46;
     -fx-text-fill: #fff;
 }
 
@@ -129,7 +100,7 @@ Light mode for the application
     -fx-text-fill: #fff;
 }
 
-.table-row-cell {
+.table-row-cell .table-cell{
     -fx-text-fill: #fff;
 }
 

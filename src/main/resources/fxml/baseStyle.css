@@ -27,53 +27,36 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-border-insets: -1;
 }
 
-.toggle-button {
-    -fx-padding: 8 15;
-    -fx-border-width: 2;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
-}
-
-.toggle-button:hover {
-    -fx-border-width: 3;
-    -fx-border-insets: -1;
-}
-
 .button.active {
     -fx-border-color: #4db265;
     -fx-border-radius: 5;
 }
 
-.text-field.field_error {
+.textbox.field_error {
     -fx-border-width: 2;
     -fx-border-color: #d05b5b;
     -fx-border-radius: 5;
     -fx-border-insets: -5;
 }
 
-.text-field {
+.textbox {
     -fx-background-radius: 5;
     -fx-padding: 10 10;
 }
 
-.text-area {
-    -fx-background-radius: 5;
-    -fx-padding: 10 10;
-}
-
-.combo-box {
+.dropdown {
     -fx-padding: 4 10;
     -fx-border-width: 2;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
 }
 
-.combo-box:hover {
+.dropdown:hover {
     -fx-border-width: 3;
     -fx-border-insets: -1;
 }
 
-.combo-box .list-cell {
+.dropdown .list-cell {
     -fx-padding: 4 10;
 }
 

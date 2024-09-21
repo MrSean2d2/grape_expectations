@@ -9,8 +9,12 @@ Light mode for the application
     -fx-text-fill: #000000;
 }
 
-#pageContainer {
+.primary {
     -fx-background-color: #cccccc;
+}
+
+.accent {
+    -fx-background-color: #ffffff;
 }
 
 #backgroundImage{
@@ -24,9 +28,6 @@ Light mode for the application
     -fx-text-fill: #333;
 }
 
-#toolBar {
-    -fx-background-color: #ffffff;
-}
 
 .button {
     -fx-background-color: #ffffff;
@@ -39,42 +40,30 @@ Light mode for the application
     -fx-text-fill: #000000;
 }
 
-.toggle-button {
+.textbox {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+.dropdown {
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
     -fx-border-color: #fff;
 }
 
-.toggle-button:hover {
+.dropdown:hover {
     -fx-border-color: #bbb;
-    -fx-text-fill: #000000;
 }
 
-.text-field {
+.dropdown .list-cell {
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
 }
-
-.text-area {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
-}
-
-.combo-box {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
-    -fx-border-color: #fff;
-}
-
-.combo-box .list-cell {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
-}
-.combo-box .list-cell:odd {
+.dropdown .list-cell:odd {
     -fx-background-color: #eee;
 }
 
-.combo-box .list-cell:hover {
+.dropdown .list-cell:hover {
     -fx-background-color: #bbb;
 }
 
@@ -88,18 +77,9 @@ Light mode for the application
     -fx-text-fill: #000000;
 }
 
-.stack-pane {
-    -fx-background-color: #cccccc;
-}
-
-.anchor-pane {
-    -fx-background-color: #cccccc;
-}
-
 .table-view {
     -fx-table-cell-border-color: #ddd;
 }
-
 
 .table-row-cell{
     -fx-background-color: #ffffff;
@@ -108,7 +88,6 @@ Light mode for the application
 .table-row-cell:odd{
     -fx-background-color: #eeeeee;
 }
-
 
 .table-row-cell:hover .table-cell {
     -fx-background-color: #bbb;
