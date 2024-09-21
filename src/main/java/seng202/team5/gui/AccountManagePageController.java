@@ -31,6 +31,9 @@ public class AccountManagePageController extends PageController {
     private Button deleteAccountButton;
 
     @FXML
+    private Button adminButton;
+
+    @FXML
     private Label usernameLabel;
 
     @FXML
@@ -59,6 +62,9 @@ public class AccountManagePageController extends PageController {
 
         // Current user
         User curUser = UserService.getInstance().getCurrentUser();
+        if (curUser.getIsAdmin()) {
+            adminButton.setDisable(false);
+        }
 
         // Create a new cutout circle to display the image in
         Circle circleCutout = new Circle(100, -100, 40);
@@ -142,5 +148,10 @@ public class AccountManagePageController extends PageController {
             userDAO.delete(UserService.getInstance().getCurrentUser().getId());
             signOutUserInstance();
         }
+    }
+
+    @FXML
+    private void loadAdminPage() {
+        swapPage("/fxml/AdminPage.fxml");
     }
 }

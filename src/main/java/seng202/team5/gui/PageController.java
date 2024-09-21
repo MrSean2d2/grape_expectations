@@ -1,10 +1,14 @@
 package seng202.team5.gui;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Controller for swapping between pages.
  */
 public class PageController {
     private HeaderController headerController;
+    private final Logger log = LogManager.getLogger(PageController.class);
 
     /**
      * Method to set the header controller reference.
@@ -22,7 +26,7 @@ public class PageController {
         try {
             headerController.loadPage(fxml);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 }

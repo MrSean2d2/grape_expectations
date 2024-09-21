@@ -141,4 +141,41 @@ public class UserDAOTest {
         assertEquals("admin", userDAO.getOne(1).getRole());
     }
 
+
+    /**
+     * Test that an empty database contains no admin users.
+     *
+     */
+    @Test
+    public void testNoAdmin() {
+        assertEquals(0, userDAO.getAdminCount());
+    }
+
+    /**
+     * Test that a database containing a regular user contains no admin users.
+     *
+     * @throws DuplicateEntryException if the user to be added already exists
+     */
+    @Test
+    public void testNoAdminWithRegularUser() throws DuplicateEntryException {
+        User user = new User("user1", "password", "user", 0);
+        int userId = userDAO.add(user);
+        user.setId(userId);
+
+        assertEquals(0, userDAO.getAdminCount());
+    }
+
+    /**
+     * Test that a database containing one admin contains one admin.
+     *
+     * @throws DuplicateEntryException if the user to be added already exists
+     */
+    @Test
+    public void testOneAdmin() throws DuplicateEntryException {
+        User admin = new User("admin", "password", "admin", 0);
+        int adminId = userDAO.add(admin);
+        admin.setId(adminId);
+        assertEquals(1, userDAO.getAdminCount());
+    }
+
 }

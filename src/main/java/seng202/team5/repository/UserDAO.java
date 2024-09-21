@@ -119,6 +119,29 @@ public class UserDAO implements DAOInterface<User> {
         throw new NotFoundException(String.format("No user with %s found", username));
     }
 
+    public List<User> getMatchingUserName(String term) {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM user WHERE username LIKE ?";
+        try (Connection conn = databaseService.connect();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + term + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getInt("icon"));
+                users.add(user);
+            }
+            return users;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
 
     /**
      * Checks if a username is unique.
@@ -139,6 +162,27 @@ public class UserDAO implements DAOInterface<User> {
             log.error(sqlException);
         }
         return true;
+    }
+
+    /**
+     * Get how many admin users are present in the database.
+     *
+     * @return the count of admin users
+     */
+    public int getAdminCount() {
+        String sql = "SELECT COUNT(*) FROM user WHERE role='admin'";
+        int count = 0;
+        try (Connection conn = databaseService.connect();
+                Statement s = conn.createStatement()) {
+            ResultSet rs = s.executeQuery(sql);
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+            return count;
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return 0;
+        }
     }
 
 

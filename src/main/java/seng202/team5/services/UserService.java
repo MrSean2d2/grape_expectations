@@ -42,6 +42,13 @@ public class UserService {
      */
     public UserService() {
         this.userDAO = new UserDAO();
+        if (userDAO.getAdminCount() == 0) {
+            User admin = registerUser("admin", "admin");
+            if (admin != null) {
+                admin.setRole("admin");
+                userDAO.update(admin);
+            }
+        }
     }
 
     /**

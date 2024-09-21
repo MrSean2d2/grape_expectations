@@ -77,7 +77,7 @@ public class AccountPageController extends PageController {
             passwordField.setText("");
 
             // Go to the homepage
-            swapPage("/fxml/newHomePage.fxml");
+            swapPage("/fxml/AccountManagePage.fxml");
         } else {
             errorLabel.setText("Username or password is incorrect!");
             usernameField.getStyleClass().add("field_error");
