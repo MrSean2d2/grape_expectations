@@ -429,7 +429,7 @@ public class DetailedViewPageController extends PageController {
             throw new RuntimeException(e);
         }
         backButton.getScene().getWindow().hide();
-        addNotification("Closed Detailed View", "#d5e958");
+        addNotification("Updated Wine Review", "#d5e958");
     }
 
 

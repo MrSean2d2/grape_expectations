@@ -246,6 +246,7 @@ public class DataListPageController extends PageController {
     private void searchClicked() {
         String searching = searchTextField.getText();
         applySearchFilters();
+        addNotification("Applied Search", "#d5e958");
     }
 
     /**

@@ -32,7 +32,10 @@ public class NotificationController extends PageController {
      * @param col the new hex colour
      */
     public void setColourBand(String col) {
-        colourBand.setStyle("-fx-background-radius: 15; -fx-background-color: " + col + ";");
+        // Append colour onto the end of the existing style
+        String currentStyle = colourBand.getStyle();
+        String newStyle = currentStyle + "; -fx-background-color: " + col + ";";
+        colourBand.setStyle(newStyle);
     }
 
     /**
