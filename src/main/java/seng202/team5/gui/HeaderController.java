@@ -2,6 +2,7 @@ package seng202.team5.gui;
 
 import java.io.IOException;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +22,8 @@ import seng202.team5.services.UserService;
  * @author team 5
  */
 public class HeaderController {
-
+    @FXML
+    public Button dashboardButton;
     @FXML
     private StackPane pageContainer;
 
@@ -39,6 +41,7 @@ public class HeaderController {
 
     @FXML
     private Button accountButton;
+
 
     @FXML
     private ScrollPane scrollPane;
@@ -169,5 +172,10 @@ public class HeaderController {
 
         // Begin loading
         new Thread(createScene).start();
+    }
+
+    public void loadDashboardPage(ActionEvent event) throws Exception {
+        loadPage("/fxml/DashboardPage.fxml");
+        dashboardButton.getStyleClass().add("active");
     }
 }
