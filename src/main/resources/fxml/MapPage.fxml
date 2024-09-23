@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.web.WebView?>
 
-<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="635.0" prefWidth="879.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.MapPageController">
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="635.0" prefWidth="879.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.MapPageController">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
       <ColumnConstraints hgrow="ALWAYS" maxWidth="-Infinity" minWidth="250.0" prefWidth="250.0" />
@@ -67,26 +67,6 @@
             <Insets left="10.0" right="10.0" />
          </padding>
       </GridPane>
-      <VBox maxWidth="-Infinity" prefWidth="1000.0" GridPane.columnSpan="2">
-         <children>
-            <Label style="-fx-font-weight: 700;" text="Map Page">
-               <font>
-                  <Font size="24.0" />
-               </font>
-               <padding>
-                  <Insets left="10.0" right="10.0" />
-               </padding>
-            </Label>
-            <Label text="Here you can see a Map view of the loaded vineyards!" wrapText="true">
-               <padding>
-                  <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
    </children>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />

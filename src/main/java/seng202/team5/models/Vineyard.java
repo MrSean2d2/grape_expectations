@@ -8,9 +8,9 @@ import java.util.Objects;
 public class Vineyard {
     private int id;
     private final String name;
-    private final double lat;
-    private final double lon;
-    private final String region;
+    private double lat;
+    private double lon;
+    private String region;
 
     /**
      * Sets the name of the vineyard.
@@ -61,10 +61,6 @@ public class Vineyard {
         this.lat = lat;
         this.lon = lon;
         this.id = 0;
-    }
-
-    public int getId() {
-        return id;
     }
 
     /**

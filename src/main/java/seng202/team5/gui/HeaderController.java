@@ -1,6 +1,8 @@
 package seng202.team5.gui;
 
 import java.io.IOException;
+import java.util.Optional;
+
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -97,8 +99,17 @@ public class HeaderController {
      */
     @FXML
     private void loadMapPage() throws Exception {
-        loadPage("/fxml/MapPage.fxml");
-        mapButton.getStyleClass().add("active");
+        // Cancel an in-progress task if it is currently running
+        if (createScene != null && createScene.isRunning()) {
+            createScene.cancel(true);
+        }
+
+        // Uses different method for loading as WebView messes with the loader
+        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/MapPage.fxml"));
+        Node loader = baseLoader.load();
+
+        pageContainer.getChildren().setAll(loader);
+        resetActiveButtons(mapButton);
     }
 
 
@@ -143,31 +154,49 @@ public class HeaderController {
 
                 // Set the header controller reference to the new page controller
                 PageController pageController = baseLoader.getController();
+
                 if (pageController != null) {
                     pageController.setHeaderController(headerController);
                 }
 
                 return page;
-
             }
         };
-
-        // Remove the button styles from the header
-        homeButton.getStyleClass().remove("active");
-        dataListButton.getStyleClass().remove("active");
-        mapButton.getStyleClass().remove("active");
-        accountButton.getStyleClass().remove("active");
 
         // Load the loading page :)
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
         Node loader = baseLoader.load();
 
         pageContainer.getChildren().setAll(loader);
-
         // Update the scene
         createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
 
         // Begin loading
         new Thread(createScene).start();
+
+        // Remove the button styles from the header
+        resetActiveButtons();
+    }
+
+    /**
+     * Reset the header buttons.
+     */
+    public void resetActiveButtons() {
+        homeButton.getStyleClass().remove("active");
+        dataListButton.getStyleClass().remove("active");
+        mapButton.getStyleClass().remove("active");
+        accountButton.getStyleClass().remove("active");
+    }
+
+    /**
+     * Reset the header buttons and set one to active.
+     */
+    public void resetActiveButtons(Button button) {
+        homeButton.getStyleClass().remove("active");
+        dataListButton.getStyleClass().remove("active");
+        mapButton.getStyleClass().remove("active");
+        accountButton.getStyleClass().remove("active");
+
+        button.getStyleClass().add("active");
     }
 }

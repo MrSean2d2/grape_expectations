@@ -5,14 +5,10 @@ import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Vineyard;
-import seng202.team5.models.Wine;
-import seng202.team5.services.DataLoadService;
-import seng202.team5.services.WineDataStoreService;
 
 import java.util.List;
 
@@ -20,7 +16,7 @@ import java.util.List;
  * Controller class for MapPage.fxml
  * @author Martyn Gascoigne
  */
-public class MapPageController {
+public class MapPageController extends PageController {
 
     private static final Logger log = LogManager.getLogger(MapPageController.class);
 
@@ -40,8 +36,8 @@ public class MapPageController {
         webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
         webEngine.load(getClass().getClassLoader().getResource("html/leaflet_osm_map.html").toExternalForm());
-        WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
-                log.info(String.format("Map WebView console log line: %d, message : %s", lineNumber, message)));
+//        WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
+//                log.info(String.format("Map WebView console log line: %d, message : %s", lineNumber, message)));
 
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
@@ -51,6 +47,8 @@ public class MapPageController {
 
                         javaScriptConnector.call("initMap");
                         addVineyardsToMap();
+
+                        System.out.println("Loaded map");
                     }
                 });
     }
