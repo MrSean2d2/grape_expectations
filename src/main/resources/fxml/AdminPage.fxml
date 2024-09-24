@@ -30,7 +30,7 @@
             <TableColumn fx:id="actionColumn" prefWidth="238.0" text="Actions" />
         </columns>
       </TableView>
-      <Label styleClass="header-label" stylesheets="@style.css" text="Manage Users">
+      <Label styleClass="header-label" text="Manage Users">
          <GridPane.margin>
             <Insets left="20.0" />
          </GridPane.margin>

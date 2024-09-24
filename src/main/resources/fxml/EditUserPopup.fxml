@@ -37,12 +37,12 @@
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Label styleClass="header-label" stylesheets="@style.css" text="Edit User" GridPane.columnIndex="1">
+                  <Label styleClass="header-label" text="Edit User" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label fx:id="usernameLabel" styleClass="header-label" stylesheets="@style.css" text="&lt;name&gt;" GridPane.columnIndex="2" />
+                  <Label fx:id="usernameLabel" styleClass="header-label" text="&lt;name&gt;" GridPane.columnIndex="2" />
                </children>
             </GridPane>
             <GridPane GridPane.rowIndex="1">

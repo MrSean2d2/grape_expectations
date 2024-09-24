@@ -66,7 +66,7 @@ public class ManageUserActionCellFactory implements
                             stage.setScene(scene);
                             stage.setTitle(String.format("Edit user %s", user.getUsername()));
                             stage.setResizable(false);
-                            String styleSheetUrl = "/fxml/style.css";
+                            String styleSheetUrl = MainWindow.styleSheet;
                             scene.getStylesheets().add(styleSheetUrl);
                             stage.initModality(Modality.WINDOW_MODAL);
                             stage.showAndWait();
