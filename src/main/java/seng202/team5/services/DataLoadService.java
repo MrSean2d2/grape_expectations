@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
-import seng202.GeolocatorService;
 import seng202.team5.exceptions.InvalidCsvEntryException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
