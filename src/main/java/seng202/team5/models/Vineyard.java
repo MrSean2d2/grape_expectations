@@ -23,6 +23,15 @@ public class Vineyard {
         this.name = name;
         this.region = region;
     }
+
+    public Vineyard(int id, String name, String region, double lat, double lon) {
+        this.id = id;
+        this.name = name;
+        this.region = region;
+        this.lat = lat;
+        this.lon = lon;
+    }
+
     /**
      * constructor for a vineyard object,
      * contains the ID of the vineyard.
