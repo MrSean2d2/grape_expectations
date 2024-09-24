@@ -9,9 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
+import seng202.team5.models.Role;
 import seng202.team5.models.User;
 import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
@@ -25,13 +27,11 @@ public class UserServiceTest {
      *
      * @throws InstanceAlreadyExistsException if the instance already exists
      */
-    @BeforeEach
-    public void setUp() throws InstanceAlreadyExistsException {
+    @BeforeAll
+    public static void setUp() throws InstanceAlreadyExistsException {
         DatabaseService.removeInstance();
         databaseService = DatabaseService.initialiseInstanceWithUrl(
                 "jdbc:sqlite:./src/test/resources/test_database.db");
-        userService = UserService.getInstance();
-        userService.signOut();
 
 
     }
@@ -42,6 +42,9 @@ public class UserServiceTest {
     @BeforeEach
     void resetDb() {
         databaseService.resetDb();
+        UserService.removeInstance();
+        userService = UserService.getInstance();
+        userService.signOut();
     }
 
     /**
@@ -49,7 +52,7 @@ public class UserServiceTest {
      */
     @Test
     public void signOutTest() {
-        User user = new User(1, "user", "password", "user", 0);
+        User user = new User(1, "user", "password", Role.USER, 0);
         userService.setCurrentUser(user);
         assertNotNull(userService.getCurrentUser());
         userService.signOut();
@@ -61,7 +64,7 @@ public class UserServiceTest {
      */
     @Test
     public void setCurrentUserTest() {
-        User user = new User(1, "user", "password", "user", 0);
+        User user = new User(1, "user", "password", Role.USER, 0);
 
         // Set the current user and check if not null and the username == "user"
         userService.setCurrentUser(user);
@@ -146,5 +149,29 @@ public class UserServiceTest {
         User signedInUser = userService.signinUser("testUser", "wrongPass");
 
         assertNull(signedInUser);
+    }
+
+    /**
+     * Test updating the user's password.
+     *
+     * @throws NoSuchAlgorithmException if there is an error registering the user
+     * @throws InvalidKeySpecException if there is an error registering the user
+     */
+    @Test
+    public void updatePasswordTest() throws NoSuchAlgorithmException, InvalidKeySpecException {
+        User user = userService.registerUser("test", "oldPassword");
+        String newPassword = "newPassword";
+        userService.updateUserPassword(user, newPassword);
+        assertTrue(UserService.verifyPassword(newPassword, user.getPassword()));
+    }
+
+    /**
+     * Test that an admin account is automatically created.
+     */
+    @Test
+    public void createAdminOnStartTest() {
+        User admin = userService.signinUser("admin", "admin");
+        assertNotNull(admin);
+        assertEquals(Role.ADMIN, admin.getRole());
     }
 }

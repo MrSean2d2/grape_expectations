@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.NotFoundException;
+import seng202.team5.models.Role;
 import seng202.team5.models.User;
 import seng202.team5.services.DatabaseService;
 
@@ -49,7 +50,7 @@ public class UserDAO implements DAOInterface<User> {
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getString("role"),
+                        Role.getRoleFromName(rs.getString("role")),
                         rs.getInt("icon"));
                 users.add(user);
             }
@@ -80,7 +81,7 @@ public class UserDAO implements DAOInterface<User> {
                             rs.getInt("id"),
                             rs.getString("username"),
                             rs.getString("password"),
-                            rs.getString("role"),
+                            Role.getRoleFromName(rs.getString("role")),
                             rs.getInt("icon"));
                 }
                 return user;
@@ -110,13 +111,42 @@ public class UserDAO implements DAOInterface<User> {
                 return new User(rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getString("role"),
+                        Role.getRoleFromName(rs.getString("role")),
                         rs.getInt("icon"));
             }
         } catch (SQLException sqlException) {
             log.error(sqlException);
         }
         throw new NotFoundException(String.format("No user with %s found", username));
+    }
+
+    /**
+     * Return a list of users whose usernames match the regexp given by term.
+     *
+     * @param term the search term to be matched against
+     * @return the list of matching users
+     */
+    public List<User> getMatchingUserName(String term) {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM user WHERE username LIKE ?";
+        try (Connection conn = databaseService.connect();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + term + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        Role.getRoleFromName(rs.getString("role")),
+                        rs.getInt("icon"));
+                users.add(user);
+            }
+            return users;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
     }
 
 
@@ -141,6 +171,27 @@ public class UserDAO implements DAOInterface<User> {
         return true;
     }
 
+    /**
+     * Get how many admin users are present in the database.
+     *
+     * @return the count of admin users
+     */
+    public int getAdminCount() {
+        String sql = "SELECT COUNT(*) FROM user WHERE role='admin'";
+        int count = 0;
+        try (Connection conn = databaseService.connect();
+                Statement s = conn.createStatement()) {
+            ResultSet rs = s.executeQuery(sql);
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+            return count;
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return 0;
+        }
+    }
+
 
     /**
      * Adds an individual user to database.
@@ -155,7 +206,7 @@ public class UserDAO implements DAOInterface<User> {
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, toAdd.getUsername());
             ps.setString(2, toAdd.getPassword());
-            ps.setString(3, toAdd.getRole());
+            ps.setString(3, toAdd.getRole().getRoleName());
             ps.setInt(4, toAdd.getIconNumber());
             ps.executeUpdate();
 
@@ -209,13 +260,15 @@ public class UserDAO implements DAOInterface<User> {
     @Override
     public void update(User toUpdate) {
         String sql  = "UPDATE user SET username=?, "
-                    + "role=? "
+                    + "role=?, "
+                    + "password=? "
                     + "WHERE id=?";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, toUpdate.getUsername());
-            ps.setString(2, toUpdate.getRole());
-            ps.setInt(3, toUpdate.getId());
+            ps.setString(2, toUpdate.getRole().getRoleName());
+            ps.setString(3, toUpdate.getPassword());
+            ps.setInt(4, toUpdate.getId());
             ps.executeUpdate();
         } catch (SQLException sqlException) {
             log.error(sqlException);
