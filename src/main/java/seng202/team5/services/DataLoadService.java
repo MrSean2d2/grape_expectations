@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
+import seng202.GeolocatorService;
 import seng202.team5.exceptions.InvalidCsvEntryException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
@@ -39,6 +40,8 @@ public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
     private final Path fileName;
+
+    private final GeolocatorService geolocatorService = new GeolocatorService();
 
     /**
      * DataLoadService constructor.
@@ -131,6 +134,7 @@ public class DataLoadService {
             // Winery
             String winery = csvEntry[13];
             Vineyard vineyard = new Vineyard(winery, regionName);
+            geolocatorService.queryAddress(vineyard);
 
             // Wine Description.
             // Description can be empty

@@ -110,11 +110,13 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      */
     @Override
     public int add(Vineyard toAdd) {
-        String sql = "INSERT OR IGNORE INTO vineyard (name, region) VALUES (?, ?)";
+        String sql = "INSERT OR IGNORE INTO vineyard (name, region, latitude, longitude) VALUES (?, ?, ?, ?)";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, toAdd.getName());
             ps.setString(2, toAdd.getRegion());
+            ps.setDouble(3, toAdd.getLat());
+            ps.setDouble(4, toAdd.getLon());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();

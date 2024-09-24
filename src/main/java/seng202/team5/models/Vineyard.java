@@ -105,6 +105,14 @@ public class Vineyard {
         this.id = id;
     }
 
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
     /**
      * checks if the vineyard is equal to another vineyard object
      * does this by checking each attribute of vineyards against each other.
