@@ -9,6 +9,7 @@ import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Vineyard;
+import seng202.team5.repository.VineyardDAO;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class MapPageController extends PageController {
     private WebEngine webEngine;
     private JSObject javaScriptConnector;
     private boolean markersDisplayed = true;
+    private VineyardDAO vineyardDAO;
 
     /**
      * Initialize the map page
@@ -33,11 +35,12 @@ public class MapPageController extends PageController {
      */
     @FXML
     public void initialize() {
+        vineyardDAO = new VineyardDAO();
         webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
         webEngine.load(getClass().getClassLoader().getResource("html/leaflet_osm_map.html").toExternalForm());
-//        WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
-//                log.info(String.format("Map WebView console log line: %d, message : %s", lineNumber, message)));
+        WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
+                log.info(String.format("Map WebView console log line: %d, message : %s", lineNumber, message)));
 
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
@@ -60,7 +63,7 @@ public class MapPageController extends PageController {
     @FXML
     private void addVineyardsToMap() {
         if (javaScriptConnector != null) {
-            List<Vineyard> vineyards = getVineyards(); // Retrieve all vineyards
+            List<Vineyard> vineyards = vineyardDAO.getAll(); // Retrieve all vineyards
             for (Vineyard vineyard : vineyards) {
                 // Debug output to verify lat/lng values
                 log.info(String.format("Adding vineyard: %s with coordinates (%f, %f)", vineyard.getName(), vineyard.getLat(), vineyard.getLon()));
