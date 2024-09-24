@@ -79,6 +79,8 @@ public class DataListPageController extends PageController {
 
     @FXML
     private TextField searchTextField;
+    @FXML
+    private Label tableResults;
     private WineDAO wineDAO;
     private VineyardDAO vineyardDAO;
 
@@ -122,6 +124,7 @@ public class DataListPageController extends PageController {
 
         // Add data to TableView
         wineTable.setItems(wines);
+        tableResults.setText(wineTable.getItems().size() + " results");
 
         wineTable.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
@@ -259,6 +262,7 @@ public class DataListPageController extends PageController {
         ObservableList<Wine> observableQueryResults =
                 FXCollections.observableArrayList(queryResults);
         wineTable.setItems(observableQueryResults);
+        tableResults.setText(wineTable.getItems().size() + " results");
     }
 
     /**
@@ -330,6 +334,7 @@ public class DataListPageController extends PageController {
         setDefaults();
         ObservableList<Wine> observableWines = FXCollections.observableArrayList(wineDAO.getAll());
         wineTable.setItems(observableWines);
+        tableResults.setText(wineTable.getItems().size() + " results");
         varietyComboBox.setValue(varietyComboBox.getItems().getFirst());
         regionComboBox.setValue(regionComboBox.getItems().getFirst());
         yearComboBox.setValue(yearComboBox.getItems().getFirst());
