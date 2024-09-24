@@ -2,29 +2,36 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
 <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="618.0" prefWidth="1084.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DashboardPageController">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="10.0" prefWidth="463.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="393.0" minWidth="10.0" prefWidth="169.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="475.0" minWidth="10.0" prefWidth="452.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints maxHeight="135.33331298828125" minHeight="10.0" prefHeight="71.99998982747397" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="191.0000228881836" minHeight="10.0" prefHeight="133.33334350585938" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="139.0" minHeight="10.0" prefHeight="139.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="191.0000228881836" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="191.0000228881836" minHeight="10.0" prefHeight="161.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="132.33331298828125" minHeight="10.0" prefHeight="42.333338419596316" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="132.33331298828125" minHeight="10.0" prefHeight="42.333338419596316" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="184.99999491373694" minHeight="10.0" prefHeight="184.99999491373694" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="My Dashboard" GridPane.columnSpan="2" GridPane.halignment="CENTER" />
-      <PieChart fx:id="pieChart" title="Pie Chart" GridPane.rowIndex="1" />
-      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <Label text="My Dashboard" GridPane.columnSpan="3" GridPane.halignment="CENTER">
+         <font>
+            <Font size="47.0" />
+         </font></Label>
+      <PieChart fx:id="pieChart" prefHeight="127.0" prefWidth="499.0" GridPane.rowIndex="2" />
+      <GridPane GridPane.columnIndex="2" GridPane.rowIndex="2">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -43,12 +50,12 @@
             <Label text="Top Colour" GridPane.rowIndex="3" />
          </children>
       </GridPane>
-      <Label text="Wines I've Reviewed" GridPane.rowIndex="2">
+      <Label text="Wines I've Reviewed" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets left="20.0" />
          </GridPane.margin>
       </Label>
-      <TableView fx:id="reviewedWinesTable" prefHeight="271.0" prefWidth="1018.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+      <TableView fx:id="reviewedWinesTable" prefHeight="271.0" prefWidth="1018.0" GridPane.columnSpan="3" GridPane.rowIndex="5">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />
@@ -57,7 +64,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </GridPane.margin>
       </TableView>
-      <GridPane GridPane.columnSpan="2" GridPane.rowIndex="3">
+      <GridPane GridPane.columnSpan="2" GridPane.rowIndex="4">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -75,5 +82,7 @@
             </Label>
          </children>
       </GridPane>
+      <ComboBox fx:id="piechartTypeComboBox" onAction="#onPiechartComboBoxClicked" prefHeight="42.0" prefWidth="170.0" promptText="Pie Chart Type" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label fx:id="piechartTitle" text="Pie Chart Title" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
    </children>
 </GridPane>
