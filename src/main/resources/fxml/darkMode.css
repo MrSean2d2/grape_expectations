@@ -36,7 +36,7 @@ Light mode for the application
 .button {
     -fx-background-color: #2e3036;
     -fx-text-fill: #fff;
-    -fx-border-color: #2e3036;
+    -fx-border-color: transparent;
 }
 
 .button:hover {
@@ -52,7 +52,7 @@ Light mode for the application
 .dropdown {
     -fx-background-color: #2e3036;
     -fx-text-fill: #fff;
-    -fx-border-color: #2e3036;
+    -fx-border-color: transparent;
 }
 
 .dropdown:hover {
