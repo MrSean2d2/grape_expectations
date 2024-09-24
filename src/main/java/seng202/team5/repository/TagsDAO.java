@@ -1,14 +1,17 @@
 package seng202.team5.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.Tag;
 import seng202.team5.services.DatabaseService;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Database Access Object for the Created_tags tables in the SQL database.
@@ -38,8 +41,8 @@ public class TagsDAO implements DAOInterface<Tag> {
         List<Tag> tags = new ArrayList<>();
         String sql = "SELECT * FROM created_tags";
         try (Connection conn = databaseService.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Tag tag = new Tag(
                         rs.getInt("tagid"),
@@ -66,7 +69,7 @@ public class TagsDAO implements DAOInterface<Tag> {
         Tag tag;
         String sql = "SELECT * FROM created_tags WHERE tagid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, tagId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -93,9 +96,9 @@ public class TagsDAO implements DAOInterface<Tag> {
      */
     public List<Tag> getFromUser(int id) {
         List<Tag> tags = new ArrayList<>();
-        String sql = "SELECT * FROM created_tags WHERE userid=?";
+        String sql = "SELECT * FROM created_tags WHERE userid=? OR userid=-1";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -124,7 +127,7 @@ public class TagsDAO implements DAOInterface<Tag> {
     public int add(Tag toAdd) throws DuplicateEntryException {
         String sql = "INSERT INTO created_tags (userId, name, colour) VALUES (?, ?, ?)";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, toAdd.getUserId());
             ps.setString(2, toAdd.getName());
             ps.setInt(3, toAdd.getColour());
@@ -151,7 +154,7 @@ public class TagsDAO implements DAOInterface<Tag> {
     public void delete(int tagId) {
         String sql = "DELETE FROM created_tags WHERE tagid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, tagId);
             ps.executeUpdate();
         } catch (SQLException sqlException) {
@@ -168,7 +171,7 @@ public class TagsDAO implements DAOInterface<Tag> {
     public void deleteFromUser(int userId) {
         String sql = "DELETE FROM created_tags WHERE userid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.executeUpdate();
         } catch (SQLException sqlException) {
@@ -188,7 +191,7 @@ public class TagsDAO implements DAOInterface<Tag> {
                 + "colour=? "
                 + "WHERE tagid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, toUpdate.getName());
             ps.setInt(2, toUpdate.getColour());
             ps.setInt(3, toUpdate.getTagId());

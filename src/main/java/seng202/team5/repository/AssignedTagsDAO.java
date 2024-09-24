@@ -1,15 +1,14 @@
 package seng202.team5.repository;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.AssignedTag;
 import seng202.team5.services.DatabaseService;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Database Access Object for the Assigned_tags tables in the SQL database.
@@ -39,8 +38,8 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
         List<AssignedTag> tags = new ArrayList<>();
         String sql = "SELECT * FROM assigned_tags";
         try (Connection conn = databaseService.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 AssignedTag tag = new AssignedTag(
                         rs.getInt("tagid"),
@@ -66,7 +65,7 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
         AssignedTag tag;
         String sql = "SELECT * FROM assigned_tags WHERE tagid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, tagId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -94,7 +93,7 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
         List<AssignedTag> tags = new ArrayList<>();
         String sql = "SELECT * FROM assigned_tags WHERE userid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -123,7 +122,7 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
         List<AssignedTag> tags = new ArrayList<>();
         String sql = "SELECT * FROM assigned_tags WHERE wineid=? AND userid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, wineId);
             ps.setInt(2, userId);
             ResultSet rs = ps.executeQuery();
@@ -152,7 +151,7 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
     public int add(AssignedTag toAdd) throws DuplicateEntryException {
         String sql = "INSERT OR IGNORE INTO assigned_tags (wineid, tagid, userid) VALUES (?, ?, ?)";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, toAdd.getWineId());
             ps.setInt(2, toAdd.getTagId());
             ps.setInt(3, toAdd.getUserId());
@@ -188,7 +187,7 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
     public void deleteFromTagId(int tagId) {
         String sql = "DELETE FROM assigned_tags WHERE tagid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, tagId);
             ps.executeUpdate();
         } catch (SQLException sqlException) {
@@ -204,7 +203,7 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
     public void deleteFromUserId(int userId) {
         String sql = "DELETE FROM assigned_tags WHERE userid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.executeUpdate();
         } catch (SQLException sqlException) {
@@ -221,9 +220,9 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
     public void deleteFromUserWineId(int userId, int wineId) {
         String sql = "DELETE FROM assigned_tags WHERE userid=? AND wineid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
-            ps.setInt(2, userId);
+            ps.setInt(2, wineId);
             ps.executeUpdate();
         } catch (SQLException sqlException) {
             log.error(sqlException);
@@ -238,7 +237,7 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
     public void deleteFromWineId(int wineId) {
         String sql = "DELETE FROM assigned_tags WHERE wineid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, wineId);
             ps.executeUpdate();
         } catch (SQLException sqlException) {
@@ -254,7 +253,7 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
     public void deleteAssignedTag(int wineId, int tagId, int userId) {
         String sql = "DELETE FROM assigned_tags WHERE wineid=? AND tagid=? AND userId=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, wineId);
             ps.setInt(2, tagId);
             ps.setInt(3, userId);

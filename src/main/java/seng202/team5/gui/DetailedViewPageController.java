@@ -1,5 +1,12 @@
 package seng202.team5.gui;
 
+import static java.lang.Math.max;
+import static seng202.team5.services.ColourLookupService.getTagLabelColour;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,15 +32,6 @@ import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import static java.lang.Math.max;
-import static seng202.team5.services.ColourLookupService.getTagLabelColour;
-
 
 /**
  * Controller for the detailed view page.
@@ -113,7 +111,6 @@ public class DetailedViewPageController extends PageController {
         }
 
         if (UserService.getInstance().getCurrentUser() != null) {
-
             userId = UserService.getInstance().getCurrentUser().getId();
             ReviewDAO reviewDAO = new ReviewDAO();
             Review review = reviewDAO.getWineReview(selectedWineId, userId);
@@ -159,7 +156,9 @@ public class DetailedViewPageController extends PageController {
         }
     }
 
-    // Method to show the popover-like popup for tag selection
+    /**
+     * Show a popover to select a new tag
+     */
     @FXML
     public void showTagPopover() {
         if (UserService.getInstance().getCurrentUser() != null) {
@@ -186,6 +185,9 @@ public class DetailedViewPageController extends PageController {
 
                     for (Tag tag : tags) {
                         if (tagsList.contains(tag)) continue;
+                        // Set the user ID to be the current user id, override the default
+                        //  user ID may be -1, for default tags
+                        tag.setUserId(userId);
 
                         // Add non-existing ones :D
                         Label newTag = new Label(tag.getName());
@@ -194,7 +196,7 @@ public class DetailedViewPageController extends PageController {
 
                         newTag.getStyleClass().add(getTagLabelColour(tag.getColour()));
 
-                        // Remove on click
+                        // Add on click
                         newTag.setOnMouseClicked(event -> {
                             if (!(tagsList.contains(tag)) && tagPopover.isShowing()) {
                                 addTag(tag);
@@ -207,9 +209,7 @@ public class DetailedViewPageController extends PageController {
                     }
                     existingBox.getChildren().addAll(labels);
 
-                    content.lookup("#closeButton").setOnMouseClicked(event -> {
-                        closePopOver();
-                    });
+                    content.lookup("#closeButton").setOnMouseClicked(event -> closePopOver());
 
                     // Add a button to confirm selection
                     Button confirmButton = (Button) content.lookup("#submitButton");
@@ -231,14 +231,15 @@ public class DetailedViewPageController extends PageController {
     }
 
     /**
-     * Close Pop Over
+     * Close the tag menu.
      */
     private void closePopOver() {
         tagPopover.hide();
     }
 
     /**
-     * Handles a BASIC tag getting added to this wine
+     * Handles a BASIC tag getting added to this wine.
+     * The basic tag is used as the "adder" tag
      *
      * @param label the text to display
      */
@@ -249,22 +250,19 @@ public class DetailedViewPageController extends PageController {
         // Basic adder
         newTag.setStyle("-fx-font-weight: 700");
         // Click add behaviour
-        newTag.setOnMouseClicked(event -> {
-            showTagPopover();
-        });
+        newTag.setOnMouseClicked(event -> showTagPopover());
 
         newTag.setCursor(Cursor.HAND);
 
         int numChildren = tagBox.getChildren().size();
-        tagBox.getChildren().add(max(numChildren - 1, 0), newTag);
-
-
+        tagBox.getChildren().add(max(numChildren - 1, 0), newTag); //Add just before the final tag
         updateTags();
+
         return newTag;
     }
 
     /**
-     * Handles a tag getting added to this wine
+     * Handles a tag getting added to this wine.
      *
      * @param tag the text to display
      */
@@ -293,7 +291,7 @@ public class DetailedViewPageController extends PageController {
     }
 
     /**
-     * Handles adding a tag with a custom name (from the custom name field)
+     * Handles adding a tag with a custom name (from the custom name field).
      */
     public void addTagWithCustomName(Node content) throws DuplicateEntryException {
         if (canAddTag && tagPopover.isShowing()) {
@@ -302,13 +300,13 @@ public class DetailedViewPageController extends PageController {
 
             // Name validity checks
             boolean nameIsValid = true;
-            if(customTag.isEmpty()){
+            if (customTag.isEmpty()) {
                 nameIsValid = false;
             } else {
                 // Check that this tag doesn't already exist
                 List<Tag> userTags = tagsDAO.getFromUser(userId);
-                for(Tag tag : userTags) {
-                    if(customTag.equals(tag.getName())) {
+                for (Tag tag : userTags) {
+                    if (customTag.equals(tag.getName())) {
                         nameIsValid = false;
                         break;
                     }
@@ -332,7 +330,7 @@ public class DetailedViewPageController extends PageController {
     }
 
     /**
-     * Update tags
+     * Update the selected tags (Set the visibility of the add button).
      */
     private void updateTags() {
         int numChildren = tagBox.getChildren().size();
@@ -422,7 +420,6 @@ public class DetailedViewPageController extends PageController {
                 // Add to assigned tags db
                 for (Tag tag : tagsList) {
                     assignedTagsDAO.add(new AssignedTag(tag.getTagId(), userId, selectedWineId));
-                    System.out.println(tag.getTagId());
                 }
             }
         } catch (DuplicateEntryException e) {
