@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
+import seng202.team5.models.Role;
 import seng202.team5.models.Tag;
 import seng202.team5.models.User;
 import seng202.team5.repository.TagsDAO;
@@ -69,9 +70,9 @@ public class TagsDAOTest {
      */
     @Test
     public void testGetAll() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", "user", 0);
+        User testUser = new User("test", "pass", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
-        User testUser2 = new User("test2", "pass", "user", 0);
+        User testUser2 = new User("test2", "pass", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
@@ -93,9 +94,9 @@ public class TagsDAOTest {
      */
     @Test
     public void testGetOne() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", "user", 0);
+        User testUser = new User("test", "pass", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
-        User testUser2 = new User("test2", "pass", "user", 0);
+        User testUser2 = new User("test2", "pass", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
@@ -117,9 +118,9 @@ public class TagsDAOTest {
      */
     @Test
     public void testGetFromUser() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", "user", 0);
+        User testUser = new User("test", "pass", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
-        User testUser2 = new User("test2", "pass", "user", 0);
+        User testUser2 = new User("test2", "pass", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
@@ -141,7 +142,7 @@ public class TagsDAOTest {
      */
     @Test
     public void testDeleteTag() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", "user", 0);
+        User testUser = new User("test", "pass", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
@@ -162,10 +163,10 @@ public class TagsDAOTest {
      */
     @Test
     public void testDeleteTagFromUser() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", "user", 0);
+        User testUser = new User("test", "pass", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
-        User testUser2 = new User("test2", "pass", "user", 0);
+        User testUser2 = new User("test2", "pass", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
@@ -194,7 +195,7 @@ public class TagsDAOTest {
      */
     @Test
     public void testUpdateTag() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", "user", 0);
+        User testUser = new User("test", "pass", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
