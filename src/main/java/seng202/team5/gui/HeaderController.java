@@ -1,5 +1,6 @@
 package seng202.team5.gui;
 
+import java.io.IOException;
 import javafx.animation.TranslateTransition;
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -8,17 +9,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.commons.lang3.NotImplementedException;
 import seng202.team5.services.UserService;
-
-import java.io.IOException;
 
 
 /**
@@ -38,13 +37,13 @@ public class HeaderController {
     private Button homeButton;
 
     @FXML
+    private ImageView homeIcon;
+
+    @FXML
     private Button dataListButton;
 
     @FXML
     private Button mapButton;
-
-    @FXML
-    private Button dashboardButton;
 
     @FXML
     private Button accountButton;
@@ -69,6 +68,14 @@ public class HeaderController {
         scrollPane.setOnMousePressed(Event::consume);
         pageContainer.setOnMousePressed(Event::consume);
 
+        UserService.getInstance().getUserProperty().addListener((observable, oldUser, newUser) -> {
+            if (newUser != null) {
+                homeIcon.setImage(new Image(getClass().getResourceAsStream("/images/Dashboard.png")));
+            } else {
+                homeIcon.setImage(new Image(getClass().getResourceAsStream("/images/Home.png")));
+            }
+        });
+
         scrollPane.setOnMousePressed((Event) -> { // remove weird focus...
             pageContainer.requestFocus();
         });
@@ -77,7 +84,6 @@ public class HeaderController {
         homeButton.setTooltip(new Tooltip("Home page"));
         dataListButton.setTooltip(new Tooltip("Data list page"));
         mapButton.setTooltip(new Tooltip("Map page"));
-        dashboardButton.setTooltip(new Tooltip("Dashboard page"));
         accountButton.setTooltip(new Tooltip("Account page"));
     }
 
@@ -88,7 +94,12 @@ public class HeaderController {
      */
     @FXML
     private void loadHomePage() throws Exception {
-        loadPage("/fxml/newHomePage.fxml");
+        if (UserService.getInstance().getCurrentUser() != null) {
+            throw new NotImplementedException("page not implemented");
+//          loadPage("/fxml/DashboardPage.fxml");
+        } else {
+            loadPage("/fxml/HomePage.fxml");
+        }
         homeButton.getStyleClass().add("active");
     }
 
@@ -113,17 +124,6 @@ public class HeaderController {
     private void loadMapPage() throws Exception {
         loadPage("/fxml/MapPage.fxml");
         mapButton.getStyleClass().add("active");
-    }
-
-
-    /**
-     * Load the map page.
-     *
-     * @throws Exception if loading the page fails
-     */
-    @FXML
-    private void loadDashboardPage() throws Exception {
-        throw new NotImplementedException("page not implemented");
     }
 
     /**
@@ -196,7 +196,7 @@ public class HeaderController {
     }
 
     /**
-     * Add a notification to the top page
+     * Add a notification to the top page.
      */
     public void addNotification(String text, String col) {
         try {
@@ -222,7 +222,7 @@ public class HeaderController {
             popUp.setOnFinished(e -> {
                 popDown.setDelay(Duration.seconds(3));
                 popDown.play();
-                popDown.setOnFinished(event -> {pageContainer.getChildren().remove(notification);});
+                popDown.setOnFinished(event -> pageContainer.getChildren().remove(notification));
             });
 
         } catch (IOException e) {
