@@ -1,4 +1,4 @@
-package seng202;
+package seng202.team5.services;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
