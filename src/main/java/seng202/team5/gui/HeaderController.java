@@ -71,8 +71,10 @@ public class HeaderController {
         UserService.getInstance().getUserProperty().addListener((observable, oldUser, newUser) -> {
             if (newUser != null) {
                 homeIcon.setImage(new Image(getClass().getResourceAsStream("/images/Dashboard.png")));
+                homeButton.setTooltip(new Tooltip("Dashboard page"));
             } else {
                 homeIcon.setImage(new Image(getClass().getResourceAsStream("/images/Home.png")));
+                homeButton.setTooltip(new Tooltip("Home page"));
             }
         });
 
@@ -95,8 +97,7 @@ public class HeaderController {
     @FXML
     private void loadHomePage() throws Exception {
         if (UserService.getInstance().getCurrentUser() != null) {
-            throw new NotImplementedException("page not implemented");
-//          loadPage("/fxml/DashboardPage.fxml");
+          loadPage("/fxml/DashboardPage.fxml");
         } else {
             loadPage("/fxml/HomePage.fxml");
         }
