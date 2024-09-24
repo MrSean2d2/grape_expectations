@@ -222,9 +222,9 @@ public class DataLoadService {
             Wine wine = wineFromText(entry);
             if (wine != null) {
 
-                for (int i = 0; i < wineColourCSV.size(); i++) {
-                    if (wineColourCSV.get(i)[0].equals(wine.getWineVariety())) {
-                        wine.setColour(wineColourCSV.get(i)[1]);
+                for (String[] strings : wineColourCSV) {
+                    if (strings[0].equals(wine.getWineVariety())) {
+                        wine.setColour(strings[1]);
                         break;
                     }
                 }
