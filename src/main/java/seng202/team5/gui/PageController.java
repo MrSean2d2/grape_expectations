@@ -29,4 +29,18 @@ public class PageController {
             log.error(e);
         }
     }
+
+    /**
+     * Add a notification to the main page
+     */
+    public void addNotification(String text, String col) {
+        headerController.addNotification(text, col);
+    }
+
+    /**
+     * Return header controller
+     */
+    public HeaderController getHeaderController() {
+        return this.headerController;
+    }
 }

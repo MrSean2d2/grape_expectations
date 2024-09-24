@@ -1,18 +1,24 @@
 package seng202.team5.gui;
 
-import java.io.IOException;
+import javafx.animation.TranslateTransition;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.apache.commons.lang3.NotImplementedException;
 import seng202.team5.services.UserService;
+
+import java.io.IOException;
 
 
 /**
@@ -38,6 +44,9 @@ public class HeaderController {
     private Button mapButton;
 
     @FXML
+    private Button dashboardButton;
+
+    @FXML
     private Button accountButton;
 
     @FXML
@@ -60,10 +69,15 @@ public class HeaderController {
         scrollPane.setOnMousePressed(Event::consume);
         pageContainer.setOnMousePressed(Event::consume);
 
+        scrollPane.setOnMousePressed((Event) -> { // remove weird focus...
+            pageContainer.requestFocus();
+        });
+
         logoButton.setTooltip(new Tooltip("Home page"));
         homeButton.setTooltip(new Tooltip("Home page"));
         dataListButton.setTooltip(new Tooltip("Data list page"));
         mapButton.setTooltip(new Tooltip("Map page"));
+        dashboardButton.setTooltip(new Tooltip("Dashboard page"));
         accountButton.setTooltip(new Tooltip("Account page"));
     }
 
@@ -101,6 +115,16 @@ public class HeaderController {
         mapButton.getStyleClass().add("active");
     }
 
+
+    /**
+     * Load the map page.
+     *
+     * @throws Exception if loading the page fails
+     */
+    @FXML
+    private void loadDashboardPage() throws Exception {
+        throw new NotImplementedException("page not implemented");
+    }
 
     /**
      * Load the account page.
@@ -169,5 +193,40 @@ public class HeaderController {
 
         // Begin loading
         new Thread(createScene).start();
+    }
+
+    /**
+     * Add a notification to the top page
+     */
+    public void addNotification(String text, String col) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Notification.fxml"));
+            Node notification = loader.load();
+            pageContainer.getChildren().add(notification);
+            StackPane.setAlignment(notification, Pos.BOTTOM_CENTER);
+
+            NotificationController notificationController = loader.getController();
+            notificationController.setText(text);
+            notificationController.setColourBand(col);
+
+            TranslateTransition popUp = new TranslateTransition(Duration.millis(150), notification);
+            popUp.setFromY(100);
+            popUp.setToY(-20);
+
+            TranslateTransition popDown = new TranslateTransition(Duration.millis(150), notification);
+            popDown.setFromY(-20);
+            popDown.setToY(100);
+
+            popUp.play();
+
+            popUp.setOnFinished(e -> {
+                popDown.setDelay(Duration.seconds(3));
+                popDown.play();
+                popDown.setOnFinished(event -> {pageContainer.getChildren().remove(notification);});
+            });
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
