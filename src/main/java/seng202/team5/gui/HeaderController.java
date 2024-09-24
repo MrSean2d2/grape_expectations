@@ -68,6 +68,7 @@ public class HeaderController {
         dataListButton.setTooltip(new Tooltip("Data list page"));
         mapButton.setTooltip(new Tooltip("Map page"));
         accountButton.setTooltip(new Tooltip("Account page"));
+        dashboardButton.setTooltip(new Tooltip("Dashboard page"));
     }
 
     /**
@@ -124,6 +125,17 @@ public class HeaderController {
         accountButton.getStyleClass().add("active");
     }
 
+    /**
+     * Load Dashboard page
+     *
+     * @throws Exception if loading page fails
+     */
+    @FXML
+    public void loadDashboardPage() throws Exception {
+        loadPage("/fxml/DashboardPage.fxml");
+        dashboardButton.getStyleClass().add("active");
+    }
+
 
     /**
      * Load a page with a path given as an argument.
@@ -160,6 +172,7 @@ public class HeaderController {
         dataListButton.getStyleClass().remove("active");
         mapButton.getStyleClass().remove("active");
         accountButton.getStyleClass().remove("active");
+        dashboardButton.getStyleClass().remove("active");
 
         // Load the loading page :)
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
@@ -174,8 +187,4 @@ public class HeaderController {
         new Thread(createScene).start();
     }
 
-    public void loadDashboardPage(ActionEvent event) throws Exception {
-        loadPage("/fxml/DashboardPage.fxml");
-        dashboardButton.getStyleClass().add("active");
-    }
 }
