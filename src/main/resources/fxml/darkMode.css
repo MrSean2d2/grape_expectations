@@ -1,0 +1,110 @@
+/*
+Light mode for the application
+ */
+
+@import url(baseStyle.css);
+
+.root {
+    -fx-background-color: #3f424d;
+    -fx-text-fill: #000000;
+}
+
+.primary {
+    -fx-background-color: #3f424d;
+}
+
+.accent {
+    -fx-background-color: #2e3036;
+}
+
+#backgroundImage{
+    -fx-background-image: url("../images/vineyard_background_night.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
+.label {
+    -fx-text-fill: #eeeeee;
+}
+
+
+.warningText {
+    -fx-text-fill: #e95958;
+}
+
+.button {
+    -fx-background-color: #2e3036;
+    -fx-text-fill: #fff;
+    -fx-border-color: #2e3036;
+}
+
+.button:hover {
+    -fx-border-color: #3e3f46;
+    -fx-text-fill: #fff;
+}
+
+.textbox {
+    -fx-background-color: #2e3036;
+    -fx-text-fill: #000;
+}
+
+.dropdown {
+    -fx-background-color: #2e3036;
+    -fx-text-fill: #fff;
+    -fx-border-color: #2e3036;
+}
+
+.dropdown:hover {
+    -fx-border-color: #3e3f46;
+}
+
+.dropdown .list-cell {
+    -fx-background-color: #2e3036;
+    -fx-text-fill: #fff;
+}
+.dropdown .list-cell:odd {
+    -fx-background-color: #34363d;
+}
+
+.dropdown .list-cell:hover {
+    -fx-background-color: #3e3f46;
+}
+
+.menu-item {
+    -fx-background-color: #2e3036;
+    -fx-text-fill: #fff;
+}
+
+.menu-item:hover {
+    -fx-background-color: #3e3f46;
+    -fx-text-fill: #000000;
+}
+
+.table-view {
+    -fx-table-cell-border-color: #2e3036;
+}
+
+.table-row-cell{
+    -fx-background-color: #2e3036;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: #34363d;
+}
+
+.table-row-cell:hover .table-cell {
+    -fx-background-color: #3e3f46;
+    -fx-text-fill: #fff;
+}
+
+
+.table-row-cell:selected .table-cell {
+    -fx-background-color: #4db265;
+    -fx-text-fill: #fff;
+}
+
+.table-row-cell .table-cell{
+    -fx-text-fill: #fff;
+}
+
