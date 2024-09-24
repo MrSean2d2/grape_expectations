@@ -1,5 +1,8 @@
 package seng202.team5.unittests.respository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +14,6 @@ import seng202.team5.repository.TagsDAO;
 import seng202.team5.repository.UserDAO;
 import seng202.team5.services.DatabaseService;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit tests for the TagsDAO.
@@ -24,6 +24,8 @@ public class TagsDAOTest {
     private static TagsDAO tagsDAO;
     private static UserDAO userDAO;
     private static DatabaseService databaseService;
+
+    public static int defaultTagCount;
 
 
     /**
@@ -37,6 +39,8 @@ public class TagsDAOTest {
 
         tagsDAO = new TagsDAO();
         userDAO = new UserDAO();
+
+        defaultTagCount = tagsDAO.getAll().size();
     }
 
 
@@ -51,10 +55,12 @@ public class TagsDAOTest {
 
     /**
      * Test that the database is empty on creation.
+     * Because of the default tags that are added in the SQLite definition file,
+     * the actual "empty" state of the database contains {defaultTagCount} default tags.
      */
     @Test
     public void testEmptyOnCreation() {
-        assertEquals(0, tagsDAO.getAll().size());
+        assertEquals(defaultTagCount, tagsDAO.getAll().size());
     }
 
 
@@ -78,7 +84,7 @@ public class TagsDAOTest {
         testTag3.setTagId(tagsDAO.add(testTag3));
 
         List<Tag> tags = tagsDAO.getAll();
-        assertEquals(3, tags.size());
+        assertEquals(3 + defaultTagCount, tags.size());
     }
 
 
@@ -101,8 +107,8 @@ public class TagsDAOTest {
         Tag testTag3 = new Tag(testUser2.getId(), "Tag 3", 0);
         testTag3.setTagId(tagsDAO.add(testTag3));
 
-        Tag tag = tagsDAO.getOne(1);
-        assertEquals("Tag 1", tag.getName());
+        List<Tag> tags = tagsDAO.getAll();
+        assertEquals("Tag 1", tags.get(defaultTagCount).getName());
     }
 
 
@@ -126,7 +132,7 @@ public class TagsDAOTest {
         testTag3.setTagId(tagsDAO.add(testTag3));
 
         List<Tag> userTags = tagsDAO.getFromUser(testUser2.getId());
-        assertEquals(2, userTags.size());
+        assertEquals(2 + defaultTagCount, userTags.size());
     }
 
 
@@ -142,12 +148,12 @@ public class TagsDAOTest {
         testTag.setTagId(tagsDAO.add(testTag));
 
         List<Tag> tags = tagsDAO.getAll();
-        assertEquals(1, tags.size());
+        assertEquals(1 + defaultTagCount, tags.size());
 
         tagsDAO.delete(1);
 
         tags = tagsDAO.getAll();
-        assertEquals(0, tags.size());
+        assertEquals(defaultTagCount, tags.size());
     }
 
 
@@ -175,12 +181,12 @@ public class TagsDAOTest {
         testTag4.setTagId(tagsDAO.add(testTag4));
 
         List<Tag> tags = tagsDAO.getAll();
-        assertEquals(4, tags.size());
+        assertEquals(4 + defaultTagCount, tags.size());
 
         tagsDAO.deleteFromUser(1);
 
         tags = tagsDAO.getAll();
-        assertEquals(1, tags.size());
+        assertEquals(1 + defaultTagCount, tags.size());
     }
 
     /**
@@ -193,7 +199,6 @@ public class TagsDAOTest {
 
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
         testTag.setTagId(tagsDAO.add(testTag));
-
 
         assertEquals("Tag 1", testTag.getName());
         testTag.setName("Tag 10");
