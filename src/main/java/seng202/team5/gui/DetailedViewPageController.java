@@ -66,6 +66,8 @@ public class DetailedViewPageController extends PageController {
     @FXML
     private Label logInMessageLabel;
     @FXML
+    private Label addTagLabel;
+    @FXML
     private Label provinceLabel;
     @FXML
     private Label varietyLabel;
@@ -141,6 +143,7 @@ public class DetailedViewPageController extends PageController {
             }
 
             logInMessageLabel.setText("");
+            addTagLabel.setText("");
             notesTextArea.setText(review.getNotes());
             updateFavoriteButton(review.isFavourite());
             updateStarDisplay(review.getRating());
@@ -149,7 +152,8 @@ public class DetailedViewPageController extends PageController {
             saveNotesButton.setDisable(false);
             notesTextArea.setEditable(true);
         } else {
-            logInMessageLabel.setText("Log in or register to save your notes!");
+            logInMessageLabel.setText("Log in to save your notes!");
+            addTagLabel.setText("Log in to add tags!");
             favoriteToggleButton.setDisable(true);
             saveNotesButton.setDisable(true);
             notesTextArea.setEditable(false);

@@ -29,6 +29,10 @@ Light mode for the application
 }
 
 
+.warningText {
+    -fx-text-fill: #e95958;
+}
+
 .button {
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
