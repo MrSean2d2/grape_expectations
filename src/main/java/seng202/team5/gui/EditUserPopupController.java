@@ -63,6 +63,11 @@ public class EditUserPopupController {
             errorLabel.setVisible(true);
             passwordField.getStyleClass().add("field_error");
             confPasswordField.getStyleClass().add("field_error");
+        } else if (passwordField.getText().isBlank() || confPasswordField.getText().isBlank()) {
+            errorLabel.setText("Password cannot be empty!");
+            errorLabel.setVisible(true);
+            passwordField.getStyleClass().add("field_error");
+            confPasswordField.getStyleClass().add("field_error");
         } else {
             errorLabel.setVisible(false);
             passwordField.getStyleClass().remove("field_error");
