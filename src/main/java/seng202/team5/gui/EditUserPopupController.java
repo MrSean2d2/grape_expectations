@@ -1,8 +1,5 @@
 package seng202.team5.gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -15,6 +12,11 @@ import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
 import seng202.team5.services.UserService;
 
+/**
+ * A controller for the edit user window.
+ *
+ * @author Sean Reitsma
+ */
 public class EditUserPopupController {
 
     @FXML
@@ -55,7 +57,7 @@ public class EditUserPopupController {
     }
 
     @FXML
-    private void submit(ActionEvent event) {
+    private void submit() {
         if (!(passwordField.getText().equals(confPasswordField.getText()))) {
             errorLabel.setText("Passwords do not match!");
             errorLabel.setVisible(true);

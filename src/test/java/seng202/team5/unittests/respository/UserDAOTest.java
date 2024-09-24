@@ -131,7 +131,7 @@ public class UserDAOTest {
         user.setId(userId);
 
         assertEquals("user1", userDAO.getOne(1).getUsername());
-        assertEquals("user", userDAO.getOne(1).getRole());
+        assertEquals("user", userDAO.getOne(1).getRole().getRoleName());
 
         user.setUsername("user2");
         user.setRole(Role.ADMIN);
@@ -139,7 +139,7 @@ public class UserDAOTest {
         userDAO.update(user);
 
         assertEquals("user2", userDAO.getOne(1).getUsername());
-        assertEquals("admin", userDAO.getOne(1).getRole());
+        assertEquals("admin", userDAO.getOne(1).getRole().getRoleName());
     }
 
 

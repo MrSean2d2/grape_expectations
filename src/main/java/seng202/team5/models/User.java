@@ -19,8 +19,8 @@ public class User {
      *
      * @param username user's unique username
      * @param password user's (hashed) password
-     * @param role user's role
-     * @param icon user's icon number
+     * @param role     user's role
+     * @param icon     user's icon number
      */
     public User(String username, String password, Role role, int icon) {
         this.username = username;
@@ -32,11 +32,11 @@ public class User {
     /**
      * Initialise a new User.
      *
-     * @param id user's unique identification number
+     * @param id       user's unique identification number
      * @param username user's unique username
      * @param password user's (hashed) password
-     * @param role user's role
-     * @param icon user's icon number
+     * @param role     user's role
+     * @param icon     user's icon number
      */
     public User(int id, String username, String password, Role role, int icon) {
         this.id = id;
@@ -71,8 +71,7 @@ public class User {
      */
     public String getIcon() {
         String iconPath = switch (icon) {
-            case 0, 1, 2, 3, 4 ->
-                    "/images/user_profile" + icon + ".png";
+            case 0, 1, 2, 3, 4 -> "/images/user_profile" + icon + ".png";
             default -> "/images/user_profile0.png";
         };
         return iconPath;
@@ -164,9 +163,9 @@ public class User {
             return false;
         }
         User user = (User) o;
-        return id == user.id && icon == user.icon &&
-                Objects.equals(username, user.username) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(role, user.role);
+        return id == user.id && icon == user.icon
+                && Objects.equals(username, user.username)
+                && Objects.equals(password, user.password)
+                && Objects.equals(role, user.role);
     }
 }

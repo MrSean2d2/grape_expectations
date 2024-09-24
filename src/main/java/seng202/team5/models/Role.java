@@ -1,10 +1,12 @@
 package seng202.team5.models;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
+/**
+ * An enum to represent role strings in a way that is easier to verify.
+ *
+ * @author Sean Reitsma
+ */
 public enum Role {
     ADMIN("admin"),
     USER("user");

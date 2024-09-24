@@ -120,6 +120,12 @@ public class UserDAO implements DAOInterface<User> {
         throw new NotFoundException(String.format("No user with %s found", username));
     }
 
+    /**
+     * Return a list of users whose usernames match the regexp given by term.
+     *
+     * @param term the search term to be matched against
+     * @return the list of matching users
+     */
     public List<User> getMatchingUserName(String term) {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM user WHERE username LIKE ?";

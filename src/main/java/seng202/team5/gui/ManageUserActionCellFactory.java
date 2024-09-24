@@ -15,7 +15,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import seng202.team5.models.User;
-import seng202.team5.repository.UserDAO;
 import seng202.team5.services.UserService;
 
 /**
