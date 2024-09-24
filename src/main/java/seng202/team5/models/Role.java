@@ -1,29 +1,34 @@
 package seng202.team5.models;
 
-/**
- * Class to record user role information. At this stage this only consists of
- * keeping track of whether the user is an admin or not.
- *
- * @author Finn Brown
- * @author Sean Reitsma
- */
-public class Role {
-    private boolean isAdmin = false;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
-    /**
-     * Toggle's the admin status of the role.
-     */
-    public void toggleAdmin() {
-        isAdmin = !isAdmin;
+public enum Role {
+    ADMIN("admin"),
+    USER("user");
+
+    private final String roleName;
+
+    Role(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRoleName() {
+        return roleName;
     }
 
     /**
-     * Returns true if the user is an admin.
+     * Get the first role matching the specified name, defaulting to {@link Role#USER}
+     * if not found.
      *
-     * @return whether the user is an admin
+     * @param name the name to match
+     * @return the matching role
      */
-    public boolean adminQuery() {
-        return isAdmin;
+    public static Role getRoleFromName(String name) {
+        return Arrays.stream(values()).filter(
+                r -> r.roleName.equals(name)).findFirst().orElse(USER);
     }
 
 }

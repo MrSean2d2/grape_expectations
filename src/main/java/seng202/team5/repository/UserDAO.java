@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.NotFoundException;
+import seng202.team5.models.Role;
 import seng202.team5.models.User;
 import seng202.team5.services.DatabaseService;
 
@@ -49,7 +50,7 @@ public class UserDAO implements DAOInterface<User> {
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getString("role"),
+                        Role.getRoleFromName(rs.getString("role")),
                         rs.getInt("icon"));
                 users.add(user);
             }
@@ -80,7 +81,7 @@ public class UserDAO implements DAOInterface<User> {
                             rs.getInt("id"),
                             rs.getString("username"),
                             rs.getString("password"),
-                            rs.getString("role"),
+                            Role.getRoleFromName(rs.getString("role")),
                             rs.getInt("icon"));
                 }
                 return user;
@@ -110,7 +111,7 @@ public class UserDAO implements DAOInterface<User> {
                 return new User(rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getString("role"),
+                        Role.getRoleFromName(rs.getString("role")),
                         rs.getInt("icon"));
             }
         } catch (SQLException sqlException) {
@@ -131,7 +132,7 @@ public class UserDAO implements DAOInterface<User> {
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getString("role"),
+                        Role.getRoleFromName(rs.getString("role")),
                         rs.getInt("icon"));
                 users.add(user);
             }
@@ -199,7 +200,7 @@ public class UserDAO implements DAOInterface<User> {
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, toAdd.getUsername());
             ps.setString(2, toAdd.getPassword());
-            ps.setString(3, toAdd.getRole());
+            ps.setString(3, toAdd.getRole().getRoleName());
             ps.setInt(4, toAdd.getIconNumber());
             ps.executeUpdate();
 
@@ -253,13 +254,15 @@ public class UserDAO implements DAOInterface<User> {
     @Override
     public void update(User toUpdate) {
         String sql  = "UPDATE user SET username=?, "
-                    + "role=? "
+                    + "role=?, "
+                    + "password=? "
                     + "WHERE id=?";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, toUpdate.getUsername());
-            ps.setString(2, toUpdate.getRole());
-            ps.setInt(3, toUpdate.getId());
+            ps.setString(2, toUpdate.getRole().getRoleName());
+            ps.setString(3, toUpdate.getPassword());
+            ps.setInt(4, toUpdate.getId());
             ps.executeUpdate();
         } catch (SQLException sqlException) {
             log.error(sqlException);

@@ -1,12 +1,18 @@
 package seng202.team5.gui;
 
+import java.io.IOException;
 import java.util.Optional;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
@@ -38,7 +44,6 @@ public class ManageUserActionCellFactory implements
                     buttonsHbox.getChildren().addAll(deleteUserButton, editUserButton);
                     User user = getTableView().getItems().get(getIndex());
                     User curUser = UserService.getInstance().getCurrentUser();
-                    UserDAO userDAO = new UserDAO();
                     deleteUserButton.setDisable(user.equals(curUser));
                     deleteUserButton.setOnAction(event -> {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -50,6 +55,24 @@ public class ManageUserActionCellFactory implements
                             UserService.getInstance().deleteUser(user);
                             getTableView().getItems().remove(getIndex());
                         }
+                    });
+                    editUserButton.setOnAction(event -> {
+                        try {
+                            UserService.getInstance().setSelectedUser(user);
+                            FXMLLoader editUserLoader = new FXMLLoader(getClass()
+                                    .getResource("/fxml/EditUserPopup.fxml"));
+                            Parent root = editUserLoader.load();
+                            Scene scene = new Scene(root);
+                            Stage stage = new Stage();
+                            stage.setScene(scene);
+                            stage.setTitle(String.format("Edit user %s", user.getUsername()));
+                            stage.setResizable(false);
+                            stage.initModality(Modality.WINDOW_MODAL);
+                            stage.showAndWait();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
                     });
                     setGraphic(buttonsHbox);
                     setText(null);

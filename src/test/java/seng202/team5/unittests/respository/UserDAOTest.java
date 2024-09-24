@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
+import seng202.team5.models.Role;
 import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
 import seng202.team5.services.DatabaseService;
@@ -58,14 +59,14 @@ public class UserDAOTest {
      */
     @Test
     public void testGetOne() throws DuplicateEntryException {
-        userDAO.add(new User("test", "password", "user", 0));
+        userDAO.add(new User("test", "password", Role.USER, 0));
 
         User user = userDAO.getOne(1);
         assertNotNull(user);
         assertEquals(1, user.getId());
         assertEquals("test", user.getUsername());
         assertEquals("password", user.getPassword());
-        assertEquals("user", user.getRole());
+        assertEquals(Role.USER, user.getRole());
         assertEquals(0, user.getIconNumber());
     }
 
@@ -75,12 +76,12 @@ public class UserDAOTest {
      */
     @Test
     public void testGetAll() throws DuplicateEntryException {
-        userDAO.add(new User("user1", "password", "user", 0));
-        userDAO.add(new User("user2", "password", "user", 0));
+        userDAO.add(new User("user1", "password", Role.USER, 0));
+        userDAO.add(new User("user2", "password", Role.USER, 0));
 
         assertEquals(2, userDAO.getAll().size());
 
-        userDAO.add(new User("user3", "password", "user", 0));
+        userDAO.add(new User("user3", "password", Role.USER, 0));
 
         assertEquals(3, userDAO.getAll().size());
     }
@@ -93,11 +94,11 @@ public class UserDAOTest {
     public void testAdd() throws DuplicateEntryException {
         assertEquals(0, userDAO.getAll().size());
 
-        userDAO.add(new User("user1", "password", "user", 0));
+        userDAO.add(new User("user1", "password", Role.USER, 0));
 
         assertEquals(1, userDAO.getAll().size());
 
-        userDAO.add(new User("user2", "password", "user", 0));
+        userDAO.add(new User("user2", "password", Role.USER, 0));
 
         assertEquals(2, userDAO.getAll().size());
     }
@@ -110,7 +111,7 @@ public class UserDAOTest {
     public void testDelete() throws DuplicateEntryException {
         assertEquals(0, userDAO.getAll().size());
 
-        userDAO.add(new User("user1", "password", "user", 0));
+        userDAO.add(new User("user1", "password", Role.USER, 0));
 
         assertEquals(1, userDAO.getAll().size());
 
@@ -125,7 +126,7 @@ public class UserDAOTest {
      */
     @Test
     public void testUpdate() throws DuplicateEntryException {
-        User user = new User("user1", "password", "user", 0);
+        User user = new User("user1", "password", Role.USER, 0);
         int userId = userDAO.add(user);
         user.setId(userId);
 
@@ -133,7 +134,7 @@ public class UserDAOTest {
         assertEquals("user", userDAO.getOne(1).getRole());
 
         user.setUsername("user2");
-        user.setRole("admin");
+        user.setRole(Role.ADMIN);
 
         userDAO.update(user);
 
@@ -158,7 +159,7 @@ public class UserDAOTest {
      */
     @Test
     public void testNoAdminWithRegularUser() throws DuplicateEntryException {
-        User user = new User("user1", "password", "user", 0);
+        User user = new User("user1", "password", Role.USER, 0);
         int userId = userDAO.add(user);
         user.setId(userId);
 
@@ -172,7 +173,7 @@ public class UserDAOTest {
      */
     @Test
     public void testOneAdmin() throws DuplicateEntryException {
-        User admin = new User("admin", "password", "admin", 0);
+        User admin = new User("admin", "password", Role.ADMIN, 0);
         int adminId = userDAO.add(admin);
         admin.setId(adminId);
         assertEquals(1, userDAO.getAdminCount());

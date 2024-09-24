@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InvalidUserIdException;
 import seng202.team5.exceptions.NotFoundException;
+import seng202.team5.models.Role;
 import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
 
@@ -37,15 +38,17 @@ public class UserService {
 
     private static final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);
 
+    private User selectedUser;
+
     /**
      * Constructor for UserService.
      */
-    public UserService() {
+    private UserService() {
         this.userDAO = new UserDAO();
         if (userDAO.getAdminCount() == 0) {
             User admin = registerUser("admin", "admin");
             if (admin != null) {
-                admin.setRole("admin");
+                admin.setRole(Role.ADMIN);
                 userDAO.update(admin);
             }
         }
@@ -62,6 +65,14 @@ public class UserService {
             instance = new UserService();
         }
         return instance;
+    }
+
+    /**
+     * WARNING: Sets the current singleton instance to null! Should only be used
+     * for testing.
+     */
+    public static void removeInstance() {
+        instance = null;
     }
 
     /**
@@ -86,6 +97,14 @@ public class UserService {
         return currentUser.get();
     }
 
+    public User getSelectedUser() {
+        return selectedUser;
+    }
+
+    public void setSelectedUser(User user) {
+        this.selectedUser = user;
+    }
+
 
     /**
      * Attempt to register a user, if they don't already exist.
@@ -107,7 +126,7 @@ public class UserService {
             Random rand = new Random();
             int iconNum = rand.nextInt(0, 5); // Generate a new (random) icon number
 
-            User user = new User(username, hashedPassword, "user", iconNum);
+            User user = new User(username, hashedPassword, Role.USER, iconNum);
 
             // Get the user id (autoincremented by database)
             int userId = userDAO.add(user);
@@ -130,6 +149,36 @@ public class UserService {
         }
     }
 
+    /**
+     * Update the user's password. This updates the user in place as well as
+     * returning the altered user.
+     *
+     * @param user the user to change
+     * @param password the user's new password
+     * @return the altered user
+     */
+    public User updateUserPassword(User user, String password) {
+        String oldPassword = user.getPassword();
+        try {
+            String hashedPassword = hashPassword(password, generateSalt());
+            user.setPassword(hashedPassword);
+            return user;
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            log.error(e);
+            /* Reset the password to ensure that the exception thrown didn't
+            leave the user in an inconsistent state. */
+            user.setPassword(oldPassword);
+            return user;
+        }
+    }
+
+
+    /**
+     * Delete the specified user from the database. The user object must be
+     * able to identify itself.
+     *
+     * @param user the user to delete
+     */
     public void deleteUser(User user) {
         if (!user.getIsAdmin() || userDAO.getAdminCount() > 1) {
             userDAO.delete(user.getId());

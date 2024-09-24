@@ -10,8 +10,8 @@ import java.util.Objects;
 public class User {
     private int id;
     private String username;
-    private final String password;
-    private String role;
+    private String password;
+    private Role role;
     private int icon;
 
     /**
@@ -22,7 +22,7 @@ public class User {
      * @param role user's role
      * @param icon user's icon number
      */
-    public User(String username, String password, String role, int icon) {
+    public User(String username, String password, Role role, int icon) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -38,7 +38,7 @@ public class User {
      * @param role user's role
      * @param icon user's icon number
      */
-    public User(int id, String username, String password, String role, int icon) {
+    public User(int id, String username, String password, Role role, int icon) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -106,7 +106,7 @@ public class User {
      *
      * @return the user's role
      */
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
@@ -117,7 +117,7 @@ public class User {
      * @return true if the user is an admin, false otherwise
      */
     public boolean getIsAdmin() {
-        return (Objects.equals(role, "admin"));
+        return (role == Role.ADMIN);
     }
 
 
@@ -132,7 +132,7 @@ public class User {
     /**
      * Sets the user's role.
      */
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -142,6 +142,17 @@ public class User {
      */
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    /**
+     * Set the password for the user. This should not be a plaintext password and
+     * should be set by
+     * {@link seng202.team5.services.UserService#updateUserPassword(User, String)}
+     *
+     * @param password the user's new hashed password
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
