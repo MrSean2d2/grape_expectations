@@ -11,13 +11,13 @@ import java.util.Objects;
 public class Wine {
     private int id;
     private String name;
-    private final String description;
-    private final int year;
-    private final int ratingValue;
+    private String description;
+    private int year;
+    private int ratingValue;
     private final double price;
     private String wineVariety;
     private String colour;
-    private final Vineyard vineyard;
+    private Vineyard vineyard;
 
     /**
      * Constructor for creating a wine object with a name,
@@ -100,6 +100,10 @@ public class Wine {
         return year;
     }
 
+    public void setYear(int year) {
+        this.year = year;
+    }
+
 
     /**
      * Gets the wine's rating value.
@@ -108,6 +112,10 @@ public class Wine {
      */
     public int getRating() {
         return ratingValue;
+    }
+
+    public void setRating(int rating) {
+        this.ratingValue = rating;
     }
 
 
@@ -130,6 +138,10 @@ public class Wine {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 
     /**
      * Gets the wine vineyard.
@@ -138,6 +150,10 @@ public class Wine {
      */
     public Vineyard getVineyard() {
         return vineyard;
+    }
+
+    public void setVineyard(Vineyard vineyard) {
+        this.vineyard = vineyard;
     }
 
 

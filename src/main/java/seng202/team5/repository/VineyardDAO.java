@@ -169,6 +169,27 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
     }
 
     /**
+     * Get a list of distinct vineyard names from the database.
+     *
+     * @return the list of distinct names
+     */
+    public List<String> getDistinctNames() {
+        List<String> names = new ArrayList<>();
+        String sql = "SELECT DISTINCT name FROM VINEYARD;";
+        try (Connection conn = databaseService.connect();
+                Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                names.add(rs.getString("name"));
+            }
+            return names;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+    /**
      * Update the vineyard in the database
      * Not currently implemented.
      */
