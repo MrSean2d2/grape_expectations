@@ -107,6 +107,11 @@ public class HeaderController {
         // Uses different method for loading as WebView messes with the loader
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/MapPage.fxml"));
         Node loader = baseLoader.load();
+        PageController pageController = baseLoader.getController();
+
+        if (pageController != null) {
+            pageController.setHeaderController(headerController);
+        }
 
         pageContainer.getChildren().setAll(loader);
         resetActiveButtons(mapButton);

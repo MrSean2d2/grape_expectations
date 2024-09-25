@@ -54,6 +54,9 @@
         if (lat !== undefined && lng !== undefined) {
             let m = new L.Marker([lat, lng], { icon: vineyardIcon });
             m.bindPopup(title).openPopup();
+            m.on('click', function (e) {
+                window.javaConnector.onMarkerClicked(title);
+            });
             m.addTo(map);
             markers.push(m);
         } else {
