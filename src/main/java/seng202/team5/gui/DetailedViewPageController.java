@@ -108,6 +108,10 @@ public class DetailedViewPageController extends PageController {
     private PopOver tagPopover;
     private ReviewDAO reviewDAO;
     private Review review;
+    private Modality modality;
+
+    private static List<DetailedViewPageController> openInstances = new ArrayList<>();
+
 
     /**
      * Initializes DetailedViewPage.
@@ -122,6 +126,8 @@ public class DetailedViewPageController extends PageController {
         initWineInfo(selectedWine);
         initUserReviews();
         initAdminActions();
+
+        openInstances.add(this);
 
     }
 
@@ -521,11 +527,22 @@ public class DetailedViewPageController extends PageController {
         } catch (DuplicateEntryException e) {
             throw new RuntimeException(e);
         }
+        openInstances.remove(this);
+
         backButton.getScene().getWindow().hide();
 
         // Show update message if it was updated
         if (review != null) {
             addNotification("Updated Wine Review", "#d5e958");
+        }
+    }
+
+    /**
+     * Closes all open instances of detailed view pages.
+     */
+    public static void closeAll() {
+        for (DetailedViewPageController instance : new ArrayList<>(openInstances)) {
+            instance.close();
         }
     }
 
