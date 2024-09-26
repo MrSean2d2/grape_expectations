@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InvalidUserIdException;
 import seng202.team5.exceptions.NotFoundException;
+import seng202.team5.exceptions.PasswordIncorrectException;
 import seng202.team5.models.Role;
 import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
@@ -190,7 +191,7 @@ public class UserService {
      *
      * @return user if they sign in
      */
-    public User signinUser(String username, String password) {
+    public User signinUser(String username, String password) throws NotFoundException, PasswordIncorrectException {
         // Get password from database if user exists
         try {
             User userAccount = userDAO.getFromUserName(username);
@@ -200,7 +201,9 @@ public class UserService {
             if (verifyPassword(password, hashPassword)) {
                 return userAccount;
             }
-        } catch (NotFoundException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (NotFoundException | InvalidKeySpecException e) {
+            throw new NotFoundException(e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
             log.error(e);
         }
         return null;
@@ -254,13 +257,18 @@ public class UserService {
      */
     public static boolean verifyPassword(String password, String hashedPassword)
             throws NoSuchAlgorithmException,
-                    InvalidKeySpecException {
+            InvalidKeySpecException, PasswordIncorrectException {
         String[] parts = hashedPassword.split(":");
         byte[] salt = Base64.getDecoder().decode(parts[0]);
         String storedHashBase64 = parts[1];
 
         String inputHash = hashPassword(password, salt).split(":")[1];
 
-        return storedHashBase64.equals(inputHash);
+        boolean equals = storedHashBase64.equals(inputHash);
+
+        if(!equals) {
+            throw new PasswordIncorrectException("Password incorrect");
+        }
+        return equals;
     }
 }

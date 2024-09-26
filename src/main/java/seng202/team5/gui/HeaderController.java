@@ -1,6 +1,10 @@
 package seng202.team5.gui;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import javafx.animation.TranslateTransition;
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -158,21 +162,44 @@ public class HeaderController {
             createScene.cancel(true);
         }
 
+        // Create a scheduled executor service for managing the delay
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+        // Task to show loading screen after a delay
+        Runnable showLoadingTask = () -> {
+            try {
+                // Load the loading page
+                FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
+                Node loader = baseLoader.load();
+                javafx.application.Platform.runLater(() -> pageContainer.getChildren().setAll(loader));
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+        };
+
+        // Make the loading screen show up if the task is still loading after 0.1 seconds
+        var loadingDelay = scheduler.schedule(showLoadingTask, 100, TimeUnit.MILLISECONDS);
+
         // Begin a new task
         createScene = new Task<>() {
             @Override
-            public Node call() throws IOException {
+            public Node call() {
                 FXMLLoader baseLoader = new FXMLLoader(getClass().getResource(fxml));
-                Node page = baseLoader.load();
 
-                // Set the header controller reference to the new page controller
-                PageController pageController = baseLoader.getController();
-                if (pageController != null) {
-                    pageController.setHeaderController(headerController);
+                try {
+                    Node page = baseLoader.load();
+
+                    // Set the header controller reference to the new page controller
+                    PageController pageController = baseLoader.getController();
+                    if (pageController != null) {
+                        pageController.setHeaderController(headerController);
+                    }
+                    return page;
+                } catch (IOException e) {
+                    System.out.println(e);
                 }
 
-                return page;
-
+                return null;
             }
         };
 
@@ -182,18 +209,18 @@ public class HeaderController {
         mapButton.getStyleClass().remove("active");
         accountButton.getStyleClass().remove("active");
 
-        // Load the loading page :)
-        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
-        Node loader = baseLoader.load();
-
-        pageContainer.getChildren().setAll(loader);
-
         // Update the scene
-        createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
+        createScene.setOnSucceeded(e -> {
+            loadingDelay.cancel(false);
+            scheduler.shutdown();
+
+            javafx.application.Platform.runLater(() -> pageContainer.getChildren().setAll(createScene.getValue()));
+        });
 
         // Begin loading
         new Thread(createScene).start();
     }
+
 
     /**
      * Add a notification to the top page.
