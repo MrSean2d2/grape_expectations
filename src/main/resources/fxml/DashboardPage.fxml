@@ -33,10 +33,12 @@
          </GridPane.margin>
       </Label>
       <TableView fx:id="reviewedWinesTable" prefHeight="271.0" prefWidth="1018.0" GridPane.rowIndex="4">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-        </columns>
+          <columns>
+              <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="589.3333486318588" resizable="false" text="Wine Name" />
+              <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="91.0" resizable="false" text="Price" />
+              <TableColumn fx:id="yearColumn" prefWidth="73.0" resizable="false" text="Year" />
+              <TableColumn fx:id="ratingColumn" prefWidth="79.0" resizable="false" text="Rating" />
+          </columns>
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
@@ -120,7 +122,7 @@
                   </VBox>
                </children>
             </GridPane>
-            <ComboBox fx:id="piechartTypeComboBox" maxWidth="200.0" onAction="#onPiechartComboBoxClicked" prefHeight="42.0" promptText="Pie Chart Type" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <ComboBox fx:id="piechartTypeComboBox" maxWidth="200.0"  prefHeight="42.0" promptText="Pie Chart Type" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

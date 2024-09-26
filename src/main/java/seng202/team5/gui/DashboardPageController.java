@@ -11,7 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import seng202.team5.models.Review;
 import seng202.team5.models.Vineyard;
@@ -27,7 +29,16 @@ import java.util.*;
 public class DashboardPageController extends PageController {
 
     @FXML
-    private TableView reviewedWinesTable;
+    public TableColumn<Wine, String> nameColumn;
+    @FXML
+    public TableColumn<Wine, Double> priceColumn;
+    @FXML
+    public TableColumn<Wine, Integer> yearColumn;
+
+    @FXML
+    public TableColumn<Wine, Double> ratingColumn;
+    @FXML
+    private TableView<Wine> reviewedWinesTable;
 
     @FXML
     private PieChart pieChart;
@@ -56,6 +67,10 @@ public class DashboardPageController extends PageController {
     private List<Map.Entry<String, Integer>> topRegion;
     private List<Map.Entry<Integer, Integer>> topYear;
 
+    /**
+     * Initalises the dashboard page
+     * Fetches user reviews, processes data and updates the pie chart
+     */
     @FXML
     private void initialize() {
         // Setup default hash maps
@@ -68,7 +83,14 @@ public class DashboardPageController extends PageController {
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
 
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+
         List<Review> userReviews = reviewDAO.getFromUser(UserService.getInstance().getCurrentUser().getId());
+
+        loadReviewedWines();
 
         // Create a hash map for each property
         for(Review review : userReviews) {
@@ -114,22 +136,36 @@ public class DashboardPageController extends PageController {
     }
 
     /**
+     * Load wines that have been reviewed into table
+     */
+    private void loadReviewedWines() {
+        List<Wine> reviewedWines = wineDAO.getReviewedWines();
+        ObservableList<Wine> observableWines = FXCollections.observableArrayList(reviewedWines);
+        reviewedWinesTable.setItems(observableWines);
+    }
+
+    /**
      * Find the max value of a hash map.
      *
      * @param inputMap the map to search
      * @return the maximum entry if found, null otherwise.
      */
     public <K, V extends Comparable<V>> List<Map.Entry<K, V>> sortHashMap(Map<K, V> inputMap) {
-        List<Map.Entry<K, V>> list = new ArrayList<>(inputMap.entrySet());
 
+        List<Map.Entry<K, V>> list = new ArrayList<>(inputMap.entrySet());
+        System.out.println(list.getFirst().getKey());
         list.sort(Map.Entry.<K, V>comparingByValue().reversed());
+        System.out.println(list.getFirst().getKey());
         return list;
     }
 
-    public void onPiechartComboBoxClicked( ) {
-        String selectedPieChart = piechartTypeComboBox.getValue();
-      //  dashboardService.getPieChart
-    }
+
+
+    /**
+     * Updates the pie chart data based on selected category
+     *
+     * @param category selected for pie chart
+     */
 
     public void updatePieChartData(String category) {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
@@ -168,4 +204,5 @@ public class DashboardPageController extends PageController {
         pieChart.setStartAngle(180);
         pieChart.setLabelsVisible(true);
     }
+
 }
