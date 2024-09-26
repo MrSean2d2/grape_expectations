@@ -9,10 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import seng202.team5.models.Review;
@@ -83,6 +80,7 @@ public class DashboardPageController extends PageController {
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
 
+        piechartTypeComboBox.setTooltip(new Tooltip("Select Type Of Pie Chart"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
