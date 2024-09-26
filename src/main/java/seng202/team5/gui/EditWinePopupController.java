@@ -121,12 +121,8 @@ public class EditWinePopupController extends PageController {
         priceErrorLabel.setVisible(true);
     }
 
-    @FXML
-    private void submit() {
-        priceErrorLabel.setVisible(false);
-        yearErrorLabel.setVisible(false);
+    private int validateYear() {
         int year = 0;
-        double price = 0;
         try {
             year = Integer.parseInt(yearField.getText());
         } catch (NumberFormatException e) {
@@ -136,6 +132,11 @@ public class EditWinePopupController extends PageController {
         if (year < 1700 || year > currentYear) {
             yearError();
         }
+        return year;
+    }
+
+    private double validatePrice() {
+        double price = 0;
         try {
             price = Double.parseDouble(priceField.getText());
         } catch (NumberFormatException e) {
@@ -144,12 +145,18 @@ public class EditWinePopupController extends PageController {
         if (price < 0) {
             priceError();
         }
-        int rating = Math.toIntExact(Math.round(ratingSlider.getValue()));
+        return price;
+    }
+
+    private String validateVariety() {
         String variety = varietyField.getText();
         if (variety.isBlank()) {
             variety = "Unknown variety";
         }
-        VineyardDAO vineyardDAO = new VineyardDAO();
+        return variety;
+    }
+
+    private Vineyard retreiveVineyard(VineyardDAO vineyardDAO) {
         String vineyardName = vineyardField.getText();
         String region = regionField.getText();
         int vineyardId = vineyardDAO.getIdFromNameRegion(vineyardName, region);
@@ -159,16 +166,39 @@ public class EditWinePopupController extends PageController {
         } else {
             vineyard = vineyardDAO.getOne(vineyardId);
         }
-        String description = descriptionArea.getText();
+        return vineyard;
+    }
+
+    private String validateName() {
         String name = nameField.getText();
         if (name.isBlank()) {
             nameField.getStyleClass().add("field_error");
         }
+        return name;
+    }
+
+    private String validateColour() {
         String colour = colourField.getText();
         if (colour.isBlank()) {
             colour = "Unknown";
         }
+        return colour;
+    }
+
+    @FXML
+    private void submit() {
+        priceErrorLabel.setVisible(false);
+        yearErrorLabel.setVisible(false);
+        String colour = validateColour();
+        int year = validateYear();
+        double price = validatePrice();
+        int rating = Math.toIntExact(Math.round(ratingSlider.getValue()));
+        String variety = validateVariety();
+        VineyardDAO vineyardDAO = new VineyardDAO();
+        Vineyard vineyard = retreiveVineyard(vineyardDAO);
         WineDAO wineDAO = new WineDAO(vineyardDAO);
+        String description = descriptionArea.getText();
+        String name = validateName();
         if (wine == null) {
             wine = new Wine(name, description, year, rating, price, variety, colour, vineyard);
             wineDAO.add(wine);
