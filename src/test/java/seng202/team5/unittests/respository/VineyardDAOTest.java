@@ -135,6 +135,9 @@ public class VineyardDAOTest {
         Assertions.assertEquals(1, regions.size());
     }
 
+    /**
+     * Tests retrieving distinct vineyard names.
+     */
     @Test
     public void testGetNamesDistinct() {
         Vineyard vineyard1 = new Vineyard("Vineyard 1", "A region");
