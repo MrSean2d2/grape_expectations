@@ -73,7 +73,7 @@ public class DashboardPageController extends PageController {
         // Create a hash map for each property
         for(Review review : userReviews) {
             Wine wine = wineDAO.getOne(review.getWineId());
-            Vineyard vineyard = vineyardDAO.getOne(wine.getVineyard().getId());
+            Vineyard vineyard = wine.getVineyard();
 
             // Add to maps
             varietyMap.merge(wine.getWineVariety(), review.getRating(), Integer::sum);
