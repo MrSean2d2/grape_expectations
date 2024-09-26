@@ -1,7 +1,7 @@
 package seng202.team5.gui;
 
+import java.time.Year;
 import java.util.List;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,7 +22,7 @@ import seng202.team5.services.WineService;
  *
  * @author Sean Reitsma
  */
-public class EditWinePopupController {
+public class EditWinePopupController extends PageController {
 
     @FXML
     private Button closeButton;
@@ -49,7 +49,13 @@ public class EditWinePopupController {
     private TextField varietyField;
 
     @FXML
+    private TextField colourField;
+
+    @FXML
     private TextField vineyardField;
+
+    @FXML
+    private TextField regionField;
 
     @FXML
     private Label wineLabel;
@@ -75,7 +81,10 @@ public class EditWinePopupController {
             priceField.setText(String.valueOf(wine.getPrice()));
             varietyField.setText(wine.getWineVariety());
             vineyardField.setText(wine.getVineyard().getName());
+            regionField.setText(wine.getRegion());
             descriptionArea.setText(wine.getDescription());
+            descriptionArea.setWrapText(true);
+            colourField.setText(wine.getWineColour());
         } else {
             actionLabel.setText("Add wine: ");
             wineLabel.setVisible(false);
@@ -89,6 +98,8 @@ public class EditWinePopupController {
         TextFields.bindAutoCompletion(varietyField, varietySuggestions);
         List<String> vineyardSuggestions = vineyardDAO.getDistinctNames();
         TextFields.bindAutoCompletion(vineyardField, vineyardSuggestions);
+        List<String> regionSuggestions = vineyardDAO.getRegions();
+        TextFields.bindAutoCompletion(regionField, regionSuggestions);
 
     }
 
@@ -111,10 +122,9 @@ public class EditWinePopupController {
     }
 
     @FXML
-    private void submit(ActionEvent event) {
+    private void submit() {
         priceErrorLabel.setVisible(false);
         yearErrorLabel.setVisible(false);
-        String name = nameField.getText();
         int year = 0;
         double price = 0;
         try {
@@ -122,26 +132,57 @@ public class EditWinePopupController {
         } catch (NumberFormatException e) {
             yearError();
         }
-        int rating = Math.toIntExact(Math.round(ratingSlider.getValue()));
+        int currentYear = Year.now().getValue();
+        if (year < 1700 || year > currentYear) {
+            yearError();
+        }
         try {
             price = Double.parseDouble(priceField.getText());
         } catch (NumberFormatException e) {
             priceError();
         }
+        if (price < 0) {
+            priceError();
+        }
+        int rating = Math.toIntExact(Math.round(ratingSlider.getValue()));
         String variety = varietyField.getText();
-        Vineyard vineyard = new Vineyard(vineyardField.getText(), "Unknown Region");
+        if (variety.isBlank()) {
+            variety = "Unknown variety";
+        }
+        VineyardDAO vineyardDAO = new VineyardDAO();
+        String vineyardName = vineyardField.getText();
+        String region = regionField.getText();
+        int vineyardId = vineyardDAO.getIdFromNameRegion(vineyardName, region);
+        Vineyard vineyard;
+        if (vineyardId == 0) {
+            vineyard = new Vineyard(vineyardName, region);
+        } else {
+            vineyard = vineyardDAO.getOne(vineyardId);
+        }
         String description = descriptionArea.getText();
+        String name = nameField.getText();
+        if (name.isBlank()) {
+            nameField.getStyleClass().add("field_error");
+        }
+        String colour = colourField.getText();
+        if (colour.isBlank()) {
+            colour = "Unknown";
+        }
+        WineDAO wineDAO = new WineDAO(vineyardDAO);
         if (wine == null) {
-            wine = new Wine(name, description, year, rating, price, variety, "Unknown", vineyard);
+            wine = new Wine(name, description, year, rating, price, variety, colour, vineyard);
+            wineDAO.add(wine);
         } else {
             wine.setName(name);
             wine.setDescription(description);
             wine.setYear(year);
             wine.setRating(rating);
             wine.setVariety(variety);
-            wine.setColour("Unknown");
+            wine.setColour(colour);
             wine.setVineyard(vineyard);
+            wineDAO.update(wine);
         }
+        close();
     }
 
 }

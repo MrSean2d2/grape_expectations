@@ -10,8 +10,11 @@ import java.util.Random;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -19,8 +22,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.controlsfx.control.PopOver;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.AssignedTag;
@@ -88,11 +94,16 @@ public class DetailedViewPageController extends PageController {
     private ImageView star5;
     @FXML
     private FlowPane tagBox;
+
+    @FXML
+    private GridPane headerGridPane;
+
     private int selectedWineId;
     private int userId;
     private PopOver tagPopover;
     private ReviewDAO reviewDAO;
     private Review review;
+    private Modality modality;
 
 
     /**
@@ -105,6 +116,18 @@ public class DetailedViewPageController extends PageController {
         reviewDAO = new ReviewDAO();
         review = null;
 
+        initWineInfo(selectedWine);
+        initUserReviews();
+        initAdminActions();
+
+    }
+
+    /**
+     * Init all the labels with the wine information of the selected wine.
+     *
+     * @param selectedWine the selected wine object
+     */
+    private void initWineInfo(Wine selectedWine) {
         if (selectedWine != null) {
             nameLabel.setText(selectedWine.getName());
             priceLabel.setText("Price: $" + selectedWine.getPrice());
@@ -114,7 +137,12 @@ public class DetailedViewPageController extends PageController {
             provinceLabel.setText("Province: " + selectedWine.getRegion());
             varietyLabel.setText("Variety: " + selectedWine.getWineVariety());
         }
+    }
 
+    /**
+     * Initialise user specific review info and tags if applicable.
+     */
+    private void initUserReviews() {
         if (UserService.getInstance().getCurrentUser() != null) {
             // Setup review stuff
             review = reviewDAO.getWineReview(selectedWineId, userId);
@@ -141,7 +169,7 @@ public class DetailedViewPageController extends PageController {
             // Done Loading Tags
             logInMessageLabel.setText("");
             addTagLabel.setText("");
-            if(review != null) {
+            if (review != null) {
                 notesTextArea.setText(review.getNotes());
                 updateFavoriteButton(review.isFavourite());
                 updateStarDisplay(review.getRating());
@@ -159,8 +187,38 @@ public class DetailedViewPageController extends PageController {
         }
     }
 
+    private void initAdminActions() {
+        if (UserService.getInstance().getCurrentUser() != null
+                && UserService.getInstance().getCurrentUser().getIsAdmin()) {
+            Button editWineButton = new Button("Edit");
+            editWineButton.setOnAction(this::editWine);
+            headerGridPane.add(editWineButton, 1, 0);
+            GridPane.setMargin(editWineButton, new Insets(0, 10, 10, 0));
+        }
+    }
+
+    private void editWine(ActionEvent event) {
+        Wine selectedWine = WineService.getInstance().getSelectedWine();
+        try {
+            FXMLLoader editWineLoader = new FXMLLoader(getClass()
+                    .getResource("/fxml/EditWinePopup.fxml"));
+            Parent root = editWineLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle(String.format("Edit wine %s", selectedWine.getName()));
+            String styleSheetUrl = MainWindow.styleSheet;
+            scene.getStylesheets().add(styleSheetUrl);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+            initWineInfo(selectedWine);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
-     * Show a popover to select a new tag
+     * Show a popover to select a new tag.
      */
     @FXML
     public void showTagPopover() {

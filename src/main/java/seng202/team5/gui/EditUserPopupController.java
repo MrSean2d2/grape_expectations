@@ -17,7 +17,7 @@ import seng202.team5.services.UserService;
  *
  * @author Sean Reitsma
  */
-public class EditUserPopupController {
+public class EditUserPopupController extends PageController {
 
     @FXML
     private PasswordField confPasswordField;
