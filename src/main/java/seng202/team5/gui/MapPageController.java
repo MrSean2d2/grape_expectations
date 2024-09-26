@@ -18,6 +18,8 @@ import seng202.team5.repository.VineyardDAO;
 
 import javax.swing.plaf.synth.Region;
 import javafx.scene.control.Label;
+import seng202.team5.services.VineyardService;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,6 +58,7 @@ public class MapPageController extends PageController {
             if (mouseEvent.getClickCount() == 2) {
                 Vineyard vineyard = vineyardTable.getSelectionModel().getSelectedItem();
                 if (vineyard != null) {
+                    VineyardService.getInstance().setSelectedVineyard(vineyard);
                     swapPage("/fxml/DataListPage.fxml");
                 }
             }
