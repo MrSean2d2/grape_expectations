@@ -135,6 +135,17 @@ public class VineyardDAOTest {
         Assertions.assertEquals(1, regions.size());
     }
 
+    @Test
+    public void testGetNamesDistinct() {
+        Vineyard vineyard1 = new Vineyard("Vineyard 1", "A region");
+        Vineyard vineyard2 = new Vineyard("Vineyard 1", "Another region");
+        vineyardDAO.add(vineyard1);
+        vineyardDAO.add(vineyard2);
+        List<String> names = vineyardDAO.getDistinctNames();
+        Assertions.assertEquals(1, names.size());
+        Assertions.assertEquals("Vineyard 1", names.getFirst());
+    }
+
     /**
      * test that vineyards are not added from an invalid wine with a valid vineyard
      */
