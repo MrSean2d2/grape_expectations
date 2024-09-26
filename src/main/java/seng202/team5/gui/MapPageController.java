@@ -49,7 +49,7 @@ public class MapPageController extends PageController {
      */
     @FXML
     public void initialize() {
-        vineyardTable.setPlaceholder(new Label("Select a Region to view Vineyards"));
+        vineyardTable.setPlaceholder(new Label("Select a region to view vineyards"));
         vineyardColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         vineyardDAO = new VineyardDAO();
 
