@@ -43,7 +43,9 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
                  Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                vineyards.add(new Vineyard(rs.getInt("id"), rs.getString("name"), rs.getString("region"), rs.getDouble("latitude"), rs.getDouble("longitude")));
+                vineyards.add(new Vineyard(rs.getInt("id"), rs.getString("name"),
+                        rs.getString("region"), rs.getDouble("latitude"),
+                        rs.getDouble("longitude")));
             }
             return vineyards;
         } catch (SQLException sqlException) {
@@ -110,7 +112,8 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      */
     @Override
     public int add(Vineyard toAdd) {
-        String sql = "INSERT OR IGNORE INTO vineyard (name, region, latitude, longitude) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT OR IGNORE INTO vineyard (name, region, latitude, longitude) "
+                + "VALUES (?, ?, ?, ?)";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, toAdd.getName());

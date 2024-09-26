@@ -24,6 +24,15 @@ public class Vineyard {
         this.region = region;
     }
 
+    /**
+     * Constructor for vineyard including coords.
+     *
+     * @param id of vineyard
+     * @param name of vineyard
+     * @param region vineyard is located in
+     * @param lat latitude coord of vineyard
+     * @param lon longitude coord of vineyard
+     */
     public Vineyard(int id, String name, String region, double lat, double lon) {
         this.id = id;
         this.name = name;

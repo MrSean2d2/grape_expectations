@@ -1,11 +1,5 @@
 package seng202.team5.services;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import seng202.team5.models.Vineyard;
-import seng202.team5.repository.VineyardDAO;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,16 +8,22 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import seng202.team5.models.Vineyard;
 
 /**
- * Class to handle requesting location from Nominatim Geolocation API
+ * Class to handle requesting location from Nominatim Geolocation API.
+ *
  * @author Morgan English
  */
 public class GeolocatorService {
     private final Map<String, double[]> coordsCache = new HashMap<>();
 
     /**
-     * Runs a query with the address given and finds the most applicable lat, lng co-ordinates
+     * Runs a query with the address given and finds the most applicable lat, lng co-ordinates.
      */
     public void queryAddress(Vineyard vineyard) {
         String region = vineyard.getRegion();
@@ -33,7 +33,8 @@ public class GeolocatorService {
             vineyard.setLon(coords[1]);
             return;
         }
-        String logMessage = String.format("Requesting geolocation from Nominatim for region: %s, New Zealand", vineyard.getRegion());
+        String logMessage = String.format("Requesting geolocation from Nominatim for region: %s, "
+                + "New Zealand", vineyard.getRegion());
         System.out.println(logMessage);
         String formattedRegion = vineyard.getRegion().replace(' ', '+');
         try {
@@ -43,7 +44,8 @@ public class GeolocatorService {
                     URI.create("https://nominatim.openstreetmap.org/search?q=" + formattedRegion + ",+New+Zealand&format=json")
             ).build();
             // Getting the response
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(
+                    request, HttpResponse.BodyHandlers.ofString());
             // Parsing the json response to get the latitude and longitude co-ordinates
             JSONParser parser = new JSONParser();
             JSONArray results = (JSONArray)  parser.parse(response.body());

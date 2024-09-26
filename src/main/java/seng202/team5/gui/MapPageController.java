@@ -1,10 +1,14 @@
 package seng202.team5.gui;
 
 import com.sun.javafx.webkit.WebConsoleListener;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -15,17 +19,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Vineyard;
 import seng202.team5.repository.VineyardDAO;
-
-import javax.swing.plaf.synth.Region;
-import javafx.scene.control.Label;
 import seng202.team5.services.VineyardService;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 /**
- * Controller class for MapPage.fxml
+ * Controller class for MapPage.fxml.
+ *
  * @author Martyn Gascoigne
  */
 public class MapPageController extends PageController {
@@ -44,7 +42,8 @@ public class MapPageController extends PageController {
     private TableColumn<Vineyard, String> vineyardColumn;
 
     /**
-     * Initialize the map page
+     * Initialize the map page.
+     *
      * @author Martyn Gascoigne
      *
      */
@@ -66,9 +65,11 @@ public class MapPageController extends PageController {
 
         webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
-        webEngine.load(getClass().getClassLoader().getResource("html/leaflet_osm_map.html").toExternalForm());
+        webEngine.load(getClass().getClassLoader().getResource(
+                "html/leaflet_osm_map.html").toExternalForm());
         WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
-                log.info(String.format("Map WebView console log line: %d, message : %s", lineNumber, message)));
+                log.info(String.format(
+                        "Map WebView console log line: %d, message : %s", lineNumber, message)));
 
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
@@ -85,6 +86,11 @@ public class MapPageController extends PageController {
                 });
     }
 
+    /**
+     * Sets items in vineyard table view to matching vineyards in selected region.
+     *
+     * @param title region of selected marker
+     */
     public void onMarkerClicked(String title) {
         List<Vineyard> vineyards = vineyardDAO.getAll();
         ObservableList<Vineyard> matchingVineyards = FXCollections.observableArrayList();
@@ -97,7 +103,8 @@ public class MapPageController extends PageController {
     }
 
     /**
-     * Add vineyards to map
+     * Add vineyards to map.
+     *
      * @author Martyn Gascoigne
      */
     @FXML
@@ -107,25 +114,31 @@ public class MapPageController extends PageController {
             Set<String> regions = new HashSet<>();
             for (Vineyard vineyard : vineyards) {
                 // Debug output to verify lat/lng values
-                log.info(String.format("Adding vineyard: %s with coordinates (%f, %f)", vineyard.getName(), vineyard.getLat(), vineyard.getLon()));
+                log.info(String.format("Adding vineyard: %s with coordinates (%f, %f)",
+                        vineyard.getName(), vineyard.getLat(), vineyard.getLon()));
 
                 // Check if the latitude and longitude are valid numbers
                 if (vineyard.getLat() != 0.0 && vineyard.getLon() != 0.0) {
                     if (!regions.contains(vineyard.getRegion())) {
-                        javaScriptConnector.call("addMarker", vineyard.getId(), vineyard.getRegion(), vineyard.getLat(), vineyard.getLon());
+                        javaScriptConnector.call("addMarker", vineyard.getId(),
+                                vineyard.getRegion(), vineyard.getLat(), vineyard.getLon());
                         regions.add(vineyard.getRegion());
                     } else {
-                        log.info(String.format("Skipping vineyard: %s, region %s already has a marker", vineyard.getName(), vineyard.getRegion()));
+                        log.info(String.format("Skipping vineyard: %s, "
+                                + "region %s already has a marker", vineyard.getName(),
+                                vineyard.getRegion()));
                     }
                 } else {
-                    log.error(String.format("Invalid coordinates for vineyard: %s", vineyard.getName()));
+                    log.error(String.format("Invalid coordinates for vineyard: %s",
+                            vineyard.getName()));
                 }
             }
         }
     }
 
     /**
-     * Get a (temporary) list of vineyards
+     * Get a (temporary) list of vineyards.
+     *
      * @author Martyn Gascoigne
      */
     private List<Vineyard> getVineyards() {
