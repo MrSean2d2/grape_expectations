@@ -124,6 +124,8 @@ public class DataListPageController extends PageController {
 
         // Add data to TableView
         wineTable.setItems(wines);
+
+        wineTable.setPlaceholder(new Label("No matching wines found"));
         tableResults.setText(wineTable.getItems().size() + " results");
 
         wineTable.setOnMouseClicked(mouseEvent -> {
