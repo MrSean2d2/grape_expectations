@@ -76,7 +76,7 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getDouble("price"),
                         rs.getString(("variety")),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("Region"))
+                        new Vineyard(rs.getInt("id"), rs.getString("vineyardName"), rs.getString("Region"))
                 ));
 
             }
@@ -114,7 +114,7 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getDouble("price"),
                         rs.getString("variety"),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("region")));
+                        new Vineyard(rs.getInt("id"), rs.getString("vineyardName"), rs.getString("region")));
             }
         } catch (SQLException e) {
             log.error(e);
@@ -151,7 +151,7 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getDouble("price"),
                         rs.getString("variety"),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("region")));
+                        new Vineyard(rs.getInt("id"), rs.getString("vineyardName"), rs.getString("region")));
             }
         } catch (SQLException sqlException) {
             log.error(sqlException);
@@ -538,7 +538,7 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getInt("price"),
                         rs.getString("variety"),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("Region"))
+                        new Vineyard(rs.getInt("id"), rs.getString("vineyardName"), rs.getString("Region"))
                 ));
             }
             return searchedWines;
