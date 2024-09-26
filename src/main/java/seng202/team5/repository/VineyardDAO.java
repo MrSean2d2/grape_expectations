@@ -43,7 +43,8 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
                  Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                vineyards.add(new Vineyard(rs.getString("name"), rs.getString("region")));
+                vineyards.add(new Vineyard(rs.getInt("id"),
+                        rs.getString("name"), rs.getString("region")));
             }
             return vineyards;
         } catch (SQLException sqlException) {
@@ -92,7 +93,8 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    vineyard = new Vineyard(rs.getString("name"), rs.getString("region"));
+                    vineyard = new Vineyard(rs.getInt("id"),
+                            rs.getString("name"), rs.getString("region"));
                 }
                 return vineyard;
             }
@@ -106,26 +108,30 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      * add Vineyard object to the database.
      *
      * @param toAdd object of type Vineyard to add
-     * @return id of added Vineyard
+     * @return id of added Vineyard (-1 if unsuccessful)
      */
     @Override
     public int add(Vineyard toAdd) {
         String sql = "INSERT OR IGNORE INTO vineyard (name, region) VALUES (?, ?)";
-        try (Connection conn = databaseService.connect();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, toAdd.getName());
-            ps.setString(2, toAdd.getRegion());
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-            int insertId = -1;
-            if (rs.next()) {
-                insertId = rs.getInt(1);
-            }
-            return insertId;
-        } catch (SQLException sqlException) {
-            log.error(sqlException);
+        if (toAdd.getName().isBlank()) {
             return -1;
+        } else {
+            try (Connection conn = databaseService.connect();
+                     PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, toAdd.getName());
+                ps.setString(2, toAdd.getRegion());
+                ps.executeUpdate();
+
+                ResultSet rs = ps.getGeneratedKeys();
+                int insertId = -1;
+                if (rs.next()) {
+                    insertId = rs.getInt(1);
+                }
+                return insertId;
+            } catch (SQLException sqlException) {
+                log.error(sqlException);
+                return -1;
+            }
         }
     }
 
