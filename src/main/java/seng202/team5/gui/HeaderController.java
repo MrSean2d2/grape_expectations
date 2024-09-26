@@ -160,9 +160,9 @@ public class HeaderController {
         }
 
         // Begin a new task
-//        createScene = new Task<>() {
-//            @Override
-//            public Node call() throws IOException {
+        createScene = new Task<>() {
+            @Override
+            public Node call() throws IOException {
                 FXMLLoader baseLoader = new FXMLLoader(getClass().getResource(fxml));
                 Node page = baseLoader.load();
 
@@ -172,10 +172,10 @@ public class HeaderController {
                     pageController.setHeaderController(headerController);
                 }
 
-//                return page;
-//
-//            }
-//        };
+                return page;
+
+            }
+        };
 
         // Remove the button styles from the header
         homeButton.getStyleClass().remove("active");
@@ -184,16 +184,16 @@ public class HeaderController {
         accountButton.getStyleClass().remove("active");
 
         // Load the loading page :)
-//        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
-//        Node loader = baseLoader.load();
+        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
+        Node loader = baseLoader.load();
 
-        pageContainer.getChildren().setAll(page);
+        pageContainer.getChildren().setAll(loader);
 
         // Update the scene
-//        createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
+        createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
 
         // Begin loading
-//        new Thread(createScene).start();
+        new Thread(createScene).start();
     }
 
     /**
