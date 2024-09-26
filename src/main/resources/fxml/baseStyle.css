@@ -26,6 +26,10 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-background-radius: 5;
 }
 
+.button.detailed_view {
+    -fx-font-size: 16;
+}
+
 .button:hover {
     -fx-border-width: 3;
     -fx-border-insets: -1;

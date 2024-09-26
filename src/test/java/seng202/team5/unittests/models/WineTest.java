@@ -77,7 +77,7 @@ public class WineTest {
      * create a wine with negative score, test that it is invalid
      */
     @Test
-    public void testNeagativeScoreWine() {
+    public void testNegativeScoreWine() {
         Wine invalidWine = new Wine("wineName", "description", 2014, -1, 20, "pinot noir",
                 "white", new Vineyard("vineyard", "region"));
         assertFalse(invalidWine.isValidWine());
