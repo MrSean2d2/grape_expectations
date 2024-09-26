@@ -87,7 +87,13 @@ public class UserServiceTest {
 
         // Check if password 1 and 2 are equal, and that 1 and 3 are not
         assertTrue(UserService.verifyPassword(pass2String, hashedPassword));
-        assertFalse(UserService.verifyPassword(pass3String, hashedPassword));
+
+        try {
+            boolean verified = UserService.verifyPassword(pass3String, hashedPassword);
+            assertTrue(false);
+        } catch (PasswordIncorrectException e) {
+            assertTrue(true);
+        }
     }
 
     /**
@@ -145,12 +151,15 @@ public class UserServiceTest {
      * Test user sign in with incorrect credentials.
      */
     @Test
-    public void incorrectSignInTest() throws NotFoundException, PasswordIncorrectException {
+    public void incorrectSignInTest() throws NotFoundException {
         userService.registerUser("testUser", "pass");
 
-        User signedInUser = userService.signinUser("testUser", "wrongPass");
-
-        assertNull(signedInUser);
+        try {
+            User signedInUser = userService.signinUser("testUser", "wrongPass");
+            assertNull(signedInUser);
+        } catch (PasswordIncorrectException e) {
+            assertTrue(true);
+        }
     }
 
     /**
