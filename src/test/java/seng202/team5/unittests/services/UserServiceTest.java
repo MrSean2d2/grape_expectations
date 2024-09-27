@@ -78,7 +78,8 @@ public class UserServiceTest {
      * Hash password test.
      */
     @Test
-    public void hashPasswordTest() throws NoSuchAlgorithmException, InvalidKeySpecException, PasswordIncorrectException {
+    public void hashPasswordTest() throws NoSuchAlgorithmException,
+            InvalidKeySpecException, PasswordIncorrectException {
         byte[] salt = UserService.generateSalt();
         String pass1String = "password";
         String pass2String = "password";
@@ -169,7 +170,8 @@ public class UserServiceTest {
      * @throws InvalidKeySpecException if there is an error registering the user
      */
     @Test
-    public void updatePasswordTest() throws NoSuchAlgorithmException, InvalidKeySpecException, PasswordIncorrectException {
+    public void updatePasswordTest() throws NoSuchAlgorithmException,
+            InvalidKeySpecException, PasswordIncorrectException {
         User user = userService.registerUser("test", "oldPassword");
         String newPassword = "newPassword";
         userService.updateUserPassword(user, newPassword);

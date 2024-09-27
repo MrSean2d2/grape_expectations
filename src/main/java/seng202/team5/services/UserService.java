@@ -154,7 +154,7 @@ public class UserService {
      * Update the user's password. This updates the user in place as well as
      * returning the altered user.
      *
-     * @param user the user to change
+     * @param user     the user to change
      * @param password the user's new password
      * @return the altered user
      */
@@ -191,7 +191,8 @@ public class UserService {
      *
      * @return user if they sign in
      */
-    public User signinUser(String username, String password) throws NotFoundException, PasswordIncorrectException {
+    public User signinUser(String username, String password) throws NotFoundException,
+            PasswordIncorrectException {
         // Get password from database if user exists
         try {
             User userAccount = userDAO.getFromUserName(username);
@@ -236,7 +237,7 @@ public class UserService {
      */
     public static String hashPassword(String password, byte[] salt)
             throws NoSuchAlgorithmException,
-                    InvalidKeySpecException {
+            InvalidKeySpecException {
         PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, HASH_LENGTH * 8);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         byte[] hash = factory.generateSecret(spec).getEncoded();
@@ -251,7 +252,7 @@ public class UserService {
     /**
      * Verify a password.
      *
-     * @param password the password to check
+     * @param password       the password to check
      * @param hashedPassword the hashed password
      * @return hashed password as a string
      */
@@ -266,7 +267,7 @@ public class UserService {
 
         boolean equals = storedHashBase64.equals(inputHash);
 
-        if(!equals) {
+        if (!equals) {
             throw new PasswordIncorrectException("Password incorrect");
         }
         return equals;

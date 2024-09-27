@@ -1,10 +1,10 @@
 package seng202.team5.gui;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 import javafx.animation.TranslateTransition;
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -74,13 +74,17 @@ public class HeaderController {
 
         UserService.getInstance().getUserProperty().addListener((observable, oldUser, newUser) -> {
             if (newUser != null) {
-                homeIcon.setImage(new Image(getClass().getResourceAsStream("/images/Dashboard.png")));
+                homeIcon.setImage(new Image(
+                        Objects.requireNonNull(
+                                getClass().getResourceAsStream("/images/Dashboard.png"))));
             } else {
-                homeIcon.setImage(new Image(getClass().getResourceAsStream("/images/Home.png")));
+                homeIcon.setImage(new Image(
+                        Objects.requireNonNull(
+                                getClass().getResourceAsStream("/images/Home.png"))));
             }
         });
 
-        scrollPane.setOnMousePressed((Event) -> { // remove weird focus...
+        scrollPane.setOnMousePressed((event) -> { // remove weird focus...
             pageContainer.requestFocus();
         });
 
@@ -100,7 +104,6 @@ public class HeaderController {
     private void loadHomePage() throws Exception {
         if (UserService.getInstance().getCurrentUser() != null) {
             throw new NotImplementedException("page not implemented");
-//          loadPage("/fxml/DashboardPage.fxml");
         } else {
             loadPage("/fxml/HomePage.fxml");
         }
@@ -162,23 +165,9 @@ public class HeaderController {
             createScene.cancel(true);
         }
 
-        // Create a scheduled executor service for managing the delay
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-        // Task to show loading screen after a delay
-        Runnable showLoadingTask = () -> {
-            try {
-                // Load the loading page
-                FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
-                Node loader = baseLoader.load();
-                javafx.application.Platform.runLater(() -> pageContainer.getChildren().setAll(loader));
-            } catch (IOException e) {
-                System.out.println(e);
-            }
-        };
 
-        // Make the loading screen show up if the task is still loading after 0.1 seconds
-        var loadingDelay = scheduler.schedule(showLoadingTask, 100, TimeUnit.MILLISECONDS);
+
 
         // Begin a new task
         createScene = new Task<>() {
@@ -209,12 +198,32 @@ public class HeaderController {
         mapButton.getStyleClass().remove("active");
         accountButton.getStyleClass().remove("active");
 
+        // Task to show loading screen after a delay
+        Runnable showLoadingTask = () -> {
+            try {
+                // Load the loading page
+                FXMLLoader baseLoader = new FXMLLoader(
+                        getClass().getResource("/fxml/LoadingSpinner.fxml"));
+                Node loader = baseLoader.load();
+                javafx.application.Platform.runLater(
+                        () -> pageContainer.getChildren().setAll(loader));
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+        };
+
+        // Create a scheduled executor service for managing the delay
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+        // Make the loading screen show up if the task is still loading after 0.1 seconds
+        var loadingDelay = scheduler.schedule(showLoadingTask, 100, TimeUnit.MILLISECONDS);
         // Update the scene
         createScene.setOnSucceeded(e -> {
             loadingDelay.cancel(false);
             scheduler.shutdown();
 
-            javafx.application.Platform.runLater(() -> pageContainer.getChildren().setAll(createScene.getValue()));
+            javafx.application.Platform.runLater(
+                    () -> pageContainer.getChildren().setAll(createScene.getValue()));
         });
 
         // Begin loading
@@ -240,7 +249,8 @@ public class HeaderController {
             popUp.setFromY(100);
             popUp.setToY(-20);
 
-            TranslateTransition popDown = new TranslateTransition(Duration.millis(150), notification);
+            TranslateTransition popDown = new TranslateTransition(
+                    Duration.millis(150), notification);
             popDown.setFromY(-20);
             popDown.setToY(100);
 

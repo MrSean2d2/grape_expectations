@@ -141,7 +141,7 @@ public class DetailedViewPageController extends PageController {
             // Done Loading Tags
             logInMessageLabel.setText("");
             addTagLabel.setText("");
-            if(review != null) {
+            if (review != null) {
                 notesTextArea.setText(review.getNotes());
                 updateFavoriteButton(review.isFavourite());
                 updateStarDisplay(review.getRating());
@@ -160,7 +160,7 @@ public class DetailedViewPageController extends PageController {
     }
 
     /**
-     * Show a popover to select a new tag
+     * Show a popover to select a new tag.
      */
     @FXML
     public void showTagPopover() {
@@ -169,7 +169,8 @@ public class DetailedViewPageController extends PageController {
                 canAddTag = true;
 
                 try {
-                    FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/TagPopover.fxml"));
+                    FXMLLoader baseLoader = new FXMLLoader(
+                            getClass().getResource("/fxml/TagPopover.fxml"));
                     Node content = baseLoader.load();
 
                     // Create the Popup
@@ -187,7 +188,9 @@ public class DetailedViewPageController extends PageController {
                     List<Label> labels = new ArrayList<>();
 
                     for (Tag tag : tags) {
-                        // Can't use .contains because tag ID will be different (with default ones) : (
+                        /* Can't use .contains because tag ID will be different (with default ones)
+                         : (
+                         */
                         boolean found = false;
                         for (Tag existingTag : tagsList) {
                             if (existingTag.getTagId() == tag.getTagId()) {
@@ -197,7 +200,9 @@ public class DetailedViewPageController extends PageController {
                         }
 
                         // Skip if it was found
-                        if (found) continue;
+                        if (found) {
+                            continue;
+                        }
 
                         // Set the user ID to be the current user id, override the default
                         //  user ID may be -1, for default tags

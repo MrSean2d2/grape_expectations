@@ -1,50 +1,27 @@
 package seng202.team5.services;
 
+/**
+ * A class to look up colours for tags.
+ *
+ * @author Martyn Gascoigne
+ */
 public class ColourLookupService {
 
-    public static String getTagColour(int tagId) {
-        String col = "";
-        switch (tagId) {
-            case (0):
-                col = "#9f8fef";
-                break;
-            case (1):
-                col = "#aaef8f";
-                break;
-            case (2):
-                col = "#8fb1ef";
-                break;
-            case (3):
-                col = "#ef8f8f";
-                break;
-            case (4):
-                col = "#efcd8f";
-                break;
-        }
-
-        return col;
-    }
-
+    /**
+     * Get the label colour for the tag.
+     *
+     * @param tagId the id of the tag
+     * @return a string of the CSS colour of the tag
+     */
     public static String getTagLabelColour(int tagId) {
-        String col = "";
-        switch (tagId) {
-            case (0):
-                col = "purple";
-                break;
-            case (1):
-                col = "green";
-                break;
-            case (2):
-                col = "blue";
-                break;
-            case (3):
-                col = "red";
-                break;
-            case (4):
-                col = "yellow";
-                break;
-        }
 
-        return col;
+        return switch (tagId) {
+            case (0) -> "purple";
+            case (1) -> "green";
+            case (2) -> "blue";
+            case (3) -> "red";
+            case (4) -> "yellow";
+            default -> "";
+        };
     }
 }

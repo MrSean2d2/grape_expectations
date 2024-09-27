@@ -27,7 +27,7 @@ public class NotificationController extends PageController {
     }
 
     /**
-     * Set the notification's alert colour
+     * Set the notification's alert colour.
      *
      * @param col the new hex colour
      */
@@ -39,7 +39,7 @@ public class NotificationController extends PageController {
     }
 
     /**
-     * Set the notification's text message
+     * Set the notification's text message.
      *
      * @param text the new text
      */
