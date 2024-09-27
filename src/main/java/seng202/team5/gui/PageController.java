@@ -1,14 +1,15 @@
 package seng202.team5.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.StackPane;
-import org.apache.logging.log4j.core.config.Node;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Controller for swapping between pages.
  */
 public class PageController {
+    private static final Logger log = LogManager.getLogger(PageController.class);
     private HeaderController headerController;
     @FXML
     private StackPane pageContainer;
