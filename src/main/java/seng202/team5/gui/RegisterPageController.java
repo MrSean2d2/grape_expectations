@@ -1,14 +1,14 @@
 package seng202.team5.gui;
 
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import seng202.team5.models.User;
 import seng202.team5.services.UserService;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Controller for the login page.
@@ -61,12 +61,16 @@ public class RegisterPageController extends PageController {
         loginButton.setTooltip(new Tooltip("Return to login page"));
         registerButton.setTooltip(new Tooltip("Register a new account"));
 
-        passwordVisibleField.textProperty().bindBidirectional(passwordField.textProperty());
-        repeatPasswordVisibleField.textProperty().bindBidirectional(repeatPasswordField.textProperty());
+        passwordVisibleField.textProperty().bindBidirectional(
+                passwordField.textProperty());
+        repeatPasswordVisibleField.textProperty().bindBidirectional(
+                repeatPasswordField.textProperty());
 
         // Create icons
-        shownIcon = new Image(getClass().getResourceAsStream("/images/OpenEye.png"));
-        hiddenIcon = new Image(getClass().getResourceAsStream("/images/ClosedEye.png"));
+        shownIcon = new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/OpenEye.png")));
+        hiddenIcon = new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/ClosedEye.png")));
     }
 
     @FXML
@@ -141,7 +145,6 @@ public class RegisterPageController extends PageController {
         }
 
         String password = passwordField.getText();
-        String repeatedPassword = repeatPasswordField.getText();
 
         if (password.isEmpty()) {
             errorLabel.setText("Password cannot be empty!");
@@ -150,21 +153,14 @@ public class RegisterPageController extends PageController {
         }
 
         // Password validation
-
-        Pattern letter = Pattern.compile("[a-zA-z]");
-        Pattern digit = Pattern.compile("[0-9]");
-        Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
-
-
-        Matcher hasLetter = letter.matcher(password);
-        Matcher hasDigit = digit.matcher(password);
-        Matcher hasSpecial = special.matcher(password);
-
         if (password.length() < 8) {
             errorLabel.setText("Password must contain at least 8 characters!");
             passwordField.getStyleClass().add("field_error");
             return;
         }
+
+        Pattern letter = Pattern.compile("[a-zA-z]");
+        Matcher hasLetter = letter.matcher(password);
 
         if (!hasLetter.find()) {
             errorLabel.setText("Password must contain alphanumeric characters!");
@@ -172,17 +168,25 @@ public class RegisterPageController extends PageController {
             return;
         }
 
+        Pattern digit = Pattern.compile("[0-9]");
+        Matcher hasDigit = digit.matcher(password);
+
         if (!hasDigit.find()) {
             errorLabel.setText("Password must contain a numeric character!");
             passwordField.getStyleClass().add("field_error");
             return;
         }
 
+        Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
+        Matcher hasSpecial = special.matcher(password);
+
         if (!hasSpecial.find()) {
             errorLabel.setText("Password must contain a special character!");
             passwordField.getStyleClass().add("field_error");
             return;
         }
+
+        String repeatedPassword = repeatPasswordField.getText();
 
         if (!password.equals(repeatedPassword)) {
             errorLabel.setText("Passwords don't match!");
@@ -209,7 +213,7 @@ public class RegisterPageController extends PageController {
     }
 
     /**
-     * Go back to login page
+     * Go back to login page.
      */
     @FXML
     private void goToLogin() {

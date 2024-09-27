@@ -1,7 +1,7 @@
 package seng202.team5.unittests.services;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -78,7 +78,8 @@ public class UserServiceTest {
      * Hash password test.
      */
     @Test
-    public void hashPasswordTest() throws NoSuchAlgorithmException, InvalidKeySpecException, PasswordIncorrectException {
+    public void hashPasswordTest() throws
+            NoSuchAlgorithmException, InvalidKeySpecException, PasswordIncorrectException {
         byte[] salt = UserService.generateSalt();
         String pass1String = "password";
         String pass2String = "password";
@@ -89,8 +90,8 @@ public class UserServiceTest {
         assertTrue(UserService.verifyPassword(pass2String, hashedPassword));
 
         try {
-            boolean verified = UserService.verifyPassword(pass3String, hashedPassword);
-            assertTrue(false);
+            UserService.verifyPassword(pass3String, hashedPassword);
+            fail();
         } catch (PasswordIncorrectException e) {
             assertTrue(true);
         }
@@ -169,7 +170,8 @@ public class UserServiceTest {
      * @throws InvalidKeySpecException if there is an error registering the user
      */
     @Test
-    public void updatePasswordTest() throws NoSuchAlgorithmException, InvalidKeySpecException, PasswordIncorrectException {
+    public void updatePasswordTest() throws
+            NoSuchAlgorithmException, InvalidKeySpecException, PasswordIncorrectException {
         User user = userService.registerUser("test", "oldPassword");
         String newPassword = "newPassword";
         userService.updateUserPassword(user, newPassword);

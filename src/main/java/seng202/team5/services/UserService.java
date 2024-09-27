@@ -191,7 +191,8 @@ public class UserService {
      *
      * @return user if they sign in
      */
-    public User signinUser(String username, String password) throws NotFoundException, PasswordIncorrectException {
+    public User signinUser(String username, String password) throws
+            NotFoundException, PasswordIncorrectException {
         // Get password from database if user exists
         try {
             User userAccount = userDAO.getFromUserName(username);
@@ -266,7 +267,7 @@ public class UserService {
 
         boolean equals = storedHashBase64.equals(inputHash);
 
-        if(!equals) {
+        if (!equals) {
             throw new PasswordIncorrectException("Password incorrect");
         }
         return equals;
