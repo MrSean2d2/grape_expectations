@@ -70,9 +70,9 @@ public class MapPageController extends PageController {
         webEngine.setJavaScriptEnabled(true);
         webEngine.load(getClass().getClassLoader().getResource(
                 "html/leaflet_osm_map.html").toExternalForm());
-        WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
-                log.info(String.format(
-                        "Map WebView console log line: %d, message : %s", lineNumber, message)));
+//        WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
+//                log.info(String.format(
+//                        "Map WebView console log line: %d, message : %s", lineNumber, message)));
 
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
