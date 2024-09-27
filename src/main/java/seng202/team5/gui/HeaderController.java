@@ -55,6 +55,7 @@ public class HeaderController {
 
 
     private final HeaderController headerController = this;
+    private String loadedPage = "";
 
     // Used to handle loading
     Task<Node> createScene = null;
@@ -105,7 +106,7 @@ public class HeaderController {
         } else {
             loadPage("/fxml/HomePage.fxml");
         }
-        homeButton.getStyleClass().add("active");
+//        homeButton.getStyleClass().add("active");
     }
 
     /**
@@ -116,7 +117,7 @@ public class HeaderController {
     @FXML
     private void loadDataListPage() throws Exception {
         loadPage("/fxml/DataListPage.fxml");
-        dataListButton.getStyleClass().add("active");
+//        dataListButton.getStyleClass().add("active");
     }
 
 
@@ -128,7 +129,7 @@ public class HeaderController {
     @FXML
     private void loadMapPage() throws Exception {
         loadPage("/fxml/MapPage.fxml");
-        mapButton.getStyleClass().add("active");
+//        mapButton.getStyleClass().add("active");
     }
 
     /**
@@ -147,7 +148,7 @@ public class HeaderController {
         } else {
             loadPage("/fxml/LoginPage.fxml");
         }
-        accountButton.getStyleClass().add("active");
+//        accountButton.getStyleClass().add("active");
     }
 
 
@@ -196,6 +197,30 @@ public class HeaderController {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
         Node loader = baseLoader.load();
         javafx.application.Platform.runLater(() -> pageContainer.getChildren().setAll(loader));
+
+        loadedPage = fxml.substring(fxml.lastIndexOf("/") + 1).trim();
+
+        // Add active status to buttons
+        switch (loadedPage) {
+            case "HomePage.fxml":
+            case "DashboardPage.fxml":
+                homeButton.getStyleClass().add("active");
+                break;
+
+            case "DataListPage.fxml":
+                dataListButton.getStyleClass().add("active");
+                break;
+
+            case "MapPage.fxml":
+                mapButton.getStyleClass().add("active");
+                break;
+
+            case "LoginPage.fxml":
+            case "RegisterPage.fxml":
+            case "AccountManagePage.fxml":
+                accountButton.getStyleClass().add("active");
+                break;
+        }
 
         // Update the scene
         createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
