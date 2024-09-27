@@ -1,5 +1,6 @@
 package seng202.team5.gui;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.fxml.FXML;
@@ -41,7 +42,6 @@ public class RegisterPageController extends PageController {
     private ImageView toggleVisibility;
     private boolean passwordVisible = false;
 
-
     @FXML
     private PasswordField repeatPasswordField;
     @FXML
@@ -64,15 +64,21 @@ public class RegisterPageController extends PageController {
         loginButton.setTooltip(new Tooltip("Return to login page"));
         registerButton.setTooltip(new Tooltip("Register a new account"));
 
-        passwordVisibleField.textProperty().bindBidirectional(passwordField.textProperty());
-        repeatPasswordVisibleField.textProperty()
-                .bindBidirectional(repeatPasswordField.textProperty());
+        passwordVisibleField.textProperty().bindBidirectional(
+                passwordField.textProperty());
+        repeatPasswordVisibleField.textProperty().bindBidirectional(
+                repeatPasswordField.textProperty());
 
         // Create icons
-        shownIcon = new Image(getClass().getResourceAsStream("/images/OpenEye.png"));
-        hiddenIcon = new Image(getClass().getResourceAsStream("/images/ClosedEye.png"));
+        shownIcon = new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/OpenEye.png")));
+        hiddenIcon = new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/ClosedEye.png")));
     }
 
+    /**
+     * Toggle the visibility of the first password box.
+     */
     @FXML
     private void togglePasswordVisibility() {
         passwordVisible = !passwordVisible;
@@ -95,6 +101,9 @@ public class RegisterPageController extends PageController {
         }
     }
 
+    /**
+     * Toggle the visibility of the confirm password box.
+     */
     @FXML
     private void toggleRepeatPasswordVisibility() {
         repeatPasswordVisible = !repeatPasswordVisible;
@@ -153,24 +162,23 @@ public class RegisterPageController extends PageController {
         }
 
         // Password validation
-
-        Pattern letter = Pattern.compile("[a-zA-z]");
-        Pattern digit = Pattern.compile("[0-9]");
-
-        Matcher hasLetter = letter.matcher(password);
-        Matcher hasDigit = digit.matcher(password);
-
         if (password.length() < 8) {
             errorLabel.setText("Password must contain at least 8 characters!");
             passwordField.getStyleClass().add("field_error");
             return;
         }
 
+        Pattern letter = Pattern.compile("[a-zA-z]");
+        Matcher hasLetter = letter.matcher(password);
+
         if (!hasLetter.find()) {
             errorLabel.setText("Password must contain alphanumeric characters!");
             passwordField.getStyleClass().add("field_error");
             return;
         }
+
+        Pattern digit = Pattern.compile("[0-9]");
+        Matcher hasDigit = digit.matcher(password);
 
         if (!hasDigit.find()) {
             errorLabel.setText("Password must contain a numeric character!");

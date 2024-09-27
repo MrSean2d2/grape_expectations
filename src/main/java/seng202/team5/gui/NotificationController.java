@@ -20,8 +20,7 @@ public class NotificationController extends PageController {
      */
     @FXML
     private void initialize() {
-
-
+        ;
     }
 
     /**

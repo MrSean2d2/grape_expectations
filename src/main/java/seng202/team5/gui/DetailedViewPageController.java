@@ -6,8 +6,8 @@ import static seng202.team5.services.ColourLookupService.getTagLabelColour;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -42,10 +42,10 @@ import seng202.team5.services.WineService;
  */
 public class DetailedViewPageController extends PageController {
     private static final Logger log = LogManager.getLogger(DetailedViewPageController.class);
-    private final Image emptyStar =
-            new Image(getClass().getResourceAsStream("/images/empty_star.png"));
-    private final Image filledStar =
-            new Image(getClass().getResourceAsStream("/images/filled_star.png"));
+    private final Image emptyStar = new Image(
+            Objects.requireNonNull(getClass().getResourceAsStream("/images/empty_star.png")));
+    private final Image filledStar = new Image(
+            Objects.requireNonNull(getClass().getResourceAsStream("/images/filled_star.png")));
     Label addLabel;
     boolean canAddTag = true;
     TagsDAO tagsDAO;
@@ -119,11 +119,11 @@ public class DetailedViewPageController extends PageController {
         }
 
         if (UserService.getInstance().getCurrentUser() != null) {
-            // Setup review stuff
-            review = reviewDAO.getWineReview(selectedWineId, userId);
-
             // Get the user ID
             userId = UserService.getInstance().getCurrentUser().getId();
+
+            // Setup review stuff
+            review = reviewDAO.getWineReview(selectedWineId, userId);
 
             tagsDAO = new TagsDAO();
             tagsList = new ArrayList<>();
@@ -191,8 +191,9 @@ public class DetailedViewPageController extends PageController {
                     List<Label> labels = new ArrayList<>();
 
                     for (Tag tag : tags) {
-                        /* Can't use .contains because tag ID will be different (with default ones)
-                         : (
+                        /*
+                         Can't use .contains because tag ID will be
+                         different (with default ones) : (
                          */
                         boolean found = false;
                         for (Tag existingTag : tagsList) {
@@ -397,11 +398,9 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * handles the event where the toggle favorite button is pressed.
-     *
-     * @param event action event
      */
     @FXML
-    private void handleToggleFavourite(ActionEvent event) {
+    private void handleToggleFavourite() {
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
@@ -417,11 +416,9 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * Saves the notes that are currently in the text box.
-     *
-     * @param event action event
      */
     @FXML
-    private void handleSaveNotes(ActionEvent event) {
+    private void handleSaveNotes() {
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
@@ -435,11 +432,9 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * Closes the page.
-     *
-     * @param event action event
      */
     @FXML
-    private void handleBackButtonAction(ActionEvent event) {
+    private void handleBackButtonAction() {
         close();
     }
 

@@ -84,12 +84,13 @@ public class AssignedTag {
         if (this == o) {
             return true;
         }
+
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
         AssignedTag that = (AssignedTag) o;
-        return tagId == that.tagId
-                && userId == that.userId
-                && wineId == that.wineId;
+        return tagId == that.tagId &&
+                userId == that.userId &&
+                wineId == that.wineId;
     }
 }

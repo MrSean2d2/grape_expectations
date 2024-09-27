@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -60,6 +61,7 @@ public class HeaderController {
 
 
     private final HeaderController headerController = this;
+    private String loadedPage = "";
 
     // Used to handle loading
     Task<Node> createScene = null;
@@ -110,7 +112,7 @@ public class HeaderController {
         } else {
             loadPage("/fxml/HomePage.fxml");
         }
-        homeButton.getStyleClass().add("active");
+        //homeButton.getStyleClass().add("active");
     }
 
     /**
@@ -121,7 +123,7 @@ public class HeaderController {
     @FXML
     private void loadDataListPage() throws Exception {
         loadPage("/fxml/DataListPage.fxml");
-        dataListButton.getStyleClass().add("active");
+        //dataListButton.getStyleClass().add("active");
     }
 
 
@@ -133,7 +135,7 @@ public class HeaderController {
     @FXML
     private void loadMapPage() throws Exception {
         loadPage("/fxml/MapPage.fxml");
-        mapButton.getStyleClass().add("active");
+        //mapButton.getStyleClass().add("active");
     }
 
     /**
@@ -152,7 +154,7 @@ public class HeaderController {
         } else {
             loadPage("/fxml/LoginPage.fxml");
         }
-        accountButton.getStyleClass().add("active");
+        //accountButton.getStyleClass().add("active");
     }
 
 
@@ -200,33 +202,43 @@ public class HeaderController {
         mapButton.getStyleClass().remove("active");
         accountButton.getStyleClass().remove("active");
 
-        // Task to show loading screen after a delay
-        Runnable showLoadingTask = () -> {
-            try {
-                // Load the loading page
-                FXMLLoader baseLoader = new FXMLLoader(
-                        getClass().getResource("/fxml/LoadingSpinner.fxml"));
-                Node loader = baseLoader.load();
-                javafx.application.Platform.runLater(
-                        () -> pageContainer.getChildren().setAll(loader));
-            } catch (IOException e) {
-                log.error(e);
-            }
-        };
+        // Load the loading page
+        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
+        try {
+            Node loader = baseLoader.load();
+            Platform.runLater(() -> pageContainer.getChildren().setAll(loader));
 
-        // Create a scheduled executor service for managing the delay
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        } catch (IOException e) {
+            log.error(e);
+        }
 
-        // Make the loading screen show up if the task is still loading after 0.1 seconds
-        var loadingDelay = scheduler.schedule(showLoadingTask, 100, TimeUnit.MILLISECONDS);
+        loadedPage = fxml.substring(fxml.lastIndexOf("/") + 1).trim();
+
+        // Add active status to buttons
+        switch (loadedPage) {
+            case "HomePage.fxml":
+            case "DashboardPage.fxml":
+                homeButton.getStyleClass().add("active");
+                break;
+
+            case "DataListPage.fxml":
+                dataListButton.getStyleClass().add("active");
+                break;
+
+            case "MapPage.fxml":
+                mapButton.getStyleClass().add("active");
+                break;
+
+            case "LoginPage.fxml":
+            case "RegisterPage.fxml":
+            case "AccountManagePage.fxml":
+                accountButton.getStyleClass().add("active");
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + loadedPage);
+        }
         // Update the scene
-        createScene.setOnSucceeded(e -> {
-            loadingDelay.cancel(false);
-            scheduler.shutdown();
-
-            javafx.application.Platform.runLater(
-                    () -> pageContainer.getChildren().setAll(createScene.getValue()));
-        });
+        createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
 
         // Begin loading
         new Thread(createScene).start();
@@ -247,7 +259,8 @@ public class HeaderController {
             notificationController.setText(text);
             notificationController.setColourBand(col);
 
-            TranslateTransition popUp = new TranslateTransition(Duration.millis(150), notification);
+            TranslateTransition popUp = new TranslateTransition(
+                    Duration.millis(150), notification);
             popUp.setFromY(100);
             popUp.setToY(-20);
 
