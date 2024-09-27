@@ -27,6 +27,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.AssignedTag;
@@ -45,6 +47,7 @@ import seng202.team5.services.WineService;
  * @author Finn Brown
  */
 public class DetailedViewPageController extends PageController {
+    private final Logger log = LogManager.getLogger(DetailedViewPageController.class);
     private final Image emptyStar =
             new Image(getClass().getResourceAsStream("/images/empty_star.png"));
     private final Image filledStar =
@@ -76,6 +79,8 @@ public class DetailedViewPageController extends PageController {
     private Label provinceLabel;
     @FXML
     private Label varietyLabel;
+    @FXML
+    private Label vineyardLabel;
     @FXML
     private TextArea notesTextArea;
     @FXML
@@ -140,6 +145,7 @@ public class DetailedViewPageController extends PageController {
             wineDescriptionLabel.setText(selectedWine.getDescription());
             provinceLabel.setText("Province: " + selectedWine.getRegion());
             varietyLabel.setText("Variety: " + selectedWine.getWineVariety());
+            vineyardLabel.setText("Vineyard: " + selectedWine.getVineyard().getName());
         }
     }
 
@@ -194,7 +200,9 @@ public class DetailedViewPageController extends PageController {
     private void initAdminActions() {
         if (UserService.getInstance().getCurrentUser() != null
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
-            Button editWineButton = new Button("Edit");
+            Button editWineButton = new Button("Edit Wine");
+            editWineButton.getStyleClass().add("detailed_view");
+            editWineButton.applyCss();
             editWineButton.setOnAction(this::editWine);
             headerGridPane.add(editWineButton, 1, 0);
             GridPane.setMargin(editWineButton, new Insets(0, 10, 10, 0));
@@ -231,7 +239,8 @@ public class DetailedViewPageController extends PageController {
                 canAddTag = true;
 
                 try {
-                    FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/TagPopover.fxml"));
+                    FXMLLoader baseLoader =
+                            new FXMLLoader(getClass().getResource("/fxml/TagPopover.fxml"));
                     Node content = baseLoader.load();
 
                     // Create the Popup
@@ -249,7 +258,8 @@ public class DetailedViewPageController extends PageController {
                     List<Label> labels = new ArrayList<>();
 
                     for (Tag tag : tags) {
-                        // Can't use .contains because tag ID will be different (with default ones) : (
+                        /* Can't use .contains because tag ID will be different
+                        (with default ones) : (*/
                         boolean found = false;
                         for (Tag existingTag : tagsList) {
                             if (existingTag.getTagId() == tag.getTagId()) {
@@ -259,7 +269,9 @@ public class DetailedViewPageController extends PageController {
                         }
 
                         // Skip if it was found
-                        if (found) continue;
+                        if (found) {
+                            continue;
+                        }
 
                         // Set the user ID to be the current user id, override the default
                         //  user ID may be -1, for default tags
@@ -425,7 +437,7 @@ public class DetailedViewPageController extends PageController {
             try {
                 reviewDAO.add(review);
             } catch (DuplicateEntryException e) {
-                e.printStackTrace();
+                log.error(e);
             }
         }
     }
@@ -452,10 +464,9 @@ public class DetailedViewPageController extends PageController {
     /**
      * handles the event where the toggle favorite button is pressed.
      *
-     * @param event action event
      */
     @FXML
-    private void handleToggleFavourite(ActionEvent event) {
+    private void handleToggleFavourite() {
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
@@ -472,10 +483,9 @@ public class DetailedViewPageController extends PageController {
     /**
      * Saves the notes that are currently in the text box.
      *
-     * @param event action event
      */
     @FXML
-    private void handleSaveNotes(ActionEvent event) {
+    private void handleSaveNotes() {
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
@@ -490,11 +500,9 @@ public class DetailedViewPageController extends PageController {
     /**
      * Closes the page.
      *
-     * @param event action event
      */
     @FXML
-    private void handleBackButtonAction(ActionEvent event) {
-
+    private void handleBackButtonAction() {
         close();
     }
 
@@ -502,7 +510,6 @@ public class DetailedViewPageController extends PageController {
      * Closes the page.
      */
     private void close() {
-
         try {
             if (UserService.getInstance().getCurrentUser() != null) {
                 assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
@@ -531,10 +538,10 @@ public class DetailedViewPageController extends PageController {
     }
 
     /**
-     * Closes all open instances of detailed view pages
+     * Closes all open instances of detailed view pages.
      */
-    public static void closeAll(){
-        for(DetailedViewPageController instance : new ArrayList<>(openInstances)) {
+    public static void closeAll() {
+        for (DetailedViewPageController instance : new ArrayList<>(openInstances)) {
             instance.close();
         }
     }

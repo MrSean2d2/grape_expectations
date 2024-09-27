@@ -272,10 +272,10 @@ public class Wine {
         }
         //description can be empty
         int currentYear = Year.now().getValue(); //gets current year for future-proofing
-        if (year < 1700 | year > currentYear) { //1700 is arbitrary boundary
+        if (year < 1700 || year > currentYear) { //1700 is arbitrary boundary
             return false;
         }
-        if (ratingValue < 0 | ratingValue > 100) {
+        if (ratingValue < 0 || ratingValue > 100) {
             return false;
         }
         if (price < 0) {

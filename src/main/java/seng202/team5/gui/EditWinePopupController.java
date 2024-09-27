@@ -69,6 +69,7 @@ public class EditWinePopupController extends PageController {
 
     private final int maxChars = 500;
     private Wine wine;
+    private boolean isWineValid = true;
 
     private static List<EditWinePopupController> openInstances = new ArrayList<>();
 
@@ -125,12 +126,14 @@ public class EditWinePopupController extends PageController {
         yearField.getStyleClass().add("field_error");
         yearErrorLabel.setText("Invalid year!");
         yearErrorLabel.setVisible(true);
+        isWineValid = false;
     }
 
     private void priceError() {
         priceField.getStyleClass().add("field_error");
         priceErrorLabel.setText("Invalid price!");
         priceErrorLabel.setVisible(true);
+        isWineValid = false;
     }
 
     private int validateYear() {
@@ -169,14 +172,20 @@ public class EditWinePopupController extends PageController {
     }
 
     private Vineyard retreiveVineyard(VineyardDAO vineyardDAO) {
+        Vineyard vineyard = null;
         String vineyardName = vineyardField.getText();
-        String region = regionField.getText();
-        int vineyardId = vineyardDAO.getIdFromNameRegion(vineyardName, region);
-        Vineyard vineyard;
-        if (vineyardId == 0) {
-            vineyard = new Vineyard(vineyardName, region);
+        if (vineyardName.isBlank()) {
+            vineyardField.getStyleClass().add("field_error");
+            isWineValid = false;
         } else {
-            vineyard = vineyardDAO.getOne(vineyardId);
+            String region = regionField.getText();
+            int vineyardId = vineyardDAO.getIdFromNameRegion(vineyardName, region);
+            if (vineyardId == 0) {
+                vineyard = new Vineyard(vineyardName, region);
+                vineyard.setId(vineyardDAO.add(vineyard));
+            } else {
+                vineyard = vineyardDAO.getOne(vineyardId);
+            }
         }
         return vineyard;
     }
@@ -185,6 +194,7 @@ public class EditWinePopupController extends PageController {
         String name = nameField.getText();
         if (name.isBlank()) {
             nameField.getStyleClass().add("field_error");
+            isWineValid = false;
         }
         return name;
     }
@@ -199,8 +209,12 @@ public class EditWinePopupController extends PageController {
 
     @FXML
     private void submit() {
+        isWineValid = true;
         priceErrorLabel.setVisible(false);
         yearErrorLabel.setVisible(false);
+        yearField.getStyleClass().remove("field_error");
+        priceField.getStyleClass().remove("field_error");
+        nameField.getStyleClass().remove("field_error");
         String colour = validateColour();
         int year = validateYear();
         double price = validatePrice();
@@ -211,20 +225,22 @@ public class EditWinePopupController extends PageController {
         WineDAO wineDAO = new WineDAO(vineyardDAO);
         String description = descriptionArea.getText();
         String name = validateName();
-        if (wine == null) {
-            wine = new Wine(name, description, year, rating, price, variety, colour, vineyard);
-            wineDAO.add(wine);
-        } else {
-            wine.setName(name);
-            wine.setDescription(description);
-            wine.setYear(year);
-            wine.setRating(rating);
-            wine.setVariety(variety);
-            wine.setColour(colour);
-            wine.setVineyard(vineyard);
-            wineDAO.update(wine);
+        if (isWineValid) {
+            if (wine == null) {
+                wine = new Wine(name, description, year, rating, price, variety, colour, vineyard);
+                wineDAO.add(wine);
+            } else {
+                wine.setName(name);
+                wine.setDescription(description);
+                wine.setYear(year);
+                wine.setRating(rating);
+                wine.setVariety(variety);
+                wine.setColour(colour);
+                wine.setVineyard(vineyard);
+                wineDAO.update(wine);
+            }
+            close();
         }
-        close();
     }
 
 }
