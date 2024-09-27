@@ -6,37 +6,27 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import seng202.team5.models.Review;
-import seng202.team5.models.Vineyard;
-import seng202.team5.models.Wine;
-import seng202.team5.repository.ReviewDAO;
-import seng202.team5.repository.VineyardDAO;
-import seng202.team5.repository.WineDAO;
+import seng202.team5.models.*;
+import seng202.team5.repository.*;
 import seng202.team5.services.DashboardService;
 import seng202.team5.services.UserService;
 
 import java.util.*;
 
+import static seng202.team5.services.ColourLookupService.getTagLabelColour;
+
 public class DashboardPageController extends PageController {
-
-    @FXML
-    public TableColumn<Wine, String> nameColumn;
-    @FXML
-    public TableColumn<Wine, Double> priceColumn;
-    @FXML
-    public TableColumn<Wine, Integer> yearColumn;
-
-    @FXML
-    public TableColumn<Wine, Double> ratingColumn;
-    @FXML
-    private TableView<Wine> reviewedWinesTable;
-
     @FXML
     private PieChart pieChart;
 
@@ -49,11 +39,15 @@ public class DashboardPageController extends PageController {
     @FXML
     private Label topYearLabel;
 
+    @FXML
+    private VBox userListPane;
+
     public ComboBox<String> piechartTypeComboBox;
     private DashboardService dashboardService;
     private VineyardDAO vineyardDAO;
     private WineDAO wineDAO;
     private ReviewDAO reviewDAO;
+    private TagsDAO tagsDAO;
 
     // Setup default hash maps
     private Map<String, Integer> varietyMap;
@@ -64,12 +58,16 @@ public class DashboardPageController extends PageController {
     private List<Map.Entry<String, Integer>> topRegion;
     private List<Map.Entry<Integer, Integer>> topYear;
 
+    private int userID;
+
     /**
      * Initalises the dashboard page
      * Fetches user reviews, processes data and updates the pie chart
      */
     @FXML
     private void initialize() {
+        userID = UserService.getInstance().getCurrentUser().getId();
+
         // Setup default hash maps
         varietyMap = new HashMap<String, Integer>();
         regionMap = new HashMap<String, Integer>();
@@ -81,14 +79,8 @@ public class DashboardPageController extends PageController {
         wineDAO = new WineDAO(vineyardDAO);
 
         piechartTypeComboBox.setTooltip(new Tooltip("Select Type Of Pie Chart"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
-        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
 
-        List<Review> userReviews = reviewDAO.getFromUser(UserService.getInstance().getCurrentUser().getId());
-
-        loadReviewedWines();
+        List<Review> userReviews = reviewDAO.getFromUser(userID);
 
         // Create a hash map for each property
         for(Review review : userReviews) {
@@ -131,15 +123,61 @@ public class DashboardPageController extends PageController {
 
         // Default value (Variety)
         piechartTypeComboBox.getSelectionModel().select(0);
+
+        // Add tables
+        tagsDAO = new TagsDAO();
+        AssignedTagsDAO assignedTagsDAO = new AssignedTagsDAO();
+        List<Tag> tags = tagsDAO.getFromUser(userID);
+
+        // Add default reviewed options
+        createNewTagList("My Reviewed Wines", userReviews.size(), -1);
+
+        // Add all of the user tag options
+        for (Tag tag : tags) {
+            /*
+            Get a list of the assigned tags
+            This could be used to get the list of wines that have this tag
+            as the assignedtag would have a wineID also
+             */
+            List<AssignedTag> numWines = assignedTagsDAO.getTagsFromUser(
+                    userID,
+                    tag.getTagId());
+
+            createNewTagList(tag.getName(), numWines.size(), tag.getColour());
+        }
     }
 
-    /**
-     * Load wines that have been reviewed into table
-     */
-    private void loadReviewedWines() {
-        List<Wine> reviewedWines = wineDAO.getReviewedWines();
-        ObservableList<Wine> observableWines = FXCollections.observableArrayList(reviewedWines);
-        reviewedWinesTable.setItems(observableWines);
+    public void createNewTagList(String name, int numWines, int colour) {
+        Label nameTag = new Label(name);
+        nameTag.setStyle(nameTag.getStyle() + "-fx-font-weight: 700;");
+        nameTag.setPadding(new Insets(5));
+        Label optionTag = new Label(String.valueOf(numWines) + " Wines");
+        optionTag.setAlignment(Pos.CENTER_RIGHT);
+        optionTag.setMaxWidth(Double.MAX_VALUE);
+        optionTag.setPadding(new Insets(5));
+        HBox.setHgrow(optionTag, Priority.ALWAYS);
+
+        HBox tagContainer = new HBox(nameTag, optionTag);
+
+        tagContainer.getStyleClass().add("tag");
+        tagContainer.getStyleClass().add("max-width");
+
+        if (colour != -1) {
+            tagContainer.getStyleClass().add(getTagLabelColour(colour));
+        }
+
+        tagContainer.setStyle(tagContainer.getStyle() + "-fx-background-radius: 5;");
+
+        // Add on click
+//            newTag.setOnMouseClicked(event -> {
+//                if (!(tagsList.contains(tag)) && tagPopover.isShowing()) {
+//                    addTag(tag);
+//                    updateTags();
+//                    closePopOver();
+//                }
+//            });
+
+        userListPane.getChildren().add(tagContainer);
     }
 
     /**
@@ -151,12 +189,11 @@ public class DashboardPageController extends PageController {
     public <K, V extends Comparable<V>> List<Map.Entry<K, V>> sortHashMap(Map<K, V> inputMap) {
 
         List<Map.Entry<K, V>> list = new ArrayList<>(inputMap.entrySet());
-        System.out.println(list.getFirst().getKey());
+//        System.out.println(list.getFirst().getKey());
         list.sort(Map.Entry.<K, V>comparingByValue().reversed());
-        System.out.println(list.getFirst().getKey());
+//        System.out.println(list.getFirst().getKey());
         return list;
     }
-
 
 
     /**
