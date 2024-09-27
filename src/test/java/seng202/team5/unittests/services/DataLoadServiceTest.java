@@ -1,7 +1,6 @@
 package seng202.team5.unittests.services;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.spy;
 
 import java.io.IOException;
@@ -84,4 +83,30 @@ public class DataLoadServiceTest {
         //2 have no price so 14/16 will be in the list
         assertEquals(14, wines.size());
     }
+
+    @Test
+    public void testColourPinotNoirWine() {
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        Wine wine = wines.get(3);
+        assertEquals("Pinot Noir", wine.getWineVariety());
+        assertEquals("Red", wine.getWineColour());
+    }
+
+    @Test
+    public void testColourRieslingWine() {
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        Wine wine = wines.get(2);
+        assertEquals("Riesling", wine.getWineVariety());
+        assertEquals("White", wine.getWineColour());
+    }
+
+    @Test
+    public void testUnknownColourWine() {//colours csv only contains those from nz data so some in test data are unknown
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        Wine wine = wines.get(4);
+        assertEquals("Tempranillo-Merlot", wine.getWineVariety());
+        assertEquals("Unknown", wine.getWineColour());
+    }
+
+
 }
