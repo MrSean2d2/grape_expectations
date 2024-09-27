@@ -1,6 +1,7 @@
 package seng202.team5.gui;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -69,6 +70,9 @@ public class EditWinePopupController extends PageController {
     private final int maxChars = 500;
     private Wine wine;
 
+    private static List<EditWinePopupController> openInstances = new ArrayList<>();
+
+
     @FXML
     private void initialize() {
         wine = WineService.getInstance().getSelectedWine();
@@ -101,12 +105,20 @@ public class EditWinePopupController extends PageController {
         List<String> regionSuggestions = vineyardDAO.getRegions();
         TextFields.bindAutoCompletion(regionField, regionSuggestions);
 
+        openInstances.add(this);
     }
 
     @FXML
     private void close() {
+        openInstances.remove(this);
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
+    }
+    @FXML
+    public static void closeAll(){
+        for(EditWinePopupController instance : new ArrayList<>(openInstances)) {
+            instance.close();
+        }
     }
 
     private void yearError() {

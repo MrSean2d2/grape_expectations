@@ -12,6 +12,9 @@ import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
 import seng202.team5.services.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A controller for the edit user window.
  *
@@ -40,6 +43,7 @@ public class EditUserPopupController extends PageController {
     @FXML
     private Button closeButton;
     private User curUser;
+    private static List<EditUserPopupController> openInstances = new ArrayList<>();
 
     @FXML
     private void initialize() {
@@ -48,10 +52,13 @@ public class EditUserPopupController extends PageController {
         usernameField.setText(curUser.getUsername());
         roleComboBox.getItems().setAll(Role.values());
         roleComboBox.getSelectionModel().select(curUser.getRole());
+
+        openInstances.add(this);
     }
 
     @FXML
     private void close() {
+        openInstances.remove(this);
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
@@ -80,6 +87,15 @@ public class EditUserPopupController extends PageController {
             close();
         }
 
+    }
+    /**
+     * Closes all open instances of detailed view pages
+     */
+    @FXML
+    public static void closeAll(){
+        for(EditUserPopupController instance : new ArrayList<>(openInstances)) {
+            instance.close();
+        }
     }
 
 }

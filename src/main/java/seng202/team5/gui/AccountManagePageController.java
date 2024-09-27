@@ -109,6 +109,9 @@ public class AccountManagePageController extends PageController {
      */
     private void signOutUserInstance() {
         DetailedViewPageController.closeAll();
+        EditWinePopupController.closeAll();
+        EditUserPopupController.closeAll();
+
         UserService.getInstance().signOut();
         swapPage("/fxml/LoginPage.fxml");
     }

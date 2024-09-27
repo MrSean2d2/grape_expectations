@@ -9,6 +9,9 @@ import javafx.scene.control.Tooltip;
 import seng202.team5.models.User;
 import seng202.team5.services.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Controller for the account page.
  *
@@ -31,6 +34,7 @@ public class AccountPageController extends PageController {
     @FXML
     private PasswordField passwordField;
 
+
     /**
      * Initialize the user page.
      */
@@ -40,6 +44,7 @@ public class AccountPageController extends PageController {
 
         loginButton.setTooltip(new Tooltip("Log in to account"));
         registerButton.setTooltip(new Tooltip("Register a new account"));
+
     }
 
     /**
