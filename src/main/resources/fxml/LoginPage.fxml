@@ -6,13 +6,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.LoginPageController">
+<GridPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.LoginPageController">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" maxWidth="1000.0" minWidth="10.0" />
    </columnConstraints>
@@ -47,10 +49,33 @@
             <Label focusTraversable="false" maxWidth="1.7976931348623157E308" text="Username" />
             <TextField fx:id="usernameField" promptText="Username" styleClass="textbox" />
             <Label focusTraversable="false" maxWidth="1.7976931348623157E308" text="Password">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
                <padding>
                   <Insets top="20.0" />
                </padding></Label>
-            <PasswordField fx:id="passwordField" promptText="Password" styleClass="textbox" />
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <PasswordField fx:id="passwordField" promptText="Password" styleClass="textbox" />
+                  <TextField fx:id="passwordVisibleField" promptText="Password" styleClass="textbox" visible="false" />
+                  <ImageView fx:id="toggleVisibility" fitHeight="30.0" fitWidth="157.0" onMouseClicked="#togglePasswordVisibility" pickOnBounds="true" preserveRatio="true" styleClass="specialIcon" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+                     <image>
+                        <Image url="@../images/ClosedEye.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </GridPane>
             <Label fx:id="errorLabel" focusTraversable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" styleClass="warningText" text="Error" textFill="#d05b5b">
                <padding>
                   <Insets bottom="20.0" top="20.0" />

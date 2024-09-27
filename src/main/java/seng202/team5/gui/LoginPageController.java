@@ -1,11 +1,14 @@
 package seng202.team5.gui;
 
+import java.util.Objects;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.exceptions.PasswordIncorrectException;
 import seng202.team5.models.User;
@@ -32,6 +35,15 @@ public class LoginPageController extends PageController {
 
     @FXML
     private PasswordField passwordField;
+    @FXML
+    private TextField passwordVisibleField;
+
+    @FXML
+    private ImageView toggleVisibility;
+    private boolean passwordVisible = false;
+
+    private Image shownIcon;
+    private Image hiddenIcon;
 
     /**
      * Initialize the user page.
@@ -42,6 +54,40 @@ public class LoginPageController extends PageController {
 
         loginButton.setTooltip(new Tooltip("Log in to account"));
         registerButton.setTooltip(new Tooltip("Go to register page"));
+
+        passwordVisibleField.textProperty().bindBidirectional(
+                passwordField.textProperty());
+
+        // Create icons
+        shownIcon = new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/OpenEye.png")));
+        hiddenIcon = new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/ClosedEye.png")));
+    }
+
+    /**
+     * Toggle the visibility of the first password box.
+     */
+    @FXML
+    private void togglePasswordVisibility() {
+        passwordVisible = !passwordVisible;
+
+        // If password visible, set visibility
+        if (passwordVisible) {
+            passwordVisibleField.setVisible(true);
+            passwordVisibleField.setManaged(true);
+            passwordField.setVisible(false);
+            passwordField.setManaged(false);
+            registerButton.requestFocus(); // make the register button focused
+            toggleVisibility.setImage(shownIcon);
+        } else {
+            passwordField.setVisible(true);
+            passwordField.setManaged(true);
+            passwordVisibleField.setVisible(false);
+            passwordVisibleField.setManaged(false);
+            registerButton.requestFocus(); // make the register button focused
+            toggleVisibility.setImage(hiddenIcon);
+        }
     }
 
     /**

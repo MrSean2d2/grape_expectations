@@ -38,7 +38,6 @@ public class RegisterPageController extends PageController {
     private ImageView toggleVisibility;
     private boolean passwordVisible = false;
 
-
     @FXML
     private PasswordField repeatPasswordField;
     @FXML
@@ -73,6 +72,9 @@ public class RegisterPageController extends PageController {
                 Objects.requireNonNull(getClass().getResourceAsStream("/images/ClosedEye.png")));
     }
 
+    /**
+     * Toggle the visibility of the first password box.
+     */
     @FXML
     private void togglePasswordVisibility() {
         passwordVisible = !passwordVisible;
@@ -95,6 +97,9 @@ public class RegisterPageController extends PageController {
         }
     }
 
+    /**
+     * Toggle the visibility of the confirm password box.
+     */
     @FXML
     private void toggleRepeatPasswordVisibility() {
         repeatPasswordVisible = !repeatPasswordVisible;
