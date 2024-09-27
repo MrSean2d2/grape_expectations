@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Vineyard;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.services.VineyardService;
+import seng202.team5.services.WineService;
 
 /**
  * Controller class for MapPage.fxml.
@@ -52,6 +53,8 @@ public class MapPageController extends PageController {
         vineyardTable.setPlaceholder(new Label("Select a region to view vineyards"));
         vineyardColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         vineyardDAO = new VineyardDAO();
+
+        WineService.getInstance().getWineList();
 
         vineyardTable.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
@@ -134,19 +137,6 @@ public class MapPageController extends PageController {
                 }
             }
         }
-    }
-
-    /**
-     * Get a (temporary) list of vineyards.
-     *
-     * @author Martyn Gascoigne
-     */
-    private List<Vineyard> getVineyards() {
-        return List.of(
-                new Vineyard(1, "Vineyard 1", -44.0, 171.1),
-                new Vineyard(2, "Vineyard 2", -44.1, 171.2),
-                new Vineyard(3, "Vineyard 3", -44.2, 171.3)
-        );
     }
 
 
