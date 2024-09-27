@@ -33,31 +33,17 @@ Light mode for the application
     -fx-text-fill: #e95958;
 }
 
-.button {
+.button, .textbox, .dropdown {
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
     -fx-border-color: transparent;
 }
 
-.button:hover {
+.button:hover, .dropdown:hover {
     -fx-border-color: #bbb;
     -fx-text-fill: #000000;
 }
 
-.textbox {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
-}
-
-.dropdown {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
-    -fx-border-color: transparent;
-}
-
-.dropdown:hover {
-    -fx-border-color: #bbb;
-}
 
 .dropdown .list-cell {
     -fx-background-color: #ffffff;
