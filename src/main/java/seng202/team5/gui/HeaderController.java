@@ -21,6 +21,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import seng202.team5.services.UserService;
 
 
@@ -31,6 +33,7 @@ import seng202.team5.services.UserService;
  */
 public class HeaderController {
 
+    private static final Logger log = LogManager.getLogger(HeaderController.class);
     @FXML
     private StackPane pageContainer;
 
@@ -157,9 +160,8 @@ public class HeaderController {
      * Load a page with a path given as an argument.
      *
      * @param fxml path to fxml file
-     * @throws Exception if loading the page fails
      */
-    public void loadPage(String fxml) throws Exception {
+    public void loadPage(String fxml) {
         // Cancel an in-progress task if it is currently running
         if (createScene != null && createScene.isRunning()) {
             createScene.cancel(true);
@@ -185,7 +187,7 @@ public class HeaderController {
                     }
                     return page;
                 } catch (IOException e) {
-                    System.out.println(e);
+                    log.error(e);
                 }
 
                 return null;
@@ -208,7 +210,7 @@ public class HeaderController {
                 javafx.application.Platform.runLater(
                         () -> pageContainer.getChildren().setAll(loader));
             } catch (IOException e) {
-                System.out.println(e);
+                log.error(e);
             }
         };
 

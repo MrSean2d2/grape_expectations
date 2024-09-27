@@ -21,6 +21,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.AssignedTag;
@@ -39,6 +41,7 @@ import seng202.team5.services.WineService;
  * @author Finn Brown
  */
 public class DetailedViewPageController extends PageController {
+    private static final Logger log = LogManager.getLogger(DetailedViewPageController.class);
     private final Image emptyStar =
             new Image(getClass().getResourceAsStream("/images/empty_star.png"));
     private final Image filledStar =
@@ -368,7 +371,7 @@ public class DetailedViewPageController extends PageController {
             try {
                 reviewDAO.add(review);
             } catch (DuplicateEntryException e) {
-                e.printStackTrace();
+                log.error(e);
             }
         }
     }

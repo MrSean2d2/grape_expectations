@@ -1,10 +1,10 @@
 package seng202.team5.unittests.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.NoSuchAlgorithmException;
@@ -89,12 +89,8 @@ public class UserServiceTest {
         // Check if password 1 and 2 are equal, and that 1 and 3 are not
         assertTrue(UserService.verifyPassword(pass2String, hashedPassword));
 
-        try {
-            boolean verified = UserService.verifyPassword(pass3String, hashedPassword);
-            assertTrue(false);
-        } catch (PasswordIncorrectException e) {
-            assertTrue(true);
-        }
+        assertThrows(PasswordIncorrectException.class, () ->
+                UserService.verifyPassword(pass3String, hashedPassword));
     }
 
     /**

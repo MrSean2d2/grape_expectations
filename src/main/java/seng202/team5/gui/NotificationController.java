@@ -1,10 +1,8 @@
 package seng202.team5.gui;
 
-import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
 
 /**
  * controller for the home page.
