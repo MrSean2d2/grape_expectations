@@ -131,7 +131,7 @@ public class DataListPageController extends PageController {
                     Wine selectedWine = wineTable.getSelectionModel().getSelectedItem();
                     if (selectedWine != null) {
                         WineService.getInstance().setSelectedWine(selectedWine);
-                        openDetailedViewPage();
+                        openDetailedViewPage(getHeaderController());
                     }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -256,6 +256,7 @@ public class DataListPageController extends PageController {
     private void searchClicked() {
         String searching = searchTextField.getText();
         applySearchFilters();
+        addNotification("Applied Search", "#d5e958");
     }
 
     /**
@@ -351,17 +352,23 @@ public class DataListPageController extends PageController {
      * Opens detailed wine view page for the wine that was double-clicked.
      *
      */
-    private void openDetailedViewPage() {
+    private void openDetailedViewPage(HeaderController headerController) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/fxml/DetailedViewPage.fxml"));
             Parent root = loader.load();
 
+            // Set the header controller reference to the new page controller
+            PageController pageController = loader.getController();
+            if (pageController != null) {
+                pageController.setHeaderController(headerController);
+            }
+
             Stage stage = new Stage();
             stage.setTitle("Wine Details");
             Scene scene = new Scene(root);
 
-            String styleSheetUrl = "/fxml/style.css";
+            String styleSheetUrl = MainWindow.styleSheet;
             scene.getStylesheets().add(styleSheetUrl);
 
             stage.setScene(scene);

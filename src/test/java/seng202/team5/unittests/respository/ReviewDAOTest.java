@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.Review;
+import seng202.team5.models.Role;
 import seng202.team5.models.User;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
@@ -81,10 +82,10 @@ public class ReviewDAOTest {
                         "Red", testVineyard);
         testWine2.setId(wineDAO.add(testWine2));
 
-        User testUser = new User("Test User", "password", "user", 0);
+        User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
-        User testUser2 = new User("Test User 2", "password", "user", 0);
+        User testUser2 = new User("Test User 2", "password", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
         Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
@@ -116,7 +117,7 @@ public class ReviewDAOTest {
                         "Red", testVineyard);
         testWine.setId(wineDAO.add(testWine));
 
-        User testUser = new User("Test User", "password", "user", 0);
+        User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
         Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
@@ -151,10 +152,10 @@ public class ReviewDAOTest {
                         "Red", testVineyard);
         testWine3.setId(wineDAO.add(testWine3));
 
-        User testUser = new User("Test User", "password", "user", 0);
+        User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
-        User testUser2 = new User("Test User 2", "password", "user", 0);
+        User testUser2 = new User("Test User 2", "password", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
         Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
@@ -202,10 +203,10 @@ public class ReviewDAOTest {
                         "Red", testVineyard);
         testWine3.setId(wineDAO.add(testWine3));
 
-        User testUser = new User("Test User", "password", "user", 0);
+        User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
-        User testUser2 = new User("Test User 2", "password", "user", 0);
+        User testUser2 = new User("Test User 2", "password", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
         Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
@@ -245,7 +246,7 @@ public class ReviewDAOTest {
                         "Red", testVineyard);
         testWine.setId(wineDAO.add(testWine));
 
-        User testUser = new User("Test User", "password", "user", 0);
+        User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
         Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
@@ -266,7 +267,7 @@ public class ReviewDAOTest {
                         "Red", testVineyard);
         testWine.setId(wineDAO.add(testWine));
 
-        User testUser = new User("Test User", "password", "user", 0);
+        User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
         Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
@@ -290,7 +291,7 @@ public class ReviewDAOTest {
                         "Red", testVineyard);
         testWine.setId(wineDAO.add(testWine));
 
-        User testUser = new User("Test User", "password", "user", 0);
+        User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
         Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
@@ -324,10 +325,10 @@ public class ReviewDAOTest {
                         "Red", testVineyard);
         testWine2.setId(wineDAO.add(testWine2));
 
-        User testUser = new User("Test User", "password", "user", 0);
+        User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
-        User testUser2 = new User("Test User 2", "password", "user", 0);
+        User testUser2 = new User("Test User 2", "password", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
         Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
@@ -368,10 +369,10 @@ public class ReviewDAOTest {
                         "Red", testVineyard);
         testWine2.setId(wineDAO.add(testWine2));
 
-        User testUser = new User("Test User", "password", "user", 0);
+        User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
-        User testUser2 = new User("Test User 2", "password", "user", 0);
+        User testUser2 = new User("Test User 2", "password", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
         Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);

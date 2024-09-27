@@ -1,16 +1,22 @@
 package seng202.team5.gui;
 
 import java.io.IOException;
+import javafx.animation.TranslateTransition;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.apache.commons.lang3.NotImplementedException;
 import seng202.team5.services.UserService;
 
 
@@ -29,6 +35,9 @@ public class HeaderController {
 
     @FXML
     private Button homeButton;
+
+    @FXML
+    private ImageView homeIcon;
 
     @FXML
     private Button dataListButton;
@@ -59,6 +68,18 @@ public class HeaderController {
         scrollPane.setOnMousePressed(Event::consume);
         pageContainer.setOnMousePressed(Event::consume);
 
+        UserService.getInstance().getUserProperty().addListener((observable, oldUser, newUser) -> {
+            if (newUser != null) {
+                homeIcon.setImage(new Image(getClass().getResourceAsStream("/images/Dashboard.png")));
+            } else {
+                homeIcon.setImage(new Image(getClass().getResourceAsStream("/images/Home.png")));
+            }
+        });
+
+        scrollPane.setOnMousePressed((Event) -> { // remove weird focus...
+            pageContainer.requestFocus();
+        });
+
         logoButton.setTooltip(new Tooltip("Home page"));
         homeButton.setTooltip(new Tooltip("Home page"));
         dataListButton.setTooltip(new Tooltip("Data list page"));
@@ -73,7 +94,12 @@ public class HeaderController {
      */
     @FXML
     private void loadHomePage() throws Exception {
-        loadPage("/fxml/newHomePage.fxml");
+        if (UserService.getInstance().getCurrentUser() != null) {
+            throw new NotImplementedException("page not implemented");
+//          loadPage("/fxml/DashboardPage.fxml");
+        } else {
+            loadPage("/fxml/HomePage.fxml");
+        }
         homeButton.getStyleClass().add("active");
     }
 
@@ -113,7 +139,6 @@ public class HeaderController {
         pageContainer.getChildren().setAll(loader);
         resetActiveButtons(mapButton);
     }
-
 
     /**
      * Load the account page.
@@ -200,5 +225,40 @@ public class HeaderController {
         accountButton.getStyleClass().remove("active");
 
         button.getStyleClass().add("active");
+    }
+
+    /**
+     * Add a notification to the top page.
+     */
+    public void addNotification(String text, String col) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Notification.fxml"));
+            Node notification = loader.load();
+            pageContainer.getChildren().add(notification);
+            StackPane.setAlignment(notification, Pos.BOTTOM_CENTER);
+
+            NotificationController notificationController = loader.getController();
+            notificationController.setText(text);
+            notificationController.setColourBand(col);
+
+            TranslateTransition popUp = new TranslateTransition(Duration.millis(150), notification);
+            popUp.setFromY(100);
+            popUp.setToY(-20);
+
+            TranslateTransition popDown = new TranslateTransition(Duration.millis(150), notification);
+            popDown.setFromY(-20);
+            popDown.setToY(100);
+
+            popUp.play();
+
+            popUp.setOnFinished(e -> {
+                popDown.setDelay(Duration.seconds(3));
+                popDown.play();
+                popDown.setOnFinished(event -> pageContainer.getChildren().remove(notification));
+            });
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
