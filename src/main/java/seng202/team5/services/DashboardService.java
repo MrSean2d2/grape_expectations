@@ -40,7 +40,7 @@ public class DashboardService {
         initializeData();
     }
 
-    private void initializeData() {
+    public void initializeData() {
         userReviews = reviewDAO.getFromUser(userID);
 
         // Create a hash map for each property
