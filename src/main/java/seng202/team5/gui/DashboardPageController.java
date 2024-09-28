@@ -44,20 +44,7 @@ public class DashboardPageController extends PageController {
 
     public ComboBox<String> piechartTypeComboBox;
     private DashboardService dashboardService;
-    private VineyardDAO vineyardDAO;
-    private WineDAO wineDAO;
-    private ReviewDAO reviewDAO;
     private TagsDAO tagsDAO;
-
-    // Setup default hash maps
-    private Map<String, Integer> varietyMap;
-    private Map<String, Integer> regionMap;
-    private Map<Integer, Integer> yearMap;
-
-    private List<Map.Entry<String, Integer>> topVariety;
-    private List<Map.Entry<String, Integer>> topRegion;
-    private List<Map.Entry<Integer, Integer>> topYear;
-
     private int userID;
 
     /**
@@ -68,61 +55,15 @@ public class DashboardPageController extends PageController {
     private void initialize() {
         userID = UserService.getInstance().getCurrentUser().getId();
 
-        // Setup default hash maps
-        varietyMap = new HashMap<String, Integer>();
-        regionMap = new HashMap<String, Integer>();
-        yearMap = new HashMap<Integer, Integer>();
+        dashboardService = new DashboardService(userID,new VineyardDAO(), new WineDAO(new VineyardDAO()), new ReviewDAO());
 
-        // fetch user reviews
-        reviewDAO = new ReviewDAO();
-        vineyardDAO = new VineyardDAO();
-        wineDAO = new WineDAO(vineyardDAO);
+        updateTopLabels();
+
+        updatePieChartComboBox();
+
 
         piechartTypeComboBox.setTooltip(new Tooltip("Select Type Of Pie Chart"));
 
-        List<Review> userReviews = reviewDAO.getFromUser(userID);
-
-        // Create a hash map for each property
-        for(Review review : userReviews) {
-            Wine wine = wineDAO.getOne(review.getWineId());
-            Vineyard vineyard = wine.getVineyard();
-
-            // Add to maps
-            varietyMap.merge(wine.getWineVariety(), review.getRating(), Integer::sum);
-            regionMap.merge(vineyard.getRegion(), review.getRating(), Integer::sum);
-            yearMap.merge(wine.getYear(), review.getRating(), Integer::sum);
-        }
-
-        // get max
-        topVariety = sortHashMap(varietyMap);
-        topRegion = sortHashMap(regionMap);
-        topYear = sortHashMap(yearMap);
-
-        if(topVariety != null) {
-            topVarietyLabel.setText(topVariety.getFirst().getKey());
-        }
-
-        if(topRegion != null) {
-            topRegionLabel.setText(topRegion.getFirst().getKey());
-        }
-
-        if(topYear != null) {
-            topYearLabel.setText(String.valueOf(topYear.getFirst().getKey()));
-        }
-
-        // Update the combo box and pie chart
-
-        ObservableList<String> piechartTypeOptions = FXCollections.observableArrayList();
-        piechartTypeOptions.addAll("Variety", "Region", "Year");
-        piechartTypeComboBox.setItems(piechartTypeOptions);
-
-        // Update the title and data
-        piechartTypeComboBox.valueProperty().addListener((observable, oldOption, newOption) -> {
-            updatePieChartData(newOption);
-        });
-
-        // Default value (Variety)
-        piechartTypeComboBox.getSelectionModel().select(0);
 
         // Add tables
         tagsDAO = new TagsDAO();
@@ -130,7 +71,7 @@ public class DashboardPageController extends PageController {
         List<Tag> tags = tagsDAO.getFromUser(userID);
 
         // Add default reviewed options
-        createNewTagList("My Reviewed Wines", userReviews.size(), -1);
+        createNewTagList("My Reviewed Wines", dashboardService.getUserReviews().size(), -1);
 
         // Add all of the user tag options
         for (Tag tag : tags) {
@@ -144,6 +85,39 @@ public class DashboardPageController extends PageController {
                     tag.getTagId());
 
             createNewTagList(tag.getName(), numWines.size(), tag.getColour());
+        }
+    }
+
+    private void updatePieChartComboBox() {
+        ObservableList<String> piechartTypeOptions = FXCollections.observableArrayList();
+        piechartTypeOptions.addAll("Variety", "Region", "Year");
+        piechartTypeComboBox.setItems(piechartTypeOptions);
+
+        // Update the title and data
+        piechartTypeComboBox.valueProperty().addListener((observable, oldOption, newOption) -> {
+            updatePieChartData(newOption);
+        });
+
+        // Default value (Variety)
+        piechartTypeComboBox.getSelectionModel().select(0);
+    }
+
+    private void updateTopLabels() {
+        // get max
+        List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();
+        List<Map.Entry<String, Integer>> topRegion = dashboardService.getTopRegion();
+        List<Map.Entry<Integer,Integer>> topYear = dashboardService.getTopYear();
+
+        if(!topVariety.isEmpty()) {
+            topVarietyLabel.setText(topVariety.getFirst().getKey());
+        }
+
+        if(!topRegion.isEmpty()) {
+            topRegionLabel.setText(topRegion.getFirst().getKey());
+        }
+
+        if(!topYear.isEmpty()) {
+            topYearLabel.setText(String.valueOf(topYear.getFirst().getKey()));
         }
     }
 
@@ -180,20 +154,6 @@ public class DashboardPageController extends PageController {
         userListPane.getChildren().add(tagContainer);
     }
 
-    /**
-     * Find the max value of a hash map.
-     *
-     * @param inputMap the map to search
-     * @return the maximum entry if found, null otherwise.
-     */
-    public <K, V extends Comparable<V>> List<Map.Entry<K, V>> sortHashMap(Map<K, V> inputMap) {
-
-        List<Map.Entry<K, V>> list = new ArrayList<>(inputMap.entrySet());
-//        System.out.println(list.getFirst().getKey());
-        list.sort(Map.Entry.<K, V>comparingByValue().reversed());
-//        System.out.println(list.getFirst().getKey());
-        return list;
-    }
 
 
     /**
@@ -208,6 +168,7 @@ public class DashboardPageController extends PageController {
 
         switch (category) {
             case "Variety":
+                List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();
                 for(int i = 0; i < Math.min(5, topVariety.size()); i++) {
                     dataList.add(new PieChart.Data(topVariety.get(i).getKey(), topVariety.get(i).getValue()));
                 }
@@ -215,6 +176,7 @@ public class DashboardPageController extends PageController {
                 pieChartData.addAll(dataList);
                 break;
             case "Region":
+                List<Map.Entry<String, Integer>> topRegion = dashboardService.getTopRegion();
                 for(int i = 0; i < Math.min(5, topRegion.size()); i++) {
                     dataList.add(new PieChart.Data(topRegion.get(i).getKey(), topRegion.get(i).getValue()));
                 }
@@ -222,6 +184,7 @@ public class DashboardPageController extends PageController {
                 pieChartData.addAll(dataList);
                 break;
             case "Year":
+                List<Map.Entry<Integer, Integer>> topYear = dashboardService.getTopYear();
                 for(int i = 0; i < Math.min(5, topYear.size()); i++) {
                     dataList.add(new PieChart.Data(String.valueOf(topYear.get(i).getKey()), topYear.get(i).getValue()));
                 }
