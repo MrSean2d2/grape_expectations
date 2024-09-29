@@ -6,8 +6,8 @@ import static seng202.team5.services.ColourLookupService.getTagLabelColour;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -21,6 +21,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.AssignedTag;
@@ -39,10 +41,11 @@ import seng202.team5.services.WineService;
  * @author Finn Brown
  */
 public class DetailedViewPageController extends PageController {
-    private final Image emptyStar =
-            new Image(getClass().getResourceAsStream("/images/empty_star.png"));
-    private final Image filledStar =
-            new Image(getClass().getResourceAsStream("/images/filled_star.png"));
+    private static final Logger log = LogManager.getLogger(DetailedViewPageController.class);
+    private final Image emptyStar = new Image(
+            Objects.requireNonNull(getClass().getResourceAsStream("/images/empty_star.png")));
+    private final Image filledStar = new Image(
+            Objects.requireNonNull(getClass().getResourceAsStream("/images/filled_star.png")));
     Label addLabel;
     boolean canAddTag = true;
     TagsDAO tagsDAO;
@@ -116,11 +119,11 @@ public class DetailedViewPageController extends PageController {
         }
 
         if (UserService.getInstance().getCurrentUser() != null) {
-            // Setup review stuff
-            review = reviewDAO.getWineReview(selectedWineId, userId);
-
             // Get the user ID
             userId = UserService.getInstance().getCurrentUser().getId();
+
+            // Setup review stuff
+            review = reviewDAO.getWineReview(selectedWineId, userId);
 
             tagsDAO = new TagsDAO();
             tagsList = new ArrayList<>();
@@ -141,7 +144,7 @@ public class DetailedViewPageController extends PageController {
             // Done Loading Tags
             logInMessageLabel.setText("");
             addTagLabel.setText("");
-            if(review != null) {
+            if (review != null) {
                 notesTextArea.setText(review.getNotes());
                 updateFavoriteButton(review.isFavourite());
                 updateStarDisplay(review.getRating());
@@ -160,7 +163,7 @@ public class DetailedViewPageController extends PageController {
     }
 
     /**
-     * Show a popover to select a new tag
+     * Show a popover to select a new tag.
      */
     @FXML
     public void showTagPopover() {
@@ -169,7 +172,8 @@ public class DetailedViewPageController extends PageController {
                 canAddTag = true;
 
                 try {
-                    FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/TagPopover.fxml"));
+                    FXMLLoader baseLoader = new FXMLLoader(
+                            getClass().getResource("/fxml/TagPopover.fxml"));
                     Node content = baseLoader.load();
 
                     // Create the Popup
@@ -187,7 +191,10 @@ public class DetailedViewPageController extends PageController {
                     List<Label> labels = new ArrayList<>();
 
                     for (Tag tag : tags) {
-                        // Can't use .contains because tag ID will be different (with default ones) : (
+                        /*
+                         Can't use .contains because tag ID will be
+                         different (with default ones) : (
+                         */
                         boolean found = false;
                         for (Tag existingTag : tagsList) {
                             if (existingTag.getTagId() == tag.getTagId()) {
@@ -197,7 +204,9 @@ public class DetailedViewPageController extends PageController {
                         }
 
                         // Skip if it was found
-                        if (found) continue;
+                        if (found) {
+                            continue;
+                        }
 
                         // Set the user ID to be the current user id, override the default
                         //  user ID may be -1, for default tags
@@ -363,7 +372,7 @@ public class DetailedViewPageController extends PageController {
             try {
                 reviewDAO.add(review);
             } catch (DuplicateEntryException e) {
-                e.printStackTrace();
+                log.error(e);
             }
         }
     }
@@ -389,11 +398,9 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * handles the event where the toggle favorite button is pressed.
-     *
-     * @param event action event
      */
     @FXML
-    private void handleToggleFavourite(ActionEvent event) {
+    private void handleToggleFavourite() {
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
@@ -409,11 +416,9 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * Saves the notes that are currently in the text box.
-     *
-     * @param event action event
      */
     @FXML
-    private void handleSaveNotes(ActionEvent event) {
+    private void handleSaveNotes() {
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
@@ -427,11 +432,9 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * Closes the page.
-     *
-     * @param event action event
      */
     @FXML
-    private void handleBackButtonAction(ActionEvent event) {
+    private void handleBackButtonAction() {
         close();
     }
 
