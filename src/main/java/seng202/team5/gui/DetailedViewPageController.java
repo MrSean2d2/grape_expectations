@@ -12,7 +12,6 @@ import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.Review;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.ReviewDAO;
-import seng202.team5.repository.WineDAO;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
 
