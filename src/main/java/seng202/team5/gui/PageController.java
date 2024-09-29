@@ -1,5 +1,7 @@
 package seng202.team5.gui;
 
+import javafx.fxml.FXML;
+import javafx.scene.layout.StackPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -7,8 +9,10 @@ import org.apache.logging.log4j.Logger;
  * Controller for swapping between pages.
  */
 public class PageController {
+    private static final Logger log = LogManager.getLogger(PageController.class);
     private HeaderController headerController;
-    private final Logger log = LogManager.getLogger(PageController.class);
+    @FXML
+    private StackPane pageContainer;
 
     /**
      * Method to set the header controller reference.
