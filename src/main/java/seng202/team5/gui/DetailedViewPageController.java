@@ -12,8 +12,11 @@ import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.Review;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.ReviewDAO;
+import seng202.team5.repository.WineDAO;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
+
+import java.util.Objects;
 
 
 /**
@@ -52,6 +55,12 @@ public class DetailedViewPageController {
 
     @FXML
     private Label varietyLabel;
+
+    @FXML
+    private Label colourLabel;
+
+    @FXML
+    private ImageView wineColourImage;
 
     @FXML
     private TextArea notesTextArea;
@@ -102,6 +111,8 @@ public class DetailedViewPageController {
             wineDescriptionLabel.setText(selectedWine.getDescription());
             provinceLabel.setText("Province: " + selectedWine.getRegion());
             varietyLabel.setText("Variety: " + selectedWine.getWineVariety());
+            colourLabel.setText("Colour: " + selectedWine.getWineColour());
+            setColourImage(selectedWine);
         }
 
         if (UserService.getInstance().getCurrentUser() != null) {
@@ -132,6 +143,19 @@ public class DetailedViewPageController {
             saveNotesButton.setDisable(true);
             notesTextArea.setEditable(false);
         }
+    }
+
+    /**
+     * sets the image to the corresponding colour:
+     * red, white, rose or unknown
+     * helps with usability and accessibility
+     */
+    private void setColourImage(Wine selectedWine) {
+        switch (selectedWine.getWineColour()) {
+            case "Red" -> wineColourImage.setImage(new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/redColourWine.png"))));
+            case "White" -> wineColourImage.setImage(new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/whiteColourWine.png"))));
+            case "Rosé" -> wineColourImage.setImage(new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/roseColourWine.png"))));
+        }//otherwise keep default image (unknown colour)
     }
 
 
