@@ -151,6 +151,13 @@ public class HeaderController {
         }
 
         pageContainer.getChildren().setAll(loader);
+
+        homeButton.getStyleClass().remove("active");
+        dataListButton.getStyleClass().remove("active");
+        mapButton.getStyleClass().remove("active");
+        accountButton.getStyleClass().remove("active");
+
+        mapButton.getStyleClass().add("active");
 //        resetActiveButtons(mapButton);
     }
 
