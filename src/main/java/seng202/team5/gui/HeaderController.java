@@ -134,8 +134,24 @@ public class HeaderController {
      */
     @FXML
     private void loadMapPage() throws Exception {
-        loadPage("/fxml/MapPage.fxml");
-        //mapButton.getStyleClass().add("active");
+//        loadPage("/fxml/MapPage.fxml");
+//        //mapButton.getStyleClass().add("active");
+        // Cancel an in-progress task if it is currently running
+        if (createScene != null && createScene.isRunning()) {
+            createScene.cancel(true);
+        }
+
+        // Uses different method for loading as WebView messes with the loader
+        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/MapPage.fxml"));
+        Node loader = baseLoader.load();
+        PageController pageController = baseLoader.getController();
+
+        if (pageController != null) {
+            pageController.setHeaderController(headerController);
+        }
+
+        pageContainer.getChildren().setAll(loader);
+//        resetActiveButtons(mapButton);
     }
 
     /**
