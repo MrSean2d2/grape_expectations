@@ -249,7 +249,7 @@ public class HeaderController {
                 accountButton.getStyleClass().add("active");
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + loadedPage);
+                break;
         }
         // Update the scene
         createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
