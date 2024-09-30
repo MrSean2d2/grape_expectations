@@ -82,10 +82,12 @@ public class HeaderController {
                 homeIcon.setImage(new Image(
                         Objects.requireNonNull(
                                 getClass().getResourceAsStream("/images/Dashboard.png"))));
+                homeButton.setTooltip(new Tooltip("Dashboard"));
             } else {
                 homeIcon.setImage(new Image(
                         Objects.requireNonNull(
                                 getClass().getResourceAsStream("/images/Home.png"))));
+                homeButton.setTooltip(new Tooltip("Home page"));
             }
         });
 
@@ -94,7 +96,6 @@ public class HeaderController {
         });
 
         logoButton.setTooltip(new Tooltip("Home page"));
-        homeButton.setTooltip(new Tooltip("Home page"));
         dataListButton.setTooltip(new Tooltip("Data list page"));
         mapButton.setTooltip(new Tooltip("Map page"));
         accountButton.setTooltip(new Tooltip("Account page"));
@@ -108,7 +109,7 @@ public class HeaderController {
     @FXML
     private void loadHomePage() throws Exception {
         if (UserService.getInstance().getCurrentUser() != null) {
-          loadPage("/fxml/DashboardPage.fxml");
+            loadPage("/fxml/DashboardPage.fxml");
         } else {
             loadPage("/fxml/HomePage.fxml");
         }
