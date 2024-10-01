@@ -42,6 +42,8 @@ public class DataLoadService {
 
     private final Path fileName;
 
+    private final GeolocatorService geolocatorService = new GeolocatorService();
+
     /**
      * DataLoadService constructor.
      */
@@ -135,6 +137,7 @@ public class DataLoadService {
             // Winery
             String winery = csvEntry[13];
             Vineyard vineyard = new Vineyard(winery, regionName);
+            geolocatorService.queryAddress(vineyard);
 
             // Wine Description.
             // Description can be empty

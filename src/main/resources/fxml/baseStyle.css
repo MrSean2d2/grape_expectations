@@ -2,7 +2,7 @@
 The basic stylesheet for the project. Light and dark mode will inherit these
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap');
 
 .root {
     -fx-font-family: "Radio Canada Big";
@@ -40,6 +40,11 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-border-radius: 5;
 }
 
+.textbox {
+    -fx-padding: 10 10;
+    -fx-background-radius: 5;
+}
+
 .textbox.field_error {
     -fx-border-width: 2;
     -fx-border-color: #e95958;
@@ -51,11 +56,6 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-font-family: "Radio Canada Big";
     -fx-font-weight: 700;
     -fx-font-size: 24;
-}
-
-.textbox {
-    -fx-background-radius: 5;
-    -fx-padding: 10 10;
 }
 
 .dropdown {
@@ -77,6 +77,64 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 .stack-pane {
     -fx-padding: 10;
 }
+
+/* Scroll bar style */
+.scroll-bar {
+    -fx-background-color: white;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+}
+
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0 0 10 0;
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0 10 0 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 2 0;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0 2;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: derive(black,90.0%);
+    -fx-background-insets : 2, 0, 0;
+    -fx-background-radius : 10;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:pressed,
+.scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: derive(#4D4C4F,10.0%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 10;
+}
+
+/* Table style */
 
 .table-view {
     -fx-background-color: transparent;
@@ -178,4 +236,9 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 
 .max-width {
     -fx-max-width: Infinity;
+}
+
+.slider, .range-slider {
+    -fx-focus-color: #4db265;
+    -fx-faint-focus-color: #4DB26591;
 }

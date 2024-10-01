@@ -201,26 +201,41 @@
                 <image>
                     <Image url="@../images/empty_star.png" />
                 </image>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
             </ImageView>
             <ImageView fx:id="star2" fitHeight="42.0" fitWidth="42.0" onMouseClicked="#handleStarClick" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../images/empty_star.png" />
                 </image>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
             </ImageView>
             <ImageView fx:id="star3" fitHeight="42.0" fitWidth="42.0" onMouseClicked="#handleStarClick" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../images/empty_star.png" />
                 </image>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
             </ImageView>
             <ImageView fx:id="star4" fitHeight="42.0" fitWidth="42.0" onMouseClicked="#handleStarClick" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../images/empty_star.png" />
                 </image>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
             </ImageView>
             <ImageView fx:id="star5" fitHeight="42.0" fitWidth="42.0" onMouseClicked="#handleStarClick" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../images/empty_star.png" />
                 </image>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
             </ImageView>
         </HBox>
         <Label fx:id="logInMessageLabel" styleClass="warningText" text="Log in to save your notes!" textFill="#e95958" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7">

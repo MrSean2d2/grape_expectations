@@ -6,13 +6,46 @@ import seng202.team5.repository.VineyardDAO;
 /**
  * A service to handle looking up and adding vineyards.
  *
+ * @author Amiele Miguel
  * @author Sean Reitsma
  */
 public class VineyardService {
     private final VineyardDAO vineyardDAO;
+    private Vineyard selectedVineyard;
+    private static VineyardService instance;
 
-    public VineyardService() {
+    private VineyardService() {
         vineyardDAO = new VineyardDAO();
+    }
+
+    /**
+     * Sets selected vineyard.
+     *
+     * @param selectedVineyard vineyard selected in map page
+     */
+    public void setSelectedVineyard(Vineyard selectedVineyard) {
+        this.selectedVineyard = selectedVineyard;
+    }
+
+    /**
+     * Gets the selected vineyard.
+     *
+     * @return selected vineyard
+     */
+    public Vineyard getSelectedVineyard() {
+        return selectedVineyard;
+    }
+
+    /**
+     * Returns the singleton WineService instance.
+     *
+     * @return instance of wine service class
+     */
+    public static VineyardService getInstance() {
+        if (instance == null) {
+            instance = new VineyardService();
+        }
+        return instance;
     }
 
     /**

@@ -8,7 +8,9 @@ import java.util.Objects;
 public class Vineyard {
     private int id;
     private final String name;
-    private final String region;
+    private double lat;
+    private double lon;
+    private String region;
 
     /**
      * Sets the name of the vineyard.
@@ -20,6 +22,23 @@ public class Vineyard {
         this.id = 0;
         this.name = name;
         this.region = region;
+    }
+
+    /**
+     * Constructor for vineyard including coords.
+     *
+     * @param id of vineyard
+     * @param name of vineyard
+     * @param region vineyard is located in
+     * @param lat latitude coord of vineyard
+     * @param lon longitude coord of vineyard
+     */
+    public Vineyard(int id, String name, String region, double lat, double lon) {
+        this.id = id;
+        this.name = name;
+        this.region = region;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     /**
@@ -37,10 +56,44 @@ public class Vineyard {
     }
 
     /**
+     * Sets the name of the vineyard.
+     *
+     * @param name the name of the vineyard
+     */
+    public Vineyard(String name) {
+        this.name = name;
+        this.lat = 40.9006F;
+        this.lon = 174.8860F;
+        this.id = 0;
+    }
+
+    /**
+     * Sets the name of the vineyard.
+     *
+     * @param name the name of the vineyard
+     * @param lat the latitude
+     * @param lon the longitude
+     */
+    public Vineyard(int id, String name, double lat, double lon) {
+        this.name = name;
+        this.lat = lat;
+        this.lon = lon;
+        this.id = 0;
+    }
+
+    /**
      * Gets the name of the vineyard.
      */
     public String getName() {
         return name;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
     }
 
     /**
@@ -68,6 +121,14 @@ public class Vineyard {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 
     /**

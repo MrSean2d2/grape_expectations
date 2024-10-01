@@ -43,8 +43,9 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
                  Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                vineyards.add(new Vineyard(rs.getInt("id"),
-                        rs.getString("name"), rs.getString("region")));
+                vineyards.add(new Vineyard(rs.getInt("id"), rs.getString("name"),
+                        rs.getString("region"), rs.getDouble("latitude"),
+                        rs.getDouble("longitude")));
             }
             return vineyards;
         } catch (SQLException sqlException) {
@@ -112,7 +113,8 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      */
     @Override
     public int add(Vineyard toAdd) {
-        String sql = "INSERT OR IGNORE INTO vineyard (name, region) VALUES (?, ?)";
+        String sql = "INSERT OR IGNORE INTO vineyard (name, region, latitude, longitude) "
+                + "VALUES (?, ?, ?, ?)";
         if (toAdd.getName().isBlank()) {
             return -1;
         } else {
@@ -120,6 +122,8 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
                      PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, toAdd.getName());
                 ps.setString(2, toAdd.getRegion());
+                ps.setDouble(3, toAdd.getLat());
+                ps.setDouble(4, toAdd.getLon());
                 ps.executeUpdate();
 
                 ResultSet rs = ps.getGeneratedKeys();

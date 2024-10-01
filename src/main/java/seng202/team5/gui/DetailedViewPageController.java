@@ -6,6 +6,7 @@ import static seng202.team5.services.ColourLookupService.getTagLabelColour;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,11 +48,11 @@ import seng202.team5.services.WineService;
  * @author Finn Brown
  */
 public class DetailedViewPageController extends PageController {
-    private final Logger log = LogManager.getLogger(DetailedViewPageController.class);
-    private final Image emptyStar =
-            new Image(getClass().getResourceAsStream("/images/empty_star.png"));
-    private final Image filledStar =
-            new Image(getClass().getResourceAsStream("/images/filled_star.png"));
+    private static final Logger log = LogManager.getLogger(DetailedViewPageController.class);
+    private final Image emptyStar = new Image(
+            Objects.requireNonNull(getClass().getResourceAsStream("/images/empty_star.png")));
+    private final Image filledStar = new Image(
+            Objects.requireNonNull(getClass().getResourceAsStream("/images/filled_star.png")));
     Label addLabel;
     boolean canAddTag = true;
     TagsDAO tagsDAO;
@@ -108,7 +109,6 @@ public class DetailedViewPageController extends PageController {
     private PopOver tagPopover;
     private ReviewDAO reviewDAO;
     private Review review;
-    private Modality modality;
 
     private static List<DetailedViewPageController> openInstances = new ArrayList<>();
 
@@ -154,11 +154,11 @@ public class DetailedViewPageController extends PageController {
      */
     private void initUserReviews() {
         if (UserService.getInstance().getCurrentUser() != null) {
-            // Setup review stuff
-            review = reviewDAO.getWineReview(selectedWineId, userId);
-
             // Get the user ID
             userId = UserService.getInstance().getCurrentUser().getId();
+
+            // Setup review stuff
+            review = reviewDAO.getWineReview(selectedWineId, userId);
 
             tagsDAO = new TagsDAO();
             tagsList = new ArrayList<>();
@@ -241,8 +241,8 @@ public class DetailedViewPageController extends PageController {
                 canAddTag = true;
 
                 try {
-                    FXMLLoader baseLoader =
-                            new FXMLLoader(getClass().getResource("/fxml/TagPopover.fxml"));
+                    FXMLLoader baseLoader = new FXMLLoader(
+                            getClass().getResource("/fxml/TagPopover.fxml"));
                     Node content = baseLoader.load();
 
                     // Create the Popup
@@ -260,8 +260,10 @@ public class DetailedViewPageController extends PageController {
                     List<Label> labels = new ArrayList<>();
 
                     for (Tag tag : tags) {
-                        /* Can't use .contains because tag ID will be different
-                        (with default ones) : (*/
+                        /*
+                         Can't use .contains because tag ID will be
+                         different (with default ones) : (
+                         */
                         boolean found = false;
                         for (Tag existingTag : tagsList) {
                             if (existingTag.getTagId() == tag.getTagId()) {
@@ -465,7 +467,6 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * handles the event where the toggle favorite button is pressed.
-     *
      */
     @FXML
     private void handleToggleFavourite() {
@@ -484,7 +485,6 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * Saves the notes that are currently in the text box.
-     *
      */
     @FXML
     private void handleSaveNotes() {
@@ -501,7 +501,6 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * Closes the page.
-     *
      */
     @FXML
     private void handleBackButtonAction() {
