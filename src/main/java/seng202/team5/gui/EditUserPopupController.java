@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import seng202.team5.models.Role;
 import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
+import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 
 /**
@@ -17,7 +18,7 @@ import seng202.team5.services.UserService;
  *
  * @author Sean Reitsma
  */
-public class EditUserPopupController {
+public class EditUserPopupController implements ClosableWindow {
 
     @FXML
     private PasswordField confPasswordField;
@@ -44,6 +45,8 @@ public class EditUserPopupController {
 
     @FXML
     private void initialize() {
+        OpenWindowsService.getInstance().addWindow(this);
+
         curUser = UserService.getInstance().getSelectedUser();
         editingCurrentUser = curUser.equals(UserService.getInstance().getCurrentUser());
         usernameLabel.setText(curUser.getUsername());
@@ -54,7 +57,8 @@ public class EditUserPopupController {
     }
 
     @FXML
-    private void close() {
+    @Override
+    public void close() {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
