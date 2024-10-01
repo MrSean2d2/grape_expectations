@@ -44,12 +44,15 @@ public class EditUserPopupController extends PageController {
     private Button closeButton;
     private User curUser;
     private static List<EditUserPopupController> openInstances = new ArrayList<>();
+    private boolean editingCurrentUser;
 
     @FXML
     private void initialize() {
         curUser = UserService.getInstance().getSelectedUser();
+        editingCurrentUser = curUser.equals(UserService.getInstance().getCurrentUser());
         usernameLabel.setText(curUser.getUsername());
         usernameField.setText(curUser.getUsername());
+        roleComboBox.setDisable(editingCurrentUser);
         roleComboBox.getItems().setAll(Role.values());
         roleComboBox.getSelectionModel().select(curUser.getRole());
 
@@ -82,6 +85,9 @@ public class EditUserPopupController extends PageController {
             curUser.setUsername(usernameField.getText());
             UserService.getInstance().updateUserPassword(curUser, passwordField.getText());
             curUser.setRole(roleComboBox.getSelectionModel().getSelectedItem());
+            if (editingCurrentUser) {
+                UserService.getInstance().setCurrentUser(curUser);
+            }
             UserDAO userDAO = new UserDAO();
             userDAO.update(curUser);
             close();
