@@ -14,7 +14,7 @@ public class Wine {
     private String description;
     private int year;
     private int ratingValue;
-    private final double price;
+    private double price;
     private String wineVariety;
     private String colour;
     private Vineyard vineyard;
@@ -90,6 +90,14 @@ public class Wine {
         return price;
     }
 
+    /**
+     * Sets the price of the wine.
+     *
+     * @param price the new wine to set
+     */
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     /**
      * Gets the bottled year.
@@ -287,5 +295,6 @@ public class Wine {
         return true;
 
     }
+
 
 }

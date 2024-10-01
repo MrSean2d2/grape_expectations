@@ -218,6 +218,8 @@ public class DetailedViewPageController extends PageController {
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setScene(scene);
+            stage.setMinHeight(486);
+            stage.setMinWidth(762);
             stage.setTitle(String.format("Edit wine %s", selectedWine.getName()));
             String styleSheetUrl = MainWindow.styleSheet;
             scene.getStylesheets().add(styleSheetUrl);

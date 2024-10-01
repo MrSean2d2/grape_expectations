@@ -11,6 +11,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 import org.controlsfx.control.textfield.TextFields;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
@@ -47,6 +49,9 @@ public class EditWinePopupController extends PageController {
     private Slider ratingSlider;
 
     @FXML
+    private TextField ratingField;
+
+    @FXML
     private TextField varietyField;
 
     @FXML
@@ -71,7 +76,7 @@ public class EditWinePopupController extends PageController {
     private Wine wine;
     private boolean isWineValid = true;
 
-    private static List<EditWinePopupController> openInstances = new ArrayList<>();
+    private static final List<EditWinePopupController> openInstances = new ArrayList<>();
 
 
     @FXML
@@ -83,6 +88,11 @@ public class EditWinePopupController extends PageController {
             nameField.setText(wine.getName());
             yearField.setText(String.valueOf(wine.getYear()));
             ratingSlider.setValue(wine.getRating());
+            ratingSlider.valueProperty().addListener((obs, oldVal, newVal) ->
+                    ratingSlider.setValue(newVal.intValue()));
+            StringConverter<Number> stringConverter = new NumberStringConverter();
+            ratingField.textProperty().bindBidirectional(
+                    ratingSlider.valueProperty(), stringConverter);
             priceField.setText(String.valueOf(wine.getPrice()));
             varietyField.setText(wine.getWineVariety());
             vineyardField.setText(wine.getVineyard().getName());
@@ -115,9 +125,13 @@ public class EditWinePopupController extends PageController {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
+
+    /**
+     * Close all windows of this type.
+     */
     @FXML
-    public static void closeAll(){
-        for(EditWinePopupController instance : new ArrayList<>(openInstances)) {
+    public static void closeAll() {
+        for (EditWinePopupController instance : new ArrayList<>(openInstances)) {
             instance.close();
         }
     }
@@ -233,6 +247,7 @@ public class EditWinePopupController extends PageController {
                 wine.setName(name);
                 wine.setDescription(description);
                 wine.setYear(year);
+                wine.setPrice(price);
                 wine.setRating(rating);
                 wine.setVariety(variety);
                 wine.setColour(colour);
