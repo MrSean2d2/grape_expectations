@@ -31,15 +31,13 @@ public class DataLoadServiceTest {
     public void loadFileTestFirst() throws IOException {
         List<String[]> records = dataLoadService.loadFile(Files.newInputStream(
                 Path.of(csvFilePath)));
-        String[] expectedFirst = {"0", "Italy", "Aromas include tropical fruit, broom, "
-                + "brimstone and dried herb. The palate isn't overly expressive, offering "
-                + "unripened apple, citrus and dried sage alongside brisk acidity.",
-                new String("Vulkà Bianco".getBytes(), StandardCharsets.UTF_8),
-                "87", null, "Sicily & Sardinia",
-                "Etna", null, new String("Kerin O’Keefe".getBytes(), StandardCharsets.UTF_8),
-                "@kerinokeefe", new String("Nicosia 2013 Vulkà Bianco  (Etna)".getBytes(),
-                                           StandardCharsets.UTF_8),
-                "White Blend", "Nicosia"};
+        String[] expectedFirst = {"174", "New Zealand", "The Stoneleigh style traditionally favors ripeness over herbaceousness, and the 2008 holds true to form," +
+                " offering up grapefruit and nectarine aromas and an appealing blend of citrus and stone-fruit flavors. " +
+                "It's plump and round, yet finishes fresh. Good as an apéritif or with light dishes.", null,
+                "88", "19", "Marlborough",
+                null, null, "Joe Czerwinski",
+                "@JoeCz", "Stoneleigh 2008 Sauvignon Blanc (Marlborough)",
+                "Sauvignon Blanc", "Stoneleigh", null};
         assertEquals(16, records.size());
         assertArrayEquals(expectedFirst, records.getFirst());
     }
@@ -53,15 +51,15 @@ public class DataLoadServiceTest {
         List<Wine> wines = dataLoadService.processWinesFromCsv();
 
         Wine wine = wines.getFirst();
-        String expected = new String("Quinta dos Avidagos 2011 Avidagos Red (Douro)".getBytes(),
+        String expected = new String("Stoneleigh 2008 Sauvignon Blanc (Marlborough)".getBytes(),
                 StandardCharsets.UTF_8);
 
         String wineName = wine.getName();
 
         assertEquals(wineName, expected);
 
-        assertEquals(2011, wine.getYear());
-        assertEquals(87, wine.getRating());
+        assertEquals(2008, wine.getYear());
+        assertEquals(88, wine.getRating());
     }
 
     /**
@@ -80,8 +78,7 @@ public class DataLoadServiceTest {
     @Test
     public void loadWinesSizeTest() {
         List<Wine> wines = dataLoadService.processWinesFromCsv();
-        //2 have no price so 14/16 will be in the list
-        assertEquals(14, wines.size());
+        assertEquals(16, wines.size());
     }
 
     @Test

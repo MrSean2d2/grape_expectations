@@ -1,0 +1,231 @@
+/*
+The basic stylesheet for the project. Light and dark mode will inherit these
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap');
+
+.root {
+    -fx-font-family: "Radio Canada Big";
+    -fx-font-weight: 400;
+}
+
+.label {
+    -fx-font-family: "Radio Canada Big";
+    -fx-font-weight: 400;
+}
+
+
+.button {
+    -fx-padding: 8 15;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.button:hover {
+    -fx-border-width: 3;
+    -fx-border-insets: -1;
+}
+
+.button.active {
+    -fx-border-color: #4db265;
+    -fx-border-radius: 5;
+}
+
+.textbox {
+    -fx-padding: 10 10;
+    -fx-background-radius: 5;
+}
+
+.textbox.field_error {
+    -fx-border-width: 2;
+    -fx-border-color: #e95958;
+    -fx-border-radius: 5;
+    -fx-border-insets: -5;
+}
+
+.header-label {
+    -fx-font-family: "Radio Canada Big";
+    -fx-font-weight: 700;
+    -fx-font-size: 24;
+}
+
+.dropdown {
+    -fx-padding: 4 10;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.dropdown:hover {
+    -fx-border-width: 3;
+    -fx-border-insets: -1;
+}
+
+.dropdown .list-cell {
+    -fx-padding: 4 10;
+}
+
+.stack-pane {
+    -fx-padding: 10;
+}
+
+/* Scroll bar style */
+.scroll-bar {
+    -fx-background-color: white;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+}
+
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0 0 10 0;
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0 10 0 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 2 0;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0 2;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: derive(black,90.0%);
+    -fx-background-insets : 2, 0, 0;
+    -fx-background-radius : 10;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:pressed,
+.scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: derive(#4D4C4F,10.0%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 10;
+}
+
+/* Table style */
+
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view:focused {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background .filler {
+ -fx-background-color: transparent;
+}
+
+.table-view .column-header{
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell{
+    -fx-padding: 2 0 2 10px;
+}
+
+
+.table-row-cell:hover .table-cell{
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}
+
+.table-row-cell:selected .table-cell{
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+    -fx-border-width: 0;
+}
+
+
+/* TAGS */
+.tag {
+    -fx-background-color: #e7e7e7;
+    -fx-text-fill: #404040;
+    -fx-padding: 8 15;
+    -fx-background-radius: 12;
+    -fx-font-size: 16px;
+}
+
+.tag:hover {
+    -fx-background-color: #f8f8f8;
+    -fx-text-fill: #404040;
+    -fx-cursor: HAND;
+}
+
+.purple {
+    -fx-background-color: #9f8fef;
+    -fx-text-fill: #352c63;
+}
+
+.purple:hover {
+    -fx-background-color: #b8acf6;
+}
+
+.blue {
+    -fx-background-color: #8fb1ef;
+    -fx-text-fill: #2c3c63;
+}
+
+.blue:hover {
+    -fx-background-color: #ace0f6;
+}
+
+.green {
+    -fx-background-color: #aaef8f;
+    -fx-text-fill: #40632c;
+}
+
+.green:hover {
+    -fx-background-color: #e1f6ac;
+}
+
+.red {
+    -fx-background-color: #ef8f8f;
+    -fx-text-fill: #632c2c;
+}
+
+.red:hover {
+    -fx-background-color: #f6acac;
+}
+
+.yellow {
+    -fx-background-color: #efcd8f;
+    -fx-text-fill: #63482c;
+}
+
+.yellow:hover {
+    -fx-background-color: #f6d3ac;
+}
+
+
+.popover {
+    -fx-background-radius: 15;
+}
+
+.max-width {
+    -fx-max-width: Infinity;
+}

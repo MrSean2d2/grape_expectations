@@ -15,10 +15,14 @@ import javafx.stage.Stage;
  */
 public class MainWindow extends Application {
 
+    static String styleSheet = "/fxml/lightMode.css";
+
     public MainWindow() { }
 
     /**
-     * Opens the gui with the fxml content specified in resources/fxml/main.fxml.
+     * Opens the gui with the fxml content specified in resources/fxml/Header.fxml.
+     * The header file is treated as a "Wrapper" - Content is inserted into a content box
+     * contained below the header, so the header will be on every page (persistent).
      *
      * @param primaryStage The current fxml stage, handled by javaFX Application class
      * @throws IOException if there is an issue loading fxml file
@@ -30,7 +34,7 @@ public class MainWindow extends Application {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/Header.fxml"));
         Parent root = baseLoader.load();
         Scene scene = new Scene(root, 1200, 800);
-        String styleSheetUrl = "/fxml/style.css";
+        String styleSheetUrl = styleSheet;
         scene.getStylesheets().add(styleSheetUrl);
 
         HeaderController baseController = baseLoader.getController();
