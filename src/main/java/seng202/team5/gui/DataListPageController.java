@@ -261,7 +261,7 @@ public class DataListPageController extends PageController {
     private void searchClicked() {
         String searching = searchTextField.getText();
         applySearchFilters();
-        addNotification("Applied Search", "#d5e958");
+//        addNotification("Applied Search", "#d5e958");
     }
 
     /**
@@ -276,7 +276,6 @@ public class DataListPageController extends PageController {
                 FXCollections.observableArrayList(queryResults);
         wineTable.setItems(observableQueryResults);
         tableResults.setText(wineTable.getItems().size() + " results");
-        addNotification("Applied Filter", "#d5e958");
     }
 
     /**
