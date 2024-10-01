@@ -1,6 +1,5 @@
 package seng202.team5.gui;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.fxml.FXML;
@@ -18,6 +17,7 @@ import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
+import seng202.team5.services.VineyardService;
 import seng202.team5.services.WineService;
 
 /**
@@ -77,36 +77,49 @@ public class EditWinePopupController extends PageController {
     private boolean isWineValid = true;
 
     private static final List<EditWinePopupController> openInstances = new ArrayList<>();
+    private WineService wineService;
 
 
-    @FXML
-    private void initialize() {
-        wine = WineService.getInstance().getSelectedWine();
-        if (wine != null) {
-            actionLabel.setText("Edit wine: ");
-            wineLabel.setText(wine.getName());
-            nameField.setText(wine.getName());
-            yearField.setText(String.valueOf(wine.getYear()));
-            ratingSlider.setValue(wine.getRating());
-            ratingSlider.valueProperty().addListener((obs, oldVal, newVal) ->
-                    ratingSlider.setValue(newVal.intValue()));
-            StringConverter<Number> stringConverter = new NumberStringConverter();
-            ratingField.textProperty().bindBidirectional(
-                    ratingSlider.valueProperty(), stringConverter);
-            priceField.setText(String.valueOf(wine.getPrice()));
-            varietyField.setText(wine.getWineVariety());
-            vineyardField.setText(wine.getVineyard().getName());
-            regionField.setText(wine.getRegion());
-            descriptionArea.setText(wine.getDescription());
-            descriptionArea.setWrapText(true);
-            colourField.setText(wine.getWineColour());
-        } else {
-            actionLabel.setText("Add wine: ");
-            wineLabel.setVisible(false);
-        }
-        descriptionArea.setTextFormatter(new TextFormatter<String>(change ->
-                change.getControlNewText().length() <= maxChars ? change : null));
+    /**
+     * Init rating slider to use integer values. Also bind the rating field
+     * to the slider.
+     */
+    private void initRating() {
+        ratingSlider.setValue(wine.getRating());
+        ratingSlider.valueProperty().addListener((obs, oldVal, newVal) ->
+                ratingSlider.setValue(newVal.intValue()));
+        StringConverter<Number> stringConverter = new NumberStringConverter();
+        ratingField.textProperty().bindBidirectional(
+                ratingSlider.valueProperty(), stringConverter);
+    }
 
+    /**
+     * Init the labels with information about the current wine.
+     */
+    private void initLabels() {
+        actionLabel.setText("Edit wine: ");
+        wineLabel.setText(wine.getName());
+        nameField.setText(wine.getName());
+        yearField.setText(String.valueOf(wine.getYear()));
+    }
+
+    /**
+     * Init the text fields with the pre-existing wine information.
+     */
+    private void initFields() {
+        priceField.setText(String.valueOf(wine.getPrice()));
+        varietyField.setText(wine.getWineVariety());
+        vineyardField.setText(wine.getVineyard().getName());
+        regionField.setText(wine.getRegion());
+        descriptionArea.setText(wine.getDescription());
+        descriptionArea.setWrapText(true);
+        colourField.setText(wine.getWineColour());
+    }
+
+    /**
+     * Init auto-completion for variety, vineyard, and region fields.
+     */
+    private void initAutoComplete() {
         VineyardDAO vineyardDAO = new VineyardDAO();
         WineDAO wineDAO = new WineDAO(vineyardDAO);
         List<String> varietySuggestions = wineDAO.getVariety();
@@ -115,10 +128,34 @@ public class EditWinePopupController extends PageController {
         TextFields.bindAutoCompletion(vineyardField, vineyardSuggestions);
         List<String> regionSuggestions = vineyardDAO.getRegions();
         TextFields.bindAutoCompletion(regionField, regionSuggestions);
+    }
+
+    /**
+     * Initialise the edit wine popup.
+     */
+    @FXML
+    private void initialize() {
+        wineService = WineService.getInstance();
+        wine = wineService.getSelectedWine();
+        if (wine != null) {
+            initLabels();
+            initRating();
+            initFields();
+        } else {
+            actionLabel.setText("Add wine: ");
+            wineLabel.setVisible(false);
+        }
+        descriptionArea.setTextFormatter(new TextFormatter<String>(change ->
+                change.getControlNewText().length() <= maxChars ? change : null));
+
+        initAutoComplete();
 
         openInstances.add(this);
     }
 
+    /**
+     * Called when the close button is pressed.
+     */
     @FXML
     private void close() {
         openInstances.remove(this);
@@ -136,30 +173,38 @@ public class EditWinePopupController extends PageController {
         }
     }
 
-    private void yearError() {
-        yearField.getStyleClass().add("field_error");
-        yearErrorLabel.setText("Invalid year!");
-        yearErrorLabel.setVisible(true);
+    /**
+     * Show a field error and set the current wine information as invalid.
+     *
+     * @param  fieldName the name of the field which has the error (to be used
+     *                   in the error message)
+     * @param  field the TextField containing the error
+     * @param errorLabel the label to show the error message on
+     */
+    private void fieldError(String fieldName, TextField field, Label errorLabel) {
+        field.getStyleClass().add("field_error");
+        errorLabel.setText(String.format("Invalid %s!", fieldName));
+        errorLabel.setVisible(true);
         isWineValid = false;
     }
 
-    private void priceError() {
-        priceField.getStyleClass().add("field_error");
-        priceErrorLabel.setText("Invalid price!");
-        priceErrorLabel.setVisible(true);
+    /**
+     * Show a field error and set the current wine information as invalid.
+     *
+     * @param field the TextField containing the error
+     */
+    private void fieldError(TextField field) {
+        field.getStyleClass().add("field_error");
         isWineValid = false;
     }
+
 
     private int validateYear() {
         int year = 0;
         try {
             year = Integer.parseInt(yearField.getText());
         } catch (NumberFormatException e) {
-            yearError();
-        }
-        int currentYear = Year.now().getValue();
-        if (year < 1700 || year > currentYear) {
-            yearError();
+            fieldError("year", yearField, yearErrorLabel);
         }
         return year;
     }
@@ -169,76 +214,41 @@ public class EditWinePopupController extends PageController {
         try {
             price = Double.parseDouble(priceField.getText());
         } catch (NumberFormatException e) {
-            priceError();
-        }
-        if (price < 0) {
-            priceError();
+            fieldError("price", priceField, priceErrorLabel);
         }
         return price;
     }
 
-    private String validateVariety() {
-        String variety = varietyField.getText();
-        if (variety.isBlank()) {
-            variety = "Unknown variety";
-        }
-        return variety;
-    }
-
-    private Vineyard retreiveVineyard(VineyardDAO vineyardDAO) {
-        Vineyard vineyard = null;
-        String vineyardName = vineyardField.getText();
-        if (vineyardName.isBlank()) {
-            vineyardField.getStyleClass().add("field_error");
-            isWineValid = false;
-        } else {
-            String region = regionField.getText();
-            int vineyardId = vineyardDAO.getIdFromNameRegion(vineyardName, region);
-            if (vineyardId == 0) {
-                vineyard = new Vineyard(vineyardName, region);
-                vineyard.setId(vineyardDAO.add(vineyard));
-            } else {
-                vineyard = vineyardDAO.getOne(vineyardId);
-            }
-        }
-        return vineyard;
-    }
-
-    private String validateName() {
-        String name = nameField.getText();
-        if (name.isBlank()) {
-            nameField.getStyleClass().add("field_error");
-            isWineValid = false;
-        }
-        return name;
-    }
-
-    private String validateColour() {
-        String colour = colourField.getText();
-        if (colour.isBlank()) {
-            colour = "Unknown";
-        }
-        return colour;
-    }
-
-    @FXML
-    private void submit() {
+    private void resetErrors() {
         isWineValid = true;
         priceErrorLabel.setVisible(false);
         yearErrorLabel.setVisible(false);
         yearField.getStyleClass().remove("field_error");
         priceField.getStyleClass().remove("field_error");
         nameField.getStyleClass().remove("field_error");
-        String colour = validateColour();
+    }
+
+    @FXML
+    private void submit() {
+        resetErrors();
+        String colour = colourField.getText();
         int year = validateYear();
         double price = validatePrice();
-        int rating = Math.toIntExact(Math.round(ratingSlider.getValue()));
-        String variety = validateVariety();
+        int rating = ratingSlider.valueProperty().intValue();
+        String variety = varietyField.getText();
+        VineyardService vineyardService = new VineyardService();
+        Vineyard vineyard = null;
+        try {
+            vineyard = vineyardService.retreiveVineyard(vineyardField.getText(),
+                    regionField.getText());
+        } catch (IllegalArgumentException e) {
+            fieldError(vineyardField);
+        }
         VineyardDAO vineyardDAO = new VineyardDAO();
-        Vineyard vineyard = retreiveVineyard(vineyardDAO);
         WineDAO wineDAO = new WineDAO(vineyardDAO);
         String description = descriptionArea.getText();
-        String name = validateName();
+        String name = nameField.getText();
+        showErrors(name, year, price);
         if (isWineValid) {
             if (wine == null) {
                 wine = new Wine(name, description, year, rating, price, variety, colour, vineyard);
@@ -255,6 +265,18 @@ public class EditWinePopupController extends PageController {
                 wineDAO.update(wine);
             }
             close();
+        }
+    }
+
+    private void showErrors(String name, int year, double price) {
+        if (!wineService.validName(name)) {
+            fieldError(nameField);
+        }
+        if (!wineService.validPrice(price)) {
+            fieldError("price", priceField, priceErrorLabel);
+        }
+        if (!wineService.validYear(year)) {
+            fieldError("year", yearField, yearErrorLabel);
         }
     }
 

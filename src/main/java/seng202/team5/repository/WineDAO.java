@@ -17,6 +17,7 @@ import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.services.DatabaseService;
+import seng202.team5.services.WineService;
 
 /**
  * Wine Data Access Object class. This class implements DAOInterface and handles
@@ -167,13 +168,13 @@ public class WineDAO implements DAOInterface<Wine> {
      */
     @Override
     public int add(Wine toAdd) {
-        if (!toAdd.isValidWine()) {
+        if (!WineService.getInstance().isValidWine(toAdd)) {
             return -1;
         } else {
             String sqlWine = "INSERT OR IGNORE INTO WINE(name, description, year, rating, "
                     + "price, vineyard, variety, colour) values (?,?,?,?,?,?,?,?);";
             try (Connection conn = databaseService.connect();
-                 PreparedStatement psWine = conn.prepareStatement(sqlWine)) {
+                     PreparedStatement psWine = conn.prepareStatement(sqlWine)) {
                 int vineyardIndex = vineyardDAO.getIdFromNameRegion(toAdd.getVineyard().getName(),
                         toAdd.getVineyard().getRegion());
                 if (vineyardIndex == 0) {
@@ -226,7 +227,7 @@ public class WineDAO implements DAOInterface<Wine> {
             conn.setAutoCommit(false);
             for (Wine wine : toAdd) {
                 //checks if wine attributes are valid
-                if (wine.isValidWine()) {
+                if (WineService.getInstance().isValidWine(wine)) {
                     ps.setString(1, wine.getName());
                     ps.setInt(2, wine.getYear());
                     ps.setString(3, wine.getWineVariety());
@@ -304,7 +305,7 @@ public class WineDAO implements DAOInterface<Wine> {
      */
     @Override
     public void update(Wine toUpdate) {
-        if (toUpdate.isValidWine()) {
+        if (WineService.getInstance().isValidWine(toUpdate)) {
             String sql = "UPDATE wine SET name=?, "
                     + "year=?, "
                     + "variety=?, "

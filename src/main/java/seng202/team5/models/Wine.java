@@ -1,6 +1,5 @@
 package seng202.team5.models;
 
-import java.time.Year;
 import java.util.Objects;
 
 /**
@@ -39,8 +38,8 @@ public class Wine {
         this.description = description;
         this.year = year;
         this.ratingValue = ratingValue;
-        this.price = price;
         this.wineVariety = wineVariety;
+        this.price = price;
         this.colour = colour;
         this.vineyard = vineYard;
     }
@@ -108,6 +107,11 @@ public class Wine {
         return year;
     }
 
+    /**
+     * Sets the bottled year.
+     *
+     * @param year the year
+     */
     public void setYear(int year) {
         this.year = year;
     }
@@ -122,6 +126,11 @@ public class Wine {
         return ratingValue;
     }
 
+    /**
+     * Sets the wine rating.
+     *
+     * @param rating the rating
+     */
     public void setRating(int rating) {
         this.ratingValue = rating;
     }
@@ -174,6 +183,14 @@ public class Wine {
         return wineVariety;
     }
 
+    /**
+     * set the variety name of a wine.
+     *
+     * @param unknownVariety string value to save as variety name
+     */
+    public void setVariety(String unknownVariety) {
+        this.wineVariety = unknownVariety;
+    }
 
     /**
      * Gets the wine's colour.
@@ -257,44 +274,7 @@ public class Wine {
                 (Objects.equals(vineyard.getName(), wine.vineyard.getName()));
     }
 
-    /**
-     * set the variety name of a wine.
-     *
-     * @param unknownVariety string value to save as variety name
-     */
-    public void setVariety(String unknownVariety) {
-        wineVariety = unknownVariety;
-    }
 
-
-    /**
-     * checks if a wine has valid values for its attributes.
-     * eg: year and price aren't 0
-     *
-     * @return boolean whether given wine is valid enough to be added to database
-     */
-    public boolean isValidWine() {
-        //wine must have a name
-        if (name.isEmpty()) {
-            return false;
-        }
-        //description can be empty
-        int currentYear = Year.now().getValue(); //gets current year for future-proofing
-        if (year < 1700 || year > currentYear) { //1700 is arbitrary boundary
-            return false;
-        }
-        if (ratingValue < 0 || ratingValue > 100) {
-            return false;
-        }
-        if (price < 0) {
-            return false;
-        }
-        if (wineVariety.isEmpty()) {
-            wineVariety = "Unknown Variety";
-        }
-        return true;
-
-    }
 
 
 }
