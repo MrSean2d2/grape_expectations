@@ -62,7 +62,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      */
     public int getIdFromNameRegion(String vineyardName, String region) {
         int id = 0;
-        String sql = "SELECT * FROM vineyard WHERE name=? AND region=?";
+        String sql = "SELECT id FROM vineyard WHERE name=? AND region=?";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, vineyardName);

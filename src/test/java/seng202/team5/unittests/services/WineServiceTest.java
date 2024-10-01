@@ -146,4 +146,22 @@ public class WineServiceTest {
                 "white", new Vineyard("vineyard", "region"));
         assertTrue(wineService.isValidWine(validWine));
     }
+
+    @Test
+    public void testBlankColour() {
+        String colour = "   ";
+        assertEquals("Unknown", wineService.validColour(colour));
+    }
+
+    @Test
+    public void testEmptyColour() {
+        String colour = "";
+        assertEquals("Unknown", wineService.validColour(colour));
+    }
+
+    @Test
+    public void testValidVariety() {
+        String variety = "Pinot Noir";
+        assertEquals("Pinot Noir", wineService.validVariety(variety));
+    }
 }
