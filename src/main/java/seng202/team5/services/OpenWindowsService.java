@@ -1,5 +1,6 @@
 package seng202.team5.services;
 
+import seng202.team5.gui.ClosableWindow;
 import seng202.team5.gui.DetailedViewPageController;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 public class OpenWindowsService {
 
     private static OpenWindowsService instance;
-    private List<Object> openWindows;
+    private List<ClosableWindow> openWindows;
 
     /**
      * Constructor ot initialise list of open windows
@@ -39,7 +40,7 @@ public class OpenWindowsService {
      * Add single window to open windows list
      * @param thisInstance
      */
-    public void addWindow(Object thisInstance) {
+    public void addWindow(ClosableWindow thisInstance) {
         System.out.println(openWindows);
         openWindows.add(thisInstance);
     }
@@ -48,7 +49,7 @@ public class OpenWindowsService {
      * Remove single instance of window from open windows list
      * @param thisInstance
      */
-    public void closeWindow(Object thisInstance){
+    public void closeWindow(ClosableWindow thisInstance){
         System.out.println(openWindows);
         openWindows.remove(thisInstance);
     }
@@ -57,18 +58,10 @@ public class OpenWindowsService {
      * Close all open Windows
      */
     public void closeAllWindows(){
-        for (Object window: openWindows){
-            closeWindow(window);
+        List<ClosableWindow> windowsCopy = new ArrayList<>(openWindows);
+        for (ClosableWindow window: windowsCopy){
+            window.close();
         }
-//        Iterator<Object> iter = openWindows.iterator();
-//        while (iter.hasNext()){
-//            Object window = iter.next();
-//            if (window.getClass() == DetailedViewPageController.class) {
-//                DetailedViewPageController typedWindow= (DetailedViewPageController) window;
-//                typedWindow.close();
-//            }
-//            System.out.println("here");
-//            //TODO: need to be able to store controllers - different types of controllers - use their close method
-//        }
+
     }
 }

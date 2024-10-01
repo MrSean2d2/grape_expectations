@@ -41,7 +41,7 @@ import seng202.team5.services.WineService;
  *
  * @author Finn Brown
  */
-public class DetailedViewPageController extends PageController {
+public class DetailedViewPageController extends PageController implements ClosableWindow {
     private static final Logger log = LogManager.getLogger(DetailedViewPageController.class);
     private final Image emptyStar = new Image(
             Objects.requireNonNull(getClass().getResourceAsStream("/images/empty_star.png")));
@@ -446,9 +446,8 @@ public class DetailedViewPageController extends PageController {
     /**
      * Closes the page.
      */
+    @Override
     public void close() {
-
-        OpenWindowsService.getInstance().closeWindow(this);
 
         try {
             if (UserService.getInstance().getCurrentUser() != null) {
