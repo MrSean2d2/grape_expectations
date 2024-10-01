@@ -134,8 +134,8 @@ public class HeaderController {
      */
     @FXML
     private void loadMapPage() throws Exception {
-//        loadPage("/fxml/MapPage.fxml");
-//        //mapButton.getStyleClass().add("active");
+        //loadPage("/fxml/MapPage.fxml");
+        //mapButton.getStyleClass().add("active");
         // Cancel an in-progress task if it is currently running
         if (createScene != null && createScene.isRunning()) {
             createScene.cancel(true);
@@ -158,7 +158,7 @@ public class HeaderController {
         accountButton.getStyleClass().remove("active");
 
         mapButton.getStyleClass().add("active");
-//        resetActiveButtons(mapButton);
+        //resetActiveButtons(mapButton);
     }
 
     /**

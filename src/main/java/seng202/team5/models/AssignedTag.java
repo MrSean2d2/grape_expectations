@@ -89,8 +89,8 @@ public class AssignedTag {
             return false;
         }
         AssignedTag that = (AssignedTag) o;
-        return tagId == that.tagId &&
-                userId == that.userId &&
-                wineId == that.wineId;
+        return tagId == that.tagId
+                && userId == that.userId
+                && wineId == that.wineId;
     }
 }
