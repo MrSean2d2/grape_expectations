@@ -82,6 +82,8 @@ public class DataListPageController extends PageController {
 
     @FXML
     private TextField searchTextField;
+    @FXML
+    private Label tableResults;
     private WineDAO wineDAO;
     private VineyardDAO vineyardDAO;
 
@@ -128,6 +130,9 @@ public class DataListPageController extends PageController {
         // Add data to TableView
         wineTable.setItems(wines);
 
+        wineTable.setPlaceholder(new Label("No matching wines found"));
+        tableResults.setText(wineTable.getItems().size() + " results");
+
         wineTable.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
                 try {
@@ -153,8 +158,8 @@ public class DataListPageController extends PageController {
         Vineyard selectedVineyard = VineyardService.getInstance().getSelectedVineyard();
         if (selectedVineyard != null) {
             searchTextField.setText(selectedVineyard.getName());
-            applySearchFilters();
             VineyardService.getInstance().setSelectedVineyard(null);
+            applySearchFilters();
         }
 
     }
@@ -232,15 +237,29 @@ public class DataListPageController extends PageController {
      * Sets filters, sliders, and labels to default values.
      */
     private void setDefaults() {
-        priceRangeSlider.setHighValue(wineDAO.getMaxPrice());
-        priceRangeSlider.setLowValue(wineDAO.getMinPrice());
-        ratingSlider.setMin(wineDAO.getMinRating());
-        ratingSlider.setMax(wineDAO.getMaxRating());
-        priceRangeSlider.setMin(wineDAO.getMinPrice());
-        priceRangeSlider.setMax(wineDAO.getMaxPrice());
-        minPriceLabel.setText(String.valueOf(wineDAO.getMinPrice()));
-        maxPriceLabel.setText(String.valueOf(wineDAO.getMaxPrice()));
-        ratingSliderValue.setText(String.valueOf(wineDAO.getMinRating()));
+        int minRating, maxRating;
+        int minPrice, maxPrice;
+
+        minRating = (int) (10*(Math.floor((double) wineDAO.getMinRating()/10)));
+        maxRating = (int) (10*(Math.ceil((double) wineDAO.getMaxRating()/10)));
+
+        minPrice = (int) (5*(Math.floor((double) wineDAO.getMinPrice()/5)));
+        maxPrice = (int) (5*(Math.ceil((double) wineDAO.getMaxPrice()/5)));
+
+        ratingSlider.setMin(minRating);
+        ratingSlider.setMax(maxRating);
+        priceRangeSlider.setMin(minPrice);
+        priceRangeSlider.setMax(maxPrice);
+
+        // Set the initial values
+        priceRangeSlider.setLowValue(minPrice);
+        priceRangeSlider.setHighValue(maxPrice);
+
+        minPriceLabel.setText(String.valueOf(minPrice));
+        maxPriceLabel.setText(String.valueOf(maxPrice));
+        ratingSliderValue.setText(String.valueOf(minRating));
+
+        // Defaults
         this.yearFilter = "0";
         this.varietyFilter = "0";
         this.regionFilter = "0";
@@ -273,6 +292,8 @@ public class DataListPageController extends PageController {
         ObservableList<Wine> observableQueryResults =
                 FXCollections.observableArrayList(queryResults);
         wineTable.setItems(observableQueryResults);
+        tableResults.setText(wineTable.getItems().size() + " results");
+        addNotification("Applied Filter", "#d5e958");
     }
 
     /**
@@ -344,6 +365,7 @@ public class DataListPageController extends PageController {
         setDefaults();
         ObservableList<Wine> observableWines = FXCollections.observableArrayList(wineDAO.getAll());
         wineTable.setItems(observableWines);
+        tableResults.setText(wineTable.getItems().size() + " results");
         varietyComboBox.setValue(varietyComboBox.getItems().getFirst());
         regionComboBox.setValue(regionComboBox.getItems().getFirst());
         yearComboBox.setValue(yearComboBox.getItems().getFirst());
