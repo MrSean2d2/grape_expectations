@@ -3,7 +3,6 @@ package seng202.team5.gui;
 import java.io.IOException;
 import java.util.Objects;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -18,7 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.services.UserService;
@@ -100,11 +98,9 @@ public class HeaderController {
 
     /**
      * Load the home page.
-     *
-     * @throws Exception if loading the page fails
      */
     @FXML
-    private void loadHomePage() throws Exception {
+    private void loadHomePage() {
         if (UserService.getInstance().getCurrentUser() != null) {
             loadPage("/fxml/DashboardPage.fxml");
         } else {
@@ -114,11 +110,9 @@ public class HeaderController {
 
     /**
      * Load the data list page.
-     *
-     * @throws Exception if loading the page fails
      */
     @FXML
-    private void loadDataListPage() throws Exception {
+    private void loadDataListPage() {
         loadPage("/fxml/DataListPage.fxml");
     }
 
@@ -156,11 +150,9 @@ public class HeaderController {
 
     /**
      * Load the account page.
-     *
-     * @throws Exception if loading the page fails
      */
     @FXML
-    private void loadAccountPage() throws Exception {
+    private void loadAccountPage() {
         // Load the "login" page if a user is currently not signed in
         // Otherwise, load the "account" page
 
@@ -217,8 +209,7 @@ public class HeaderController {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
         try {
             Node loader = baseLoader.load();
-            Platform.runLater(() -> pageContainer.getChildren().setAll(loader));
-
+            pageContainer.getChildren().setAll(loader);
         } catch (IOException e) {
             log.error(e);
         }
