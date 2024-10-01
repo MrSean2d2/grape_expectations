@@ -236,7 +236,7 @@ public class EditWinePopupController extends PageController {
         double price = validatePrice();
         int rating = ratingSlider.valueProperty().intValue();
         String variety = varietyField.getText();
-        VineyardService vineyardService = new VineyardService();
+        VineyardService vineyardService = VineyardService.getInstance();
         Vineyard vineyard = null;
         try {
             vineyard = vineyardService.retreiveVineyard(vineyardField.getText(),
