@@ -76,7 +76,7 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getDouble("price"),
                         rs.getString(("variety")),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("Region"))
+                        new Vineyard(rs.getInt("id"), rs.getString("vineyardName"), rs.getString("Region"))
                 ));
 
             }
@@ -114,7 +114,7 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getDouble("price"),
                         rs.getString("variety"),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("region")));
+                        new Vineyard(rs.getInt("id"), rs.getString("vineyardName"), rs.getString("region")));
             }
         } catch (SQLException e) {
             log.error(e);
@@ -151,7 +151,7 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getDouble("price"),
                         rs.getString("variety"),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("region")));
+                        new Vineyard(rs.getInt("id"), rs.getString("vineyardName"), rs.getString("region")));
             }
         } catch (SQLException sqlException) {
             log.error(sqlException);
@@ -538,11 +538,48 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getInt("price"),
                         rs.getString("variety"),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("Region"))
+                        new Vineyard(rs.getInt("id"), rs.getString("vineyardName"), rs.getString("Region"))
                 ));
             }
             return searchedWines;
         } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+
+    /**
+     * Gets the list of wines that have been reviewed
+     *
+     * @return list of Wine objects that have reviews
+     */
+    public List<Wine> getReviewedWines(){
+        List<Wine> reviewedWines = new ArrayList<>();
+        String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, "
+                + "vineyard.region FROM WINE "
+                + "JOIN REVIEW on wine.id = review.wineid "
+                + "JOIN VINEYARD on VINEYARD.id = WINE.vineyard; ";
+        try (Connection conn = databaseService.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while(rs.next()) {
+                reviewedWines.add(new Wine(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("year"),
+                        rs.getInt("rating"),
+                        rs.getInt("price"),
+                        rs.getString("variety"),
+                        rs.getString("colour"),
+                        new Vineyard(rs.getInt("id"), rs.getString("vineyardName"), rs.getString("Region"))
+                ));
+            }
+            return reviewedWines;
+
+        }catch (SQLException e) {
             log.error(e);
             return new ArrayList<>();
         }

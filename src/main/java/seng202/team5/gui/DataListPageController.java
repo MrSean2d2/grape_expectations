@@ -25,9 +25,11 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.RangeSlider;
+import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
+import seng202.team5.services.VineyardService;
 import seng202.team5.services.WineService;
 
 
@@ -134,7 +136,7 @@ public class DataListPageController extends PageController {
                     Wine selectedWine = wineTable.getSelectionModel().getSelectedItem();
                     if (selectedWine != null) {
                         WineService.getInstance().setSelectedWine(selectedWine);
-                        openDetailedViewPage();
+                        openDetailedViewPage(getHeaderController());
                     }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -149,6 +151,14 @@ public class DataListPageController extends PageController {
         // Initialises listeners on sliders
         initializeSliderListeners();
         initializeSliderValueListeners();
+
+        Vineyard selectedVineyard = VineyardService.getInstance().getSelectedVineyard();
+        if (selectedVineyard != null) {
+            searchTextField.setText(selectedVineyard.getName());
+            applySearchFilters();
+            VineyardService.getInstance().setSelectedVineyard(null);
+        }
+
     }
 
     /**
@@ -251,6 +261,7 @@ public class DataListPageController extends PageController {
     private void searchClicked() {
         String searching = searchTextField.getText();
         applySearchFilters();
+        addNotification("Applied Search", "#d5e958");
     }
 
     /**
@@ -348,17 +359,23 @@ public class DataListPageController extends PageController {
      * Opens detailed wine view page for the wine that was double-clicked.
      *
      */
-    private void openDetailedViewPage() {
+    private void openDetailedViewPage(HeaderController headerController) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/fxml/DetailedViewPage.fxml"));
             Parent root = loader.load();
 
+            // Set the header controller reference to the new page controller
+            PageController pageController = loader.getController();
+            if (pageController != null) {
+                pageController.setHeaderController(headerController);
+            }
+
             Stage stage = new Stage();
             stage.setTitle("Wine Details");
             Scene scene = new Scene(root);
 
-            String styleSheetUrl = "/fxml/style.css";
+            String styleSheetUrl = MainWindow.styleSheet;
             scene.getStylesheets().add(styleSheetUrl);
 
             stage.setScene(scene);

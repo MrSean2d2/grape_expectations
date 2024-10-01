@@ -1,17 +1,22 @@
 package seng202.team5.unittests.services;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
+import seng202.team5.exceptions.NotFoundException;
+import seng202.team5.exceptions.PasswordIncorrectException;
+import seng202.team5.models.Role;
 import seng202.team5.models.User;
 import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
@@ -25,13 +30,11 @@ public class UserServiceTest {
      *
      * @throws InstanceAlreadyExistsException if the instance already exists
      */
-    @BeforeEach
-    public void setUp() throws InstanceAlreadyExistsException {
+    @BeforeAll
+    public static void setUp() throws InstanceAlreadyExistsException {
         DatabaseService.removeInstance();
         databaseService = DatabaseService.initialiseInstanceWithUrl(
                 "jdbc:sqlite:./src/test/resources/test_database.db");
-        userService = UserService.getInstance();
-        userService.signOut();
 
 
     }
@@ -42,6 +45,9 @@ public class UserServiceTest {
     @BeforeEach
     void resetDb() {
         databaseService.resetDb();
+        UserService.removeInstance();
+        userService = UserService.getInstance();
+        userService.signOut();
     }
 
     /**
@@ -49,7 +55,7 @@ public class UserServiceTest {
      */
     @Test
     public void signOutTest() {
-        User user = new User(1, "user", "password", "user", 0);
+        User user = new User(1, "user", "password", Role.USER, 0);
         userService.setCurrentUser(user);
         assertNotNull(userService.getCurrentUser());
         userService.signOut();
@@ -61,7 +67,7 @@ public class UserServiceTest {
      */
     @Test
     public void setCurrentUserTest() {
-        User user = new User(1, "user", "password", "user", 0);
+        User user = new User(1, "user", "password", Role.USER, 0);
 
         // Set the current user and check if not null and the username == "user"
         userService.setCurrentUser(user);
@@ -73,7 +79,8 @@ public class UserServiceTest {
      * Hash password test.
      */
     @Test
-    public void hashPasswordTest() throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public void hashPasswordTest() throws NoSuchAlgorithmException,
+            InvalidKeySpecException, PasswordIncorrectException {
         byte[] salt = UserService.generateSalt();
         String pass1String = "password";
         String pass2String = "password";
@@ -82,7 +89,9 @@ public class UserServiceTest {
 
         // Check if password 1 and 2 are equal, and that 1 and 3 are not
         assertTrue(UserService.verifyPassword(pass2String, hashedPassword));
-        assertFalse(UserService.verifyPassword(pass3String, hashedPassword));
+
+        assertThrows(PasswordIncorrectException.class, () ->
+                UserService.verifyPassword(pass3String, hashedPassword));
     }
 
     /**
@@ -128,7 +137,7 @@ public class UserServiceTest {
      * Test user sign in with correct credentials.
      */
     @Test
-    public void correctSignInTest() {
+    public void correctSignInTest() throws NotFoundException, PasswordIncorrectException {
         userService.registerUser("testUser1", "pass");
 
         User signedInUser = userService.signinUser("testUser1", "pass");
@@ -140,11 +149,39 @@ public class UserServiceTest {
      * Test user sign in with incorrect credentials.
      */
     @Test
-    public void incorrectSignInTest() {
+    public void incorrectSignInTest() throws NotFoundException {
         userService.registerUser("testUser", "pass");
 
-        User signedInUser = userService.signinUser("testUser", "wrongPass");
+        try {
+            User signedInUser = userService.signinUser("testUser", "wrongPass");
+            assertNull(signedInUser);
+        } catch (PasswordIncorrectException e) {
+            assertTrue(true);
+        }
+    }
 
-        assertNull(signedInUser);
+    /**
+     * Test updating the user's password.
+     *
+     * @throws NoSuchAlgorithmException if there is an error registering the user
+     * @throws InvalidKeySpecException if there is an error registering the user
+     */
+    @Test
+    public void updatePasswordTest() throws NoSuchAlgorithmException,
+            InvalidKeySpecException, PasswordIncorrectException {
+        User user = userService.registerUser("test", "oldPassword");
+        String newPassword = "newPassword";
+        userService.updateUserPassword(user, newPassword);
+        assertTrue(UserService.verifyPassword(newPassword, user.getPassword()));
+    }
+
+    /**
+     * Test that an admin account is automatically created.
+     */
+    @Test
+    public void createAdminOnStartTest() throws NotFoundException, PasswordIncorrectException {
+        User admin = userService.signinUser("admin", "admin");
+        assertNotNull(admin);
+        assertEquals(Role.ADMIN, admin.getRole());
     }
 }
