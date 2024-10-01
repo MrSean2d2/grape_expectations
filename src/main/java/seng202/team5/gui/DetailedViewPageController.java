@@ -32,6 +32,7 @@ import seng202.team5.models.Wine;
 import seng202.team5.repository.AssignedTagsDAO;
 import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
+import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
 
@@ -103,6 +104,8 @@ public class DetailedViewPageController extends PageController {
      */
     @FXML
     private void initialize() {
+        OpenWindowsService.getInstance().addWindow(this);
+
         Wine selectedWine = WineService.getInstance().getSelectedWine();
         selectedWineId = selectedWine.getId();
         reviewDAO = new ReviewDAO();
@@ -435,13 +438,18 @@ public class DetailedViewPageController extends PageController {
      */
     @FXML
     private void handleBackButtonAction() {
+        OpenWindowsService.getInstance().closeWindow(this);
+
         close();
     }
 
     /**
      * Closes the page.
      */
-    private void close() {
+    public void close() {
+
+        OpenWindowsService.getInstance().closeWindow(this);
+
         try {
             if (UserService.getInstance().getCurrentUser() != null) {
                 assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
@@ -459,6 +467,7 @@ public class DetailedViewPageController extends PageController {
         } catch (DuplicateEntryException e) {
             throw new RuntimeException(e);
         }
+
         backButton.getScene().getWindow().hide();
 
         // Show update message if it was updated

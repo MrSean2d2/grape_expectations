@@ -29,6 +29,7 @@ import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
+import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.VineyardService;
 import seng202.team5.services.WineService;
 
@@ -94,6 +95,7 @@ public class DataListPageController extends PageController {
     private boolean favouriteFilter;
     private static final Logger log = LogManager.getLogger(DataListPageController.class);
 
+
     /**
      * Initializes the data List by calling {@link seng202.team5.services.WineService}
      * to populate the list of wines.
@@ -102,6 +104,7 @@ public class DataListPageController extends PageController {
     private void initialize() {
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
+
 
         favToggleButton.setDisable(true);
         favToggleButton.setText("Coming Soon");
@@ -373,6 +376,8 @@ public class DataListPageController extends PageController {
 
             stage.setScene(scene);
             stage.show();
+
+
         } catch (Exception e) {
             log.error(e);
         }
