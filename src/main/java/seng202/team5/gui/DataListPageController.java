@@ -276,6 +276,7 @@ public class DataListPageController extends PageController {
                 FXCollections.observableArrayList(queryResults);
         wineTable.setItems(observableQueryResults);
         tableResults.setText(wineTable.getItems().size() + " results");
+        addNotification("Applied Filter", "#d5e958");
     }
 
     /**
