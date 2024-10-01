@@ -226,6 +226,7 @@ public class EditWinePopupController extends PageController {
         yearField.getStyleClass().remove("field_error");
         priceField.getStyleClass().remove("field_error");
         nameField.getStyleClass().remove("field_error");
+        vineyardField.getStyleClass().remove("field_error");
     }
 
     @FXML
