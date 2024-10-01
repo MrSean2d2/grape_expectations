@@ -90,6 +90,36 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
     /**
      * Gets a list of a given user's tags (by id).
      *
+     * @param userid id of the user
+     * @param tagid id of the tag
+     * @return list of tags from a given user of a given type
+     */
+    public List<AssignedTag> getTagsFromUser(int userid, int tagid) {
+        List<AssignedTag> tags = new ArrayList<>();
+        String sql = "SELECT * FROM assigned_tags WHERE userid=? AND tagid=?";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userid);
+            ps.setInt(2, tagid);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                AssignedTag tag = new AssignedTag(
+                        rs.getInt("tagid"),
+                        rs.getInt("userid"),
+                        rs.getInt("wineid"));
+                tags.add(tag);
+            }
+            return tags;
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return new ArrayList<>();
+        }
+    }
+
+
+    /**
+     * Gets a list of a given user's tags (by id).
+     *
      * @param id id of the user
      * @return list of tags from the given user
      */

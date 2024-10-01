@@ -88,7 +88,7 @@
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <ComboBox fx:id="roleComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                  <ComboBox fx:id="roleComboBox" prefWidth="150.0" styleClass="dropdown" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
