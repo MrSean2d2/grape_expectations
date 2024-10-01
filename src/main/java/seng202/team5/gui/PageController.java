@@ -1,7 +1,5 @@
 package seng202.team5.gui;
 
-import javafx.fxml.FXML;
-import javafx.scene.layout.StackPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,8 +9,6 @@ import org.apache.logging.log4j.Logger;
 public class PageController {
     private static final Logger log = LogManager.getLogger(PageController.class);
     private HeaderController headerController;
-    @FXML
-    private StackPane pageContainer;
 
     /**
      * Method to set the header controller reference.
@@ -27,10 +23,12 @@ public class PageController {
      * @param fxml the path to the file
      */
     public void swapPage(String fxml) {
-        try {
-            headerController.loadPage(fxml);
-        } catch (Exception e) {
-            log.error(e);
+        if(headerController != null) {
+            try {
+                headerController.loadPage(fxml);
+            } catch (Exception e) {
+                log.error(e);
+            }
         }
     }
 
@@ -38,7 +36,9 @@ public class PageController {
      * Add a notification to the main page.
      */
     public void addNotification(String text, String col) {
-        headerController.addNotification(text, col);
+        if(headerController != null) {
+            headerController.addNotification(text, col);
+        }
     }
 
     /**

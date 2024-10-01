@@ -2,11 +2,7 @@ package seng202.team5.gui;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -21,7 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.services.UserService;
@@ -82,10 +77,12 @@ public class HeaderController {
                 homeIcon.setImage(new Image(
                         Objects.requireNonNull(
                                 getClass().getResourceAsStream("/images/Dashboard.png"))));
+                homeButton.setTooltip(new Tooltip("Dashboard"));
             } else {
                 homeIcon.setImage(new Image(
                         Objects.requireNonNull(
                                 getClass().getResourceAsStream("/images/Home.png"))));
+                homeButton.setTooltip(new Tooltip("Home page"));
             }
         });
 
@@ -94,7 +91,6 @@ public class HeaderController {
         });
 
         logoButton.setTooltip(new Tooltip("Home page"));
-        homeButton.setTooltip(new Tooltip("Home page"));
         dataListButton.setTooltip(new Tooltip("Data list page"));
         mapButton.setTooltip(new Tooltip("Map page"));
         accountButton.setTooltip(new Tooltip("Account page"));
@@ -102,28 +98,22 @@ public class HeaderController {
 
     /**
      * Load the home page.
-     *
-     * @throws Exception if loading the page fails
      */
     @FXML
-    private void loadHomePage() throws Exception {
+    private void loadHomePage() {
         if (UserService.getInstance().getCurrentUser() != null) {
-            throw new NotImplementedException("page not implemented");
+            loadPage("/fxml/DashboardPage.fxml");
         } else {
             loadPage("/fxml/HomePage.fxml");
         }
-        //homeButton.getStyleClass().add("active");
     }
 
     /**
      * Load the data list page.
-     *
-     * @throws Exception if loading the page fails
      */
     @FXML
-    private void loadDataListPage() throws Exception {
+    private void loadDataListPage() {
         loadPage("/fxml/DataListPage.fxml");
-        //dataListButton.getStyleClass().add("active");
     }
 
 
@@ -134,8 +124,6 @@ public class HeaderController {
      */
     @FXML
     private void loadMapPage() throws Exception {
-        //loadPage("/fxml/MapPage.fxml");
-        //mapButton.getStyleClass().add("active");
         // Cancel an in-progress task if it is currently running
         if (createScene != null && createScene.isRunning()) {
             createScene.cancel(true);
@@ -158,16 +146,13 @@ public class HeaderController {
         accountButton.getStyleClass().remove("active");
 
         mapButton.getStyleClass().add("active");
-        //resetActiveButtons(mapButton);
     }
 
     /**
      * Load the account page.
-     *
-     * @throws Exception if loading the page fails
      */
     @FXML
-    private void loadAccountPage() throws Exception {
+    private void loadAccountPage() {
         // Load the "login" page if a user is currently not signed in
         // Otherwise, load the "account" page
 
@@ -177,7 +162,6 @@ public class HeaderController {
         } else {
             loadPage("/fxml/LoginPage.fxml");
         }
-        //accountButton.getStyleClass().add("active");
     }
 
 
@@ -191,10 +175,6 @@ public class HeaderController {
         if (createScene != null && createScene.isRunning()) {
             createScene.cancel(true);
         }
-
-
-
-
 
         // Begin a new task
         createScene = new Task<>() {
@@ -225,12 +205,11 @@ public class HeaderController {
         mapButton.getStyleClass().remove("active");
         accountButton.getStyleClass().remove("active");
 
-        // Load the loading page
+        // Load the loading page :)
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
         try {
             Node loader = baseLoader.load();
-            Platform.runLater(() -> pageContainer.getChildren().setAll(loader));
-
+            pageContainer.getChildren().setAll(loader);
         } catch (IOException e) {
             log.error(e);
         }
@@ -258,7 +237,7 @@ public class HeaderController {
                 accountButton.getStyleClass().add("active");
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + loadedPage);
+                break;
         }
         // Update the scene
         createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));

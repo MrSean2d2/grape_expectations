@@ -17,14 +17,15 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.RangeSlider?>
 
-<GridPane alignment="TOP_CENTER" prefHeight="905.0" prefWidth="1031.0" styleClass="primary" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+<GridPane alignment="TOP_CENTER" prefHeight="877.0" prefWidth="921.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="120.0" prefHeight="120.0" />
-        <RowConstraints maxHeight="180.0" minHeight="100.0" prefHeight="120.0" vgrow="NEVER" />
-        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="400.0" vgrow="ALWAYS" />
+        <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="179.99999237060547" minHeight="100.0" prefHeight="112.00000508626303" vgrow="NEVER" />
+        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="568.0" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="-Infinity" minHeight="20.0" prefHeight="20.0" vgrow="ALWAYS" />
     </rowConstraints>
     <children>
         <GridPane maxWidth="1000.0" prefHeight="129.0" prefWidth="1000.0" GridPane.halignment="CENTER" GridPane.rowIndex="1">
@@ -115,7 +116,7 @@
                                 <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Slider fx:id="ratingSlider" blockIncrement="1.0" majorTickUnit="10.0" maxWidth="-Infinity" minorTickCount="1" prefHeight="38.0" prefWidth="155.0" showTickLabels="true" showTickMarks="true" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                <Slider fx:id="ratingSlider" blockIncrement="5.0" majorTickUnit="10.0" maxWidth="-Infinity" min="80.0" minorTickCount="4" prefHeight="38.0" prefWidth="155.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                     <padding>
                                         <Insets left="20.0" />
                                     </padding>
@@ -140,7 +141,7 @@
                                 <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <RangeSlider fx:id="priceRangeSlider" highValue="1.0" highValueChanging="true" lowValue="0.0" lowValueChanging="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="1" prefHeight="30.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                                <RangeSlider fx:id="priceRangeSlider" blockIncrement="25.0" highValue="1.0" highValueChanging="true" lowValue="0.0" lowValueChanging="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="4" prefHeight="30.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                                     <padding>
                                         <Insets top="5.0" />
                                     </padding>
@@ -176,8 +177,8 @@
                 </GridPane>
             </children>
         </GridPane>
-        <VBox alignment="CENTER" prefWidth="965.0" spacing="20" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP">
-            <TableView fx:id="wineTable" maxHeight="1000.0" maxWidth="1000.0" minHeight="400.0" prefHeight="600.0" prefWidth="963.0" VBox.vgrow="ALWAYS">
+        <VBox alignment="CENTER" prefHeight="575.0" prefWidth="901.0" spacing="20" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP">
+            <TableView fx:id="wineTable" maxWidth="1000.0" prefHeight="290.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="589.3333486318588" resizable="false" text="Wine Name" />
                     <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="91.0" resizable="false" text="Price" />
@@ -213,6 +214,11 @@
                 </Label>
             </children>
         </VBox>
+      <Label fx:id="tableResults" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1000.0" minWidth="800.0" prefHeight="16.0" prefWidth="1000.0" text="Label" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </Label>
     </children>
     <padding>
         <Insets bottom="50.0" left="10.0" right="10.0" top="50.0" />
