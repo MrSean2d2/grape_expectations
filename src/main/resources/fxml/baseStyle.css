@@ -229,3 +229,8 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 .max-width {
     -fx-max-width: Infinity;
 }
+
+.slider, .range-slider {
+    -fx-focus-color: #4db265;
+    -fx-faint-focus-color: #4DB26591;
+}
