@@ -197,6 +197,9 @@ public class DetailedViewPageController extends PageController {
         }
     }
 
+    /**
+     * Initialise the button for the admin to edit a wine.
+     */
     private void initAdminActions() {
         if (UserService.getInstance().getCurrentUser() != null
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
@@ -209,6 +212,11 @@ public class DetailedViewPageController extends PageController {
         }
     }
 
+    /**
+     * Called when the admin clicks the edit wine button.
+     *
+     * @param event the ActionEvent associated with the button click
+     */
     private void editWine(ActionEvent event) {
         Wine selectedWine = WineService.getInstance().getSelectedWine();
         try {

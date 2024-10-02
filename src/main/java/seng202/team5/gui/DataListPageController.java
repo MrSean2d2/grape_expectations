@@ -1,10 +1,12 @@
 package seng202.team5.gui;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,6 +23,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,6 +32,7 @@ import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
+import seng202.team5.services.UserService;
 import seng202.team5.services.VineyardService;
 import seng202.team5.services.WineService;
 
@@ -78,6 +82,9 @@ public class DataListPageController extends PageController {
 
     @FXML
     private Button resetSearchFilterButton;
+
+    @FXML
+    private Button addWineButton;
 
     @FXML
     private TextField searchTextField;
@@ -158,7 +165,39 @@ public class DataListPageController extends PageController {
             VineyardService.getInstance().setSelectedVineyard(null);
             applySearchFilters();
         }
+        initAdminAction();
 
+    }
+
+    private void initAdminAction() {
+        if (UserService.getInstance().getCurrentUser() != null
+                && UserService.getInstance().getCurrentUser().getIsAdmin()) {
+            addWineButton.setVisible(true);
+            addWineButton.setOnAction(this::addWine);
+        }
+    }
+
+    private void addWine(ActionEvent event) {
+        WineService.getInstance().setSelectedWine(null);
+        try {
+            FXMLLoader addWineLoader = new FXMLLoader(getClass().getResource(
+                    "/fxml/EditWinePopup.fxml"));
+            Parent root = addWineLoader.load();
+            EditWinePopupController controller = addWineLoader.getController();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setMinHeight(controller.getMinHeight());
+            stage.setMinWidth(controller.getMinWidth());
+            stage.setTitle("Add new wine");
+            String styleSheetUrl = MainWindow.styleSheet;
+            scene.getStylesheets().add(styleSheetUrl);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+            onResetSearchFilterButtonClicked();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
