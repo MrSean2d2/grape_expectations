@@ -1,18 +1,22 @@
 package seng202.team5.gui;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import seng202.team5.repository.VineyardDAO;
 
 /**
  * controller for the loading page
  * contains a spinning gif.
  */
 public class LoadingPageController {
-
+    @FXML
+    public Label progressLabel;
     @FXML
     private BorderPane spinnerLocation;
+    private VineyardDAO vineyardDAO;
 
 
     /**
@@ -20,6 +24,7 @@ public class LoadingPageController {
      */
     @FXML
     private void initialize() {
+        vineyardDAO = new VineyardDAO();
 
         Image gifImage = new Image(getClass().getResourceAsStream("/images/animation.gif"));
 
@@ -32,5 +37,8 @@ public class LoadingPageController {
         gifView.setStyle("-fx-border-radius: 100");
 
         spinnerLocation.setCenter(gifView);
+        if (vineyardDAO.getOne(1) == null) {
+            progressLabel.setText("Populating Database...");
+        }
     }
 }
