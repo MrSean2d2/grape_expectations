@@ -252,6 +252,11 @@ public class HeaderController {
         new Thread(createScene).start();
     }
 
+    /**
+     * Disables/enabled interaction with buttons in header.
+     *
+     * @param enabled if buttons should be enabled or disabled
+     */
     private void setHeaderInteractionEnabled(boolean enabled) {
         logoButton.setDisable(!enabled);
         homeButton.setDisable(!enabled);
