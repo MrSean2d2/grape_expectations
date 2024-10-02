@@ -34,7 +34,7 @@ public class DataLoadServiceTest {
                 Path.of(csvFilePath)));
         String[] expectedFirst = {"174", "New Zealand", "The Stoneleigh style traditionally favors ripeness over herbaceousness, and the 2008 holds true to form," +
                 " offering up grapefruit and nectarine aromas and an appealing blend of citrus and stone-fruit flavors. " +
-                "It's plump and round, yet finishes fresh. Good as an apéritif or with light dishes.", null,
+                new String("It's plump and round, yet finishes fresh. Good as an apéritif or with light dishes.".getBytes(), StandardCharsets.UTF_8), null,
                 "88", "19", "Marlborough",
                 null, null, "Joe Czerwinski",
                 "@JoeCz", "Stoneleigh 2008 Sauvignon Blanc (Marlborough)",

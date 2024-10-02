@@ -19,12 +19,20 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-font-weight: 700;
     /*-fx-font-style: italic;*/
 }
+.label.label_error {
+    -fx-text-fill: #e95958;
+}
+
 
 .button {
     -fx-padding: 8 15;
     -fx-border-width: 2;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
+}
+
+.button.detailed_view {
+    -fx-font-size: 16;
 }
 
 .button:hover {
