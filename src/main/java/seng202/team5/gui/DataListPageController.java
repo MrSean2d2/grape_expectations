@@ -155,6 +155,7 @@ public class DataListPageController extends PageController {
         Vineyard selectedVineyard = VineyardService.getInstance().getSelectedVineyard();
         if (selectedVineyard != null) {
             searchTextField.setText(selectedVineyard.getName());
+            regionFilter = selectedVineyard.getRegion();
             VineyardService.getInstance().setSelectedVineyard(null);
             applySearchFilters();
         }
