@@ -38,6 +38,8 @@ import seng202.team5.models.Wine;
 public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
+    private final WineService wineService;
+
     private final Path fileName;
 
     private final GeolocatorService geolocatorService = new GeolocatorService();
@@ -47,6 +49,7 @@ public class DataLoadService {
      */
     public DataLoadService() {
         this.fileName = pathFromConfig();
+        this.wineService = WineService.getInstance();
         log.info(fileName);
     }
 
@@ -56,6 +59,7 @@ public class DataLoadService {
      */
     public DataLoadService(String specifiedFileName) {
         this.fileName = Path.of(specifiedFileName);
+        this.wineService = WineService.getInstance();
     }
 
     /**
@@ -128,7 +132,7 @@ public class DataLoadService {
             }
 
             // Wine Variety
-            String varietyName = csvEntry[12];
+            String varietyName = wineService.validVariety(csvEntry[12]);
 
             // Winery
             String winery = csvEntry[13];
@@ -142,7 +146,7 @@ public class DataLoadService {
             // Return the created Wine object
             Wine resultWine = new Wine(name, description, year, ratingValue, price,
                     varietyName, "Unknown", vineyard);
-            if (resultWine.isValidWine()) {
+            if (wineService.isValidWine(resultWine)) {
                 return resultWine;
             } else {
                 return null;

@@ -8,10 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -19,8 +23,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
@@ -75,6 +82,8 @@ public class DetailedViewPageController extends PageController implements Closab
     @FXML
     private Label varietyLabel;
     @FXML
+    private Label vineyardLabel;
+    @FXML
     private TextArea notesTextArea;
     @FXML
     private Button saveNotesButton;
@@ -92,11 +101,17 @@ public class DetailedViewPageController extends PageController implements Closab
     private ImageView star5;
     @FXML
     private FlowPane tagBox;
+
+    @FXML
+    private GridPane headerGridPane;
+
     private int selectedWineId;
     private int userId;
     private PopOver tagPopover;
     private ReviewDAO reviewDAO;
     private Review review;
+
+    private static List<DetailedViewPageController> openInstances = new ArrayList<>();
 
 
     /**
@@ -111,6 +126,20 @@ public class DetailedViewPageController extends PageController implements Closab
         reviewDAO = new ReviewDAO();
         review = null;
 
+
+        initWineInfo(selectedWine);
+        initUserReviews();
+        initAdminActions();
+
+
+    }
+
+    /**
+     * Init all the labels with the wine information of the selected wine.
+     *
+     * @param selectedWine the selected wine object
+     */
+    private void initWineInfo(Wine selectedWine) {
         if (selectedWine != null) {
             nameLabel.setText(selectedWine.getName());
             priceLabel.setText("Price: $" + selectedWine.getPrice());
@@ -119,8 +148,14 @@ public class DetailedViewPageController extends PageController implements Closab
             wineDescriptionLabel.setText(selectedWine.getDescription());
             provinceLabel.setText("Province: " + selectedWine.getRegion());
             varietyLabel.setText("Variety: " + selectedWine.getWineVariety());
+            vineyardLabel.setText("Vineyard: " + selectedWine.getVineyard().getName());
         }
+    }
 
+    /**
+     * Initialise user specific review info and tags if applicable.
+     */
+    private void initUserReviews() {
         if (UserService.getInstance().getCurrentUser() != null) {
             // Get the user ID
             userId = UserService.getInstance().getCurrentUser().getId();
@@ -162,6 +197,40 @@ public class DetailedViewPageController extends PageController implements Closab
             favoriteToggleButton.setDisable(true);
             saveNotesButton.setDisable(true);
             notesTextArea.setEditable(false);
+        }
+    }
+
+    private void initAdminActions() {
+        if (UserService.getInstance().getCurrentUser() != null
+                && UserService.getInstance().getCurrentUser().getIsAdmin()) {
+            Button editWineButton = new Button("Edit Wine");
+            editWineButton.getStyleClass().add("detailed_view");
+            editWineButton.applyCss();
+            editWineButton.setOnAction(this::editWine);
+            headerGridPane.add(editWineButton, 1, 0);
+            GridPane.setMargin(editWineButton, new Insets(0, 10, 10, 0));
+        }
+    }
+
+    private void editWine(ActionEvent event) {
+        Wine selectedWine = WineService.getInstance().getSelectedWine();
+        try {
+            FXMLLoader editWineLoader = new FXMLLoader(getClass()
+                    .getResource("/fxml/EditWinePopup.fxml"));
+            Parent root = editWineLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setMinHeight(486);
+            stage.setMinWidth(762);
+            stage.setTitle(String.format("Edit wine %s", selectedWine.getName()));
+            String styleSheetUrl = MainWindow.styleSheet;
+            scene.getStylesheets().add(styleSheetUrl);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+            initWineInfo(selectedWine);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -464,17 +533,24 @@ public class DetailedViewPageController extends PageController implements Closab
                         assignedTagsDAO.add(new AssignedTag(tag.getTagId(), userId, selectedWineId));
                     }
                 }
-
             }
         } catch (DuplicateEntryException e) {
             throw new RuntimeException(e);
         }
-
         backButton.getScene().getWindow().hide();
 
         // Show update message if it was updated
         if (review != null) {
             addNotification("Updated Wine Review", "#d5e958");
+        }
+    }
+
+    /**
+     * Closes all open instances of detailed view pages.
+     */
+    public static void closeAll() {
+        for (DetailedViewPageController instance : new ArrayList<>(openInstances)) {
+            instance.close();
         }
     }
 

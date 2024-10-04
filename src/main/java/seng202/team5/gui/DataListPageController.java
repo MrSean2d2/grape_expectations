@@ -191,23 +191,20 @@ public class DataListPageController extends PageController {
      * Adds listeners to price and rating slider filters, to handle action of such filters.
      */
     private void initializeSliderListeners() {
-        priceRangeSlider.highValueProperty().addListener(
-                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                maxPriceFilter = Float.parseFloat(String.format("%.1f", newVal.floatValue()));
-                applySearchFilters();
-            });
+        priceRangeSlider.setOnMouseReleased(event -> {
+            maxPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getHighValue()));
+            applySearchFilters();
+        });
 
-        priceRangeSlider.lowValueProperty().addListener(
-                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                minPriceFilter = Float.parseFloat(String.format("%.1f", newVal.floatValue()));
-                applySearchFilters();
-            });
+        priceRangeSlider.setOnMouseReleased(event -> {
+            minPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getLowValue()));
+            applySearchFilters();
+        });
 
-        ratingSlider.valueProperty().addListener(
-                (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                minRatingFilter = Float.parseFloat(String.format("%.1f", newVal.floatValue()));
-                applySearchFilters();
-            });
+        ratingSlider.setOnMouseReleased(event -> {
+            minRatingFilter = Float.parseFloat(String.format("%.1f", ratingSlider.getValue()));
+            applySearchFilters();
+        });
     }
 
     /**

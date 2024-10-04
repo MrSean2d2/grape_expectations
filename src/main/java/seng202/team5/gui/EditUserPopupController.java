@@ -13,13 +13,15 @@ import seng202.team5.repository.UserDAO;
 import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A controller for the edit user window.
  *
  * @author Sean Reitsma
  */
 public class EditUserPopupController implements ClosableWindow {
-
     @FXML
     private PasswordField confPasswordField;
 
@@ -41,6 +43,7 @@ public class EditUserPopupController implements ClosableWindow {
     @FXML
     private Button closeButton;
     private User curUser;
+    private static List<EditUserPopupController> openInstances = new ArrayList<>();
     private boolean editingCurrentUser;
 
     @FXML
@@ -92,5 +95,14 @@ public class EditUserPopupController implements ClosableWindow {
         }
 
     }
+//    /**
+//     * Closes all open instances of detailed view pages
+//     */
+//    @FXML
+//    public static void closeAll(){
+//        for(EditUserPopupController instance : new ArrayList<>(openInstances)) {
+//            instance.close();
+//        }
+//    }
 
 }
