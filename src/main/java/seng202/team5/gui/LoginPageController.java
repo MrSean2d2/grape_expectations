@@ -1,7 +1,11 @@
 package seng202.team5.gui;
 
+import java.io.IOException;
 import java.util.Objects;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -9,9 +13,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.exceptions.PasswordIncorrectException;
 import seng202.team5.models.User;
+import seng202.team5.services.ColourLookupService;
 import seng202.team5.services.UserService;
 
 /**
@@ -19,7 +26,7 @@ import seng202.team5.services.UserService;
  *
  * @author Martyn Gascoigne
  */
-public class LoginPageController extends PageController {
+public class LoginPageController extends PageController implements HasFormErrors {
 
     @FXML
     private Button loginButton;
@@ -95,15 +102,14 @@ public class LoginPageController extends PageController {
      */
     @FXML
     public void attemptLogin() {
-        usernameField.getStyleClass().remove("field_error");
-        passwordField.getStyleClass().remove("field_error");
+        resetFieldError(usernameField);
+        resetFieldError(passwordField);
 
         String username = usernameField.getText();
 
         if (username.isEmpty()) {
             // Show error
-            errorLabel.setText("Username cannot be empty!");
-            usernameField.getStyleClass().add("field_error");
+            fieldError(usernameField, "Username cannot be empty!");
             return;
         }
 
@@ -111,8 +117,7 @@ public class LoginPageController extends PageController {
 
         if (password.isEmpty()) {
             // Show error
-            errorLabel.setText("Password cannot be empty!");
-            passwordField.getStyleClass().add("field_error");
+            fieldError(passwordField, "Password cannot be empty!");
             return;
         }
 
@@ -127,16 +132,46 @@ public class LoginPageController extends PageController {
                 passwordField.setText("");
 
                 // Go to the homepage
+                addNotification(String.format("User %s logged in", user.getUsername()), "#d5e958");
+                if (user.getIsAdmin() && userManager.isAdminDefaultPassword()) {
+                    userManager.setSelectedUser(user);
+                    loadEditPassword();
+                    userManager.changedAdminPassword();
+                }
                 swapPage("/fxml/AccountManagePage.fxml");
             }
         } catch (NotFoundException e) {
-            errorLabel.setText("User doesn't exist!");
-            usernameField.getStyleClass().add("field_error");
+            fieldError(usernameField, "User doesn't exist!");
         } catch (PasswordIncorrectException e) {
-            errorLabel.setText("Password is incorrect!");
-            passwordField.getStyleClass().add("field_error");
+            fieldError(passwordField, "Password is incorrect!");
         }
     }
+
+    private void loadEditPassword() {
+        try {
+            FXMLLoader editPasswordLoader = new FXMLLoader(
+                    getClass().getResource("/fxml/EditPasswordPopup.fxml"));
+            Parent root = editPasswordLoader.load();
+            EditPasswordPopupController controller = editPasswordLoader.getController();
+            controller.setClosable(false);
+            Stage stage = new Stage();
+            stage.setTitle("Edit password");
+            Scene scene = new Scene(root);
+            String styleSheetUrl = MainWindow.styleSheet;
+            scene.getStylesheets().add(styleSheetUrl);
+            stage.setMinWidth(controller.minWidth);
+            stage.setMinHeight(controller.minHeight);
+            stage.setOnCloseRequest(controller::onCloseRequest);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(loginButton.getScene().getWindow());
+            stage.setScene(scene);
+            stage.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
     /**
      * Visit the register page.
@@ -146,5 +181,23 @@ public class LoginPageController extends PageController {
     public void goToRegister() {
         // Transition
         swapPage("/fxml/RegisterPage.fxml");
+    }
+
+    @Override
+    public void fieldError(TextField field, String message) {
+        fieldError(field);
+        errorLabel.setVisible(true);
+        errorLabel.setText(message);
+    }
+
+    @Override
+    public void fieldError(TextField field) {
+        field.getStyleClass().add("field_error");
+    }
+
+    @Override
+    public void resetFieldError(TextField field) {
+        errorLabel.setVisible(false);
+        field.getStyleClass().remove("field_error");
     }
 }
