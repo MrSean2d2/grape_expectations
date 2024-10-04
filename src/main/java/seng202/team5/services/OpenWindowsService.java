@@ -62,6 +62,5 @@ public class OpenWindowsService {
         for (ClosableWindow window: windowsCopy){
             window.closeWindow();
         }
-
     }
 }

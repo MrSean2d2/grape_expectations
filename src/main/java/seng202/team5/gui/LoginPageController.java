@@ -127,6 +127,9 @@ public class LoginPageController extends PageController {
                 usernameField.setText("");
                 passwordField.setText("");
 
+                // Close any open popup windows
+                OpenWindowsService.getInstance().closeAllWindows();
+
                 // Go to the homepage
                 swapPage("/fxml/AccountManagePage.fxml");
             }
