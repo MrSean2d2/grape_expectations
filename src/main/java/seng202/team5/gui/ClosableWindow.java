@@ -8,5 +8,5 @@ public interface ClosableWindow {
     /**
      * closes window by implementing controller
      */
-    void close();
+    void closeWindow();
 }

@@ -43,7 +43,7 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </GridPane.margin>
             <children>
-                <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButtonAction" text="Close" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#closeWindow" text="Close" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
                     <font>
                         <Font size="16.0" />
                     </font>

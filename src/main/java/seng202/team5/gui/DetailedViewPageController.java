@@ -437,31 +437,34 @@ public class DetailedViewPageController extends PageController implements Closab
      * Closes the page.
      */
     @FXML
-    private void handleBackButtonAction() {
+    @Override
+    public void closeWindow() {
         OpenWindowsService.getInstance().closeWindow(this);
-
         close();
     }
 
     /**
      * Closes the page.
      */
-    @Override
     public void close() {
 
         try {
             if (UserService.getInstance().getCurrentUser() != null) {
-                assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
+                if(assignedTagsDAO!= null) {
 
-                // Add review to this wine
-                if (!tagsList.isEmpty()) {
-                    createReviewIfNotExists();
+                    assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
+
+                    // Add review to this wine
+                    if (!tagsList.isEmpty()) {
+                        createReviewIfNotExists();
+                    }
+
+                    // Add to assigned tags db
+                    for (Tag tag : tagsList) {
+                        assignedTagsDAO.add(new AssignedTag(tag.getTagId(), userId, selectedWineId));
+                    }
                 }
 
-                // Add to assigned tags db
-                for (Tag tag : tagsList) {
-                    assignedTagsDAO.add(new AssignedTag(tag.getTagId(), userId, selectedWineId));
-                }
             }
         } catch (DuplicateEntryException e) {
             throw new RuntimeException(e);

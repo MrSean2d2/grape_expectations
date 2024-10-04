@@ -60,7 +60,7 @@ public class OpenWindowsService {
     public void closeAllWindows(){
         List<ClosableWindow> windowsCopy = new ArrayList<>(openWindows);
         for (ClosableWindow window: windowsCopy){
-            window.close();
+            window.closeWindow();
         }
 
     }

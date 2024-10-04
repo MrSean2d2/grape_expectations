@@ -58,7 +58,8 @@ public class EditUserPopupController implements ClosableWindow {
 
     @FXML
     @Override
-    public void close() {
+    public void closeWindow() {
+        OpenWindowsService.removeInstance();
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
@@ -87,7 +88,7 @@ public class EditUserPopupController implements ClosableWindow {
             }
             UserDAO userDAO = new UserDAO();
             userDAO.update(curUser);
-            close();
+            closeWindow();
         }
 
     }
