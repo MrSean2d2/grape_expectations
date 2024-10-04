@@ -161,6 +161,14 @@ public class EditPasswordPopupController implements HasFormErrors {
         toggleRepeatVisibility.setImage(repeatPasswordVisible ? shownIcon : hiddenIcon);
     }
 
+    /**
+     * Set the visibility status of the text field passed, and inversely set the
+     * visibility of the password field passed.
+     *
+     * @param visible true to set textField visible and passField not visible
+     * @param passField the password field
+     * @param textField the plain text field
+     */
     private void setVisible(boolean visible, PasswordField passField,
                             TextField textField) {
         textField.setVisible(visible);

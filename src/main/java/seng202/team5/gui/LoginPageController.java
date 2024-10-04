@@ -147,6 +147,9 @@ public class LoginPageController extends PageController implements HasFormErrors
         }
     }
 
+    /**
+     * Load the edit password popup to force the user to edit their password.
+     */
     private void loadEditPassword() {
         try {
             FXMLLoader editPasswordLoader = new FXMLLoader(
@@ -183,6 +186,12 @@ public class LoginPageController extends PageController implements HasFormErrors
         swapPage("/fxml/RegisterPage.fxml");
     }
 
+    /**
+     * Show a field error for the specified field, with an error message.
+     *
+     * @param field   the field containing the error
+     * @param message the error message
+     */
     @Override
     public void fieldError(TextField field, String message) {
         fieldError(field);
@@ -190,11 +199,21 @@ public class LoginPageController extends PageController implements HasFormErrors
         errorLabel.setText(message);
     }
 
+    /**
+     * Show a field error for the specified field, without an error message.
+     *
+     * @param field the field containing the error
+     */
     @Override
     public void fieldError(TextField field) {
         field.getStyleClass().add("field_error");
     }
 
+    /**
+     * Reset the error status of a given field.
+     *
+     * @param field the field to reset
+     */
     @Override
     public void resetFieldError(TextField field) {
         errorLabel.setVisible(false);
