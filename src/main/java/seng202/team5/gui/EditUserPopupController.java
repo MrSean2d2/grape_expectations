@@ -59,7 +59,7 @@ public class EditUserPopupController implements ClosableWindow {
     @FXML
     @Override
     public void closeWindow() {
-        OpenWindowsService.removeInstance();
+        OpenWindowsService.getInstance().closeWindow(this);
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
