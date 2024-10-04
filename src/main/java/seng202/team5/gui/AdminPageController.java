@@ -52,7 +52,7 @@ public class AdminPageController extends PageController {
     }
 
     @FXML
-    private void done(ActionEvent event) {
+    private void done(ActionEvent e) {
         // Close open edit user pop ups
         OpenWindowsService.getInstance().closeAllWindows();
         swapPage("/fxml/AccountManagePage.fxml");

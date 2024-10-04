@@ -1,10 +1,8 @@
 package seng202.team5.services;
 
 import seng202.team5.gui.ClosableWindow;
-import seng202.team5.gui.DetailedViewPageController;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -34,24 +32,22 @@ public class OpenWindowsService {
         return instance;
     }
 
-    public static void removeInstance() { instance = null;}
-
     /**
      * Add single window to open windows list
-     * @param thisInstance
+     * @param thisWindow newly opened window
      */
-    public void addWindow(ClosableWindow thisInstance) {
+    public void addWindow(ClosableWindow thisWindow) {
         System.out.println(openWindows);
-        openWindows.add(thisInstance);
+        openWindows.add(thisWindow);
     }
 
     /**
      * Remove single instance of window from open windows list
-     * @param thisInstance
+     * @param thisWindow window to close
      */
-    public void closeWindow(ClosableWindow thisInstance){
+    public void closeWindow(ClosableWindow thisWindow){
         System.out.println(openWindows);
-        openWindows.remove(thisInstance);
+        openWindows.remove(thisWindow);
     }
 
     /**
