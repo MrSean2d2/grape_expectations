@@ -111,8 +111,6 @@ public class DetailedViewPageController extends PageController implements Closab
     private ReviewDAO reviewDAO;
     private Review review;
 
-    private static List<DetailedViewPageController> openInstances = new ArrayList<>();
-
 
     /**
      * Initializes DetailedViewPage.
@@ -545,14 +543,6 @@ public class DetailedViewPageController extends PageController implements Closab
         }
     }
 
-    /**
-     * Closes all open instances of detailed view pages.
-     */
-    public static void closeAll() {
-        for (DetailedViewPageController instance : new ArrayList<>(openInstances)) {
-            instance.close();
-        }
-    }
 
 
     /**

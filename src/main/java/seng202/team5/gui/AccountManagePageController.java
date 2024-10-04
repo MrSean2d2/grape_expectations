@@ -15,7 +15,6 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import seng202.team5.models.User;
 import seng202.team5.repository.ReviewDAO;
-import seng202.team5.repository.UserDAO;
 import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 
