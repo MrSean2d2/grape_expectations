@@ -17,7 +17,7 @@ import seng202.team5.services.UserService;
  *
  * @author Martyn Gascoigne
  */
-public class RegisterPageController extends PageController {
+public class RegisterPageController extends FormErrorController {
 
     @FXML
     private Button loginButton;
@@ -124,11 +124,6 @@ public class RegisterPageController extends PageController {
         }
     }
 
-    private void fieldError(TextField field, String message) {
-        errorLabel.setText(message);
-        field.getStyleClass().add("field_error");
-    }
-
     /**
      * Attempt to register with the provided details
      * if the register is successful,
@@ -147,7 +142,7 @@ public class RegisterPageController extends PageController {
         UserService userService = UserService.getInstance();
         String message = userService.checkName(username);
         if (message != null) {
-            fieldError(usernameField, message);
+            fieldError(usernameField, errorLabel, message);
             return;
         }
 
@@ -155,7 +150,7 @@ public class RegisterPageController extends PageController {
         // Password validation
         String passMessage = userService.checkPassword(password);
         if (passMessage != null) {
-            fieldError(passwordField, passMessage);
+            fieldError(passwordField, errorLabel, passMessage);
             return;
         }
 

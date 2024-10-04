@@ -21,7 +21,7 @@ import seng202.team5.services.UserService;
  *
  * @author Sean Reitsma
  */
-public class EditPasswordPopupController implements HasFormErrors {
+public class EditPasswordPopupController extends FormErrorController {
 
     @FXML
     private Label errorLabel;
@@ -49,17 +49,20 @@ public class EditPasswordPopupController implements HasFormErrors {
 
     private Image shownIcon;
     private Image hiddenIcon;
-    public final int minWidth = 385;
-    public final int minHeight = 230;
     private boolean closable = true;
 
     /**
-     * Sets whether this window should be allowed to close when the user hits
-     * the window manager close button.
+     * Initialize the window.
      *
-     * @param closable true if the window is allowed to close (default)
+     * @param stage the stage of the window
+     * @param closable whether this window should be closeable or not
      */
-    public void setClosable(boolean closable) {
+    public void init(Stage stage, boolean closable) {
+        stage.setOnCloseRequest(this::onCloseRequest);
+        int minWidth = 385;
+        stage.setMinWidth(minWidth);
+        int minHeight = 230;
+        stage.setMinHeight(minHeight);
         this.closable = closable;
     }
 
@@ -88,7 +91,7 @@ public class EditPasswordPopupController implements HasFormErrors {
      *
      * @param windowEvent the close event
      */
-    public void onCloseRequest(WindowEvent windowEvent) {
+    private void onCloseRequest(WindowEvent windowEvent) {
         if (closable) {
             close();
         } else {
@@ -118,10 +121,10 @@ public class EditPasswordPopupController implements HasFormErrors {
         UserService userService = UserService.getInstance();
         String message = userService.checkPassword(password);
         if (message != null) {
-            fieldError(passwordField, message);
+            fieldError(passwordField, errorLabel, message);
         } else if (!password.equals(repeatPassword)) {
             fieldError(passwordField);
-            fieldError(repeatPasswordField, "Passwords do not match!");
+            fieldError(repeatPasswordField, errorLabel, "Passwords do not match!");
         } else {
             User user = userService.getSelectedUser();
             userService.updateUserPassword(user, password);
@@ -173,38 +176,5 @@ public class EditPasswordPopupController implements HasFormErrors {
         textField.setManaged(visible);
         passField.setVisible(!visible);
         passField.setManaged(!visible);
-    }
-
-    /**
-     * Show a field error for the specified field, with an error message.
-     *
-     * @param field   the field containing the error
-     * @param message the error message
-     */
-    @Override
-    public void fieldError(TextField field, String message) {
-        fieldError(field);
-        errorLabel.setVisible(true);
-        errorLabel.setText(message);
-    }
-
-    /**
-     * Show a field error for the specified field, without an error message.
-     *
-     * @param field the field containing the error
-     */
-    @Override
-    public void fieldError(TextField field) {
-        field.getStyleClass().add("field_error");
-    }
-
-    /**
-     * Reset the error status of a given field.
-     *
-     * @param field the field to reset
-     */
-    @Override
-    public void resetFieldError(TextField field) {
-        field.getStyleClass().remove("field_error");
     }
 }

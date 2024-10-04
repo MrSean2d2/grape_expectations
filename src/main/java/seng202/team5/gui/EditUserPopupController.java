@@ -1,11 +1,16 @@
 package seng202.team5.gui;
 
+import java.io.IOException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import seng202.team5.models.Role;
 import seng202.team5.models.User;
@@ -21,13 +26,6 @@ import java.util.List;
  * @author Sean Reitsma
  */
 public class EditUserPopupController extends PageController {
-
-    @FXML
-    private PasswordField confPasswordField;
-
-    @FXML
-    private PasswordField passwordField;
-
     @FXML
     private ComboBox<Role> roleComboBox;
 
@@ -68,38 +66,27 @@ public class EditUserPopupController extends PageController {
 
     @FXML
     private void submit() {
-        if (!(passwordField.getText().equals(confPasswordField.getText()))) {
-            errorLabel.setText("Passwords do not match!");
-            errorLabel.setVisible(true);
-            passwordField.getStyleClass().add("field_error");
-            confPasswordField.getStyleClass().add("field_error");
-        } else if (passwordField.getText().isBlank() || confPasswordField.getText().isBlank()) {
-            errorLabel.setText("Password cannot be empty!");
-            errorLabel.setVisible(true);
-            passwordField.getStyleClass().add("field_error");
-            confPasswordField.getStyleClass().add("field_error");
-        } else {
-            errorLabel.setVisible(false);
-            passwordField.getStyleClass().remove("field_error");
-            confPasswordField.getStyleClass().remove("field_error");
-            curUser.setUsername(usernameField.getText());
-            UserService.getInstance().updateUserPassword(curUser, passwordField.getText());
-            curUser.setRole(roleComboBox.getSelectionModel().getSelectedItem());
-            if (editingCurrentUser) {
-                UserService.getInstance().setCurrentUser(curUser);
-            }
-            UserDAO userDAO = new UserDAO();
-            userDAO.update(curUser);
-            close();
+        curUser.setUsername(usernameField.getText());
+        curUser.setRole(roleComboBox.getSelectionModel().getSelectedItem());
+        if (editingCurrentUser) {
+            UserService.getInstance().setCurrentUser(curUser);
         }
-
+        UserDAO userDAO = new UserDAO();
+        userDAO.update(curUser);
+        close();
     }
+
+    @FXML
+    private void openEditPassword() {
+        openEditPasswordPopup(true, closeButton.getScene().getWindow());
+    }
+
     /**
-     * Closes all open instances of detailed view pages
+     * Closes all open instances of detailed view pages.
      */
     @FXML
-    public static void closeAll(){
-        for(EditUserPopupController instance : new ArrayList<>(openInstances)) {
+    public static void closeAll() {
+        for (EditUserPopupController instance : new ArrayList<>(openInstances)) {
             instance.close();
         }
     }

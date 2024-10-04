@@ -1,5 +1,12 @@
 package seng202.team5.gui;
 
+import java.io.IOException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,5 +53,28 @@ public class PageController {
      */
     public HeaderController getHeaderController() {
         return this.headerController;
+    }
+
+    public void openEditPasswordPopup(boolean closable, Window owner) {
+        try {
+            FXMLLoader editPasswordLoader = new FXMLLoader(
+                    getClass().getResource("/fxml/EditPasswordPopup.fxml"));
+            Parent root = editPasswordLoader.load();
+            EditPasswordPopupController controller = editPasswordLoader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Edit password");
+            Scene scene = new Scene(root);
+            String styleSheetUrl = MainWindow.styleSheet;
+            scene.getStylesheets().add(styleSheetUrl);
+
+            controller.init(stage, closable);
+
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(owner);
+            stage.setScene(scene);
+            stage.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

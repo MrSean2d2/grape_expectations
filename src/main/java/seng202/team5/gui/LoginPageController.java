@@ -25,7 +25,7 @@ import seng202.team5.services.UserService;
  *
  * @author Martyn Gascoigne
  */
-public class LoginPageController extends PageController implements HasFormErrors {
+public class LoginPageController extends PasswordVisibilityController {
 
     @FXML
     private Button loginButton;
@@ -77,23 +77,9 @@ public class LoginPageController extends PageController implements HasFormErrors
     @FXML
     private void togglePasswordVisibility() {
         passwordVisible = !passwordVisible;
-
-        // If password visible, set visibility
-        if (passwordVisible) {
-            passwordVisibleField.setVisible(true);
-            passwordVisibleField.setManaged(true);
-            passwordField.setVisible(false);
-            passwordField.setManaged(false);
-            registerButton.requestFocus(); // make the register button focused
-            toggleVisibility.setImage(shownIcon);
-        } else {
-            passwordField.setVisible(true);
-            passwordField.setManaged(true);
-            passwordVisibleField.setVisible(false);
-            passwordVisibleField.setManaged(false);
-            registerButton.requestFocus(); // make the register button focused
-            toggleVisibility.setImage(hiddenIcon);
-        }
+        setVisible(passwordVisible, passwordField, passwordVisibleField);
+        registerButton.requestFocus();
+        toggleVisibility.setImage(passwordVisible ? shownIcon : hiddenIcon);
     }
 
     /**
@@ -108,7 +94,7 @@ public class LoginPageController extends PageController implements HasFormErrors
 
         if (username.isEmpty()) {
             // Show error
-            fieldError(usernameField, "Username cannot be empty!");
+            fieldError(usernameField, errorLabel, "Username cannot be empty!");
             return;
         }
 
@@ -116,7 +102,7 @@ public class LoginPageController extends PageController implements HasFormErrors
 
         if (password.isEmpty()) {
             // Show error
-            fieldError(passwordField, "Password cannot be empty!");
+            fieldError(passwordField, errorLabel, "Password cannot be empty!");
             return;
         }
 
@@ -140,9 +126,9 @@ public class LoginPageController extends PageController implements HasFormErrors
                 swapPage("/fxml/AccountManagePage.fxml");
             }
         } catch (NotFoundException e) {
-            fieldError(usernameField, "User doesn't exist!");
+            fieldError(usernameField, errorLabel, "User doesn't exist!");
         } catch (PasswordIncorrectException e) {
-            fieldError(passwordField, "Password is incorrect!");
+            fieldError(passwordField, errorLabel, "Password is incorrect!");
         }
     }
 
@@ -150,27 +136,7 @@ public class LoginPageController extends PageController implements HasFormErrors
      * Load the edit password popup to force the user to edit their password.
      */
     private void loadEditPassword() {
-        try {
-            FXMLLoader editPasswordLoader = new FXMLLoader(
-                    getClass().getResource("/fxml/EditPasswordPopup.fxml"));
-            Parent root = editPasswordLoader.load();
-            EditPasswordPopupController controller = editPasswordLoader.getController();
-            controller.setClosable(false);
-            Stage stage = new Stage();
-            stage.setTitle("Edit password");
-            Scene scene = new Scene(root);
-            String styleSheetUrl = MainWindow.styleSheet;
-            scene.getStylesheets().add(styleSheetUrl);
-            stage.setMinWidth(controller.minWidth);
-            stage.setMinHeight(controller.minHeight);
-            stage.setOnCloseRequest(controller::onCloseRequest);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(loginButton.getScene().getWindow());
-            stage.setScene(scene);
-            stage.showAndWait();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        openEditPasswordPopup(false, loginButton.getScene().getWindow());
     }
 
 
@@ -183,39 +149,5 @@ public class LoginPageController extends PageController implements HasFormErrors
     public void goToRegister() {
         // Transition
         swapPage("/fxml/RegisterPage.fxml");
-    }
-
-    /**
-     * Show a field error for the specified field, with an error message.
-     *
-     * @param field   the field containing the error
-     * @param message the error message
-     */
-    @Override
-    public void fieldError(TextField field, String message) {
-        fieldError(field);
-        errorLabel.setVisible(true);
-        errorLabel.setText(message);
-    }
-
-    /**
-     * Show a field error for the specified field, without an error message.
-     *
-     * @param field the field containing the error
-     */
-    @Override
-    public void fieldError(TextField field) {
-        field.getStyleClass().add("field_error");
-    }
-
-    /**
-     * Reset the error status of a given field.
-     *
-     * @param field the field to reset
-     */
-    @Override
-    public void resetFieldError(TextField field) {
-        errorLabel.setVisible(false);
-        field.getStyleClass().remove("field_error");
     }
 }
