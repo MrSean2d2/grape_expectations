@@ -9,7 +9,7 @@ PRAGMA foreign_keys = OFF;
 --SPLIT
 CREATE TABLE IF NOT EXISTS VINEYARD (
     id INTEGER PRIMARY KEY,
-    name TEXT,
+    name TEXT NOT NULL,
     region TEXT,
     latitude NUMERIC,
     longitude NUMERIC,

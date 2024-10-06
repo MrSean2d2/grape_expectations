@@ -140,11 +140,6 @@ public class SearchFilterStepDefs {
     }
 
 
-    @When("the user applies filters variety “Syrah” and region “Wairarapa”")
-    public void theUserAppliesFiltersVarietySyrahAndRegionWairarapa() {
-
-    }
-
     @When("the user applies filters variety {string} and region {string}")
     public void theUserAppliesFiltersVarietyAndRegion(String variety, String region) {
         String query = wineDAO.queryBuilder("", variety, region, "0", 0.0, 800.0, 0, 100.0, false);

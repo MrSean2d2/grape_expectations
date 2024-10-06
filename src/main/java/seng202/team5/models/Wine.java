@@ -1,6 +1,5 @@
 package seng202.team5.models;
 
-import java.time.Year;
 import java.util.Objects;
 
 /**
@@ -11,13 +10,13 @@ import java.util.Objects;
 public class Wine {
     private int id;
     private String name;
-    private final String description;
-    private final int year;
-    private final int ratingValue;
-    private final double price;
+    private String description;
+    private int year;
+    private int ratingValue;
+    private double price;
     private String wineVariety;
     private String colour;
-    private final Vineyard vineyard;
+    private Vineyard vineyard;
 
     /**
      * Constructor for creating a wine object with a name,
@@ -39,8 +38,8 @@ public class Wine {
         this.description = description;
         this.year = year;
         this.ratingValue = ratingValue;
-        this.price = price;
         this.wineVariety = wineVariety;
+        this.price = price;
         this.colour = colour;
         this.vineyard = vineYard;
     }
@@ -90,6 +89,14 @@ public class Wine {
         return price;
     }
 
+    /**
+     * Sets the price of the wine.
+     *
+     * @param price the new wine to set
+     */
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     /**
      * Gets the bottled year.
@@ -100,6 +107,15 @@ public class Wine {
         return year;
     }
 
+    /**
+     * Sets the bottled year.
+     *
+     * @param year the year
+     */
+    public void setYear(int year) {
+        this.year = year;
+    }
+
 
     /**
      * Gets the wine's rating value.
@@ -108,6 +124,15 @@ public class Wine {
      */
     public int getRating() {
         return ratingValue;
+    }
+
+    /**
+     * Sets the wine rating.
+     *
+     * @param rating the rating
+     */
+    public void setRating(int rating) {
+        this.ratingValue = rating;
     }
 
 
@@ -130,6 +155,10 @@ public class Wine {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 
     /**
      * Gets the wine vineyard.
@@ -138,6 +167,10 @@ public class Wine {
      */
     public Vineyard getVineyard() {
         return vineyard;
+    }
+
+    public void setVineyard(Vineyard vineyard) {
+        this.vineyard = vineyard;
     }
 
 
@@ -150,6 +183,14 @@ public class Wine {
         return wineVariety;
     }
 
+    /**
+     * set the variety name of a wine.
+     *
+     * @param unknownVariety string value to save as variety name
+     */
+    public void setVariety(String unknownVariety) {
+        this.wineVariety = unknownVariety;
+    }
 
     /**
      * Gets the wine's colour.
@@ -233,43 +274,7 @@ public class Wine {
                 (Objects.equals(vineyard.getName(), wine.vineyard.getName()));
     }
 
-    /**
-     * set the variety name of a wine.
-     *
-     * @param unknownVariety string value to save as variety name
-     */
-    public void setVariety(String unknownVariety) {
-        wineVariety = unknownVariety;
-    }
 
 
-    /**
-     * checks if a wine has valid values for its attributes.
-     * eg: year and price aren't 0
-     *
-     * @return boolean whether given wine is valid enough to be added to database
-     */
-    public boolean isValidWine() {
-        //wine must have a name
-        if (name.isEmpty()) {
-            return false;
-        }
-        //description can be empty
-        int currentYear = Year.now().getValue(); //gets current year for future-proofing
-        if (year < 1700 | year > currentYear) { //1700 is arbitrary boundary
-            return false;
-        }
-        if (ratingValue < 0 | ratingValue > 100) {
-            return false;
-        }
-        if (price < 0) {
-            return false;
-        }
-        if (wineVariety.isEmpty()) {
-            wineVariety = "Unknown Variety";
-        }
-        return true;
-
-    }
 
 }

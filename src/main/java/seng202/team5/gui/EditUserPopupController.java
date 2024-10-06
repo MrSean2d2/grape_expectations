@@ -12,12 +12,15 @@ import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
 import seng202.team5.services.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A controller for the edit user window.
  *
  * @author Sean Reitsma
  */
-public class EditUserPopupController {
+public class EditUserPopupController extends PageController {
 
     @FXML
     private PasswordField confPasswordField;
@@ -40,6 +43,7 @@ public class EditUserPopupController {
     @FXML
     private Button closeButton;
     private User curUser;
+    private static List<EditUserPopupController> openInstances = new ArrayList<>();
     private boolean editingCurrentUser;
 
     @FXML
@@ -51,10 +55,13 @@ public class EditUserPopupController {
         roleComboBox.setDisable(editingCurrentUser);
         roleComboBox.getItems().setAll(Role.values());
         roleComboBox.getSelectionModel().select(curUser.getRole());
+
+        openInstances.add(this);
     }
 
     @FXML
     private void close() {
+        openInstances.remove(this);
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
@@ -86,6 +93,15 @@ public class EditUserPopupController {
             close();
         }
 
+    }
+    /**
+     * Closes all open instances of detailed view pages
+     */
+    @FXML
+    public static void closeAll(){
+        for(EditUserPopupController instance : new ArrayList<>(openInstances)) {
+            instance.close();
+        }
     }
 
 }

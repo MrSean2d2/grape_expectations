@@ -64,6 +64,32 @@ public class VineyardDAOTest {
         Assertions.assertEquals(toAdd.getName(), vineyard.getName());
     }
 
+    /**
+     * Test that a vineyard with a blank name doesn't get added.
+     */
+    @Test
+    public void testAddVineyardBlankName() {
+        Vineyard toAdd = new Vineyard("", "region1");
+        int id = vineyardDAO.add(toAdd);
+        Assertions.assertEquals(-1, id);
+        Assertions.assertEquals(0, vineyardDAO.getAll().size());
+    }
+
+    /**
+     * Test that a vineyard with a blank region <em>does</em> get added.
+     * Not sure if this is desirable but this is currently the expected behaviour.
+     */
+    @Test
+    public void testAddVineyardBlankRegion() {
+        Vineyard toAdd = new Vineyard("vineyard", "");
+        int id = vineyardDAO.add(toAdd);
+        toAdd.setId(id);
+        Assertions.assertNotEquals(-1, id);
+        List<Vineyard> vineyards = vineyardDAO.getAll();
+        Assertions.assertEquals(1, vineyards.size());
+        Assertions.assertEquals(vineyards.getFirst(), toAdd);
+    }
+
 
     /**
      * Test deleting a vineyard.
@@ -133,6 +159,20 @@ public class VineyardDAOTest {
         vineyardDAO.add(vineyard2);
         List<String> regions = vineyardDAO.getRegions();
         Assertions.assertEquals(1, regions.size());
+    }
+
+    /**
+     * Tests retrieving distinct vineyard names.
+     */
+    @Test
+    public void testGetNamesDistinct() {
+        Vineyard vineyard1 = new Vineyard("Vineyard 1", "A region");
+        Vineyard vineyard2 = new Vineyard("Vineyard 1", "Another region");
+        vineyardDAO.add(vineyard1);
+        vineyardDAO.add(vineyard2);
+        List<String> names = vineyardDAO.getDistinctNames();
+        Assertions.assertEquals(1, names.size());
+        Assertions.assertEquals("Vineyard 1", names.getFirst());
     }
 
     /**

@@ -108,6 +108,10 @@ public class AccountManagePageController extends PageController {
      * signs the user out and swaps to log in page.
      */
     private void signOutUserInstance() {
+        DetailedViewPageController.closeAll();
+        EditWinePopupController.closeAll();
+        EditUserPopupController.closeAll();
+
         UserService.getInstance().signOut();
         swapPage("/fxml/LoginPage.fxml");
     }
