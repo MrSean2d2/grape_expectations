@@ -511,13 +511,13 @@ public class DetailedViewPageController extends PageController implements Closab
     }
 
     /**
-     * Closes the page.
+     * Closes the page and updates the review if necessary.
      */
     public void close() {
 
         try {
             if (UserService.getInstance().getCurrentUser() != null) {
-                if(assignedTagsDAO!= null) {
+                if (assignedTagsDAO != null) {
 
                     assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
 
@@ -528,7 +528,8 @@ public class DetailedViewPageController extends PageController implements Closab
 
                     // Add to assigned tags db
                     for (Tag tag : tagsList) {
-                        assignedTagsDAO.add(new AssignedTag(tag.getTagId(), userId, selectedWineId));
+                        assignedTagsDAO.add(new AssignedTag(tag.getTagId(),
+                                userId, selectedWineId));
                     }
                 }
             }

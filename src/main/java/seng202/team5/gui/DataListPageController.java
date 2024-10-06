@@ -29,11 +29,8 @@ import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
-import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.VineyardService;
 import seng202.team5.services.WineService;
-
-
 
 /**
  * Controller for the Data List Page.
@@ -192,17 +189,20 @@ public class DataListPageController extends PageController {
      */
     private void initializeSliderListeners() {
         priceRangeSlider.setOnMouseReleased(event -> {
-            maxPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getHighValue()));
+            maxPriceFilter = Float.parseFloat(
+                    String.format("%.1f", priceRangeSlider.getHighValue()));
             applySearchFilters();
         });
 
         priceRangeSlider.setOnMouseReleased(event -> {
-            minPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getLowValue()));
+            minPriceFilter = Float.parseFloat(
+                    String.format("%.1f", priceRangeSlider.getLowValue()));
             applySearchFilters();
         });
 
         ratingSlider.setOnMouseReleased(event -> {
-            minRatingFilter = Float.parseFloat(String.format("%.1f", ratingSlider.getValue()));
+            minRatingFilter = Float.parseFloat(
+                    String.format("%.1f", ratingSlider.getValue()));
             applySearchFilters();
         });
     }
@@ -234,18 +234,17 @@ public class DataListPageController extends PageController {
      * Sets filters, sliders, and labels to default values.
      */
     private void setDefaults() {
-        int minRating, maxRating;
-        int minPrice, maxPrice;
-
-        minRating = (int) (10*(Math.floor((double) wineDAO.getMinRating()/10)));
-        maxRating = (int) (10*(Math.ceil((double) wineDAO.getMaxRating()/10)));
-
-        minPrice = (int) (5*(Math.floor((double) wineDAO.getMinPrice()/5)));
-        maxPrice = (int) (5*(Math.ceil((double) wineDAO.getMaxPrice()/5)));
-
+        // Update the min / max values of the sliders
+        int minRating = (int) (10 * (Math.floor((double) wineDAO.getMinRating() / 10)));
         ratingSlider.setMin(minRating);
+
+        int maxRating = (int) (10 * (Math.ceil((double) wineDAO.getMaxRating() / 10)));
         ratingSlider.setMax(maxRating);
+
+        int minPrice = (int) (5 * (Math.floor((double) wineDAO.getMinPrice() / 5)));
         priceRangeSlider.setMin(minPrice);
+
+        int maxPrice = (int) (5 * (Math.ceil((double) wineDAO.getMaxPrice() / 5)));
         priceRangeSlider.setMax(maxPrice);
 
         // Set the initial values

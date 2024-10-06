@@ -1,28 +1,30 @@
 package seng202.team5.services;
 
-import seng202.team5.gui.ClosableWindow;
 
 import java.util.ArrayList;
 import java.util.List;
+import seng202.team5.gui.ClosableWindow;
 
 /**
- * Service class to keeps track of open pop-up windows across the application
+ * Service class to keeps track of open pop-up windows across the application.
+ *
+ * @author Caitlin Tam
  */
-
 public class OpenWindowsService {
 
     private static OpenWindowsService instance;
     private List<ClosableWindow> openWindows;
 
     /**
-     * Constructor ot initialise list of open windows
+     * Constructor ot initialise list of open windows.
      */
     private OpenWindowsService() {
         this.openWindows = new ArrayList<>();
     }
 
     /**
-     * Initialise OpenWindowsService
+     * Initialise OpenWindowsService.
+     *
      * @return instance of OpenWindowsService
      */
     public static OpenWindowsService getInstance() {
@@ -33,7 +35,8 @@ public class OpenWindowsService {
     }
 
     /**
-     * Add single window to open windows list
+     * Add single window to open windows list.
+     *
      * @param thisWindow newly opened window
      */
     public void addWindow(ClosableWindow thisWindow) {
@@ -42,20 +45,21 @@ public class OpenWindowsService {
     }
 
     /**
-     * Remove single instance of window from open windows list
+     * Remove single instance of window from open windows list.
+     *
      * @param thisWindow window to close
      */
-    public void closeWindow(ClosableWindow thisWindow){
+    public void closeWindow(ClosableWindow thisWindow) {
         System.out.println(openWindows);
         openWindows.remove(thisWindow);
     }
 
     /**
-     * Close all open Windows
+     * Close all open Windows.
      */
-    public void closeAllWindows(){
+    public void closeAllWindows() {
         List<ClosableWindow> windowsCopy = new ArrayList<>(openWindows);
-        for (ClosableWindow window: windowsCopy){
+        for (ClosableWindow window : windowsCopy) {
             window.closeWindow();
         }
     }

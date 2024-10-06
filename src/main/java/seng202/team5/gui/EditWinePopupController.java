@@ -25,7 +25,7 @@ import seng202.team5.services.WineService;
  *
  * @author Sean Reitsma
  */
-public class EditWinePopupController extends PageController implements ClosableWindow{
+public class EditWinePopupController extends PageController implements ClosableWindow {
 
     @FXML
     private Button closeButton;

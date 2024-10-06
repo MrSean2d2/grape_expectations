@@ -23,7 +23,7 @@ public class PageController {
      * @param fxml the path to the file
      */
     public void swapPage(String fxml) {
-        if(headerController != null) {
+        if (headerController != null) {
             try {
                 headerController.loadPage(fxml);
             } catch (Exception e) {
@@ -36,7 +36,7 @@ public class PageController {
      * Add a notification to the main page.
      */
     public void addNotification(String text, String col) {
-        if(headerController != null) {
+        if (headerController != null) {
             headerController.addNotification(text, col);
         }
     }
