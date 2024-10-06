@@ -178,6 +178,7 @@ public class DetailedViewPageController extends PageController {
 
             // Done Loading Tags
             logInMessageLabel.setText("");
+            ratingStars.setVisible(true );
             addTagLabel.setText("");
             if (review != null) {
                 notesTextArea.setText(review.getNotes());
@@ -190,6 +191,7 @@ public class DetailedViewPageController extends PageController {
             notesTextArea.setEditable(true);
         } else {
             logInMessageLabel.setText("Log in to save your notes!");
+            ratingStars.setVisible(false);
             addTagLabel.setText("Log in to add tags!");
             favoriteToggleButton.setDisable(true);
             saveNotesButton.setDisable(true);

@@ -49,9 +49,12 @@ public class DashboardService {
             Vineyard vineyard = wine.getVineyard();
 
             // Add to maps
-            varietyMap.merge(wine.getWineVariety(), review.getRating(), Integer::sum);
-            regionMap.merge(vineyard.getRegion(), review.getRating(), Integer::sum);
-            yearMap.merge(wine.getYear(), review.getRating(), Integer::sum);
+            if (review.getRating() != -1){
+                varietyMap.merge(wine.getWineVariety(), review.getRating(), Integer::sum);
+                regionMap.merge(vineyard.getRegion(), review.getRating(), Integer::sum);
+                yearMap.merge(wine.getYear(), review.getRating(), Integer::sum);
+            }
+
         }
 
     }
