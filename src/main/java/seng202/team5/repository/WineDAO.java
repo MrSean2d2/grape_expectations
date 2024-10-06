@@ -365,6 +365,27 @@ public class WineDAO implements DAOInterface<Wine> {
     }
 
     /**
+     * get the colour of a given variety by finding the colour of the first list item in that variety
+     */
+    public List<String> getColourFromVariety(String givenVariety) {
+        List<String> colours = new ArrayList<>();
+        String sql = "SELECT DISTINCT colour FROM WINE WHERE variety = ?;";
+
+        try (Connection conn = databaseService.connect();
+             PreparedStatement prepstatement = conn.prepareStatement(sql)) {
+            prepstatement.setString(1, givenVariety);
+            ResultSet rs = prepstatement.executeQuery();
+            while (rs.next()) {
+                colours.add(rs.getString("colour"));
+            }
+            return colours;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+    /**
      * Gets list of different years of wine.
      *
      * @return list of years
@@ -477,7 +498,7 @@ public class WineDAO implements DAOInterface<Wine> {
      * @param year to filter
      * @return sql string
      */
-    public String queryBuilder(String search, String variety, String region, String year,
+    public String queryBuilder(String search, String variety, String colour, String region, String year,
                                double minPrice, double maxPrice, double minRating,
                                double maxRating, boolean favourite) {
         String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "

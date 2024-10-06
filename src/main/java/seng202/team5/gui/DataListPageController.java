@@ -44,6 +44,8 @@ public class DataListPageController extends PageController {
     public ComboBox<String> regionComboBox;
     @FXML
     public ComboBox<String> varietyComboBox;
+    @FXML
+    public ComboBox<String> colourComboBox;
 
     @FXML
     public Slider ratingSlider;
@@ -86,6 +88,7 @@ public class DataListPageController extends PageController {
 
     private String yearFilter;
     private String varietyFilter;
+    private String colourFilter;
     private String regionFilter;
     private double minPriceFilter;
     private double maxPriceFilter;
@@ -223,6 +226,22 @@ public class DataListPageController extends PageController {
                 FXCollections.observableArrayList(varietyOptions);
         observableVarietyList.addFirst("Variety");
         varietyComboBox.setItems(observableVarietyList);
+
+        setColourComboBox();
+
+    }
+
+    public void setColourComboBox() {
+        List<String> colourOptions;
+        if (varietyFilter.equals("0")) {//variety filter still at default value
+            colourOptions = List.of(new String[]{"Red", "Rosé", "White"});
+        } else {
+            colourOptions = wineDAO.getColourFromVariety(varietyFilter);
+        }
+        ObservableList<String> observableColourList =
+                FXCollections.observableArrayList(colourOptions);
+        observableColourList.addFirst("Colour");
+        colourComboBox.setItems(observableColourList);
     }
 
     /**
@@ -240,6 +259,7 @@ public class DataListPageController extends PageController {
         ratingSliderValue.setText(String.valueOf(wineDAO.getMinRating()));
         this.yearFilter = "0";
         this.varietyFilter = "0";
+        this.colourFilter = "0";
         this.regionFilter = "0";
         this.minPriceFilter = 0.0;
         this.maxPriceFilter = 800.0;
@@ -263,7 +283,7 @@ public class DataListPageController extends PageController {
      * Apply search and filters and updates table.
      */
     public void applySearchFilters() {
-        String sql = wineDAO.queryBuilder(searchTextField.getText(), varietyFilter, regionFilter,
+        String sql = wineDAO.queryBuilder(searchTextField.getText(), varietyFilter, colourFilter, regionFilter,
                 yearFilter, minPriceFilter, maxPriceFilter, minRatingFilter,
                 maxRatingFilter, favouriteFilter);
         List<Wine> queryResults = wineDAO.executeSearchFilter(sql, searchTextField.getText());
@@ -286,11 +306,24 @@ public class DataListPageController extends PageController {
 
     /**
      * Handles action of Variety filter selected.
+     * updates colour combobox if necessary
      */
     public void onVarietyComboBoxClicked() {
         String selectedVariety = String.valueOf(varietyComboBox.getValue());
         if (!(Objects.equals(selectedVariety, "Variety") || selectedVariety == null)) {
             varietyFilter = selectedVariety;
+        }
+        applySearchFilters();
+        setColourComboBox();
+    }
+
+    /**
+     * Handles action of Colour filter selected.
+     */
+    public void onColourComboBoxClicked() {
+        String selectedColour = String.valueOf(colourComboBox.getValue());
+        if (!(Objects.equals(selectedColour, "Colour") || selectedColour == null)) {
+            colourFilter = selectedColour;
         }
         applySearchFilters();
     }
@@ -342,6 +375,7 @@ public class DataListPageController extends PageController {
         ObservableList<Wine> observableWines = FXCollections.observableArrayList(wineDAO.getAll());
         wineTable.setItems(observableWines);
         varietyComboBox.setValue(varietyComboBox.getItems().getFirst());
+        colourComboBox.setValue(colourComboBox.getItems().getFirst());
         regionComboBox.setValue(regionComboBox.getItems().getFirst());
         yearComboBox.setValue(yearComboBox.getItems().getFirst());
 
