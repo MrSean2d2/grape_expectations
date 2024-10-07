@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -155,7 +156,15 @@ public class DetailedViewPageController extends PageController {
             addTagLabel.setText("Log in to add tags!");
             notesTextArea.setEditable(false);
         }
-
+        // listener for window closing
+        Platform.runLater(() -> {
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            if (stage != null) {
+                stage.setOnCloseRequest(event -> {
+                    close();
+                });
+            }
+        });
     }
 
     /**
