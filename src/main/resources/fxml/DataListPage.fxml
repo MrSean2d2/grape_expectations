@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import org.controlsfx.control.RangeSlider?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.controlsfx.control.*?>
 
-<GridPane alignment="TOP_CENTER" prefHeight="877.0" prefWidth="921.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+<GridPane alignment="TOP_CENTER" prefHeight="877.0" prefWidth="921.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
     </columnConstraints>
@@ -25,7 +15,7 @@
         <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="179.99999237060547" minHeight="100.0" prefHeight="112.00000508626303" vgrow="NEVER" />
         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="568.0" vgrow="ALWAYS" />
-      <RowConstraints maxHeight="-Infinity" minHeight="20.0" prefHeight="20.0" vgrow="ALWAYS" />
+        <RowConstraints maxHeight="-Infinity" minHeight="20.0" prefHeight="20.0" vgrow="ALWAYS" />
     </rowConstraints>
     <children>
         <GridPane maxWidth="1000.0" prefHeight="129.0" prefWidth="1000.0" GridPane.halignment="CENTER" GridPane.rowIndex="1">
@@ -125,11 +115,7 @@
                                     </cursor>
                                 </Slider>
                                 <Label alignment="CENTER" ellipsisString="---" prefHeight="17.0" prefWidth="111.0" text="Minimum Rating" textOverrun="CLIP" GridPane.halignment="CENTER" />
-                                <Label fx:id="ratingSliderValue" text="0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER">
-                                    <padding>
-                                        <Insets right="10.0" />
-                                    </padding>
-                                </Label>
+                                <TextField fx:id="ratingSliderValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
                             </children>
                         </GridPane>
                         <GridPane prefHeight="50.0" prefWidth="208.0" GridPane.columnIndex="3">
@@ -149,17 +135,9 @@
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
                                 </RangeSlider>
-                                <Label fx:id="maxPriceLabel" minHeight="-Infinity" minWidth="-Infinity" text="0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER">
-                                    <padding>
-                                        <Insets right="10.0" />
-                                    </padding>
-                                </Label>
                                 <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Price Range" GridPane.halignment="CENTER" />
-                                <Label fx:id="minPriceLabel" text="0" GridPane.rowSpan="2" GridPane.valignment="CENTER">
-                                    <padding>
-                                        <Insets left="7.0" />
-                                    </padding>
-                                </Label>
+                        <TextField fx:id="minPriceValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" GridPane.rowSpan="2" />
+                        <TextField fx:id="maxPriceValue" alignment="CENTER" layoutX="10.0" layoutY="12.0" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" />
                             </children>
                         </GridPane>
                         <ComboBox fx:id="regionComboBox" onAction="#onRegionComboBoxClicked" prefHeight="24.0" prefWidth="148.0" promptText="Region" styleClass="dropdown" GridPane.columnIndex="1" GridPane.halignment="CENTER">
@@ -191,16 +169,16 @@
                 </cursor>
             </TableView>
         </VBox>
-      <GridPane maxWidth="1000.0" prefHeight="123.0" prefWidth="901.0" GridPane.halignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="767.0" prefWidth="765.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="442.0" minWidth="10.0" prefWidth="136.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints vgrow="SOMETIMES" />
-          <RowConstraints minHeight="80.0" prefHeight="123.0" vgrow="ALWAYS" />
-        </rowConstraints>
-         <children>
+        <GridPane maxWidth="1000.0" prefHeight="123.0" prefWidth="901.0" GridPane.halignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="767.0" prefWidth="765.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="442.0" minWidth="10.0" prefWidth="136.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints minHeight="80.0" prefHeight="123.0" vgrow="ALWAYS" />
+            </rowConstraints>
+            <children>
                 <Label style="-fx-font-weight: 700;" text="Wine Database">
                     <font>
                         <Font size="24.0" />
@@ -208,30 +186,30 @@
                     <padding>
                         <Insets left="10.0" right="10.0" />
                     </padding>
-               <GridPane.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </GridPane.margin>
+                    <GridPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </GridPane.margin>
                 </Label>
-            <Button fx:id="addWineButton" mnemonicParsing="false" text="+" visible="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
-               <GridPane.margin>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-               </GridPane.margin>
-            </Button>
+                <Button fx:id="addWineButton" mnemonicParsing="false" text="+" visible="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+                    <GridPane.margin>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                    </GridPane.margin>
+                </Button>
                 <Label maxWidth="765.0" prefWidth="765.0" text="Here you can see a list of the wines currently in the database and filter them! Double click on a wine to view more information about it!" wrapText="true" GridPane.rowIndex="1">
                     <font>
                         <Font size="18.0" />
                     </font>
-               <padding>
-                  <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
+                    <padding>
+                        <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
                 </Label>
-         </children>
-      </GridPane>
-      <Label fx:id="tableResults" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1000.0" minWidth="800.0" prefHeight="16.0" prefWidth="1000.0" text="Label" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
-      </Label>
+            </children>
+        </GridPane>
+        <Label fx:id="tableResults" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1000.0" minWidth="800.0" prefHeight="16.0" prefWidth="1000.0" text="Label" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
+            <GridPane.margin>
+                <Insets />
+            </GridPane.margin>
+        </Label>
     </children>
     <padding>
         <Insets bottom="50.0" left="10.0" right="10.0" top="50.0" />
