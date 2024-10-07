@@ -213,6 +213,17 @@ public class DashboardPageController extends PageController {
         pieChart.setClockwise(true);
         pieChart.setStartAngle(180);
         pieChart.setLabelsVisible(true);
+
+        for (final PieChart.Data data: pieChart.getData()) {
+            double total = pieChart.getData().stream().mapToDouble(PieChart.Data::getPieValue).sum();
+            pieChart.getData().forEach( pieData->{
+                String percentage = String.format("%.2f%%", ((pieData.getPieValue()/total)*100));
+                Tooltip tooltip = new Tooltip(percentage);
+                Tooltip.install(pieData.getNode(), tooltip);
+            });
+
+        }
+
     }
 
 }
