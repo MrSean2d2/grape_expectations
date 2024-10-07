@@ -30,7 +30,7 @@ public class PageController {
      * @param fxml the path to the file
      */
     public void swapPage(String fxml) {
-        if(headerController != null) {
+        if (headerController != null) {
             try {
                 headerController.loadPage(fxml);
             } catch (Exception e) {
@@ -43,7 +43,7 @@ public class PageController {
      * Add a notification to the main page.
      */
     public void addNotification(String text, String col) {
-        if(headerController != null) {
+        if (headerController != null) {
             headerController.addNotification(text, col);
         }
     }
@@ -55,6 +55,12 @@ public class PageController {
         return this.headerController;
     }
 
+    /**
+     * Open the popup to edit a user password.
+     *
+     * @param closable whether the popup should allow the user to close it
+     * @param owner the window opening the popup
+     */
     public void openEditPasswordPopup(boolean closable, Window owner) {
         try {
             FXMLLoader editPasswordLoader = new FXMLLoader(
