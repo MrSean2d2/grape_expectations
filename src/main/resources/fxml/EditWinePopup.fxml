@@ -147,8 +147,8 @@
                         <Insets bottom="10.0" left="20.0" right="20.0" top="5.0" />
                      </GridPane.margin>
                   </Button>
-                  <Label fx:id="yearErrorLabel" styleClass="label_error" text="Label" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-                  <Label fx:id="priceErrorLabel" styleClass="label_error" text="Label" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+                  <Label fx:id="yearErrorLabel" styleClass="label_error" text="Label" visible="false" wrapText="true" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                  <Label fx:id="priceErrorLabel" styleClass="label_error" text="Label" visible="false" wrapText="true" GridPane.columnIndex="6" GridPane.rowIndex="3" />
                   <Label text="Region:" GridPane.columnIndex="3" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
