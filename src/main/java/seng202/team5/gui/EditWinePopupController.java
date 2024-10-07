@@ -81,11 +81,19 @@ public class EditWinePopupController extends PageController {
 
 
     /**
-     * Init rating slider to use integer values. Also bind the rating field
-     * to the slider.
+     * Set the rating value and initialise the slider.
      */
     private void initRating() {
         ratingSlider.setValue(wine.getRating());
+        initRatingSlider();
+
+    }
+
+    /**
+     * Init rating slider to use integer values. Also bind the rating field
+     * to the slider.
+     */
+    private void initRatingSlider() {
         ratingSlider.valueProperty().addListener((obs, oldVal, newVal) ->
                 ratingSlider.setValue(newVal.intValue()));
         StringConverter<Number> stringConverter = new NumberStringConverter();
@@ -142,6 +150,8 @@ public class EditWinePopupController extends PageController {
             initRating();
             initFields();
         } else {
+            ratingSlider.setValue(0);
+            initRatingSlider();
             actionLabel.setText("Add wine: ");
             wineLabel.setVisible(false);
         }
@@ -199,6 +209,12 @@ public class EditWinePopupController extends PageController {
     }
 
 
+    /**
+     * Turns the year field into an int. Returns 0 and shows an error if parsing
+     * fails.
+     *
+     * @return the year
+     */
     private int validateYear() {
         int year = 0;
         try {
@@ -209,6 +225,12 @@ public class EditWinePopupController extends PageController {
         return year;
     }
 
+    /**
+     * Turns the price field into an int. Returns 0 and shows an error if parsing
+     * fails.
+     *
+     * @return the price
+     */
     private double validatePrice() {
         double price = 0;
         try {
@@ -219,6 +241,9 @@ public class EditWinePopupController extends PageController {
         return price;
     }
 
+    /**
+     * Reset the error state and hide all the error labels.
+     */
     private void resetErrors() {
         isWineValid = true;
         priceErrorLabel.setVisible(false);
@@ -229,6 +254,10 @@ public class EditWinePopupController extends PageController {
         vineyardField.getStyleClass().remove("field_error");
     }
 
+    /**
+     * Submit the form, perform error validation and edit the wine, updating the
+     * database if everything is valid.
+     */
     @FXML
     private void submit() {
         resetErrors();
@@ -269,6 +298,14 @@ public class EditWinePopupController extends PageController {
         }
     }
 
+    /**
+     * Validate the fields which need validating using WineService and show error
+     * messages if any are invalid.
+     *
+     * @param name the name field (shouldn't be blank)
+     * @param year the year field (shouldn't be in the future or ridiculously old)
+     * @param price the price field (shouldn't be negative)
+     */
     private void showErrors(String name, int year, double price) {
         if (!wineService.validName(name)) {
             fieldError(nameField);
@@ -281,4 +318,25 @@ public class EditWinePopupController extends PageController {
         }
     }
 
+    /**
+     * Get the minimum height for this window. Use this to set the stage minimum
+     * height.
+     *
+     * @return the min height
+     */
+    public int getMinHeight() {
+        int minHeight = 486;
+        return minHeight;
+    }
+
+    /**
+     * Get the minimum width for this window. Use this to set the stage minimum
+     * width.
+     *
+     * @return the min width
+     */
+    public int getMinWidth() {
+        int minWidth = 762;
+        return minWidth;
+    }
 }
