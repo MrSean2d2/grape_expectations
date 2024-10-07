@@ -1,6 +1,5 @@
 package seng202.team5.gui;
 
-import java.util.ArrayList;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,6 +16,7 @@ import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
+import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.VineyardService;
 import seng202.team5.services.WineService;
 
@@ -25,7 +25,7 @@ import seng202.team5.services.WineService;
  *
  * @author Sean Reitsma
  */
-public class EditWinePopupController extends PageController {
+public class EditWinePopupController extends PageController implements ClosableWindow {
 
     @FXML
     private Button closeButton;
@@ -76,7 +76,6 @@ public class EditWinePopupController extends PageController {
     private Wine wine;
     private boolean isWineValid = true;
 
-    private static final List<EditWinePopupController> openInstances = new ArrayList<>();
     private WineService wineService;
 
 
@@ -143,6 +142,7 @@ public class EditWinePopupController extends PageController {
      */
     @FXML
     private void initialize() {
+        OpenWindowsService.getInstance().addWindow(this);
         wineService = WineService.getInstance();
         wine = wineService.getSelectedWine();
         if (wine != null) {
@@ -160,27 +160,18 @@ public class EditWinePopupController extends PageController {
 
         initAutoComplete();
 
-        openInstances.add(this);
+
     }
 
     /**
      * Called when the close button is pressed.
      */
     @FXML
-    private void close() {
-        openInstances.remove(this);
+    @Override
+    public void closeWindow() {
+        OpenWindowsService.getInstance().closeWindow(this);
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
-    }
-
-    /**
-     * Close all windows of this type.
-     */
-    @FXML
-    public static void closeAll() {
-        for (EditWinePopupController instance : new ArrayList<>(openInstances)) {
-            instance.close();
-        }
     }
 
     /**
@@ -294,7 +285,7 @@ public class EditWinePopupController extends PageController {
                 wine.setVineyard(vineyard);
                 wineDAO.update(wine);
             }
-            close();
+            closeWindow();
         }
     }
 
