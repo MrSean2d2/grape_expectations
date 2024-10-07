@@ -1,8 +1,6 @@
 package seng202.team5.gui;
 
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import seng202.team5.models.User;
 import seng202.team5.services.UserService;
 
@@ -162,35 +162,9 @@ public class RegisterPageController extends PageController {
         }
 
         // Password validation
-        if (password.length() < 8) {
-            errorLabel.setText("Password must contain at least 8 characters!");
-            passwordField.getStyleClass().add("field_error");
-            return;
-        }
-
-        Pattern letter = Pattern.compile("[a-zA-z]");
-        Matcher hasLetter = letter.matcher(password);
-
-        if (!hasLetter.find()) {
-            errorLabel.setText("Password must contain alphanumeric characters!");
-            passwordField.getStyleClass().add("field_error");
-            return;
-        }
-
-        Pattern digit = Pattern.compile("[0-9]");
-        Matcher hasDigit = digit.matcher(password);
-
-        if (!hasDigit.find()) {
-            errorLabel.setText("Password must contain a numeric character!");
-            passwordField.getStyleClass().add("field_error");
-            return;
-        }
-
-        Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
-        Matcher hasSpecial = special.matcher(password);
-
-        if (!hasSpecial.find()) {
-            errorLabel.setText("Password must contain a special character!");
+        if (!UserService.checkPasswordValidity(password)) {
+            errorLabel.setText("Password must be between 8 and 30 characters, "
+                    + "containing letters, a number, and a special character!");
             passwordField.getStyleClass().add("field_error");
             return;
         }
@@ -218,6 +192,18 @@ public class RegisterPageController extends PageController {
             // Show error
             errorLabel.setText("Account with that username already exists!");
             usernameField.getStyleClass().add("field_error");
+        }
+    }
+
+    /**
+     * Attempt to register account if the user presses enter.
+     *
+     * @param event KeyEvent that triggered the method, pressing of a key
+     */
+    @FXML
+    private void enterPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            attemptRegister();
         }
     }
 

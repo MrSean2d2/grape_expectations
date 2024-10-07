@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.exceptions.PasswordIncorrectException;
 import seng202.team5.models.User;
@@ -139,6 +141,18 @@ public class LoginPageController extends PageController {
         } catch (PasswordIncorrectException e) {
             errorLabel.setText("Password is incorrect!");
             passwordField.getStyleClass().add("field_error");
+        }
+    }
+
+    /**
+     * Attempt to log in if the user presses enter.
+     *
+     * @param event KeyEvent that triggered the method, pressing of a key
+     */
+    @FXML
+    private void enterPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            attemptLogin();
         }
     }
 

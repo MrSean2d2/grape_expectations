@@ -5,6 +5,8 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javax.crypto.SecretKeyFactory;
@@ -271,5 +273,26 @@ public class UserService {
             throw new PasswordIncorrectException("Password incorrect");
         }
         return equals;
+    }
+
+    /**
+     * Check the validity of a password.
+     *
+     * @param password the password string to check
+     * @return whether the password was valid or not
+     */
+    public static boolean checkPasswordValidity(String password) {
+        Pattern letter = Pattern.compile("[a-zA-z]");
+        Matcher hasLetter = letter.matcher(password);
+        Pattern digit = Pattern.compile("[0-9]");
+        Matcher hasDigit = digit.matcher(password);
+        Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
+        Matcher hasSpecial = special.matcher(password);
+
+        return (password.length() >= 8
+                && password.length() <= 30
+                && hasLetter.find()
+                && hasDigit.find()
+                && hasSpecial.find());
     }
 }
