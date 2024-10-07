@@ -1,18 +1,19 @@
 package seng202.team5.services;
 
-import seng202.team5.models.Review;
-import seng202.team5.models.Vineyard;
-import seng202.team5.models.Wine;
-import seng202.team5.repository.ReviewDAO;
-import seng202.team5.repository.TagsDAO;
-import seng202.team5.repository.VineyardDAO;
-import seng202.team5.repository.WineDAO;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import seng202.team5.models.Review;
+import seng202.team5.models.Vineyard;
+import seng202.team5.models.Wine;
+import seng202.team5.repository.ReviewDAO;
+import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
 
+/**
+ * Service class for the dashboard page.
+ */
 public class DashboardService {
 
     private final int userID;
@@ -25,13 +26,11 @@ public class DashboardService {
     private Map<String, Integer> regionMap = new HashMap<>();
     private Map<Integer, Integer> yearMap = new HashMap<>();
 
-
-
-    /**
-     * Get pie chart numbers
-     */
     String sql = "SELECT Count(*) FROM __ group by ";
 
+    /**
+     * Get pie chart numbers.
+     */
     public DashboardService(int userID, VineyardDAO vineyardDAO, WineDAO wineDAO, ReviewDAO reviewDAO) {
         this.userID = userID;
         this.vineyardDAO = vineyardDAO;
@@ -40,35 +39,60 @@ public class DashboardService {
         initializeData();
     }
 
+    /**
+     * Initialise the data.
+     */
     public void initializeData() {
         userReviews = reviewDAO.getFromUser(userID);
 
         // Create a hash map for each property
-        for(Review review : userReviews) {
+        for (Review review : userReviews) {
             Wine wine = wineDAO.getOne(review.getWineId());
             Vineyard vineyard = wine.getVineyard();
 
             // Add to maps
-            if (review.getRating() != -1){
-                varietyMap.merge(wine.getWineVariety(), review.getRating(), Integer::sum);
-                regionMap.merge(vineyard.getRegion(), review.getRating(), Integer::sum);
-                yearMap.merge(wine.getYear(), review.getRating(), Integer::sum);
-            }
+            varietyMap.merge(wine.getWineVariety(), review.getRating(), Integer::sum);
+            regionMap.merge(vineyard.getRegion(), review.getRating(), Integer::sum);
+            yearMap.merge(wine.getYear(), review.getRating(), Integer::sum);
+        }
 
         }
 
     }
+
+    /**
+     * Get a list of the user's top varieties.
+     *
+     * @return a sorted list of the user's top varieties
+     */
     public List<Map.Entry<String, Integer>> getTopVariety() {
         return sortHashMap(varietyMap);
     }
+
+    /**
+     * Get a list of the user's top regions.
+     *
+     * @return a sorted list of the user's top regions
+     */
     public List<Map.Entry<String, Integer>> getTopRegion() {
         return sortHashMap(regionMap);
     }
+
+    /**
+     * Get a list of the user's top years.
+     *
+     * @return a sorted list of the user's top years
+     */
     public List<Map.Entry<Integer, Integer>> getTopYear() {
         return sortHashMap(yearMap);
     }
 
-    public List<Review> getUserReviews(){
+    /**
+     * Get a list of the user's reviews.
+     *
+     * @return a list of the user's reviews
+     */
+    public List<Review> getUserReviews() {
         return userReviews;
     }
 
@@ -78,13 +102,10 @@ public class DashboardService {
      * @param inputMap the map to search
      * @return the maximum entry if found, null otherwise.
      */
-
     public <K, V extends Comparable<V>> List<Map.Entry<K, V>> sortHashMap(Map<K, V> inputMap) {
 
         List<Map.Entry<K, V>> list = new ArrayList<>(inputMap.entrySet());
-//        System.out.println(list.getFirst().getKey());
         list.sort(Map.Entry.<K, V>comparingByValue().reversed());
-//        System.out.println(list.getFirst().getKey());
         return list;
     }
     // region pie chart
@@ -93,7 +114,7 @@ public class DashboardService {
 
 
     /**
-     * get preferences
+     * Get the user's preferences.
      */
     // top region
     // top variety

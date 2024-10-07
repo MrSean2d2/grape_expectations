@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.exceptions.PasswordIncorrectException;
 import seng202.team5.models.User;
+import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 
 /**
@@ -125,6 +126,9 @@ public class LoginPageController extends PageController {
                 userManager.setCurrentUser(user);
                 usernameField.setText("");
                 passwordField.setText("");
+
+                // Close any open popup windows
+                OpenWindowsService.getInstance().closeAllWindows();
 
                 // Go to the homepage
                 swapPage("/fxml/AccountManagePage.fxml");

@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.RangeSlider?>
 
-<GridPane alignment="TOP_CENTER" prefHeight="877.0" prefWidth="921.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+<GridPane alignment="TOP_CENTER" prefHeight="877.0" prefWidth="921.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
     </columnConstraints>
@@ -191,8 +191,16 @@
                 </cursor>
             </TableView>
         </VBox>
-        <VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefWidth="1000.0" GridPane.halignment="CENTER" GridPane.vgrow="SOMETIMES">
-            <children>
+      <GridPane maxWidth="1000.0" prefHeight="123.0" prefWidth="901.0" GridPane.halignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="767.0" prefWidth="765.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="442.0" minWidth="10.0" prefWidth="136.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints vgrow="SOMETIMES" />
+          <RowConstraints minHeight="80.0" prefHeight="123.0" vgrow="ALWAYS" />
+        </rowConstraints>
+         <children>
                 <Label style="-fx-font-weight: 700;" text="Wine Database">
                     <font>
                         <Font size="24.0" />
@@ -200,20 +208,25 @@
                     <padding>
                         <Insets left="10.0" right="10.0" />
                     </padding>
+               <GridPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </GridPane.margin>
                 </Label>
-                <Label text="Here you can see a list of the wines currently in the database and filter them! Double click on a wine to view more information about it!" wrapText="true">
-                    <padding>
-                        <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
-                    </padding>
+            <Button fx:id="addWineButton" mnemonicParsing="false" text="+" visible="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+               </GridPane.margin>
+            </Button>
+                <Label maxWidth="765.0" prefWidth="765.0" text="Here you can see a list of the wines currently in the database and filter them! Double click on a wine to view more information about it!" wrapText="true" GridPane.rowIndex="1">
                     <font>
                         <Font size="18.0" />
                     </font>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
+               <padding>
+                  <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
                 </Label>
-            </children>
-        </VBox>
+         </children>
+      </GridPane>
       <Label fx:id="tableResults" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1000.0" minWidth="800.0" prefHeight="16.0" prefWidth="1000.0" text="Label" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
          <GridPane.margin>
             <Insets />
