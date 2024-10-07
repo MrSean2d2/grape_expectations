@@ -13,8 +13,6 @@ import seng202.team5.gui.ClosableWindow;
  * @author Caitlin Tam
  */
 public class OpenWindowsService {
-    private static final Logger log = LogManager.getLogger(OpenWindowsService.class);
-
     private static OpenWindowsService instance;
     private final List<ClosableWindow> openWindows;
 
