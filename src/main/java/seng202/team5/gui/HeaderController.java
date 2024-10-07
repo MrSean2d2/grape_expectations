@@ -176,6 +176,8 @@ public class HeaderController {
             createScene.cancel(true);
         }
 
+        setHeaderInteractionEnabled(false);
+
         // Begin a new task
         createScene = new Task<>() {
             @Override
@@ -240,10 +242,27 @@ public class HeaderController {
                 break;
         }
         // Update the scene
-        createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
+        createScene.setOnSucceeded(e -> {
+            pageContainer.getChildren().setAll(createScene.getValue());
+            setHeaderInteractionEnabled(true); // Re-enable interactions after loading
+        });
+
 
         // Begin loading
         new Thread(createScene).start();
+    }
+
+    /**
+     * Disables/enabled interaction with buttons in header.
+     *
+     * @param enabled if buttons should be enabled or disabled
+     */
+    private void setHeaderInteractionEnabled(boolean enabled) {
+        logoButton.setDisable(!enabled);
+        homeButton.setDisable(!enabled);
+        dataListButton.setDisable(!enabled);
+        mapButton.setDisable(!enabled);
+        accountButton.setDisable(!enabled);
     }
 
     /**

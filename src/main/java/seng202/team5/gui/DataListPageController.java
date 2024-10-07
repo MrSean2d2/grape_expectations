@@ -162,6 +162,7 @@ public class DataListPageController extends PageController {
         Vineyard selectedVineyard = VineyardService.getInstance().getSelectedVineyard();
         if (selectedVineyard != null) {
             searchTextField.setText(selectedVineyard.getName());
+            regionFilter = selectedVineyard.getRegion();
             VineyardService.getInstance().setSelectedVineyard(null);
             applySearchFilters();
         }
@@ -228,20 +229,17 @@ public class DataListPageController extends PageController {
      */
     private void initializeSliderListeners() {
         priceRangeSlider.setOnMouseReleased(event -> {
-            maxPriceFilter = Float.parseFloat(
-                    String.format("%.1f", priceRangeSlider.getHighValue()));
+            maxPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getHighValue()));
             applySearchFilters();
         });
 
         priceRangeSlider.setOnMouseReleased(event -> {
-            minPriceFilter = Float.parseFloat(
-                    String.format("%.1f", priceRangeSlider.getLowValue()));
+            minPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getLowValue()));
             applySearchFilters();
         });
 
         ratingSlider.setOnMouseReleased(event -> {
-            minRatingFilter = Float.parseFloat(
-                    String.format("%.1f", ratingSlider.getValue()));
+            minRatingFilter = Float.parseFloat(String.format("%.1f", ratingSlider.getValue()));
             applySearchFilters();
         });
     }
@@ -273,7 +271,6 @@ public class DataListPageController extends PageController {
      * Sets filters, sliders, and labels to default values.
      */
     private void setDefaults() {
-        // Update the min / max values of the sliders
         int minRating = (int) (10 * (Math.floor((double) wineDAO.getMinRating() / 10)));
         ratingSlider.setMin(minRating);
 

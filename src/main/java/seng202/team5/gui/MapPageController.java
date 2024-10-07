@@ -52,8 +52,6 @@ public class MapPageController extends PageController {
         vineyardColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         vineyardDAO = new VineyardDAO();
 
-        WineService.getInstance().getWineList();
-
         vineyardTable.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
                 Vineyard vineyard = vineyardTable.getSelectionModel().getSelectedItem();
