@@ -385,6 +385,24 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
+    public List<String> getVarietyFromColour(String givenColour) {
+        List<String> varieties = new ArrayList<>();
+        String sql = "SELECT DISTINCT variety FROM WINE WHERE colour = ?;";
+
+        try (Connection conn = databaseService.connect();
+             PreparedStatement prepstatement = conn.prepareStatement(sql)) {
+            prepstatement.setString(1, givenColour);
+            ResultSet rs = prepstatement.executeQuery();
+            while (rs.next()) {
+                varieties.add(rs.getString("variety"));
+            }
+            return varieties;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
     /**
      * Gets list of different years of wine.
      *
@@ -508,14 +526,17 @@ public class WineDAO implements DAOInterface<Wine> {
         if (search != null) {
             sql +=  " AND (wine.name LIKE ? OR wine.description LIKE ?) ";
         }
-        if (variety != "0") {
+        if (!Objects.equals(variety, "0")) {
             sql += " AND wine.variety = '" + variety + "'";
+        }
+        if (!Objects.equals(colour, "0")) {
+            sql += " AND wine.colour = '" + colour + "'";
         }
         if (!Objects.equals(region, "0") && region != null) {
             region = region.replace("'", "''");
             sql += " AND vineyard.region = '" + region + "'";
         }
-        if (year != "0") {
+        if (!Objects.equals(year, "0")) {
             sql += " AND wine.year = " + year;
         }
         if (maxPrice != 800.0) {
