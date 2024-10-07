@@ -12,10 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -53,8 +50,6 @@ public class DetailedViewPageController extends PageController {
     List<Tag> tagsList;
     @FXML
     private Button backButton;
-    @FXML
-    private Button favoriteToggleButton;
     @FXML
     private Label nameLabel;
     @FXML
@@ -146,17 +141,14 @@ public class DetailedViewPageController extends PageController {
             addTagLabel.setText("");
             if (review != null) {
                 notesTextArea.setText(review.getNotes());
-                updateFavoriteButton(review.isFavourite());
                 updateStarDisplay(review.getRating());
             }
 
-            favoriteToggleButton.setDisable(false);
             saveNotesButton.setDisable(false);
             notesTextArea.setEditable(true);
         } else {
             logInMessageLabel.setText("Log in to save your notes!");
             addTagLabel.setText("Log in to add tags!");
-            favoriteToggleButton.setDisable(true);
             saveNotesButton.setDisable(true);
             notesTextArea.setEditable(false);
         }
@@ -186,7 +178,7 @@ public class DetailedViewPageController extends PageController {
                     // Set the Popup to close when clicking outside
                     tagPopover.setAutoHide(true);
 
-                    VBox existingBox = ((VBox) content.lookup("#tester"));
+                    VBox existingBox = (VBox) baseLoader.getNamespace().get("existingBox");
                     List<Tag> tags = tagsDAO.getFromUser(userId);
                     List<Label> labels = new ArrayList<>();
 
@@ -397,24 +389,6 @@ public class DetailedViewPageController extends PageController {
     }
 
     /**
-     * handles the event where the toggle favorite button is pressed.
-     */
-    @FXML
-    private void handleToggleFavourite() {
-        if (UserService.getInstance().getCurrentUser() == null) {
-            close();
-        } else {
-            createReviewIfNotExists();
-
-            if (review != null) {
-                review.toggleFavourite(review.isFavourite());
-                updateFavoriteButton(review.isFavourite());
-            }
-        }
-    }
-
-
-    /**
      * Saves the notes that are currently in the text box.
      */
     @FXML
@@ -479,25 +453,5 @@ public class DetailedViewPageController extends PageController {
         star3.setImage(rating >= 3 ? filledStar : emptyStar);
         star4.setImage(rating >= 4 ? filledStar : emptyStar);
         star5.setImage(rating >= 5 ? filledStar : emptyStar);
-    }
-
-    /**
-     * Updates text of the toggle favorite button based on if the wine is favorited or not.
-     *
-     * @param isFavorited whether the wine is currently favourited
-     */
-    private void updateFavoriteButton(boolean isFavorited) {
-
-        if (UserService.getInstance().getCurrentUser() == null) {
-            close();
-        } else {
-            if (isFavorited) {
-                favoriteToggleButton.setText("Unfavourite");
-                favoriteToggleButton.setStyle("-fx-background-color: #ffdd00");
-            } else {
-                favoriteToggleButton.setText("Favourite");
-                favoriteToggleButton.setStyle(null);
-            }
-        }
     }
 }

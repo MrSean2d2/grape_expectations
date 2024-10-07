@@ -1,22 +1,15 @@
 package seng202.team5.gui;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import seng202.team5.models.*;
 import seng202.team5.repository.*;
 import seng202.team5.services.DashboardService;
@@ -44,6 +37,9 @@ public class DashboardPageController extends PageController {
     @FXML
     private VBox userListPane;
 
+    @FXML
+    private Label titleLabel;
+
     public ComboBox<String> piechartTypeComboBox;
     private DashboardService dashboardService;
     private TagsDAO tagsDAO;
@@ -57,11 +53,17 @@ public class DashboardPageController extends PageController {
     private void initialize() {
         userID = UserService.getInstance().getCurrentUser().getId();
 
+        if(userID != 0) {
+            titleLabel.setText("Hello, " + UserService.getInstance().getCurrentUser().getUsername() + "!");
+        }
 
         dashboardService = new DashboardService(userID,new VineyardDAO(), new WineDAO(new VineyardDAO()), new ReviewDAO());
 
-        if (dashboardService.getUserReviews().size()< 3) {
+        // Show error message if the user needs to rate more wines
+        int numWinesReviewed = dashboardService.getUserReviews().size();
+        if (numWinesReviewed < 5) {
             pieChart.setVisible(false);
+            notEnoughRatingsMessageLabel.setText("Rate " + (5-numWinesReviewed) + " more wine(s) to view Pie Chart Stats!");
             notEnoughRatingsMessageLabel.setVisible(true);
             piechartTypeComboBox.setDisable(true);
         } else {
@@ -73,9 +75,7 @@ public class DashboardPageController extends PageController {
 
         updatePieChartComboBox();
 
-
         piechartTypeComboBox.setTooltip(new Tooltip("Select Type Of Pie Chart"));
-
 
         // Add tables
         tagsDAO = new TagsDAO();
