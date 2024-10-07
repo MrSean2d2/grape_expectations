@@ -3,6 +3,9 @@ package seng202.team5.gui;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+/**
+ * A class to generalise password toggle logic.
+ */
 public class PasswordVisibilityController extends FormErrorController {
     /**
      * Set the visibility status of the text field passed, and inversely set the
