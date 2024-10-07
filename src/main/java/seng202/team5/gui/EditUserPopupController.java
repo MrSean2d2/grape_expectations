@@ -10,18 +10,16 @@ import javafx.stage.Stage;
 import seng202.team5.models.Role;
 import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
+import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A controller for the edit user window.
  *
  * @author Sean Reitsma
  */
-public class EditUserPopupController extends PageController {
-
+public class EditUserPopupController implements ClosableWindow {
     @FXML
     private PasswordField confPasswordField;
 
@@ -43,11 +41,12 @@ public class EditUserPopupController extends PageController {
     @FXML
     private Button closeButton;
     private User curUser;
-    private static List<EditUserPopupController> openInstances = new ArrayList<>();
     private boolean editingCurrentUser;
 
     @FXML
     private void initialize() {
+        OpenWindowsService.getInstance().addWindow(this);
+
         curUser = UserService.getInstance().getSelectedUser();
         editingCurrentUser = curUser.equals(UserService.getInstance().getCurrentUser());
         usernameLabel.setText(curUser.getUsername());
@@ -55,13 +54,12 @@ public class EditUserPopupController extends PageController {
         roleComboBox.setDisable(editingCurrentUser);
         roleComboBox.getItems().setAll(Role.values());
         roleComboBox.getSelectionModel().select(curUser.getRole());
-
-        openInstances.add(this);
     }
 
     @FXML
-    private void close() {
-        openInstances.remove(this);
+    @Override
+    public void closeWindow() {
+        OpenWindowsService.getInstance().closeWindow(this);
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
@@ -90,18 +88,9 @@ public class EditUserPopupController extends PageController {
             }
             UserDAO userDAO = new UserDAO();
             userDAO.update(curUser);
-            close();
+            closeWindow();
         }
 
-    }
-    /**
-     * Closes all open instances of detailed view pages
-     */
-    @FXML
-    public static void closeAll(){
-        for(EditUserPopupController instance : new ArrayList<>(openInstances)) {
-            instance.close();
-        }
     }
 
 }

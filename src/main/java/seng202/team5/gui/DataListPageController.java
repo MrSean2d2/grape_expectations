@@ -1,10 +1,12 @@
 package seng202.team5.gui;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,6 +23,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,10 +32,9 @@ import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
+import seng202.team5.services.UserService;
 import seng202.team5.services.VineyardService;
 import seng202.team5.services.WineService;
-
-
 
 /**
  * Controller for the Data List Page.
@@ -80,6 +82,9 @@ public class DataListPageController extends PageController {
     private Button resetSearchFilterButton;
 
     @FXML
+    private Button addWineButton;
+
+    @FXML
     private TextField searchTextField;
     @FXML
     private Label tableResults;
@@ -96,6 +101,7 @@ public class DataListPageController extends PageController {
     private boolean favouriteFilter;
     private static final Logger log = LogManager.getLogger(DataListPageController.class);
 
+
     /**
      * Initializes the data List by calling {@link seng202.team5.services.WineService}
      * to populate the list of wines.
@@ -104,6 +110,7 @@ public class DataListPageController extends PageController {
     private void initialize() {
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
+
 
         favToggleButton.setDisable(true);
         favToggleButton.setText("Coming Soon");
@@ -159,7 +166,39 @@ public class DataListPageController extends PageController {
             VineyardService.getInstance().setSelectedVineyard(null);
             applySearchFilters();
         }
+        initAdminAction();
 
+    }
+
+    private void initAdminAction() {
+        if (UserService.getInstance().getCurrentUser() != null
+                && UserService.getInstance().getCurrentUser().getIsAdmin()) {
+            addWineButton.setVisible(true);
+            addWineButton.setOnAction(this::addWine);
+        }
+    }
+
+    private void addWine(ActionEvent event) {
+        WineService.getInstance().setSelectedWine(null);
+        try {
+            FXMLLoader addWineLoader = new FXMLLoader(getClass().getResource(
+                    "/fxml/EditWinePopup.fxml"));
+            Parent root = addWineLoader.load();
+            EditWinePopupController controller = addWineLoader.getController();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setMinHeight(controller.getMinHeight());
+            stage.setMinWidth(controller.getMinWidth());
+            stage.setTitle("Add new wine");
+            String styleSheetUrl = MainWindow.styleSheet;
+            scene.getStylesheets().add(styleSheetUrl);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+            onResetSearchFilterButtonClicked();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -190,20 +229,17 @@ public class DataListPageController extends PageController {
      */
     private void initializeSliderListeners() {
         priceRangeSlider.setOnMouseReleased(event -> {
-            maxPriceFilter = Float.parseFloat(String.format(
-                    "%.1f", priceRangeSlider.getHighValue()));
+            maxPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getHighValue()));
             applySearchFilters();
         });
 
         priceRangeSlider.setOnMouseReleased(event -> {
-            minPriceFilter = Float.parseFloat(String.format(
-                    "%.1f", priceRangeSlider.getLowValue()));
+            minPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getLowValue()));
             applySearchFilters();
         });
 
         ratingSlider.setOnMouseReleased(event -> {
-            minRatingFilter = Float.parseFloat(String.format(
-                    "%.1f", ratingSlider.getValue()));
+            minRatingFilter = Float.parseFloat(String.format("%.1f", ratingSlider.getValue()));
             applySearchFilters();
         });
     }
@@ -235,19 +271,27 @@ public class DataListPageController extends PageController {
      * Sets filters, sliders, and labels to default values.
      */
     private void setDefaults() {
-        int minRating;
-        int maxRating;
-        minRating = (int) (10 * (Math.floor((double) wineDAO.getMinRating() / 10)));
-        maxRating = (int) (10 * (Math.ceil((double) wineDAO.getMaxRating() / 10)));
+        int minRating = (int) (10 * (Math.floor((double) wineDAO.getMinRating() / 10)));
+        ratingSlider.setMin(minRating);
 
-        int minPrice;
-        int maxPrice;
-        minPrice = (int) (5 * (Math.floor((double) wineDAO.getMinPrice() / 5)));
-        maxPrice = (int) (5 * (Math.ceil((double) wineDAO.getMaxPrice() / 5)));
+        int maxRating = (int) (10 * (Math.ceil((double) wineDAO.getMaxRating() / 10)));
+        ratingSlider.setMax(maxRating);
+
+        int minPrice = (int) (5 * (Math.floor((double) wineDAO.getMinPrice() / 5)));
+        priceRangeSlider.setMin(minPrice);
+
+        int maxPrice = (int) (5 * (Math.ceil((double) wineDAO.getMaxPrice() / 5)));
+        priceRangeSlider.setMax(maxPrice);
 
         ratingSlider.setMin(minRating);
+
+        int maxRating = (int) (10 * (Math.ceil((double) wineDAO.getMaxRating() / 10)));
         ratingSlider.setMax(maxRating);
+
+        int minPrice = (int) (5 * (Math.floor((double) wineDAO.getMinPrice() / 5)));
         priceRangeSlider.setMin(minPrice);
+
+        int maxPrice = (int) (5 * (Math.ceil((double) wineDAO.getMaxPrice() / 5)));
         priceRangeSlider.setMax(maxPrice);
 
         // Set the initial values
@@ -397,6 +441,8 @@ public class DataListPageController extends PageController {
 
             stage.setScene(scene);
             stage.show();
+
+
         } catch (Exception e) {
             log.error(e);
         }

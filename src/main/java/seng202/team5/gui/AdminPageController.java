@@ -13,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
+import seng202.team5.services.OpenWindowsService;
 
 /**
  * Controller for the admin page. This page allows the admin to manage users.
@@ -51,7 +52,9 @@ public class AdminPageController extends PageController {
     }
 
     @FXML
-    private void done(ActionEvent event) {
+    private void done(ActionEvent e) {
+        // Close open edit user pop ups
+        OpenWindowsService.getInstance().closeAllWindows();
         swapPage("/fxml/AccountManagePage.fxml");
     }
 
