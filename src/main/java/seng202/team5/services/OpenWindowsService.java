@@ -3,6 +3,8 @@ package seng202.team5.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import seng202.team5.gui.ClosableWindow;
 
 /**
@@ -11,9 +13,10 @@ import seng202.team5.gui.ClosableWindow;
  * @author Caitlin Tam
  */
 public class OpenWindowsService {
+    private static final Logger log = LogManager.getLogger(OpenWindowsService.class);
 
     private static OpenWindowsService instance;
-    private List<ClosableWindow> openWindows;
+    private final List<ClosableWindow> openWindows;
 
     /**
      * Constructor ot initialise list of open windows.
@@ -40,7 +43,7 @@ public class OpenWindowsService {
      * @param thisWindow newly opened window
      */
     public void addWindow(ClosableWindow thisWindow) {
-        System.out.println(openWindows);
+        log.debug(openWindows);
         openWindows.add(thisWindow);
     }
 
@@ -50,7 +53,7 @@ public class OpenWindowsService {
      * @param thisWindow window to close
      */
     public void closeWindow(ClosableWindow thisWindow) {
-        System.out.println(openWindows);
+        log.debug(openWindows);
         openWindows.remove(thisWindow);
     }
 
