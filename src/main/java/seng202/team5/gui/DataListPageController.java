@@ -153,6 +153,7 @@ public class DataListPageController extends PageController {
         setDefaults();
         System.out.println("setting filter buttons");
         setUpFilterButtons();
+        setUpTagFilter();
 
         // Initialises listeners on sliders
         initializeSliderListeners();
@@ -234,7 +235,9 @@ public class DataListPageController extends PageController {
                 FXCollections.observableArrayList(varietyOptions);
         observableVarietyList.addFirst("Variety");
         varietyComboBox.setItems(observableVarietyList);
+    }
 
+    private void setUpTagFilter() {
         if (UserService.getInstance().getCurrentUser() != null) {
             // User is logged in, set up the tag combo box
             int userId = UserService.getInstance().getCurrentUser().getId();
@@ -255,10 +258,8 @@ public class DataListPageController extends PageController {
 
         // Handle the tag selection event to filter wines
         tagComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if (newValue != null && !newValue.equals("Tags")) {
-                filterWinesByTag(newValue); // Call method to filter wines by the selected tag
-            } else {
-//                resetWineList();
+            if (newValue != null) {
+                filterWinesByTag(newValue);
             }
         });
     }
@@ -271,48 +272,45 @@ public class DataListPageController extends PageController {
     void filterWinesByTag(String selectedTag) {
         int currentUserId = UserService.getInstance().getCurrentUser().getId();
 
+        List<Integer> wineIds;
+
         if ("My Reviewed Wines".equals(selectedTag)) {
             // Show all wines that the current user has reviewed
             List<Review> userReviews = reviewDAO.getFromUser(currentUserId);
-
-            List<Integer> wineIds = userReviews.stream()
+            wineIds = userReviews.stream()
                     .map(Review::getWineId)
                     .distinct()
                     .collect(Collectors.toList());
-
-            // Fetch the wines based on the review wine IDs
-            List<Wine> reviewedWines = wineIds.stream()
-                    .map(wineDAO::getOne)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-
-            ObservableList<Wine> reviewedWineList = FXCollections.observableArrayList(reviewedWines);
-            wineTable.setItems(reviewedWineList);
+        } else if ("Tags".equals(selectedTag)) {
+            wineIds = wineDAO.getAll().stream()
+                    .map(Wine::getId)
+                    .collect(Collectors.toList()); // Returns all wineIDs
         } else {
+            // Filter reviews that contain the selected tag
             List<Review> userReviews = reviewDAO.getFromUser(currentUserId);
 
-            // Filter reviews that contain the selected tag
-            List<Review> reviewsWithTag = userReviews.stream()
+            wineIds = userReviews.stream()
                     .filter(review -> {
                         List<Tag> wineTags = tagsDAO.getFromWine(review.getWineId());
                         return wineTags.stream().anyMatch(tag -> tag.getName().equals(selectedTag));
                     })
-                    .collect(Collectors.toList());
-
-            List<Integer> wineIds = reviewsWithTag.stream()
                     .map(Review::getWineId)
                     .distinct()
                     .collect(Collectors.toList());
-
-            // Fetch the wines based on the filtered wine IDs
-            List<Wine> filteredWines = wineIds.stream()
-                    .map(wineDAO::getOne)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-
-            ObservableList<Wine> filteredWineList = FXCollections.observableArrayList(filteredWines);
-            wineTable.setItems(filteredWineList);
         }
+
+        // Fetch the wines based on the filtered wine IDs and apply other filters
+        List<Wine> filteredWines = wineDAO.getAll().stream()
+                .filter(wine -> wineIds.contains(wine.getId()))   // Tag filtering
+                .filter(wine -> varietyFilter.equals("0") || wine.getWineVariety().equals(varietyFilter))  // Variety filter
+                .filter(wine -> regionFilter.equals("0") || wine.getRegion().equals(regionFilter))  // Region filter
+                .filter(wine -> yearFilter.equals("0") || String.valueOf(wine.getYear()).equals(yearFilter))  // Year filter
+                .filter(wine -> wine.getPrice() >= minPriceFilter && wine.getPrice() <= maxPriceFilter)  // Price filter
+                .filter(wine -> wine.getRating() >= minRatingFilter)  // Rating filter
+                .collect(Collectors.toList());
+
+        ObservableList<Wine> filteredWineList = FXCollections.observableArrayList(filteredWines);
+        wineTable.setItems(filteredWineList);
     }
 
     /**
@@ -364,10 +362,18 @@ public class DataListPageController extends PageController {
         String sql = wineDAO.queryBuilder(searchTextField.getText(), varietyFilter, regionFilter,
                 yearFilter, minPriceFilter, maxPriceFilter, minRatingFilter,
                 maxRatingFilter);
+
         List<Wine> queryResults = wineDAO.executeSearchFilter(sql, searchTextField.getText());
-        ObservableList<Wine> observableQueryResults =
-                FXCollections.observableArrayList(queryResults);
-        wineTable.setItems(observableQueryResults);
+
+        // If a tag is selected, apply tag filtering as well
+        String selectedTag = tagComboBox.getValue();
+        if (!Objects.equals(selectedTag, "Tags") && selectedTag != null) {
+            filterWinesByTag(selectedTag);
+        } else {
+            ObservableList<Wine> observableQueryResults =
+                    FXCollections.observableArrayList(queryResults);
+            wineTable.setItems(observableQueryResults);
+        }
     }
 
     /**
@@ -437,7 +443,7 @@ public class DataListPageController extends PageController {
         varietyComboBox.setValue(varietyComboBox.getItems().getFirst());
         regionComboBox.setValue(regionComboBox.getItems().getFirst());
         yearComboBox.setValue(yearComboBox.getItems().getFirst());
-
+        tagComboBox.setValue(tagComboBox.getItems().getFirst());
     }
 
     /**
