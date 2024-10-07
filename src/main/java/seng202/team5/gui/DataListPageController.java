@@ -283,17 +283,6 @@ public class DataListPageController extends PageController {
         int maxPrice = (int) (5 * (Math.ceil((double) wineDAO.getMaxPrice() / 5)));
         priceRangeSlider.setMax(maxPrice);
 
-        ratingSlider.setMin(minRating);
-
-        int maxRating = (int) (10 * (Math.ceil((double) wineDAO.getMaxRating() / 10)));
-        ratingSlider.setMax(maxRating);
-
-        int minPrice = (int) (5 * (Math.floor((double) wineDAO.getMinPrice() / 5)));
-        priceRangeSlider.setMin(minPrice);
-
-        int maxPrice = (int) (5 * (Math.ceil((double) wineDAO.getMaxPrice() / 5)));
-        priceRangeSlider.setMax(maxPrice);
-
         // Set the initial values
         priceRangeSlider.setLowValue(minPrice);
         priceRangeSlider.setHighValue(maxPrice);
