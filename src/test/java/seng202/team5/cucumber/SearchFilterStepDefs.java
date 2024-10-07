@@ -26,8 +26,7 @@ public class SearchFilterStepDefs {
     @When("the user applies a year {int} filter")
     public void theUserAppliesYearFilter(int year) {
         String query =
-                wineDAO.queryBuilder("0", "0", "0", String.valueOf(year), 0.0, 800.0, 0.0, 100.0,
-                        false);
+                wineDAO.queryBuilder("0", "0", "0", String.valueOf(year), 0.0, 800.0, 0.0, 100.0);
         filteredWines = wineDAO.executeSearchFilter(query, null);
     }
 
@@ -40,7 +39,7 @@ public class SearchFilterStepDefs {
 
     @When("the user searches for {string} in the search bar")
     public void theUserSearchesForInTheSearchBar(String search) {
-        String query = wineDAO.queryBuilder(search, "0", "0", "0", 0.0, 800.0, 0.0, 100.0, false);
+        String query = wineDAO.queryBuilder(search, "0", "0", "0", 0.0, 800.0, 0.0, 100.0);
         filteredWines = wineDAO.executeSearchFilter(query, null);
     }
 
@@ -55,8 +54,7 @@ public class SearchFilterStepDefs {
     @When("the user inputs non existent search {string}")
     public void theUserInputs(String nonExistentSearch) {
         String query =
-                wineDAO.queryBuilder(nonExistentSearch, "0", "0", "0", 0.0, 800.0, 0.0, 100.0,
-                        false);
+                wineDAO.queryBuilder(nonExistentSearch, "0", "0", "0", 0.0, 800.0, 0.0, 100.0);
         filteredWines = wineDAO.executeSearchFilter(query, null);
     }
 
@@ -67,7 +65,7 @@ public class SearchFilterStepDefs {
 
     @When("the user applies a variety filter {string}")
     public void theUserAppliesVarietyFilter(String variety) {
-        String query = wineDAO.queryBuilder("0", variety, "0", "0", 0.0, 800.0, 0.0, 100.0, false);
+        String query = wineDAO.queryBuilder("0", variety, "0", "0", 0.0, 800.0, 0.0, 100.0);
         filteredWines = wineDAO.executeSearchFilter(query, null);
     }
 
@@ -82,7 +80,7 @@ public class SearchFilterStepDefs {
     @When("the user applies a minimum price range {int} and maximum price {int}")
     public void theUserAppliesMinimumPriceRangeAndMaximumPrice(int minPrice, int maxPrice) {
         String query =
-                wineDAO.queryBuilder("0", "0", "0", "0", minPrice, maxPrice, 0.0, 100.0, false);
+                wineDAO.queryBuilder("0", "0", "0", "0", minPrice, maxPrice, 0.0, 100.0);
         filteredWines = wineDAO.executeSearchFilter(query, null);
 
     }
@@ -98,8 +96,7 @@ public class SearchFilterStepDefs {
     @When("the user applies a {int} year filter minimum rating filter of {int}.")
     public void theUserAppliesaYearFilterMinimumRatingFilterOf(int year, int rating) {
         String query =
-                wineDAO.queryBuilder("0", "0", "0", String.valueOf(year), 0, 800.0, 0.0, rating,
-                        false);
+                wineDAO.queryBuilder("0", "0", "0", String.valueOf(year), 0, 800.0, 0.0, rating);
         filteredWines = wineDAO.executeSearchFilter(query, null);
     }
 
@@ -118,7 +115,7 @@ public class SearchFilterStepDefs {
             String variety, String region, int year, int minPrice, int maxPrice, int minRating,
             String search) {
         String query = wineDAO.queryBuilder(search, variety, region, String.valueOf(year), minPrice,
-                maxPrice, 0, minRating, false);
+                maxPrice, 0, minRating);
         filteredWines = wineDAO.executeSearchFilter(query, null);
     }
 
@@ -147,7 +144,7 @@ public class SearchFilterStepDefs {
 
     @When("the user applies filters variety {string} and region {string}")
     public void theUserAppliesFiltersVarietyAndRegion(String variety, String region) {
-        String query = wineDAO.queryBuilder("", variety, region, "0", 0.0, 800.0, 0, 100.0, false);
+        String query = wineDAO.queryBuilder("", variety, region, "0", 0.0, 800.0, 0, 100.0);
         filteredWines = wineDAO.executeSearchFilter(query, null);
     }
 

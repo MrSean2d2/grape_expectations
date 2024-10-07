@@ -479,7 +479,7 @@ public class WineDAO implements DAOInterface<Wine> {
      */
     public String queryBuilder(String search, String variety, String region, String year,
                                double minPrice, double maxPrice, double minRating,
-                               double maxRating, boolean favourite) {
+                               double maxRating) {
         String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
                 + "wine.rating, wine.variety, wine.price, wine.colour, "
                 + "vineyard.name AS vineyardName, vineyard.region FROM WINE, VINEYARD "

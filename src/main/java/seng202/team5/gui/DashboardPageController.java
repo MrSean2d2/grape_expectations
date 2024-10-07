@@ -125,16 +125,14 @@ public class DashboardPageController extends PageController {
         Label nameTag = new Label(name);
         nameTag.setStyle(nameTag.getStyle() + "-fx-font-weight: 700;");
         nameTag.setPadding(new Insets(5));
-        Label optionTag = new Label(String.valueOf(numWines) + " Wines");
+        Label optionTag = new Label(numWines + " Wines");
         optionTag.setAlignment(Pos.CENTER_RIGHT);
         optionTag.setMaxWidth(Double.MAX_VALUE);
         optionTag.setPadding(new Insets(5));
         HBox.setHgrow(optionTag, Priority.ALWAYS);
 
         HBox tagContainer = new HBox(nameTag, optionTag);
-
-        tagContainer.getStyleClass().add("tag");
-        tagContainer.getStyleClass().add("max-width");
+        tagContainer.getStyleClass().addAll("tag", "max-width");
 
         if (colour != -1) {
             tagContainer.getStyleClass().add(getTagLabelColour(colour));
@@ -142,14 +140,16 @@ public class DashboardPageController extends PageController {
 
         tagContainer.setStyle(tagContainer.getStyle() + "-fx-background-radius: 5;");
 
-        // Add on click
-//            newTag.setOnMouseClicked(event -> {
-//                if (!(tagsList.contains(tag)) && tagPopover.isShowing()) {
-//                    addTag(tag);
-//                    updateTags();
-//                    closePopOver();
-//                }
-//            });
+        // Set click event to pass tag name to DataListPage
+        tagContainer.setOnMouseClicked(event -> {
+            try {
+                HeaderController headerController = getHeaderController();
+                System.out.println(name);
+                headerController.loadDataListPageWithTag(name); // Pass tag name or ID to DataListPage
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         userListPane.getChildren().add(tagContainer);
     }

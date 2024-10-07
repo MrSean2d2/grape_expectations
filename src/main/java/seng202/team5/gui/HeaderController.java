@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
@@ -121,9 +123,61 @@ public class HeaderController {
      * @throws Exception if loading the page fails
      */
     @FXML
-    private void loadDataListPage() throws Exception {
+    void loadDataListPage() throws Exception {
         loadPage("/fxml/DataListPage.fxml");
     }
+
+    @FXML
+    void loadDataListPageWithTag(String tagFilter) throws Exception {
+        // Load the loading page first
+        FXMLLoader loaderSpinner = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
+        Node loader = loaderSpinner.load();
+
+        // Display the loading spinner in the container
+        pageContainer.getChildren().setAll(loader);
+
+        // Create a Task to load the DataListPage in the background
+        Task<Node> loadDataListTask = new Task<Node>() {
+            @Override
+            protected Node call() throws Exception {
+                // Load the Data List page (this will run in a background thread)
+                FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/DataListPage.fxml"));
+                Node page = baseLoader.load();
+
+                // Get the controller for the Data List page
+                DataListPageController dataListPageController = baseLoader.getController();
+
+                // Pass the tag filter to the controller
+                if (dataListPageController != null) {
+                    dataListPageController.filterWinesByTag(tagFilter);
+                    dataListPageController.setComboBoxTagSelection(tagFilter);
+                }
+
+                return page;
+            }
+        };
+
+
+        loadDataListTask.setOnSucceeded(event -> {
+            pageContainer.getChildren().setAll(loadDataListTask.getValue());
+
+            // Update the button styles
+            dataListButton.getStyleClass().add("active");
+            homeButton.getStyleClass().remove("active");
+            mapButton.getStyleClass().remove("active");
+            accountButton.getStyleClass().remove("active");
+        });
+
+
+        loadDataListTask.setOnFailed(event -> {
+            Throwable exception = loadDataListTask.getException();
+
+            System.err.println("Failed to load the Data List page: " + exception.getMessage());
+        });
+
+        new Thread(loadDataListTask).start();
+    }
+
 
 
     /**
