@@ -40,6 +40,9 @@ public class EditWinePopupController extends PageController implements ClosableW
     private TextField nameField;
 
     @FXML
+    private Label nameErrorLabel;
+
+    @FXML
     private TextField priceField;
 
     @FXML
@@ -177,14 +180,13 @@ public class EditWinePopupController extends PageController implements ClosableW
     /**
      * Show a field error and set the current wine information as invalid.
      *
-     * @param  fieldName the name of the field which has the error (to be used
-     *                   in the error message)
+     * @param  message the error message
      * @param  field the TextField containing the error
      * @param errorLabel the label to show the error message on
      */
-    private void fieldError(String fieldName, TextField field, Label errorLabel) {
+    private void fieldError(String message, TextField field, Label errorLabel) {
         field.getStyleClass().add("field_error");
-        errorLabel.setText(String.format("Invalid %s!", fieldName));
+        errorLabel.setText(message);
         errorLabel.setVisible(true);
         isWineValid = false;
     }
@@ -211,7 +213,7 @@ public class EditWinePopupController extends PageController implements ClosableW
         try {
             year = Integer.parseInt(yearField.getText());
         } catch (NumberFormatException e) {
-            fieldError("year", yearField, yearErrorLabel);
+            fieldError("Year must be a number!", yearField, yearErrorLabel);
         }
         return year;
     }
@@ -227,7 +229,7 @@ public class EditWinePopupController extends PageController implements ClosableW
         try {
             price = Double.parseDouble(priceField.getText());
         } catch (NumberFormatException e) {
-            fieldError("price", priceField, priceErrorLabel);
+            fieldError("Price must be a number", priceField, priceErrorLabel);
         }
         return price;
     }
@@ -239,6 +241,7 @@ public class EditWinePopupController extends PageController implements ClosableW
         isWineValid = true;
         priceErrorLabel.setVisible(false);
         yearErrorLabel.setVisible(false);
+        nameErrorLabel.setVisible(false);
         yearField.getStyleClass().remove("field_error");
         priceField.getStyleClass().remove("field_error");
         nameField.getStyleClass().remove("field_error");
@@ -299,13 +302,13 @@ public class EditWinePopupController extends PageController implements ClosableW
      */
     private void showErrors(String name, int year, double price) {
         if (!wineService.validName(name)) {
-            fieldError(nameField);
+            fieldError("Name can't be blank!", nameField, nameErrorLabel);
         }
         if (!wineService.validPrice(price)) {
-            fieldError("price", priceField, priceErrorLabel);
+            fieldError("Price can't be negative!", priceField, priceErrorLabel);
         }
         if (!wineService.validYear(year)) {
-            fieldError("year", yearField, yearErrorLabel);
+            fieldError("Year can't be in the future or older than 1700", yearField, yearErrorLabel);
         }
     }
 
