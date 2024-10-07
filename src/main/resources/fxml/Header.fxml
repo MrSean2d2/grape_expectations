@@ -75,61 +75,61 @@
                     </graphic>
                 </Button>
                 <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefWidth="900.0" spacing="10.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS">
-                    <children>
-                        <Button fx:id="homeButton" onAction="#loadHomePage" prefHeight="50.0" prefWidth="50.0">
-                            <opaqueInsets>
-                                <Insets />
-                            </opaqueInsets>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                            <graphic>
-                                <ImageView id="icon" fx:id="homeIcon" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../images/Home.png" />
-                                    </image>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                        <Button fx:id="dataListButton" onAction="#loadDataListPage" prefHeight="50.0" prefWidth="50.0">
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                            <graphic>
-                                <ImageView id="icon" fx:id="logo2" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../images/List.png" />
-                                    </image>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                        <Button fx:id="mapButton" disable="true" onAction="#loadMapPage" prefHeight="50.0" prefWidth="50.0">
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                            <graphic>
-                                <ImageView id="icon" fx:id="logo3" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../images/Map.png" />
-                                    </image>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                  <Button fx:id="accountButton" onAction="#loadAccountPage" prefHeight="50.0" prefWidth="50.0">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
+                <children>
+                    <Button fx:id="homeButton" onAction="#loadHomePage" prefHeight="50.0" prefWidth="50.0">
+                        <opaqueInsets>
+                            <Insets />
+                        </opaqueInsets>
+                        <cursor>
+                            <Cursor fx:constant="HAND" />
+                        </cursor>
+                        <graphic>
+                            <ImageView id="icon" fx:id="homeIcon" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../images/Home.png" />
+                                </image>
+                                <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                </cursor>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                   <Button fx:id="dataListButton" onAction="#loadDataListPage" prefHeight="50.0" prefWidth="50.0">
+                       <cursor>
+                           <Cursor fx:constant="HAND" />
+                       </cursor>
                      <graphic>
-                        <ImageView id="icon" fx:id="logo41" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="icon" fx:id="logo2" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/List.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                   <Button fx:id="mapButton" onAction="#loadMapPage" prefHeight="50.0" prefWidth="50.0">
+                       <cursor>
+                           <Cursor fx:constant="HAND" />
+                       </cursor>
+                     <graphic>
+                        <ImageView id="icon" fx:id="logo3" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Map.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                   <Button fx:id="accountButton" onAction="#loadAccountPage" prefHeight="50.0" prefWidth="50.0">
+                       <cursor>
+                           <Cursor fx:constant="HAND" />
+                       </cursor>
+                     <graphic>
+                        <ImageView id="icon" fx:id="logo4" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/User.png" />
                            </image>

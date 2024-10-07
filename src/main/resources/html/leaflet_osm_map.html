@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet & OSM Map Demo</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script>
+    let map;
+    let markers = [];
+
+    let vineyardIcon = L.icon({
+        iconUrl: 'img/pin.png',
+        iconSize: [24, 24],
+        iconAnchor: [12, 24],
+    });
+
+    let jsConnector = {
+        addMarker: addMarker,
+        initMap: initMap,
+        removeMarkers: removeMarkers, // Function to remove all markers
+        displayMarkers: displayMarkers // Function to display all markers
+    };
+
+    function initMap() {
+        let mapOptions = {
+            center: [-41.0, 174.9],
+            zoom: 5
+        };
+        map = new L.map('map', mapOptions);
+        new L.TileLayer('https://tile.csse.canterbury.ac.nz/hot/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors<br>Served by Grape Expectations!'
+        }).addTo(map);
+    }
+
+    function addMarker(id, title, lat, lng) {
+        console.log(`Adding marker: ${title} at (${lat}, ${lng})`); // Debugging log
+        if (lat !== undefined && lng !== undefined) {
+            let m = new L.Marker([lat, lng], { icon: vineyardIcon });
+            m.bindPopup(title).openPopup();
+            m.on('click', function (e) {
+                window.javaConnector.onMarkerClicked(title);
+            });
+            m.addTo(map);
+            markers.push(m);
+        } else {
+            console.error(`Invalid LatLng values for marker: ${title}`);
+        }
+    }
+
+    function removeMarkers() {
+        markers.forEach(marker => marker.remove());
+        markers = [];
+    }
+
+    function displayMarkers(vineyards) {
+        vineyards.forEach(vineyard => addMarker(vineyard.id, vineyard.name, vineyard.lat, vineyard.lon));
+    }
+</script>
+</body>
+</html>

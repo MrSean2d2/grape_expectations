@@ -29,12 +29,14 @@ import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.RangeSlider;
 import seng202.team5.models.Review;
 import seng202.team5.models.Tag;
+import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
 import seng202.team5.services.UserService;
+import seng202.team5.services.VineyardService;
 import seng202.team5.services.WineService;
 
 
@@ -155,6 +157,14 @@ public class DataListPageController extends PageController {
         // Initialises listeners on sliders
         initializeSliderListeners();
         initializeSliderValueListeners();
+
+        Vineyard selectedVineyard = VineyardService.getInstance().getSelectedVineyard();
+        if (selectedVineyard != null) {
+            searchTextField.setText(selectedVineyard.getName());
+            applySearchFilters();
+            VineyardService.getInstance().setSelectedVineyard(null);
+        }
+
     }
 
     /**

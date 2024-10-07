@@ -16,13 +16,13 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.RangeSlider?>
 
-<GridPane alignment="TOP_CENTER" prefHeight="707.0" prefWidth="1055.0" styleClass="primary" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+<GridPane alignment="TOP_CENTER" prefHeight="905.0" prefWidth="1031.0" styleClass="primary" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="179.99999237060547" minHeight="100.0" prefHeight="112.00000508626303" vgrow="NEVER" />
+        <RowConstraints maxHeight="120.0" prefHeight="120.0" />
+        <RowConstraints maxHeight="180.0" minHeight="100.0" prefHeight="120.0" vgrow="NEVER" />
         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="400.0" vgrow="ALWAYS" />
     </rowConstraints>
     <children>

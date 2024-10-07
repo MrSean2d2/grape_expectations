@@ -1,6 +1,7 @@
 package seng202.team5.unittests.services;
 
 import impl.org.controlsfx.collections.MappingChange;
+import org.assertj.core.api.AbstractAssert;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
@@ -102,6 +103,22 @@ public class DashboardServiceTest {
         Assertions.assertEquals(2020, topYear.get(0).getKey());
         Assertions.assertEquals(5, topYear.get(0).getValue().intValue());
 
+    }
+
+    @Test
+    public void testSortHashMap() throws DuplicateEntryException {
+        Wine wine4 = new Wine("TestWine4", "nice", 2021, 50, 10, "Pinot Noir", "red", vineyardDAO.getOne(1));
+        wine4.setId(wineDAO.add(wine4));
+
+        reviewDAO.add(new Review(wine4.getId(), dashboardService.getUserReviews().get(0).getUserId(), true, "Decent", 2));
+
+        dashboardService.initializeData();
+        List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();
+        List<Map.Entry<Integer, Integer>> topYear = dashboardService.getTopYear();
+
+        Assertions.assertEquals("Pinot Noir", topVariety.get(0).getKey());
+
+        Assertions.assertEquals(2020, topYear.get(0).getKey().intValue());
     }
 
 

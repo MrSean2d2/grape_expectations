@@ -6,8 +6,8 @@ import static seng202.team5.services.ColourLookupService.getTagLabelColour;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -21,6 +21,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.AssignedTag;
@@ -39,11 +41,11 @@ import seng202.team5.services.WineService;
  * @author Finn Brown
  */
 public class DetailedViewPageController extends PageController {
-
-    private final Image emptyStar =
-            new Image(getClass().getResourceAsStream("/images/empty_star.png"));
-    private final Image filledStar =
-            new Image(getClass().getResourceAsStream("/images/filled_star.png"));
+    private static final Logger log = LogManager.getLogger(DetailedViewPageController.class);
+    private final Image emptyStar = new Image(
+            Objects.requireNonNull(getClass().getResourceAsStream("/images/empty_star.png")));
+    private final Image filledStar = new Image(
+            Objects.requireNonNull(getClass().getResourceAsStream("/images/filled_star.png")));
     Label addLabel;
     boolean canAddTag = true;
     TagsDAO tagsDAO;
@@ -92,6 +94,9 @@ public class DetailedViewPageController extends PageController {
     private int selectedWineId;
     private int userId;
     private PopOver tagPopover;
+    private ReviewDAO reviewDAO;
+    private Review review;
+
 
     /**
      * Initializes DetailedViewPage.
@@ -100,7 +105,8 @@ public class DetailedViewPageController extends PageController {
     private void initialize() {
         Wine selectedWine = WineService.getInstance().getSelectedWine();
         selectedWineId = selectedWine.getId();
-
+        reviewDAO = new ReviewDAO();
+        review = null;
 
         if (selectedWine != null) {
             nameLabel.setText(selectedWine.getName());
@@ -113,9 +119,11 @@ public class DetailedViewPageController extends PageController {
         }
 
         if (UserService.getInstance().getCurrentUser() != null) {
+            // Get the user ID
             userId = UserService.getInstance().getCurrentUser().getId();
-            ReviewDAO reviewDAO = new ReviewDAO();
-            Review review = reviewDAO.getWineReview(selectedWineId, userId);
+
+            // Setup review stuff
+            review = reviewDAO.getWineReview(selectedWineId, userId);
 
             tagsDAO = new TagsDAO();
             tagsList = new ArrayList<>();
@@ -124,29 +132,23 @@ public class DetailedViewPageController extends PageController {
             assignedTagsDAO = new AssignedTagsDAO();
             List<AssignedTag> assignedTags = assignedTagsDAO.getAllAssigned(selectedWineId, userId);
 
+            // Add "adder" tag
             addLabel = addBasicTag("+");
 
+            // Create a new tag for each assigned tag
             for (AssignedTag tag : assignedTags) {
-                // Create a new Tag
                 Tag createdTag = tagsDAO.getOne(tag.getTagId());
                 addTag(createdTag);
             }
 
             // Done Loading Tags
-            if (review == null) {
-                review = new Review(selectedWineId, userId);
-                try {
-                    reviewDAO.add(review);
-                } catch (DuplicateEntryException e) {
-                    e.printStackTrace();
-                }
-            }
-
             logInMessageLabel.setText("");
             addTagLabel.setText("");
-            notesTextArea.setText(review.getNotes());
-            updateFavoriteButton(review.isFavourite());
-            updateStarDisplay(review.getRating());
+            if (review != null) {
+                notesTextArea.setText(review.getNotes());
+                updateFavoriteButton(review.isFavourite());
+                updateStarDisplay(review.getRating());
+            }
 
             favoriteToggleButton.setDisable(false);
             saveNotesButton.setDisable(false);
@@ -161,7 +163,7 @@ public class DetailedViewPageController extends PageController {
     }
 
     /**
-     * Show a popover to select a new tag
+     * Show a popover to select a new tag.
      */
     @FXML
     public void showTagPopover() {
@@ -170,7 +172,8 @@ public class DetailedViewPageController extends PageController {
                 canAddTag = true;
 
                 try {
-                    FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/TagPopover.fxml"));
+                    FXMLLoader baseLoader = new FXMLLoader(
+                            getClass().getResource("/fxml/TagPopover.fxml"));
                     Node content = baseLoader.load();
 
                     // Create the Popup
@@ -188,7 +191,23 @@ public class DetailedViewPageController extends PageController {
                     List<Label> labels = new ArrayList<>();
 
                     for (Tag tag : tags) {
-                        if (tagsList.contains(tag)) continue;
+                        /*
+                         Can't use .contains because tag ID will be
+                         different (with default ones) : (
+                         */
+                        boolean found = false;
+                        for (Tag existingTag : tagsList) {
+                            if (existingTag.getTagId() == tag.getTagId()) {
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        // Skip if it was found
+                        if (found) {
+                            continue;
+                        }
+
                         // Set the user ID to be the current user id, override the default
                         //  user ID may be -1, for default tags
                         tag.setUserId(userId);
@@ -344,6 +363,21 @@ public class DetailedViewPageController extends PageController {
     }
 
     /**
+     * Handles creating a new review if the review doesn't exist - called if a user edits anything
+     * and a review doesn't already exist.
+     */
+    private void createReviewIfNotExists() {
+        if (review == null && UserService.getInstance().getCurrentUser() != null) {
+            review = new Review(selectedWineId, userId);
+            try {
+                reviewDAO.add(review);
+            } catch (DuplicateEntryException e) {
+                log.error(e);
+            }
+        }
+    }
+
+    /**
      * handles a user clicking on one of the star icons, changing their review of the wine.
      *
      * @param event mouse event
@@ -354,8 +388,7 @@ public class DetailedViewPageController extends PageController {
         int clickedStarIndex = Integer.parseInt(
                 clickedStar.getId().substring(4)); // Get star number (e.g., star1 -> 1)
 
-        ReviewDAO reviewDAO = new ReviewDAO();
-        Review review = reviewDAO.getWineReview(selectedWineId, userId);
+        createReviewIfNotExists();
 
         if (review != null) {
             review.setRating(clickedStarIndex);
@@ -365,17 +398,14 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * handles the event where the toggle favorite button is pressed.
-     *
-     * @param event action event
      */
     @FXML
-    private void handleToggleFavourite(ActionEvent event) {
-        ReviewDAO reviewDAO = new ReviewDAO();
-        Review review = reviewDAO.getWineReview(selectedWineId, userId);
-
+    private void handleToggleFavourite() {
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
+            createReviewIfNotExists();
+
             if (review != null) {
                 review.toggleFavourite(review.isFavourite());
                 updateFavoriteButton(review.isFavourite());
@@ -386,17 +416,13 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * Saves the notes that are currently in the text box.
-     *
-     * @param event action event
      */
     @FXML
-    private void handleSaveNotes(ActionEvent event) {
-        ReviewDAO reviewDAO = new ReviewDAO();
-        Review review = reviewDAO.getWineReview(selectedWineId, userId);
-
+    private void handleSaveNotes() {
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
+            createReviewIfNotExists();
             if (review != null) {
                 review.setNotes(notesTextArea.getText());
             }
@@ -406,11 +432,9 @@ public class DetailedViewPageController extends PageController {
 
     /**
      * Closes the page.
-     *
-     * @param event action event
      */
     @FXML
-    private void handleBackButtonAction(ActionEvent event) {
+    private void handleBackButtonAction() {
         close();
     }
 
@@ -421,6 +445,12 @@ public class DetailedViewPageController extends PageController {
         try {
             if (UserService.getInstance().getCurrentUser() != null) {
                 assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
+
+                // Add review to this wine
+                if (!tagsList.isEmpty()) {
+                    createReviewIfNotExists();
+                }
+
                 // Add to assigned tags db
                 for (Tag tag : tagsList) {
                     assignedTagsDAO.add(new AssignedTag(tag.getTagId(), userId, selectedWineId));
@@ -430,7 +460,11 @@ public class DetailedViewPageController extends PageController {
             throw new RuntimeException(e);
         }
         backButton.getScene().getWindow().hide();
-        addNotification("Updated Wine Review", "#d5e958");
+
+        // Show update message if it was updated
+        if (review != null) {
+            addNotification("Updated Wine Review", "#d5e958");
+        }
     }
 
 

@@ -1,10 +1,8 @@
 package seng202.team5.gui;
 
-import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
 
 /**
  * controller for the home page.
@@ -22,12 +20,11 @@ public class NotificationController extends PageController {
      */
     @FXML
     private void initialize() {
-
-
+        ;
     }
 
     /**
-     * Set the notification's alert colour
+     * Set the notification's alert colour.
      *
      * @param col the new hex colour
      */
@@ -39,7 +36,7 @@ public class NotificationController extends PageController {
     }
 
     /**
-     * Set the notification's text message
+     * Set the notification's text message.
      *
      * @param text the new text
      */
