@@ -62,7 +62,9 @@ public class AccountManagePageController extends PageController {
 
         // Current user
         User curUser = UserService.getInstance().getCurrentUser();
-        if (curUser.getIsAdmin()) {
+        if (!curUser.getIsAdmin()) {
+            adminButton.setVisible(false);
+        } else {
             adminButton.setDisable(false);
         }
 
