@@ -28,6 +28,8 @@ import static seng202.team5.services.ColourLookupService.getTagLabelColour;
 
 public class DashboardPageController extends PageController {
     @FXML
+    public Label notEnoughRatingsMessageLabel;
+    @FXML
     private PieChart pieChart;
 
     @FXML
@@ -55,8 +57,18 @@ public class DashboardPageController extends PageController {
     private void initialize() {
         userID = UserService.getInstance().getCurrentUser().getId();
 
+
         dashboardService = new DashboardService(userID,new VineyardDAO(), new WineDAO(new VineyardDAO()), new ReviewDAO());
 
+        if (dashboardService.getUserReviews().size()< 3) {
+            pieChart.setVisible(false);
+            notEnoughRatingsMessageLabel.setVisible(true);
+            piechartTypeComboBox.setDisable(true);
+        } else {
+            pieChart.setVisible(true);
+            notEnoughRatingsMessageLabel.setVisible(false);
+            piechartTypeComboBox.setDisable(false);
+        }
         updateTopLabels();
 
         updatePieChartComboBox();

@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.chart.PieChart?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1147.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1492.0" prefWidth="1121.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DashboardPageController">
+<GridPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1147.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1492.0" prefWidth="1121.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DashboardPageController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" />
       <ColumnConstraints />
@@ -100,6 +95,7 @@
                   <Font size="26.0" />
                </font>
             </Label>
+            <Label fx:id="notEnoughRatingsMessageLabel" text="Rate More Wines To View Pie Chart Stats!" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
       <VBox>
