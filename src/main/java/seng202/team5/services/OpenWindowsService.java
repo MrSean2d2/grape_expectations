@@ -43,7 +43,6 @@ public class OpenWindowsService {
      * @param thisWindow newly opened window
      */
     public void addWindow(ClosableWindow thisWindow) {
-        log.debug(openWindows);
         openWindows.add(thisWindow);
     }
 
@@ -53,7 +52,6 @@ public class OpenWindowsService {
      * @param thisWindow window to close
      */
     public void closeWindow(ClosableWindow thisWindow) {
-        log.debug(openWindows);
         openWindows.remove(thisWindow);
     }
 
