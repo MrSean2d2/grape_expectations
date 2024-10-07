@@ -50,12 +50,10 @@ public class DashboardService {
             Wine wine = wineDAO.getOne(review.getWineId());
             Vineyard vineyard = wine.getVineyard();
 
-            // Add to maps
+            // Populate the maps
             varietyMap.merge(wine.getWineVariety(), review.getRating(), Integer::sum);
             regionMap.merge(vineyard.getRegion(), review.getRating(), Integer::sum);
             yearMap.merge(wine.getYear(), review.getRating(), Integer::sum);
-        }
-
         }
 
     }
