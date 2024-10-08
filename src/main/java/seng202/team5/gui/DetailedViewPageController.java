@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -18,6 +21,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
@@ -70,8 +75,6 @@ public class DetailedViewPageController extends PageController {
     private Label varietyLabel;
     @FXML
     private TextArea notesTextArea;
-    @FXML
-    private Button saveNotesButton;
     @FXML
     private HBox ratingStars;
     @FXML
@@ -144,14 +147,21 @@ public class DetailedViewPageController extends PageController {
                 updateStarDisplay(review.getRating());
             }
 
-            saveNotesButton.setDisable(false);
             notesTextArea.setEditable(true);
         } else {
             logInMessageLabel.setText("Log in to save your notes!");
             addTagLabel.setText("Log in to add tags!");
-            saveNotesButton.setDisable(true);
             notesTextArea.setEditable(false);
         }
+        // listener for window closing
+        Platform.runLater(() -> {
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            if (stage != null) {
+                stage.setOnCloseRequest(event -> {
+                    close();
+                });
+            }
+        });
     }
 
     /**
@@ -391,8 +401,7 @@ public class DetailedViewPageController extends PageController {
     /**
      * Saves the notes that are currently in the text box.
      */
-    @FXML
-    private void handleSaveNotes() {
+    private void saveNotes() {
         if (UserService.getInstance().getCurrentUser() == null) {
             close();
         } else {
@@ -412,6 +421,7 @@ public class DetailedViewPageController extends PageController {
         close();
     }
 
+
     /**
      * Closes the page.
      */
@@ -420,6 +430,7 @@ public class DetailedViewPageController extends PageController {
             if (UserService.getInstance().getCurrentUser() != null) {
                 assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
 
+                saveNotes();
                 // Add review to this wine
                 if (!tagsList.isEmpty()) {
                     createReviewIfNotExists();
