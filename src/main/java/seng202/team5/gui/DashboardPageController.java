@@ -188,33 +188,33 @@ public class DashboardPageController extends PageController {
         switch (category) {
             case "Variety":
                 List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();
-                for (int i = 0; i < Math.min(5, topVariety.size()); i++) {
-                    dataList.add(new PieChart.Data(topVariety.get(i).getKey(), topVariety.get(i).getValue()));
+                for ( Map.Entry<String, Integer> entryVariety : topVariety) {
+                    if (entryVariety.getValue() > 0) {
+                        dataList.add(new PieChart.Data(entryVariety.getKey(), entryVariety.getValue()));
+                    }
                 }
-
-                pieChartData.addAll(dataList);
                 break;
             case "Region":
                 List<Map.Entry<String, Integer>> topRegion = dashboardService.getTopRegion();
-                for (int i = 0; i < Math.min(5, topRegion.size()); i++) {
-                    dataList.add(new PieChart.Data(topRegion.get(i).getKey(), topRegion.get(i).getValue()));
+                for ( Map.Entry<String, Integer> entryRegion : topRegion) {
+                    if (entryRegion.getValue() > 0) {
+                        dataList.add(new PieChart.Data(entryRegion.getKey(), entryRegion.getValue()));
+                    }
                 }
-
-                pieChartData.addAll(dataList);
                 break;
             case "Year":
                 List<Map.Entry<Integer, Integer>> topYear = dashboardService.getTopYear();
-                for (int i = 0; i < Math.min(5, topYear.size()); i++) {
-                    dataList.add(new PieChart.Data(String.valueOf(topYear.get(i).getKey()), topYear.get(i).getValue()));
+                for ( Map.Entry<Integer, Integer> entryYear : topYear) {
+                    if (entryYear.getValue() > 0) {
+                    dataList.add(new PieChart.Data(String.valueOf(entryYear.getKey()), entryYear.getValue()));
+                    }
                 }
-
-                pieChartData.addAll(dataList);
                 break;
             default:
                 // Don't add any data!!!
                 break;
         }
-
+        pieChartData.addAll(dataList);
         pieChart.setData(pieChartData);
         pieChart.setTitle("Favourite " + category);
         pieChart.setClockwise(true);
@@ -228,13 +228,12 @@ public class DashboardPageController extends PageController {
                 Tooltip tooltip = new Tooltip(percentage);
                 Tooltip.install(pieData.getNode(), tooltip);
             });
+            data.getNode().setOnMouseClicked(event -> {
+                String message = "you clicked " + data.getName() + " which has vlaue " + data.getPieValue();
+                System.out.println(message);
+
+            });
         }
-        pieChart.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getClickCount() == 2) {
-                System.out.print("piechart clicked " + pieChart.getData());
-                swapPage("/fxml/DataListPage.fxml");
-            }
-        });
     }
 }
 
