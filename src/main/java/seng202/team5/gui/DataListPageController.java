@@ -122,9 +122,13 @@ public class DataListPageController extends PageController {
         regionComboBox.setTooltip(new Tooltip("Filter by region"));
         yearComboBox.setTooltip(new Tooltip("Filter by year"));
         priceRangeSlider.setTooltip(new Tooltip("Select a price range"));
-        ratingSlider.setTooltip(new Tooltip("Select a minimum price"));
+        maxPriceValue.setTooltip(new Tooltip("Set a maximum price"));
+        minPriceValue.setTooltip(new Tooltip("Set a minimum price"));
+        ratingSlider.setTooltip(new Tooltip("Select a minimum rating"));
+        ratingSliderValue.setTooltip(new Tooltip("Set a minimum rating"));
         searchButton.setTooltip(new Tooltip("Enter search query"));
         resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
+
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
