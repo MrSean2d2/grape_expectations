@@ -54,11 +54,14 @@ public class DetailedViewPageController extends PageController implements Closab
             Objects.requireNonNull(getClass().getResourceAsStream("/images/empty_star.png")));
     private final Image filledStar = new Image(
             Objects.requireNonNull(getClass().getResourceAsStream("/images/filled_star.png")));
+
     Label addLabel;
     boolean canAddTag = true;
     TagsDAO tagsDAO;
     AssignedTagsDAO assignedTagsDAO;
     List<Tag> tagsList;
+    @FXML
+    public Label ratingLogInLabel;
     @FXML
     private Button backButton;
     @FXML
@@ -178,6 +181,7 @@ public class DetailedViewPageController extends PageController implements Closab
             }
 
             // Done Loading Tags
+            ratingLogInLabel.setVisible(false);
             logInMessageLabel.setText("");
             ratingStars.setVisible(true);
             addTagLabel.setText("");
@@ -192,6 +196,7 @@ public class DetailedViewPageController extends PageController implements Closab
             notesTextArea.setEditable(true);
         } else {
             logInMessageLabel.setText("Log in to save your notes!");
+            ratingLogInLabel.setVisible(true);
             ratingStars.setVisible(false);
             addTagLabel.setText("Log in to add tags!");
             favoriteToggleButton.setDisable(true);
