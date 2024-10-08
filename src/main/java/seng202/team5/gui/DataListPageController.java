@@ -162,8 +162,16 @@ public class DataListPageController extends PageController {
             applySearchFilters();
             VineyardService.getInstance().setSelectedVineyard(null);
         }
-        String selectedPieSearchTerm = DashboardService.getInstance().getSelectedPieSliceSearch();
+        List<String> selectedPieSearchTerm = DashboardService.getInstance().getSelectedPieSliceSearch();
+        if(selectedPieSearchTerm!=null) {
+            if (selectedPieSearchTerm.get(0) == "Variety") {
+                varietyComboBox.setValue(selectedPieSearchTerm.get(1));
+                tagComboBox.setValue("All Tags");
+                applySearchFilters();
+                DashboardService.getInstance().setSelectedPieSliceSearch(null,null);
+            }
 
+        }
 
     }
 

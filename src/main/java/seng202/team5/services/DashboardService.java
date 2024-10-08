@@ -32,7 +32,9 @@ public class DashboardService {
      * Get pie chart numbers
      */
     String sql = "SELECT Count(*) FROM __ group by ";
-    private String selectedPieSearchTerm;
+
+    private String selectedCategory;
+    private String selectedFilterTerm;
 
     public DashboardService(int userID, VineyardDAO vineyardDAO, WineDAO wineDAO, ReviewDAO reviewDAO) {
         this.userID = userID;
@@ -43,6 +45,10 @@ public class DashboardService {
     }
 
     public DashboardService() {
+        this.userID = 1; // Replace with a default user ID as needed
+        this.vineyardDAO = new VineyardDAO();
+        this.wineDAO = new WineDAO(vineyardDAO);
+        this.reviewDAO = new ReviewDAO();
         //TODO get rid of need for empty constructor
     }
 
@@ -98,12 +104,16 @@ public class DashboardService {
         return list;
     }
 
-    public String setSelectedPieSliceSearch(String searchTerm){
-        this.selectedPieSearchTerm = selectedPieSearchTerm;
-        return searchTerm;
+    public void setSelectedPieSliceSearch(String selectedCategory, String selectedFilterTerm){
+        this.selectedCategory = selectedCategory;
+        this.selectedFilterTerm = selectedFilterTerm;
+
     }
-    public String getSelectedPieSliceSearch(){
-        return selectedPieSearchTerm;
+    public List<String> getSelectedPieSliceSearch(){
+        List<String> selectedValues = new ArrayList<>();
+        selectedValues.add(selectedCategory);
+        selectedValues.add(selectedFilterTerm);
+        return selectedValues;
         
     }
 }

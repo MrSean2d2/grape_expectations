@@ -230,11 +230,16 @@ public class DashboardPageController extends PageController {
             });
             data.getNode().setOnMouseClicked(event -> {
                 String message = "you clicked " + data.getName() + " which has vlaue " + data.getPieValue();
-
+                String filterTerm = data.getName();
+                DashboardService.getInstance().setSelectedPieSliceSearch(category,filterTerm);
                 swapPage("/fxml/DataListPage.fxml");
+
+
+
             });
         }
     }
+
 }
 
 
