@@ -1,6 +1,5 @@
 package seng202.team5.cucumber;
 
-import io.cucumber.java.bs.A;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
