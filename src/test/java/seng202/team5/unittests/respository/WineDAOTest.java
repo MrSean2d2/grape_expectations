@@ -530,4 +530,117 @@ public class WineDAOTest {
         }
     }
 
+    /**
+     * Test getting the distinct variety list
+     */
+    @Test
+    public void testGetVariety() {
+        Vineyard vineyard = new Vineyard("Vineyard", "Region");
+        Wine wine1 = new Wine("Test", "Nice", 1999, 89,
+                10, "Variety 1", "Red", vineyard);
+        Wine wine2 = new Wine("Test 1", "Nice", 1999, 89, 10,
+                "Variety 2", "Red", vineyard);
+        Wine wine3 = new Wine("Test 2", "Nice", 1999, 89, 10,
+                "Variety 3", "Red", vineyard);
+        Wine wine4 = new Wine("Test 3", "Nice", 1999, 89, 10,
+                "Variety 1", "Red", vineyard);
+        List<Wine> wines = List.of(wine1, wine2, wine3, wine4);
+        wineDAO.batchAdd(wines);
+        List<String> varieties = wineDAO.getVariety();
+        assertEquals(3, varieties.size());
+        assertEquals("Variety 1", varieties.getFirst());
+    }
+
+    @Test
+    public void testGetYear() {
+        Vineyard vineyard = new Vineyard("Vineyard", "Region");
+        Wine wine1 = new Wine("Test", "Nice", 1999, 89,
+                10, "Variety 1", "Red", vineyard);
+        Wine wine2 = new Wine("Test 1", "Nice", 2000, 89, 10,
+                "Variety 2", "Red", vineyard);
+        Wine wine3 = new Wine("Test 2", "Nice", 2001, 89, 10,
+                "Variety 3", "Red", vineyard);
+        Wine wine4 = new Wine("Test 3", "Nice", 1999, 89, 10,
+                "Variety 1", "Red", vineyard);
+        List<Wine> wines = List.of(wine1, wine2, wine3, wine4);
+        wineDAO.batchAdd(wines);
+        List<String> years = wineDAO.getYear();
+        assertEquals(3, years.size());
+        assertEquals("1999", years.getFirst());
+    }
+
+    @Test
+    public void testGetMinRating() {
+        Vineyard vineyard = new Vineyard("Vineyard", "Region");
+        Wine wine1 = new Wine("Test", "Nice", 1999, 80,
+                10, "Variety 1", "Red", vineyard);
+        Wine wine2 = new Wine("Test 1", "Nice", 2000, 89, 10,
+                "Variety 2", "Red", vineyard);
+        Wine wine3 = new Wine("Test 2", "Nice", 2001, 100, 10,
+                "Variety 3", "Red", vineyard);
+        Wine wine4 = new Wine("Test 3", "Nice", 1999, 93, 10,
+                "Variety 1", "Red", vineyard);
+        List<Wine> wines = List.of(wine1, wine2, wine3, wine4);
+        wineDAO.batchAdd(wines);
+        assertEquals(80, wineDAO.getMinRating());
+    }
+
+    @Test
+    public void testGetMaxRating() {
+        Vineyard vineyard = new Vineyard("Vineyard", "Region");
+        Wine wine1 = new Wine("Test", "Nice", 1999, 80,
+                10, "Variety 1", "Red", vineyard);
+        Wine wine2 = new Wine("Test 1", "Nice", 2000, 89, 10,
+                "Variety 2", "Red", vineyard);
+        Wine wine3 = new Wine("Test 2", "Nice", 2001, 100, 10,
+                "Variety 3", "Red", vineyard);
+        Wine wine4 = new Wine("Test 3", "Nice", 1999, 93, 10,
+                "Variety 1", "Red", vineyard);
+        List<Wine> wines = List.of(wine1, wine2, wine3, wine4);
+        wineDAO.batchAdd(wines);
+        assertEquals(100, wineDAO.getMaxRating());
+    }
+
+    /**
+     * Test max and min price. This is grouped in a nested test because they both
+     * have the same setup.
+     */
+    @Nested
+    class TestPrice {
+        /**
+         * Setup some wines with a range of prices.
+         */
+        @BeforeEach
+        public void init() {
+            Vineyard vineyard = new Vineyard("Vineyard", "Region");
+            Wine wine1 = new Wine("Test", "Nice", 1999, 89,
+                    10, "Variety 1", "Red", vineyard);
+            Wine wine2 = new Wine("Test 1", "Nice", 1999, 89, 10,
+                    "Variety 2", "Red", vineyard);
+            Wine wine3 = new Wine("Test 2", "Nice", 1999, 89, 20,
+                    "Variety 3", "Red", vineyard);
+            Wine wine4 = new Wine("Test 3", "Nice", 1999, 89, 100,
+                    "Variety 1", "Red", vineyard);
+            List<Wine> wines = List.of(wine1, wine2, wine3, wine4);
+            wineDAO.batchAdd(wines);
+        }
+
+        /**
+         * Verify the minimum price.
+         */
+        @Test
+        public void testGetMinPrice() {
+            assertEquals(10, wineDAO.getMinPrice());
+        }
+
+        /**
+         * Verify the max price.
+         */
+        @Test
+        public void testGetMaxPrice() {
+            assertEquals(100, wineDAO.getMaxPrice());
+        }
+    }
+
+
 }
