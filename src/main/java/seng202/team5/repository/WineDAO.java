@@ -526,10 +526,10 @@ public class WineDAO implements DAOInterface<Wine> {
         if (search != null) {
             sql +=  " AND (wine.name LIKE ? OR wine.description LIKE ?) ";
         }
-        if (!Objects.equals(variety, "0")) {
+        if (!(Objects.equals(variety, "0")|| variety.equals("null"))) {
             sql += " AND wine.variety = '" + variety + "'";
         }
-        if (!Objects.equals(colour, "0")) {
+        if (!(Objects.equals(colour, "0")|| Objects.equals(colour, "null"))) {
             sql += " AND wine.colour = '" + colour + "'";
         }
         if (!Objects.equals(region, "0") && region != null) {

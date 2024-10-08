@@ -5,6 +5,7 @@ import java.util.Objects;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -221,14 +222,41 @@ public class DataListPageController extends PageController {
         observableRegionsList.addFirst("Region");
         regionComboBox.setItems(observableRegionsList);
 
+        setDefaultVarietyBox();
+
+        setColourComboBox();
+
+    }
+
+    public void setDefaultVarietyBox() {
         List<String> varietyOptions = wineDAO.getVariety();
+        setVarietyOptions(varietyOptions);
+    }
+
+    /**
+     * takes list of variety options and sets variety combo box to have them as options in drop-down
+     * @param varietyOptions list of varieties
+     */
+    public void setVarietyOptions(List<String> varietyOptions){
         ObservableList<String> observableVarietyList =
                 FXCollections.observableArrayList(varietyOptions);
         observableVarietyList.addFirst("Variety");
         varietyComboBox.setItems(observableVarietyList);
+    }
 
-        setColourComboBox();
+    public void setVarietyComboBox() {
+        List<String> varietyOptions;
 
+        if (colourFilter.equals("0")||colourFilter.equals("Colour")) {//variety filter still at default value
+            varietyOptions = wineDAO.getVariety();
+        } else {
+            varietyOptions = wineDAO.getVarietyFromColour(colourFilter);
+            if (!varietyOptions.contains(varietyFilter)) {
+                varietyFilter = "0";
+                varietyComboBox.setValue("Variety");
+            }
+        }
+        setVarietyOptions(varietyOptions);
     }
 
     public void setColourComboBox() {
@@ -242,6 +270,8 @@ public class DataListPageController extends PageController {
                 FXCollections.observableArrayList(colourOptions);
         observableColourList.addFirst("Colour");
         colourComboBox.setItems(observableColourList);
+
+
     }
 
     /**
@@ -310,11 +340,11 @@ public class DataListPageController extends PageController {
      */
     public void onVarietyComboBoxClicked() {
         String selectedVariety = String.valueOf(varietyComboBox.getValue());
-        if (!(Objects.equals(selectedVariety, "Variety") || selectedVariety == null)) {
+        if (!(Objects.equals(selectedVariety, "Variety") || Objects.equals(selectedVariety, "null"))) {
             varietyFilter = selectedVariety;
+            applySearchFilters();
         }
-        applySearchFilters();
-        setColourComboBox();
+
     }
 
     /**
@@ -324,8 +354,10 @@ public class DataListPageController extends PageController {
         String selectedColour = String.valueOf(colourComboBox.getValue());
         if (!(Objects.equals(selectedColour, "Colour") || selectedColour == null)) {
             colourFilter = selectedColour;
+            setVarietyComboBox();
+            applySearchFilters();
         }
-        applySearchFilters();
+        //applySearchFilters();
     }
 
     /**
@@ -380,6 +412,7 @@ public class DataListPageController extends PageController {
         yearComboBox.setValue(yearComboBox.getItems().getFirst());
 
         favToggleButton.setSelected(false);
+        setDefaultVarietyBox();
     }
 
     /**
