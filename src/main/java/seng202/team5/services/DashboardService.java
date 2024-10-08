@@ -4,7 +4,6 @@ import seng202.team5.models.Review;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.ReviewDAO;
-import seng202.team5.repository.TagsDAO;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
 
@@ -13,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service class that handles operations related to the dashboard
+ */
 public class DashboardService {
 
     private final int userID;
@@ -25,17 +27,17 @@ public class DashboardService {
     private Map<String, Integer> varietyMap = new HashMap<>();
     private Map<String, Integer> regionMap = new HashMap<>();
     private Map<Integer, Integer> yearMap = new HashMap<>();
-
-
-
-    /**
-     * Get pie chart numbers
-     */
-    String sql = "SELECT Count(*) FROM __ group by ";
-
     private String selectedCategory;
     private String selectedFilterTerm;
 
+    /**
+     * Constructor for Dashboard Services
+     *
+     * @param userID of logged in user
+     * @param vineyardDAO DAO for vineyard operations
+     * @param wineDAO DAO for wine operations
+     * @param reviewDAO DAO for review operations
+     */
     public DashboardService(int userID, VineyardDAO vineyardDAO, WineDAO wineDAO, ReviewDAO reviewDAO) {
         this.userID = userID;
         this.vineyardDAO = vineyardDAO;
@@ -44,15 +46,21 @@ public class DashboardService {
         initializeData();
     }
 
+    /**
+     * Empty constructor for creating/retrieving instances of this service class
+     */
     public DashboardService() {
-        this.userID = 1; // Replace with a default user ID as needed
+        this.userID = 1;
         this.vineyardDAO = new VineyardDAO();
         this.wineDAO = new WineDAO(vineyardDAO);
         this.reviewDAO = new ReviewDAO();
-        //TODO get rid of need for empty constructor
     }
 
-
+    /**
+     * Gets the singleton instance of DashboardService
+     *
+     * @return the singleton instance of DashboardService
+     */
     public static DashboardService getInstance() {
         if (instance == null) {
             instance = new DashboardService();
@@ -60,6 +68,9 @@ public class DashboardService {
         return instance;
     }
 
+    /**
+     * Initialises data for service, aggregates ratings by variety, region, year
+     */
     public void initializeData() {
         userReviews = reviewDAO.getFromUser(userID);
 
@@ -75,16 +86,39 @@ public class DashboardService {
         }
 
     }
+
+    /**
+     * Retrieves the top varieties based on user ratings
+     *
+     * @return sorted list of entries containing wine varieties
+     */
     public List<Map.Entry<String, Integer>> getTopVariety() {
         return sortHashMap(varietyMap);
     }
+
+    /**
+     * Retrieves the top regions based on user ratings
+     *
+     * @return sorted list of entries containing wine region
+     */
     public List<Map.Entry<String, Integer>> getTopRegion() {
         return sortHashMap(regionMap);
     }
+
+    /**
+     * Retrieves the top years based on user ratings
+     *
+     * @return sorted list of entries containing wine year
+     */
     public List<Map.Entry<Integer, Integer>> getTopYear() {
         return sortHashMap(yearMap);
     }
 
+    /**
+     * Retrieves the list of user reviews
+     *
+     * @return the list of reviews for the logged-in user
+     */
     public List<Review> getUserReviews(){
         return userReviews;
     }
@@ -95,7 +129,6 @@ public class DashboardService {
      * @param inputMap the map to search
      * @return the maximum entry if found, null otherwise.
      */
-
     public <K, V extends Comparable<V>> List<Map.Entry<K, V>> sortHashMap(Map<K, V> inputMap) {
 
         List<Map.Entry<K, V>> list = new ArrayList<>(inputMap.entrySet());
@@ -104,11 +137,23 @@ public class DashboardService {
         return list;
     }
 
+    /**
+     * Sets the selected category and filter term for pie slice searches
+     *
+     * @param selectedCategory category selected for filtering
+     * @param selectedFilterTerm filter term applied
+     */
     public void setSelectedPieSliceSearch(String selectedCategory, String selectedFilterTerm){
         this.selectedCategory = selectedCategory;
         this.selectedFilterTerm = selectedFilterTerm;
 
     }
+
+    /**
+     * Retrieves the selected pie slice search criteria
+     *
+     * @return a list containing the selected category and filter term
+     */
     public List<String> getSelectedPieSliceSearch(){
         List<String> selectedValues = new ArrayList<>();
         selectedValues.add(selectedCategory);
