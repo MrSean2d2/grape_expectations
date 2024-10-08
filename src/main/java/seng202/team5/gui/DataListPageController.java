@@ -230,7 +230,8 @@ public class DataListPageController extends PageController {
                         }
                     });
                 } else {
-                    addNotification("Please pick a minimum price greater than " + (int) priceRangeSlider.getMin(), "#d5e958");
+                    addNotification("Please pick a minimum price greater than "
+                            + (int) priceRangeSlider.getMin(), "#d5e958");
                 }
             } catch (NumberFormatException e) {
                 addNotification("Invalid Number", "#d5e958");
@@ -257,10 +258,12 @@ public class DataListPageController extends PageController {
                         }
                     });
                 } else {
-                    addNotification("Please pick a maximum price less than " + (int) priceRangeSlider.getMax(), "#d5e958");
+                    addNotification("Please pick a maximum price less than "
+                            + (int) priceRangeSlider.getMax(), "#d5e958");
                 }
             } catch (NumberFormatException e) {
-                addNotification("Please pick a price between " + (int) priceRangeSlider.getMin() + " and " + (int) priceRangeSlider.getMax(), "#d5e958");
+                addNotification("Please pick a price between " + (int) priceRangeSlider.getMin()
+                        + " and " + (int) priceRangeSlider.getMax(), "#d5e958");
             }
         });
 
@@ -284,7 +287,8 @@ public class DataListPageController extends PageController {
                         }
                     });
                 } else {
-                    addNotification("Please pick a rating between " + (int) ratingSlider.getMin() + " and " + (int) ratingSlider.getMax(), "#d5e958");
+                    addNotification("Please pick a rating between " + (int) ratingSlider.getMin()
+                            + " and " + (int) ratingSlider.getMax(), "#d5e958");
                 }
             } catch (NumberFormatException e) {
                 addNotification("Invalid Number", "#d5e958");
@@ -299,13 +303,15 @@ public class DataListPageController extends PageController {
     private void initializeSliderListeners() {
         priceRangeSlider.setOnMouseReleased(event -> {
             isSliderChanging = false;
-            maxPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getHighValue()));
+            maxPriceFilter = Float.parseFloat(String.format(
+                    "%.1f", priceRangeSlider.getHighValue()));
             applySearchFilters();
         });
 
         priceRangeSlider.setOnMouseReleased(event -> {
             isSliderChanging = false;
-            minPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getLowValue()));
+            minPriceFilter = Float.parseFloat(String.format(
+                    "%.1f", priceRangeSlider.getLowValue()));
             applySearchFilters();
         });
 

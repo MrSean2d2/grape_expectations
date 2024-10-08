@@ -82,7 +82,7 @@ public class AssignedTagsDAO implements DAOInterface<AssignedTag> {
         AssignedTag tag;
         String sql = "SELECT * FROM assigned_tags WHERE tagid=? AND userid=? AND wineid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, tagId);
             ps.setInt(2, userId);
             ps.setInt(3, wineId);

@@ -16,7 +16,7 @@ import seng202.team5.repository.WineDAO;
  */
 public class DashboardService {
 
-    private final int userID;
+    private final int userId;
     private final VineyardDAO vineyardDAO;
     private final WineDAO wineDAO;
     private final ReviewDAO reviewDAO;
@@ -31,8 +31,9 @@ public class DashboardService {
     /**
      * Get pie chart numbers.
      */
-    public DashboardService(int userID, VineyardDAO vineyardDAO, WineDAO wineDAO, ReviewDAO reviewDAO) {
-        this.userID = userID;
+    public DashboardService(int userId, VineyardDAO vineyardDAO,
+                            WineDAO wineDAO, ReviewDAO reviewDAO) {
+        this.userId = userId;
         this.vineyardDAO = vineyardDAO;
         this.wineDAO = wineDAO;
         this.reviewDAO = reviewDAO;
@@ -43,7 +44,7 @@ public class DashboardService {
      * Initialise the data.
      */
     public void initializeData() {
-        userReviews = reviewDAO.getFromUser(userID);
+        userReviews = reviewDAO.getFromUser(userId);
 
         // Create a hash map for each property
         for (Review review : userReviews) {
@@ -106,15 +107,4 @@ public class DashboardService {
         list.sort(Map.Entry.<K, V>comparingByValue().reversed());
         return list;
     }
-    // region pie chart
-    // variety
-    // tags
-
-
-    /**
-     * Get the user's preferences.
-     */
-    // top region
-    // top variety
-    // Most used tag?
 }

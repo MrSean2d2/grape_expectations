@@ -2,20 +2,29 @@ package seng202.team5.gui;
 
 import static seng202.team5.services.ColourLookupService.getTagLabelColour;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.NotImplementedException;
-import seng202.team5.models.*;
-import seng202.team5.repository.*;
+import seng202.team5.models.AssignedTag;
+import seng202.team5.models.Tag;
+import seng202.team5.repository.AssignedTagsDAO;
+import seng202.team5.repository.ReviewDAO;
+import seng202.team5.repository.TagsDAO;
+import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
 import seng202.team5.services.DashboardService;
 import seng202.team5.services.UserService;
 
@@ -42,7 +51,7 @@ public class DashboardPageController extends PageController {
     public ComboBox<String> piechartTypeComboBox;
     private DashboardService dashboardService;
     private TagsDAO tagsDAO;
-    private int userID;
+    private int userId;
 
     /**
      * Initalises the dashboard page.
@@ -50,9 +59,9 @@ public class DashboardPageController extends PageController {
      */
     @FXML
     private void initialize() {
-        userID = UserService.getInstance().getCurrentUser().getId();
+        userId = UserService.getInstance().getCurrentUser().getId();
 
-        dashboardService = new DashboardService(userID,
+        dashboardService = new DashboardService(userId,
                 new VineyardDAO(),
                 new WineDAO(new VineyardDAO()),
                 new ReviewDAO());
@@ -68,7 +77,7 @@ public class DashboardPageController extends PageController {
         // Add tables
         tagsDAO = new TagsDAO();
         AssignedTagsDAO assignedTagsDAO = new AssignedTagsDAO();
-        List<Tag> tags = tagsDAO.getFromUser(userID);
+        List<Tag> tags = tagsDAO.getFromUser(userId);
 
         // Add default reviewed options
         createNewTagList("My Reviewed Wines", dashboardService.getUserReviews().size(), -1);
@@ -81,7 +90,7 @@ public class DashboardPageController extends PageController {
             as the assignedtag would have a wineID also
              */
             List<AssignedTag> numWines = assignedTagsDAO.getTagsFromUser(
-                    userID,
+                    userId,
                     tag.getTagId());
 
             createNewTagList(tag.getName(), numWines.size(), tag.getColour());

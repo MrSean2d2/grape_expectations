@@ -179,7 +179,7 @@ public class DetailedViewPageController extends PageController implements Closab
 
             // Done Loading Tags
             logInMessageLabel.setText("");
-            ratingStars.setVisible(true );
+            ratingStars.setVisible(true);
             addTagLabel.setText("");
             if (review != null) {
                 notesTextArea.setText(review.getNotes());
