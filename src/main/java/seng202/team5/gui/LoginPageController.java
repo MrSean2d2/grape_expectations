@@ -1,7 +1,11 @@
 package seng202.team5.gui;
 
+import java.io.IOException;
 import java.util.Objects;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -11,6 +15,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.exceptions.PasswordIncorrectException;
 import seng202.team5.models.User;
@@ -22,7 +28,7 @@ import seng202.team5.services.UserService;
  *
  * @author Martyn Gascoigne
  */
-public class LoginPageController extends PageController {
+public class LoginPageController extends PasswordVisibilityController {
 
     @FXML
     private Button loginButton;
@@ -74,23 +80,9 @@ public class LoginPageController extends PageController {
     @FXML
     private void togglePasswordVisibility() {
         passwordVisible = !passwordVisible;
-
-        // If password visible, set visibility
-        if (passwordVisible) {
-            passwordVisibleField.setVisible(true);
-            passwordVisibleField.setManaged(true);
-            passwordField.setVisible(false);
-            passwordField.setManaged(false);
-            registerButton.requestFocus(); // make the register button focused
-            toggleVisibility.setImage(shownIcon);
-        } else {
-            passwordField.setVisible(true);
-            passwordField.setManaged(true);
-            passwordVisibleField.setVisible(false);
-            passwordVisibleField.setManaged(false);
-            registerButton.requestFocus(); // make the register button focused
-            toggleVisibility.setImage(hiddenIcon);
-        }
+        setVisible(passwordVisible, passwordField, passwordVisibleField);
+        registerButton.requestFocus();
+        toggleVisibility.setImage(passwordVisible ? shownIcon : hiddenIcon);
     }
 
     /**
@@ -98,15 +90,14 @@ public class LoginPageController extends PageController {
      */
     @FXML
     public void attemptLogin() {
-        usernameField.getStyleClass().remove("field_error");
-        passwordField.getStyleClass().remove("field_error");
+        resetFieldError(usernameField);
+        resetFieldError(passwordField);
 
         String username = usernameField.getText();
 
         if (username.isEmpty()) {
             // Show error
-            errorLabel.setText("Username cannot be empty!");
-            usernameField.getStyleClass().add("field_error");
+            fieldError(usernameField, errorLabel, "Username cannot be empty!");
             return;
         }
 
@@ -114,8 +105,7 @@ public class LoginPageController extends PageController {
 
         if (password.isEmpty()) {
             // Show error
-            errorLabel.setText("Password cannot be empty!");
-            passwordField.getStyleClass().add("field_error");
+            fieldError(passwordField, errorLabel, "Password cannot be empty!");
             return;
         }
 
@@ -133,16 +123,29 @@ public class LoginPageController extends PageController {
                 OpenWindowsService.getInstance().closeAllWindows();
 
                 // Go to the homepage
+                addNotification(String.format("User %s logged in", user.getUsername()), "#d5e958");
+                if (user.getIsAdmin() && userManager.isAdminDefaultPassword()) {
+                    userManager.setSelectedUser(user);
+                    loadEditPassword();
+                    userManager.changedAdminPassword();
+                }
                 swapPage("/fxml/AccountManagePage.fxml");
             }
         } catch (NotFoundException e) {
-            errorLabel.setText("User doesn't exist!");
-            usernameField.getStyleClass().add("field_error");
+            fieldError(usernameField, errorLabel, "User doesn't exist!");
         } catch (PasswordIncorrectException e) {
-            errorLabel.setText("Password is incorrect!");
-            passwordField.getStyleClass().add("field_error");
+            fieldError(passwordField, errorLabel, "Password is incorrect!");
         }
     }
+
+    /**
+     * Load the edit password popup to force the user to edit their password.
+     */
+    private void loadEditPassword() {
+        openEditPasswordPopup(false, loginButton.getScene().getWindow());
+    }
+
+
 
     /**
      * Attempt to log in if the user presses enter.

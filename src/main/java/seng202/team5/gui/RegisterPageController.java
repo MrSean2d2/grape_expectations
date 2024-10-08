@@ -19,7 +19,7 @@ import seng202.team5.services.UserService;
  *
  * @author Martyn Gascoigne
  */
-public class RegisterPageController extends PageController {
+public class RegisterPageController extends FormErrorController {
 
     @FXML
     private Button loginButton;
@@ -141,31 +141,18 @@ public class RegisterPageController extends PageController {
 
         String username = usernameField.getText();
 
-        if (username.isEmpty()) {
-            errorLabel.setText("Username cannot be empty!");
-            usernameField.getStyleClass().add("field_error");
-            return;
-        }
-
-        if (username.length() < 4 || username.length() > 20) {
-            errorLabel.setText("Username must be between 4 and 20 characters!");
-            usernameField.getStyleClass().add("field_error");
+        UserService userService = UserService.getInstance();
+        String message = userService.checkName(username);
+        if (message != null) {
+            fieldError(usernameField, errorLabel, message);
             return;
         }
 
         String password = passwordField.getText();
-
-        if (password.isEmpty()) {
-            errorLabel.setText("Password cannot be empty!");
-            passwordField.getStyleClass().add("field_error");
-            return;
-        }
-
         // Password validation
-        if (!UserService.checkPasswordValidity(password)) {
-            errorLabel.setText("Password must be between 8 and 30 characters, "
-                    + "containing letters, a number, and a special character!");
-            passwordField.getStyleClass().add("field_error");
+        String passMessage = userService.checkPassword(password);
+        if (passMessage != null) {
+            fieldError(passwordField, errorLabel, passMessage);
             return;
         }
 
@@ -178,11 +165,10 @@ public class RegisterPageController extends PageController {
             return;
         }
 
-        UserService userManager = UserService.getInstance();
-        User user = userManager.registerUser(username, password);
+        User user = userService.registerUser(username, password);
 
         if (user != null) {
-            userManager.setCurrentUser(user);
+            userService.setCurrentUser(user);
             usernameField.setText("");
             passwordField.setText("");
 

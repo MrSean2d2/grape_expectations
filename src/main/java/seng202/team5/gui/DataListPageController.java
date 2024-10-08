@@ -25,6 +25,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.RangeSlider;
@@ -52,13 +54,13 @@ public class DataListPageController extends PageController {
     @FXML
     public ToggleButton favToggleButton;
     @FXML
-    public Label ratingSliderValue;
+    public TextField ratingSliderValue;
     @FXML
     public RangeSlider priceRangeSlider;
     @FXML
-    public Label maxPriceLabel;
+    public TextField maxPriceValue;
     @FXML
-    public Label minPriceLabel;
+    public TextField minPriceValue;
 
     @FXML
     private TableView<Wine> wineTable;
@@ -100,6 +102,7 @@ public class DataListPageController extends PageController {
     private double maxRatingFilter;
     private boolean favouriteFilter;
     private static final Logger log = LogManager.getLogger(DataListPageController.class);
+    private boolean isSliderChanging = false;
 
 
     /**
@@ -167,7 +170,7 @@ public class DataListPageController extends PageController {
             applySearchFilters();
         }
         initAdminAction();
-
+        wineTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     private void initAdminAction() {
@@ -209,19 +212,85 @@ public class DataListPageController extends PageController {
         // sets value of price/rating labels in real time
         priceRangeSlider.highValueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    Float value = Float.valueOf(String.format("%.1f", newVal.floatValue()));
-                    maxPriceLabel.setText(String.valueOf(value));
+                    int value = Integer.valueOf(String.format("%.0f", newVal.floatValue()));
+                    maxPriceValue.setText(String.valueOf(value));
                 });
+
+        minPriceValue.textProperty().addListener((observable, oldVal, newVal) -> {
+            try {
+                Double newMinPrice = Double.parseDouble(newVal);
+                if (newMinPrice >= priceRangeSlider.getMin()) {
+                    minPriceValue.setOnKeyPressed(event -> {
+                        if (event.getCode() == KeyCode.ENTER) {
+                            priceRangeSlider.setLowValue(newMinPrice);
+                            minPriceFilter = newMinPrice;
+                            if (!isSliderChanging) {
+                                applySearchFilters();
+                            }
+                        }
+                    });
+                } else {
+                    addNotification("Please pick a minimum price greater than " + (int) priceRangeSlider.getMin(), "#d5e958");
+                }
+            } catch (NumberFormatException e) {
+                addNotification("Invalid Number", "#d5e958");
+            }
+        });
+
         priceRangeSlider.lowValueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    Float value = Float.valueOf(String.format("%.1f", newVal.floatValue()));
-                    minPriceLabel.setText(String.valueOf(value));
+                    int value = Integer.valueOf(String.format("%.0f", newVal.floatValue()));
+                    minPriceValue.setText(String.valueOf(value));
                 });
+
+        maxPriceValue.textProperty().addListener((observable, oldVal, newVal) -> {
+            try {
+                Double newMaxPrice = Double.parseDouble(newVal);
+                if (newMaxPrice <= priceRangeSlider.getMax()) {
+                    maxPriceValue.setOnKeyPressed(event -> {
+                        if (event.getCode() == KeyCode.ENTER) {
+                            priceRangeSlider.setHighValue(newMaxPrice);
+                            maxPriceFilter = newMaxPrice;
+                            if (!isSliderChanging) {
+                                applySearchFilters();
+                            }
+                        }
+                    });
+                } else {
+                    addNotification("Please pick a maximum price less than " + (int) priceRangeSlider.getMax(), "#d5e958");
+                }
+            } catch (NumberFormatException e) {
+                addNotification("Please pick a price between " + (int) priceRangeSlider.getMin() + " and " + (int) priceRangeSlider.getMax(), "#d5e958");
+            }
+        });
+
         ratingSlider.valueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    Float value = Float.valueOf(String.format("%.1f", newVal.floatValue()));
+                    int value = Integer.valueOf(String.format("%.0f", newVal.floatValue()));
                     ratingSliderValue.setText(String.valueOf(value));
                 });
+
+        ratingSliderValue.textProperty().addListener((observable, oldVal, newVal) -> {
+            try {
+                Double newRating = Double.parseDouble(newVal);
+                if (newRating >= ratingSlider.getMin() && newRating <= ratingSlider.getMax()) {
+                    ratingSliderValue.setOnKeyPressed(event -> {
+                        if (event.getCode() == KeyCode.ENTER) {
+                            ratingSlider.setValue(newRating);
+                            minRatingFilter = newRating;
+                            if (!isSliderChanging) {
+                                applySearchFilters();
+                            }
+                        }
+                    });
+                } else {
+                    addNotification("Please pick a rating between " + (int) ratingSlider.getMin() + " and " + (int) ratingSlider.getMax(), "#d5e958");
+                }
+            } catch (NumberFormatException e) {
+                addNotification("Invalid Number", "#d5e958");
+            }
+
+        });
     }
 
     /**
@@ -229,19 +298,26 @@ public class DataListPageController extends PageController {
      */
     private void initializeSliderListeners() {
         priceRangeSlider.setOnMouseReleased(event -> {
+            isSliderChanging = false;
             maxPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getHighValue()));
             applySearchFilters();
         });
 
         priceRangeSlider.setOnMouseReleased(event -> {
+            isSliderChanging = false;
             minPriceFilter = Float.parseFloat(String.format("%.1f", priceRangeSlider.getLowValue()));
             applySearchFilters();
         });
 
+        priceRangeSlider.setOnMousePressed(event -> isSliderChanging = true);
+
         ratingSlider.setOnMouseReleased(event -> {
+            isSliderChanging = false;
             minRatingFilter = Float.parseFloat(String.format("%.1f", ratingSlider.getValue()));
             applySearchFilters();
         });
+
+        ratingSlider.setOnMousePressed(event -> isSliderChanging = true);
     }
 
     /**
@@ -287,8 +363,8 @@ public class DataListPageController extends PageController {
         priceRangeSlider.setLowValue(minPrice);
         priceRangeSlider.setHighValue(maxPrice);
 
-        minPriceLabel.setText(String.valueOf(minPrice));
-        maxPriceLabel.setText(String.valueOf(maxPrice));
+        minPriceValue.setText(String.valueOf(minPrice));
+        maxPriceValue.setText(String.valueOf(maxPrice));
         ratingSliderValue.setText(String.valueOf(minRating));
 
         // Defaults
@@ -390,8 +466,7 @@ public class DataListPageController extends PageController {
      * Resets search and filters.
      */
     public void onResetSearchFilterButtonClicked() {
-        ratingSlider.setValue(0.0);
-        ratingSliderValue.setText("0");
+        ratingSlider.setValue(ratingSlider.getMin());
         searchTextField.clear();
         wineTable.getItems().clear();
         setDefaults();
