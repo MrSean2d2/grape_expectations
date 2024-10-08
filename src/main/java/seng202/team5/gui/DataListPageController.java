@@ -35,10 +35,7 @@ import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
-import seng202.team5.services.UserService;
-import seng202.team5.services.VineyardService;
-import seng202.team5.services.WineService;
-
+import seng202.team5.services.*;
 
 
 /**
@@ -165,6 +162,8 @@ public class DataListPageController extends PageController {
             applySearchFilters();
             VineyardService.getInstance().setSelectedVineyard(null);
         }
+        String selectedPieSearchTerm = DashboardService.getInstance().getSelectedPieSliceSearch();
+
 
     }
 

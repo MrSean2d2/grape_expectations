@@ -19,6 +19,7 @@ public class DashboardService {
     private final VineyardDAO vineyardDAO;
     private final WineDAO wineDAO;
     private final ReviewDAO reviewDAO;
+    private static DashboardService instance;
 
     private List<Review> userReviews;
     private Map<String, Integer> varietyMap = new HashMap<>();
@@ -31,6 +32,7 @@ public class DashboardService {
      * Get pie chart numbers
      */
     String sql = "SELECT Count(*) FROM __ group by ";
+    private String selectedPieSearchTerm;
 
     public DashboardService(int userID, VineyardDAO vineyardDAO, WineDAO wineDAO, ReviewDAO reviewDAO) {
         this.userID = userID;
@@ -38,6 +40,18 @@ public class DashboardService {
         this.wineDAO = wineDAO;
         this.reviewDAO = reviewDAO;
         initializeData();
+    }
+
+    public DashboardService() {
+        //TODO get rid of need for empty constructor
+    }
+
+
+    public static DashboardService getInstance() {
+        if (instance == null) {
+            instance = new DashboardService();
+        }
+        return instance;
     }
 
     public void initializeData() {
@@ -82,5 +96,14 @@ public class DashboardService {
         list.sort(Map.Entry.<K, V>comparingByValue().reversed());
 
         return list;
+    }
+
+    public String setSelectedPieSliceSearch(String searchTerm){
+        this.selectedPieSearchTerm = selectedPieSearchTerm;
+        return searchTerm;
+    }
+    public String getSelectedPieSliceSearch(){
+        return selectedPieSearchTerm;
+        
     }
 }

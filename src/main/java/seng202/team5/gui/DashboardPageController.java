@@ -230,8 +230,8 @@ public class DashboardPageController extends PageController {
             });
             data.getNode().setOnMouseClicked(event -> {
                 String message = "you clicked " + data.getName() + " which has vlaue " + data.getPieValue();
-                System.out.println(message);
 
+                swapPage("/fxml/DataListPage.fxml");
             });
         }
     }
