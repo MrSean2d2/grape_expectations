@@ -1,5 +1,8 @@
 package seng202.team5.unittests.respository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,9 +12,6 @@ import seng202.team5.models.*;
 import seng202.team5.repository.*;
 import seng202.team5.services.DatabaseService;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
@@ -127,14 +127,18 @@ public class AssignedTagsDAOTest {
 
         testWine1.setId(wineDAO.add(testWine1));
 
-        assignedTagsDAO.add(new AssignedTag(testTag.getTagId(), testUser.getId(), testWine1.getId()));
-        assignedTagsDAO.add(new AssignedTag(testTag2.getTagId(), testUser2.getId(), testWine1.getId()));
+        assignedTagsDAO.add(new AssignedTag(testTag.getTagId(),
+                testUser.getId(), testWine1.getId()));
+        assignedTagsDAO.add(new AssignedTag(testTag2.getTagId(),
+                testUser2.getId(), testWine1.getId()));
 
-        AssignedTag assignedTag = assignedTagsDAO.getSingleTag(testTag.getTagId(), testUser.getId(), testWine1.getId());
+        AssignedTag assignedTag = assignedTagsDAO.getSingleTag(testTag.getTagId(),
+                testUser.getId(), testWine1.getId());
         Tag foundTag = tagsDAO.getOne(assignedTag.getTagId());
         assertEquals("Test Tag", foundTag.getName());
 
-        AssignedTag assignedTag2 = assignedTagsDAO.getSingleTag(testTag2.getTagId(), testUser2.getId(), testWine1.getId());
+        AssignedTag assignedTag2 = assignedTagsDAO.getSingleTag(testTag2.getTagId(),
+                testUser2.getId(), testWine1.getId());
         Tag foundTag2 = tagsDAO.getOne(assignedTag2.getTagId());
         assertEquals("Test Tag 2", foundTag2.getName());
     }
@@ -217,7 +221,8 @@ public class AssignedTagsDAOTest {
         assignedTagsDAO.add(new AssignedTag(2, testUser.getId(), testWine2.getId()));
         assignedTagsDAO.add(new AssignedTag(0, testUser2.getId(), testWine1.getId()));
 
-        List<AssignedTag> assignedTags = assignedTagsDAO.getAllAssigned(testWine1.getId(), testUser.getId());
+        List<AssignedTag> assignedTags = assignedTagsDAO.getAllAssigned(testWine1.getId(),
+                testUser.getId());
         assertEquals(1,  assignedTags.size());
 
         assignedTags = assignedTagsDAO.getAllAssigned(testWine2.getId(), testUser.getId());

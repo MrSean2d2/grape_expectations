@@ -81,7 +81,7 @@ public class DashboardPageController extends PageController {
     private int userId;
 
     /**
-     * Initialises the dashboard page
+     * Initialises the dashboard page.
      * Fetches user reviews, processes data and updates the pie chart
      */
     @FXML
@@ -89,7 +89,9 @@ public class DashboardPageController extends PageController {
         userId = UserService.getInstance().getCurrentUser().getId();
 
         if (userId != 0) {
-            titleLabel.setText("Hello, " + UserService.getInstance().getCurrentUser().getUsername() + "!");
+            titleLabel.setText("Hello, "
+                    + UserService.getInstance().getCurrentUser().getUsername()
+                    + "!");
         }
 
         dashboardService = new DashboardService(
@@ -102,7 +104,9 @@ public class DashboardPageController extends PageController {
         int numWinesReviewed = dashboardService.getUserReviews().size();
         if (numWinesReviewed < 5) {
             pieChart.setVisible(false);
-            notEnoughRatingsMessageLabel.setText("Rate " + (5 - numWinesReviewed) + " more wine(s) to view Pie Chart Stats!");
+            notEnoughRatingsMessageLabel.setText("Rate "
+                    + (5 - numWinesReviewed)
+                    + " more wine(s) to view Pie Chart Stats!");
             notEnoughRatingsMessageLabel.setVisible(true);
         } else {
             pieChart.setVisible(true);
@@ -129,7 +133,9 @@ public class DashboardPageController extends PageController {
         List<Tag> tags = tagsDAO.getFromUser(userId);
 
         // Add default reviewed options
-        createNewTagList("My Reviewed Wines", dashboardService.getUserReviews().size(), -1, 0, false);
+        createNewTagList("My Reviewed Wines",
+                dashboardService.getUserReviews().size(),
+                -1, 0, false);
 
         // Add all user tag options
         for (Tag tag : tags) {
@@ -138,7 +144,11 @@ public class DashboardPageController extends PageController {
                     tag.getTagId());
 
             boolean canEdit = (tag.getUserId() == userId);
-            createNewTagList(tag.getName(), numWines.size(), tag.getColour(), tag.getTagId(), canEdit);
+            createNewTagList(tag.getName(),
+                    numWines.size(),
+                    tag.getColour(),
+                    tag.getTagId(),
+                    canEdit);
         }
     }
 
@@ -155,7 +165,7 @@ public class DashboardPageController extends PageController {
 
         ToggleGroup tg = new ToggleGroup();
 
-        for (RadioButton button: radioButtonList) {
+        for (RadioButton button : radioButtonList) {
             button.getStyleClass().remove("radio-button");
             button.getStyleClass().add("button");
             button.setToggleGroup(tg);
@@ -174,7 +184,7 @@ public class DashboardPageController extends PageController {
     }
 
     /**
-     * Populates the top labels for user preferences
+     * Populates the top labels for user preferences.
      */
     private void updateTopLabels() {
         // get max
@@ -229,7 +239,7 @@ public class DashboardPageController extends PageController {
 
         // Wrap in a bigger box to allow for the edit button
         HBox biggerContainer = new HBox(tagContainer);
-        biggerContainer.getStyleClass().add( "max-width");
+        biggerContainer.getStyleClass().add("max-width");
         biggerContainer.setAlignment(Pos.CENTER_LEFT);
 
         // Add an edit button if the user has the ability to
@@ -271,9 +281,11 @@ public class DashboardPageController extends PageController {
             try {
                 HeaderController headerController = getHeaderController();
                 if (id == 0) {
-                    headerController.loadDataListPageWithTag("All Tags"); // Case for when top button is clicked
+                    // Case for when top button is clicked
+                    headerController.loadDataListPageWithTag("All Reviews");
                 } else {
-                    headerController.loadDataListPageWithTag(name); // Pass tag name or ID to DataListPage
+                    // Pass tag name or ID to DataListPage
+                    headerController.loadDataListPageWithTag(name);
                 }
 
             } catch (Exception e) {
@@ -323,7 +335,7 @@ public class DashboardPageController extends PageController {
     }
 
     /**
-     * Add a new tag
+     * Add a new tag.
      */
     @FXML
     private void addNewTag() {
@@ -355,33 +367,41 @@ public class DashboardPageController extends PageController {
         switch (category) {
             case "Variety":
                 List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();
-                for ( Map.Entry<String, Integer> entryVariety : topVariety) {
+                for (Map.Entry<String, Integer> entryVariety : topVariety) {
                     if (entryVariety.getValue() > 0) {
-                        dataList.add(new PieChart.Data(entryVariety.getKey(), entryVariety.getValue()));
+                        dataList.add(new PieChart.Data(
+                                entryVariety.getKey(),
+                                entryVariety.getValue()));
                     }
                 }
                 break;
             case "Region":
                 List<Map.Entry<String, Integer>> topRegion = dashboardService.getTopRegion();
-                for ( Map.Entry<String, Integer> entryRegion : topRegion) {
+                for (Map.Entry<String, Integer> entryRegion : topRegion) {
                     if (entryRegion.getValue() > 0) {
-                        dataList.add(new PieChart.Data(entryRegion.getKey(), entryRegion.getValue()));
+                        dataList.add(new PieChart.Data(
+                                entryRegion.getKey(),
+                                entryRegion.getValue()));
                     }
                 }
                 break;
             case "Year":
                 List<Map.Entry<Integer, Integer>> topYear = dashboardService.getTopYear();
-                for ( Map.Entry<Integer, Integer> entryYear : topYear) {
+                for (Map.Entry<Integer, Integer> entryYear : topYear) {
                     if (entryYear.getValue() > 0) {
-                    dataList.add(new PieChart.Data(String.valueOf(entryYear.getKey()), entryYear.getValue()));
+                        dataList.add(new PieChart.Data(
+                                String.valueOf(entryYear.getKey()),
+                                entryYear.getValue()));
                     }
                 }
                 break;
             case "Colour":
                 List<Map.Entry<String, Integer>> topColour = dashboardService.getTopColour();
-                for ( Map.Entry<String, Integer> entryColour : topColour) {
+                for (Map.Entry<String, Integer> entryColour : topColour) {
                     if (entryColour.getValue() > 0) {
-                        dataList.add(new PieChart.Data(String.valueOf(entryColour.getKey()), entryColour.getValue()));
+                        dataList.add(new PieChart.Data(
+                                String.valueOf(entryColour.getKey()),
+                                entryColour.getValue()));
                     }
                 }
                 break;
@@ -392,9 +412,10 @@ public class DashboardPageController extends PageController {
                     notEnoughRatingsMessageLabel.setVisible(false);
                 } else {
                     noTagMessageLabel.setVisible(false);
-                    for ( Map.Entry<String, Integer> entryTag : topTags) {
+                    for (Map.Entry<String, Integer> entryTag : topTags) {
                         if (entryTag.getValue() > 0) {
-                            dataList.add(new PieChart.Data(String.valueOf(entryTag.getKey()), entryTag.getValue()));
+                            dataList.add(new PieChart.Data(
+                                    String.valueOf(entryTag.getKey()), entryTag.getValue()));
                         }
                     }
                 }
@@ -414,15 +435,17 @@ public class DashboardPageController extends PageController {
         pieChart.setLabelsVisible(true);
 
         for (final PieChart.Data data : pieChart.getData()) {
-            double total = pieChart.getData().stream().mapToDouble(PieChart.Data::getPieValue).sum();
+            double total = pieChart.getData().stream().mapToDouble(
+                    PieChart.Data::getPieValue).sum();
             pieChart.getData().forEach(pieData -> {
-                String percentage = String.format("%.2f%%", ((pieData.getPieValue() / total) * 100));
+                String percentage = String.format("%.2f%%",
+                        ((pieData.getPieValue() / total) * 100));
                 Tooltip tooltip = new Tooltip(percentage);
                 Tooltip.install(pieData.getNode(), tooltip);
             });
             data.getNode().setOnMouseClicked(event -> {
                 String filterTerm = data.getName();
-                DashboardService.getInstance().setSelectedPieSliceSearch(category,filterTerm);
+                DashboardService.getInstance().setSelectedPieSliceSearch(category, filterTerm);
                 swapPage("/fxml/DataListPage.fxml");
             });
         }

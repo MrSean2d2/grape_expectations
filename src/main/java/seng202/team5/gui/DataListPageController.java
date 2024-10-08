@@ -3,7 +3,6 @@ package seng202.team5.gui;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,14 +27,8 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.RangeSlider;
-import seng202.team5.models.Review;
-import seng202.team5.models.Tag;
-import seng202.team5.models.Vineyard;
-import seng202.team5.models.Wine;
-import seng202.team5.repository.ReviewDAO;
-import seng202.team5.repository.TagsDAO;
-import seng202.team5.repository.VineyardDAO;
-import seng202.team5.repository.WineDAO;
+import seng202.team5.models.*;
+import seng202.team5.repository.*;
 import seng202.team5.services.DashboardService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.VineyardService;
@@ -99,8 +92,6 @@ public class DataListPageController extends PageController {
     private WineDAO wineDAO;
     private VineyardDAO vineyardDAO;
     private TagsDAO tagsDAO;
-    private ReviewDAO reviewDAO;
-
     private String yearFilter;
     private String varietyFilter;
     private String colourFilter;
@@ -121,7 +112,6 @@ public class DataListPageController extends PageController {
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
         tagsDAO = new TagsDAO();
-        reviewDAO = new ReviewDAO();
 
         varietyComboBox.setTooltip(new Tooltip("Filter by variety"));
         regionComboBox.setTooltip(new Tooltip("Filter by region"));
@@ -133,7 +123,6 @@ public class DataListPageController extends PageController {
         ratingSliderValue.setTooltip(new Tooltip("Set a minimum rating"));
         searchButton.setTooltip(new Tooltip("Enter search query"));
         resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
-
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -198,7 +187,7 @@ public class DataListPageController extends PageController {
         if (valid) {
             String category = selectedPieFilterTerm.get(0);
             String filterTerm = selectedPieFilterTerm.get(1);
-            tagComboBox.setValue("All Tags");
+            tagComboBox.setValue("All Reviews");
             switch (category) {
                 case "Variety":
                     varietyComboBox.setValue(filterTerm);
@@ -219,9 +208,10 @@ public class DataListPageController extends PageController {
                     // Any other invalid case, break
                     break;
             }
-            applySearchFilters();
             DashboardService.getInstance().setSelectedPieSliceSearch(null, null);
         }
+
+        applySearchFilters();
     }
 
     private void initAdminAction() {
@@ -411,7 +401,7 @@ public class DataListPageController extends PageController {
             ObservableList<String> observableTagList =
                     FXCollections.observableArrayList();
             observableTagList.add("Tags");
-            observableTagList.add("All Tags");
+            observableTagList.add("All Reviews");
             observableTagList.addAll(tagOptions);
             tagComboBox.setItems(observableTagList);
             tagComboBox.setDisable(false);
@@ -423,65 +413,9 @@ public class DataListPageController extends PageController {
         tagComboBox.getSelectionModel().selectedItemProperty().addListener((options,
                                                                             oldValue, newValue) -> {
             if (newValue != null) {
-                filterWinesByTag(newValue);
+                applySearchFilters();
             }
         });
-    }
-
-    /**
-     * Filters wines by the selected tag.
-     *
-     * @param selectedTag tag selected to filter by.
-     */
-    void filterWinesByTag(String selectedTag) {
-        int currentUserId = UserService.getInstance().getCurrentUser().getId();
-
-        List<Integer> wineIds;
-
-        if ("All Tags".equals(selectedTag)) {
-            // Show all wines that the current user has reviewed
-            List<Review> userReviews = reviewDAO.getFromUser(currentUserId);
-            wineIds = userReviews.stream()
-                    .map(Review::getWineId)
-                    .distinct()
-                    .collect(Collectors.toList());
-        } else if ("Tags".equals(selectedTag)) {
-            wineIds = wineDAO.getAll().stream()
-                    .map(Wine::getId)
-                    .collect(Collectors.toList()); // Returns all wineIDs
-        } else {
-            // Filter reviews that contain the selected tag
-            List<Review> userReviews = reviewDAO.getFromUser(currentUserId);
-
-            wineIds = userReviews.stream()
-                    .filter(review -> {
-                        List<Tag> wineTags = tagsDAO.getFromWine(review.getWineId());
-                        return wineTags.stream().anyMatch(tag -> tag.getName().equals(selectedTag));
-                    })
-                    .map(Review::getWineId)
-                    .distinct()
-                    .collect(Collectors.toList());
-        }
-
-        // Fetch the wines based on the filtered wine IDs and apply other filters
-        List<Wine> filteredWines = wineDAO.getAll().stream()
-                .filter(wine -> wineIds.contains(wine.getId()))   // Tag filtering
-                .filter(wine -> varietyFilter.equals("0")
-                        || wine.getWineVariety().equals(varietyFilter))  // Variety filter
-                .filter(wine -> regionFilter.equals("0")
-                        || wine.getRegion().equals(regionFilter))  // Region filter
-                .filter(wine -> yearFilter.equals("0")
-                        || String.valueOf(wine.getYear()).equals(yearFilter))  // Year filter
-                .filter(wine -> wine.getPrice() >= minPriceFilter
-                        && wine.getPrice() <= maxPriceFilter)  // Price filter
-                .filter(wine -> colourFilter.equals("0")
-                        || wine.getWineColour().equals(colourFilter)) // Colour filter
-                .filter(wine -> wine.getRating() >= minRatingFilter)  // Rating filter
-                .filter(wine -> wine.getName().contains(searchTextField.getText())) // Search filter
-                .collect(Collectors.toList());
-
-        ObservableList<Wine> filteredWineList = FXCollections.observableArrayList(filteredWines);
-        wineTable.setItems(filteredWineList);
     }
 
     /**
@@ -562,22 +496,15 @@ public class DataListPageController extends PageController {
      * Apply search and filters and updates table.
      */
     public void applySearchFilters() {
-        String sql = wineDAO.queryBuilder(searchTextField.getText(),
+        String selectedTag = tagComboBox.getValue();
+        WineService.getInstance().searchWines(searchTextField.getText(),
                 varietyFilter, colourFilter, regionFilter,
                 yearFilter, minPriceFilter, maxPriceFilter,
-                minRatingFilter, maxRatingFilter);
-
-        List<Wine> queryResults = wineDAO.executeSearchFilter(sql, searchTextField.getText());
+                minRatingFilter, maxRatingFilter, selectedTag);
 
         // If a tag is selected, apply tag filtering as well
-        String selectedTag = tagComboBox.getValue();
-        if (!Objects.equals(selectedTag, "Tags") && selectedTag != null) {
-            filterWinesByTag(selectedTag);
-        } else {
-            ObservableList<Wine> observableQueryResults = WineService.getInstance().getWineList();
-            wineTable.setItems(observableQueryResults);
-        }
-
+        ObservableList<Wine> observableQueryResults = WineService.getInstance().getWineList();
+        wineTable.setItems(observableQueryResults);
         tableResults.setText(wineTable.getItems().size() + " results");
         addNotification("Applied Filter", "#d5e958");
     }
@@ -665,7 +592,9 @@ public class DataListPageController extends PageController {
         colourComboBox.setValue(colourComboBox.getItems().getFirst());
         regionComboBox.setValue(regionComboBox.getItems().getFirst());
         yearComboBox.setValue(yearComboBox.getItems().getFirst());
-        tagComboBox.setValue(tagComboBox.getItems().getFirst());
+        if (!tagComboBox.isDisabled()) {
+            tagComboBox.setValue(tagComboBox.getItems().getFirst());
+        }
 
         setDefaultVarietyBox();
         addNotification("Search and filters reset", "#d5e958");

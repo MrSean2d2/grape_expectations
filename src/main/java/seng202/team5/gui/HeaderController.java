@@ -130,7 +130,7 @@ public class HeaderController {
     }
 
     @FXML
-    private void loadDataListPageWithTag(String tagFilter) throws Exception {
+    void loadDataListPageWithTag(String tagFilter) throws Exception {
         // Load the loading page first
         FXMLLoader loaderSpinner = new FXMLLoader(
                 getClass().getResource("/fxml/LoadingSpinner.fxml"));
@@ -153,7 +153,6 @@ public class HeaderController {
 
                 // Pass the tag filter to the controller
                 if (dataListPageController != null) {
-                    dataListPageController.filterWinesByTag(tagFilter);
                     dataListPageController.setComboBoxTagSelection(tagFilter);
                 }
 

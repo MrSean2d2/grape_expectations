@@ -124,7 +124,8 @@ public class TagsDAO implements DAOInterface<Tag> {
      */
     public List<Tag> getFromWine(int wineId) {
         List<Tag> tags = new ArrayList<>();
-        String sql = "SELECT created_tags.tagid, created_tags.userid, created_tags.name, created_tags.colour "
+        String sql = "SELECT created_tags.tagid, created_tags.userid,"
+                + "created_tags.name, created_tags.colour "
                 + "FROM created_tags "
                 + "JOIN assigned_tags ON created_tags.tagid = assigned_tags.tagid "
                 + "WHERE assigned_tags.wineid=?";
@@ -144,6 +145,31 @@ public class TagsDAO implements DAOInterface<Tag> {
         } catch (SQLException sqlException) {
             log.error(sqlException);
             return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Get the tag's id from its name and user id.
+     *
+     * @param name the tag name
+     * @param userId the id of the user who created the tag
+     * @return the id of the tag
+     */
+    public int getIdFromName(String name, int userId) {
+        int id = 0;
+        String sql = "SELECT tagid FROM created_tags WHERE name=? AND (userid=? OR userid=-1)";
+        try (Connection conn = databaseService.connect();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+            ps.setInt(2, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt("tagid");
+            }
+            return id;
+        } catch (SQLException e) {
+            log.error(e);
+            return 0;
         }
     }
 

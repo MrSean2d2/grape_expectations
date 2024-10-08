@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import seng202.team5.models.*;
 import seng202.team5.repository.*;
 
@@ -127,6 +126,7 @@ public class DashboardService {
     public List<Map.Entry<String, Integer>> getTopColour() {
         return sortHashMap(colourMap);
     }
+
     /**
      * Retrieves the top tags based on user ratings.
      *
@@ -135,6 +135,7 @@ public class DashboardService {
     public List<Map.Entry<String, Integer>> getTopTags() {
         return sortHashMap(tagMap);
     }
+
     /**
      * Retrieves the list of user reviews.
      *

@@ -437,8 +437,10 @@ public class WineDAOTest {
          */
         @Test
         public void testFilterRegion() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name, "
+                    + "wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour, "
+                    + "vineyard.name AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD "
                     + "WHERE vineyard.id = wine.vineyard "
                     + "AND wine.colour = 'testRegion' "
@@ -452,8 +454,10 @@ public class WineDAOTest {
          */
         @Test
         public void testFilterYear() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name, "
+                    + "wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour, "
+                    + "vineyard.name AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD "
                     + "WHERE vineyard.id = wine.vineyard AND vineyard.region = '1999' "
                     + "AND wine.price <= -1.0 AND wine.price >= 800.0;";

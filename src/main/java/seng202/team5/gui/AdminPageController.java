@@ -44,7 +44,7 @@ public class AdminPageController extends PageController {
     private UserDAO userDAO;
 
     /**
-     * Initialise columns
+     * Initialise columns.
      */
     @FXML
     private void initialize() {
@@ -71,8 +71,9 @@ public class AdminPageController extends PageController {
     }
 
     /**
-     * Handles event of search after enter pressed
-     * @param event
+     * Handles event of search after enter pressed.
+     *
+     * @param event key event
      */
     @FXML
     private void enterPressed(KeyEvent event) {
@@ -82,7 +83,7 @@ public class AdminPageController extends PageController {
     }
 
     /**
-     * Handles event of search pressed, searches users for term in search field
+     * Handles event of search pressed, searches users for term in search field.
      */
     @FXML
     private void searchPressed() {
