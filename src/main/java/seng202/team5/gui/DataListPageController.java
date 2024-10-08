@@ -237,6 +237,9 @@ public class DataListPageController extends PageController {
         varietyComboBox.setItems(observableVarietyList);
     }
 
+    /**
+     * Populates the tag combo box with the user specific tags, and initialises the listener for when the box is used.
+     */
     private void setUpTagFilter() {
         if (UserService.getInstance().getCurrentUser() != null) {
             // User is logged in, set up the tag combo box
