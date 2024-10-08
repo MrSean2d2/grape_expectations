@@ -115,7 +115,7 @@
                                     </cursor>
                                 </Slider>
                                 <Label alignment="CENTER" ellipsisString="---" prefHeight="17.0" prefWidth="111.0" text="Minimum Rating" textOverrun="CLIP" GridPane.halignment="CENTER" />
-                                <TextField fx:id="ratingSliderValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
+                                <TextField fx:id="ratingSliderValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="slidertextbox" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
                             </children>
                         </GridPane>
                         <GridPane prefHeight="50.0" prefWidth="208.0" GridPane.columnIndex="3">
@@ -136,8 +136,8 @@
                                     </cursor>
                                 </RangeSlider>
                                 <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Price Range" GridPane.halignment="CENTER" />
-                        <TextField fx:id="minPriceValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" GridPane.rowSpan="2" />
-                        <TextField fx:id="maxPriceValue" alignment="CENTER" layoutX="10.0" layoutY="12.0" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" />
+                        <TextField fx:id="minPriceValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="slidertextbox" GridPane.rowSpan="2" />
+                        <TextField fx:id="maxPriceValue" alignment="CENTER" layoutX="10.0" layoutY="12.0" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="slidertextbox" GridPane.halignment="RIGHT" GridPane.rowSpan="2" />
                             </children>
                         </GridPane>
                         <ComboBox fx:id="regionComboBox" onAction="#onRegionComboBoxClicked" prefHeight="24.0" prefWidth="148.0" promptText="Region" styleClass="dropdown" GridPane.columnIndex="1" GridPane.halignment="CENTER">
@@ -171,8 +171,8 @@
         </VBox>
         <GridPane maxWidth="1000.0" prefHeight="123.0" prefWidth="901.0" GridPane.halignment="CENTER">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="767.0" prefWidth="765.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="442.0" minWidth="10.0" prefWidth="136.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="901.0" minWidth="771.0" prefWidth="901.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="442.0" minWidth="0.0" prefWidth="0.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints vgrow="SOMETIMES" />
@@ -195,7 +195,7 @@
                         <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                     </GridPane.margin>
                 </Button>
-                <Label maxWidth="765.0" prefWidth="765.0" text="Here you can see a list of the wines currently in the database and filter them! Make sure to press enter when manually entering ranges for price and rating. Double click on a wine to view more information about it!" wrapText="true" GridPane.rowIndex="1">
+                <Label maxWidth="935.0" prefHeight="80.0" prefWidth="935.0" text="Here you can see a list of the wines currently in the database and filter them! Make sure to press enter when manually entering ranges for price and rating. Double click on a wine to view more information about it!" wrapText="true" GridPane.rowIndex="1">
                     <font>
                         <Font size="18.0" />
                     </font>
