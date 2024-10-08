@@ -195,7 +195,7 @@
                         <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                     </GridPane.margin>
                 </Button>
-                <Label maxWidth="765.0" prefWidth="765.0" text="Here you can see a list of the wines currently in the database and filter them! Double click on a wine to view more information about it!" wrapText="true" GridPane.rowIndex="1">
+                <Label maxWidth="765.0" prefWidth="765.0" text="Here you can see a list of the wines currently in the database and filter them! Make sure to press enter when manually entering ranges for price and rating. Double click on a wine to view more information about it!" wrapText="true" GridPane.rowIndex="1">
                     <font>
                         <Font size="18.0" />
                     </font>
