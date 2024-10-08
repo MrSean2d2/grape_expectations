@@ -364,27 +364,6 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
-    /**
-     * get the colour of a given variety by finding the colour of the first list item in that variety
-     */
-    public List<String> getColourFromVariety(String givenVariety) {
-        List<String> colours = new ArrayList<>();
-        String sql = "SELECT DISTINCT colour FROM WINE WHERE variety = ?;";
-
-        try (Connection conn = databaseService.connect();
-             PreparedStatement prepstatement = conn.prepareStatement(sql)) {
-            prepstatement.setString(1, givenVariety);
-            ResultSet rs = prepstatement.executeQuery();
-            while (rs.next()) {
-                colours.add(rs.getString("colour"));
-            }
-            return colours;
-        } catch (SQLException e) {
-            log.error(e);
-            return new ArrayList<>();
-        }
-    }
-
     public List<String> getVarietyFromColour(String givenColour) {
         List<String> varieties = new ArrayList<>();
         String sql = "SELECT DISTINCT variety FROM WINE WHERE colour = ?;";

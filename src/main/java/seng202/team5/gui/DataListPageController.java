@@ -259,19 +259,15 @@ public class DataListPageController extends PageController {
         setVarietyOptions(varietyOptions);
     }
 
+    /**
+     * sets colour combo box options
+     */
     public void setColourComboBox() {
-        List<String> colourOptions;
-        if (varietyFilter.equals("0")) {//variety filter still at default value
-            colourOptions = List.of(new String[]{"Red", "Rosé", "White"});
-        } else {
-            colourOptions = wineDAO.getColourFromVariety(varietyFilter);
-        }
+        List<String> colourOptions = List.of(new String[]{"Red", "Rosé", "White"});
         ObservableList<String> observableColourList =
                 FXCollections.observableArrayList(colourOptions);
         observableColourList.addFirst("Colour");
         colourComboBox.setItems(observableColourList);
-
-
     }
 
     /**
@@ -340,7 +336,7 @@ public class DataListPageController extends PageController {
      */
     public void onVarietyComboBoxClicked() {
         String selectedVariety = String.valueOf(varietyComboBox.getValue());
-        if (!(Objects.equals(selectedVariety, "Variety") || Objects.equals(selectedVariety, "null"))) {
+        if (!(Objects.equals(selectedVariety, "Variety"))) {
             varietyFilter = selectedVariety;
             applySearchFilters();
         }
@@ -352,12 +348,11 @@ public class DataListPageController extends PageController {
      */
     public void onColourComboBoxClicked() {
         String selectedColour = String.valueOf(colourComboBox.getValue());
-        if (!(Objects.equals(selectedColour, "Colour") || selectedColour == null)) {
+        if (!(Objects.equals(selectedColour, "Colour"))) {
             colourFilter = selectedColour;
             setVarietyComboBox();
             applySearchFilters();
         }
-        //applySearchFilters();
     }
 
     /**
