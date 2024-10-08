@@ -74,7 +74,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <ComboBox fx:id="varietyComboBox" onAction="#onVarietyComboBoxClicked" prefWidth="150.0" promptText="Variety" styleClass="dropdown" GridPane.halignment="CENTER">
+                        <ComboBox fx:id="varietyComboBox" onAction="#onVarietyComboBoxClicked" prefWidth="100.0" promptText="Variety" GridPane.columnIndex="1" styleClass="dropdown" GridPane.halignment="CENTER">
                             <GridPane.margin>
                                 <Insets right="10.0" />
                             </GridPane.margin>
@@ -149,7 +149,7 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </ComboBox>
-                  <ComboBox fx:id="colourComboBox" prefWidth="150.0" promptText="Colour" GridPane.columnIndex="1" onAction="#onColourComboBoxClicked" prefHeight="24.0" styleClass="dropdown" GridPane.halignment="CENTER"/>
+                  <ComboBox fx:id="colourComboBox" onAction="#onColourComboBoxClicked" prefHeight="24.0" prefWidth="150.0" promptText="Colour" styleClass="dropdown" GridPane.columnIndex="0" GridPane.halignment="CENTER" />
                     </children>
                     <GridPane.margin>
                         <Insets />
