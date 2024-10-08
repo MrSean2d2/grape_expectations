@@ -50,7 +50,7 @@ public class DataLoadService {
     public DataLoadService() {
         this.fileName = pathFromConfig();
         this.wineService = WineService.getInstance();
-        log.info(fileName);
+        log.info("Selected {} for populating database", fileName);
     }
 
     /**
@@ -79,14 +79,14 @@ public class DataLoadService {
             Map<String, Object> obj = yaml.load(inputStream);
             Object result = obj.get("csvPath");
             if (result instanceof String) {
-                log.info(result);
+                log.info("Parsed csvPath: {}", result);
                 return Path.of((String) result);
             } else {
                 log.error("Unable to parse config file, 'csvPath' value is not a string");
                 return null;
             }
         } catch (IOException e) {
-            log.error(e);
+            log.warn("No config file present", e);
             return null;
         }
     }
