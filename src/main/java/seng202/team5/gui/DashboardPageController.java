@@ -156,8 +156,12 @@ public class DashboardPageController extends PageController {
         tagContainer.setOnMouseClicked(event -> {
             try {
                 HeaderController headerController = getHeaderController();
-                System.out.println(name);
-                headerController.loadDataListPageWithTag(name); // Pass tag name or ID to DataListPage
+                if (name.equals("My Reviewed Wines")) {
+                    headerController.loadDataListPageWithTag("All Tags"); // Case for when top button is clicked
+                } else {
+                    headerController.loadDataListPageWithTag(name); // Pass tag name or ID to DataListPage
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
