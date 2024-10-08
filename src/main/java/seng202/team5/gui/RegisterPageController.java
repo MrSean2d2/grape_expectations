@@ -1,8 +1,6 @@
 package seng202.team5.gui;
 
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import seng202.team5.models.User;
 import seng202.team5.services.UserService;
 
@@ -19,7 +19,7 @@ import seng202.team5.services.UserService;
  *
  * @author Martyn Gascoigne
  */
-public class RegisterPageController extends PageController {
+public class RegisterPageController extends FormErrorController {
 
     @FXML
     private Button loginButton;
@@ -141,57 +141,18 @@ public class RegisterPageController extends PageController {
 
         String username = usernameField.getText();
 
-        if (username.isEmpty()) {
-            errorLabel.setText("Username cannot be empty!");
-            usernameField.getStyleClass().add("field_error");
-            return;
-        }
-
-        if (username.length() < 4 || username.length() > 20) {
-            errorLabel.setText("Username must be between 4 and 20 characters!");
-            usernameField.getStyleClass().add("field_error");
+        UserService userService = UserService.getInstance();
+        String message = userService.checkName(username);
+        if (message != null) {
+            fieldError(usernameField, errorLabel, message);
             return;
         }
 
         String password = passwordField.getText();
-
-        if (password.isEmpty()) {
-            errorLabel.setText("Password cannot be empty!");
-            passwordField.getStyleClass().add("field_error");
-            return;
-        }
-
         // Password validation
-        if (password.length() < 8) {
-            errorLabel.setText("Password must contain at least 8 characters!");
-            passwordField.getStyleClass().add("field_error");
-            return;
-        }
-
-        Pattern letter = Pattern.compile("[a-zA-z]");
-        Matcher hasLetter = letter.matcher(password);
-
-        if (!hasLetter.find()) {
-            errorLabel.setText("Password must contain alphanumeric characters!");
-            passwordField.getStyleClass().add("field_error");
-            return;
-        }
-
-        Pattern digit = Pattern.compile("[0-9]");
-        Matcher hasDigit = digit.matcher(password);
-
-        if (!hasDigit.find()) {
-            errorLabel.setText("Password must contain a numeric character!");
-            passwordField.getStyleClass().add("field_error");
-            return;
-        }
-
-        Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
-        Matcher hasSpecial = special.matcher(password);
-
-        if (!hasSpecial.find()) {
-            errorLabel.setText("Password must contain a special character!");
-            passwordField.getStyleClass().add("field_error");
+        String passMessage = userService.checkPassword(password);
+        if (passMessage != null) {
+            fieldError(passwordField, errorLabel, passMessage);
             return;
         }
 
@@ -204,11 +165,10 @@ public class RegisterPageController extends PageController {
             return;
         }
 
-        UserService userManager = UserService.getInstance();
-        User user = userManager.registerUser(username, password);
+        User user = userService.registerUser(username, password);
 
         if (user != null) {
-            userManager.setCurrentUser(user);
+            userService.setCurrentUser(user);
             usernameField.setText("");
             passwordField.setText("");
 
@@ -218,6 +178,18 @@ public class RegisterPageController extends PageController {
             // Show error
             errorLabel.setText("Account with that username already exists!");
             usernameField.getStyleClass().add("field_error");
+        }
+    }
+
+    /**
+     * Attempt to register account if the user presses enter.
+     *
+     * @param event KeyEvent that triggered the method, pressing of a key
+     */
+    @FXML
+    private void enterPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            attemptRegister();
         }
     }
 

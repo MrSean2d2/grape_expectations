@@ -26,7 +26,7 @@ public class SearchFilterStepDefs {
     @When("the user applies a year {int} filter")
     public void theUserAppliesYearFilter(int year) {
         String query =
-                wineDAO.queryBuilder("0", "0","0", "0", String.valueOf(year), 0.0, 800.0, 0.0, 100.0,
+                wineDAO.queryBuilder("0", "0", "0", String.valueOf(year), 0.0, 800.0, 0.0, 100.0,
                         false);
         filteredWines = wineDAO.executeSearchFilter(query, null);
     }
@@ -151,7 +151,6 @@ public class SearchFilterStepDefs {
     public void noEntriesAreShown() {
         Assert.assertEquals(0, filteredWines.size());
     }
-
 
 
 }

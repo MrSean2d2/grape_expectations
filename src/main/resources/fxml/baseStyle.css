@@ -2,7 +2,7 @@
 The basic stylesheet for the project. Light and dark mode will inherit these
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&family=Space+Mono:wght@400;700&display=swap');
 
 .root {
     -fx-font-family: "Radio Canada Big";
@@ -14,12 +14,25 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-font-weight: 400;
 }
 
+.special-info-text {
+    -fx-font-family: "Radio Canada Big";
+    -fx-font-weight: 700;
+    /*-fx-font-style: italic;*/
+}
+.label.label_error {
+    -fx-text-fill: #e95958;
+}
+
 
 .button {
     -fx-padding: 8 15;
     -fx-border-width: 2;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
+}
+
+.button.detailed_view {
+    -fx-font-size: 16;
 }
 
 .button:hover {
@@ -228,4 +241,9 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 
 .max-width {
     -fx-max-width: Infinity;
+}
+
+.slider, .range-slider {
+    -fx-focus-color: #4db265;
+    -fx-faint-focus-color: #4DB26591;
 }

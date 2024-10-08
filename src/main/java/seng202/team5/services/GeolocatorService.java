@@ -22,6 +22,20 @@ import seng202.team5.models.Vineyard;
 public class GeolocatorService {
     private final Map<String, double[]> coordsCache = new HashMap<>();
 
+    private static GeolocatorService instance;
+
+    /**
+     * Returns the singleton GeolocatorService instance.
+     *
+     * @return instance of geolocator service class
+     */
+    public static GeolocatorService getInstance() {
+        if (instance == null) {
+            instance = new GeolocatorService();
+        }
+        return instance;
+    }
+
     /**
      * Runs a query with the address given and finds the most applicable lat, lng co-ordinates.
      */

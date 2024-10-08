@@ -62,7 +62,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      */
     public int getIdFromNameRegion(String vineyardName, String region) {
         int id = 0;
-        String sql = "SELECT * FROM vineyard WHERE name=? AND region=?";
+        String sql = "SELECT id FROM vineyard WHERE name=? AND region=?";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, vineyardName);
@@ -94,7 +94,8 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    vineyard = new Vineyard(rs.getString("name"), rs.getString("region"));
+                    vineyard = new Vineyard(rs.getInt("id"),
+                            rs.getString("name"), rs.getString("region"));
                 }
                 return vineyard;
             }
@@ -108,29 +109,33 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      * add Vineyard object to the database.
      *
      * @param toAdd object of type Vineyard to add
-     * @return id of added Vineyard
+     * @return id of added Vineyard (-1 if unsuccessful)
      */
     @Override
     public int add(Vineyard toAdd) {
         String sql = "INSERT OR IGNORE INTO vineyard (name, region, latitude, longitude) "
                 + "VALUES (?, ?, ?, ?)";
-        try (Connection conn = databaseService.connect();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, toAdd.getName());
-            ps.setString(2, toAdd.getRegion());
-            ps.setDouble(3, toAdd.getLat());
-            ps.setDouble(4, toAdd.getLon());
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-            int insertId = -1;
-            if (rs.next()) {
-                insertId = rs.getInt(1);
-            }
-            return insertId;
-        } catch (SQLException sqlException) {
-            log.error(sqlException);
+        if (toAdd.getName().isBlank()) {
             return -1;
+        } else {
+            try (Connection conn = databaseService.connect();
+                     PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, toAdd.getName());
+                ps.setString(2, toAdd.getRegion());
+                ps.setDouble(3, toAdd.getLat());
+                ps.setDouble(4, toAdd.getLon());
+                ps.executeUpdate();
+
+                ResultSet rs = ps.getGeneratedKeys();
+                int insertId = -1;
+                if (rs.next()) {
+                    insertId = rs.getInt(1);
+                }
+                return insertId;
+            } catch (SQLException sqlException) {
+                log.error(sqlException);
+                return -1;
+            }
         }
     }
 
@@ -167,6 +172,27 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
                 regions.add(rs.getString("region"));
             }
             return regions;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Get a list of distinct vineyard names from the database.
+     *
+     * @return the list of distinct names
+     */
+    public List<String> getDistinctNames() {
+        List<String> names = new ArrayList<>();
+        String sql = "SELECT DISTINCT name FROM VINEYARD;";
+        try (Connection conn = databaseService.connect();
+                Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                names.add(rs.getString("name"));
+            }
+            return names;
         } catch (SQLException e) {
             log.error(e);
             return new ArrayList<>();

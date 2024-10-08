@@ -1,8 +1,8 @@
 package seng202.team5.gui;
 
-import com.sun.javafx.webkit.WebConsoleListener;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +26,7 @@ import seng202.team5.services.WineService;
  * Controller class for MapPage.fxml.
  *
  * @author Martyn Gascoigne
+ * @author Amiele Miguel
  */
 public class MapPageController extends PageController {
 
@@ -44,17 +45,12 @@ public class MapPageController extends PageController {
 
     /**
      * Initialize the map page.
-     *
-     * @author Martyn Gascoigne
-     *
      */
     @FXML
     public void initialize() {
         vineyardTable.setPlaceholder(new Label("Select a region to view vineyards"));
         vineyardColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         vineyardDAO = new VineyardDAO();
-
-        WineService.getInstance().getWineList();
 
         vineyardTable.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
@@ -68,12 +64,8 @@ public class MapPageController extends PageController {
 
         webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
-        webEngine.load(getClass().getClassLoader().getResource(
-                "html/leaflet_osm_map.html").toExternalForm());
-//        WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
-//                log.info(String.format(
-//                        "Map WebView console log line: %d, message : %s", lineNumber, message)));
-
+        webEngine.load(Objects.requireNonNull(getClass().getClassLoader().getResource(
+                "html/leaflet_osm_map.html")).toExternalForm());
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == Worker.State.SUCCEEDED) {
@@ -87,6 +79,7 @@ public class MapPageController extends PageController {
                         System.out.println("Loaded map");
                     }
                 });
+        vineyardTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     /**
@@ -107,8 +100,6 @@ public class MapPageController extends PageController {
 
     /**
      * Add vineyards to map.
-     *
-     * @author Martyn Gascoigne
      */
     @FXML
     private void addVineyardsToMap() {
@@ -138,6 +129,4 @@ public class MapPageController extends PageController {
             }
         }
     }
-
-
 }

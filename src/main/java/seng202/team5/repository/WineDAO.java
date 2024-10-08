@@ -17,6 +17,7 @@ import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.services.DatabaseService;
+import seng202.team5.services.WineService;
 
 /**
  * Wine Data Access Object class. This class implements DAOInterface and handles
@@ -59,10 +60,10 @@ public class WineDAO implements DAOInterface<Wine> {
     @Override
     public List<Wine> getAll() {
         List<Wine> wines = new ArrayList<>();
-        String sql =
-                "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                        + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, "
-                        + "vineyard.region FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard;";
+        String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating,"
+                        + "wine.variety, wine.price, wine.colour, vineyard.name "
+                        + "AS vineyardName, vineyard.region FROM WINE, VINEYARD "
+                        + "WHERE vineyard.id = wine.vineyard;";
         try (Connection conn = databaseService.connect();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
@@ -76,7 +77,9 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getDouble("price"),
                         rs.getString(("variety")),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("Region"))
+                        new Vineyard(rs.getInt("id"),
+                                rs.getString("vineyardName"),
+                                rs.getString("Region"))
                 ));
 
             }
@@ -96,10 +99,10 @@ public class WineDAO implements DAOInterface<Wine> {
      */
     @Override
     public Wine getOne(int id) {
-        String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, "
-                + "vineyard.region FROM WINE, VINEYARD "
-                + "WHERE vineyard.id = wine.vineyard AND wine.id=?;";
+        String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating,"
+                        + "wine.variety, wine.price, wine.colour, vineyard.name "
+                        + "AS vineyardName, vineyard.region FROM WINE, VINEYARD "
+                        + "WHERE vineyard.id = wine.vineyard AND wine.id = ?;";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -114,7 +117,9 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getDouble("price"),
                         rs.getString("variety"),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("region")));
+                        new Vineyard(rs.getInt("id"),
+                                rs.getString("vineyardName"),
+                                rs.getString("region")));
             }
         } catch (SQLException e) {
             log.error(e);
@@ -133,10 +138,10 @@ public class WineDAO implements DAOInterface<Wine> {
      * @throws NotFoundException no user found with that username
      */
     public Wine getWineFromName(String name) throws NotFoundException {
-        String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, "
-                + "vineyard.region FROM WINE, VINEYARD "
-                + "WHERE vineyard.id = wine.vineyard AND wine.name=?;";
+        String sql = "SELECT wine.id, wine.name, wine.description, wine.year, wine.rating,"
+                + "wine.variety, wine.price, wine.colour, vineyard.name "
+                + "AS vineyardName, vineyard.region FROM WINE, VINEYARD "
+                + "WHERE vineyard.id = wine.vineyard AND wine.name = ?;";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
@@ -151,7 +156,9 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getDouble("price"),
                         rs.getString("variety"),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("region")));
+                        new Vineyard(rs.getInt("id"),
+                                rs.getString("vineyardName"),
+                                rs.getString("region")));
             }
         } catch (SQLException sqlException) {
             log.error(sqlException);
@@ -167,41 +174,42 @@ public class WineDAO implements DAOInterface<Wine> {
      */
     @Override
     public int add(Wine toAdd) {
-        if (!toAdd.isValidWine()) {
+        if (!WineService.getInstance().isValidWine(toAdd)) {
             return -1;
-        }
-        String sqlWine = "INSERT OR IGNORE INTO WINE(name, description, year, rating, "
-                + "price, vineyard, variety, colour) values (?,?,?,?,?,?,?,?);";
-        try (Connection conn = databaseService.connect();
-                PreparedStatement psWine = conn.prepareStatement(sqlWine)) {
-            int vineyardIndex = vineyardDAO.getIdFromNameRegion(toAdd.getVineyard().getName(),
-                    toAdd.getVineyard().getRegion());
-            if (vineyardIndex == 0) {
-                toAdd.getVineyard().setId(vineyardDAO.add(toAdd.getVineyard()));
-            } else {
-                toAdd.getVineyard().setId(vineyardIndex);
+        } else {
+            String sqlWine = "INSERT OR IGNORE INTO WINE(name, description, year, rating, "
+                    + "price, vineyard, variety, colour) values (?,?,?,?,?,?,?,?);";
+            try (Connection conn = databaseService.connect();
+                     PreparedStatement psWine = conn.prepareStatement(sqlWine)) {
+                int vineyardIndex = vineyardDAO.getIdFromNameRegion(toAdd.getVineyard().getName(),
+                        toAdd.getVineyard().getRegion());
+                if (vineyardIndex == 0) {
+                    toAdd.getVineyard().setId(vineyardDAO.add(toAdd.getVineyard()));
+                } else {
+                    toAdd.getVineyard().setId(vineyardIndex);
+                }
+
+                psWine.setString(1, toAdd.getName());
+                psWine.setString(2, toAdd.getDescription());
+                psWine.setInt(3, toAdd.getYear());
+                psWine.setDouble(4, toAdd.getRating());
+                psWine.setDouble(5, toAdd.getPrice());
+                psWine.setInt(6, toAdd.getVineyard().getId());
+                psWine.setString(7, toAdd.getWineVariety());
+                psWine.setString(8, toAdd.getWineColour());
+
+                psWine.executeUpdate();
+                ResultSet rs = psWine.getGeneratedKeys();
+
+                int insertId = -1;
+                if (rs.next()) {
+                    insertId = rs.getInt(1);
+                }
+                return insertId;
+            } catch (SQLException sqlException) {
+                log.error("Error adding wine: ", sqlException);
+                return -1;
             }
-
-            psWine.setString(1, toAdd.getName());
-            psWine.setString(2, toAdd.getDescription());
-            psWine.setInt(3, toAdd.getYear());
-            psWine.setDouble(4, toAdd.getRating());
-            psWine.setDouble(5, toAdd.getPrice());
-            psWine.setInt(6, toAdd.getVineyard().getId());
-            psWine.setString(7, toAdd.getWineVariety());
-            psWine.setString(8, toAdd.getWineColour());
-
-            psWine.executeUpdate();
-            ResultSet rs = psWine.getGeneratedKeys();
-
-            int insertId = -1;
-            if (rs.next()) {
-                insertId = rs.getInt(1);
-            }
-            return insertId;
-        } catch (SQLException sqlException) {
-            log.error("Error adding wine: ", sqlException);
-            return -1;
         }
     }
 
@@ -225,7 +233,7 @@ public class WineDAO implements DAOInterface<Wine> {
             conn.setAutoCommit(false);
             for (Wine wine : toAdd) {
                 //checks if wine attributes are valid
-                if (wine.isValidWine()) {
+                if (WineService.getInstance().isValidWine(wine)) {
                     ps.setString(1, wine.getName());
                     ps.setInt(2, wine.getYear());
                     ps.setString(3, wine.getWineVariety());
@@ -303,29 +311,31 @@ public class WineDAO implements DAOInterface<Wine> {
      */
     @Override
     public void update(Wine toUpdate) {
-        String sql  = "UPDATE wine SET name=?, "
-                + "year=?, "
-                + "variety=?, "
-                + "rating=?, "
-                + "price=?, "
-                + "colour=?, "
-                + "vineyard=?, "
-                + "description=? "
-                + "WHERE id=?";
-        try (Connection conn = databaseService.connect();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, toUpdate.getName());
-            ps.setInt(2, toUpdate.getYear());
-            ps.setString(3, toUpdate.getWineVariety());
-            ps.setInt(4, toUpdate.getRating());
-            ps.setDouble(5, toUpdate.getPrice());
-            ps.setString(6, toUpdate.getWineColour());
-            ps.setInt(7, toUpdate.getVineyard().getId());
-            ps.setString(8, toUpdate.getDescription());
-            ps.setInt(9, toUpdate.getId());
-            ps.executeUpdate();
-        } catch (SQLException sqlException) {
-            log.error(sqlException);
+        if (WineService.getInstance().isValidWine(toUpdate)) {
+            String sql = "UPDATE wine SET name=?, "
+                    + "year=?, "
+                    + "variety=?, "
+                    + "rating=?, "
+                    + "price=?, "
+                    + "colour=?, "
+                    + "vineyard=?, "
+                    + "description=? "
+                    + "WHERE id=?";
+            try (Connection conn = databaseService.connect();
+                     PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, toUpdate.getName());
+                ps.setInt(2, toUpdate.getYear());
+                ps.setString(3, toUpdate.getWineVariety());
+                ps.setInt(4, toUpdate.getRating());
+                ps.setDouble(5, toUpdate.getPrice());
+                ps.setString(6, toUpdate.getWineColour());
+                ps.setInt(7, toUpdate.getVineyard().getId());
+                ps.setString(8, toUpdate.getDescription());
+                ps.setInt(9, toUpdate.getId());
+                ps.executeUpdate();
+            } catch (SQLException sqlException) {
+                log.error(sqlException);
+            }
         }
     }
 
@@ -498,37 +508,55 @@ public class WineDAO implements DAOInterface<Wine> {
     public String queryBuilder(String search, String variety, String colour, String region, String year,
                                double minPrice, double maxPrice, double minRating,
                                double maxRating, boolean favourite) {
+
+        // Build the SQL statement
         String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
                 + "wine.rating, wine.variety, wine.price, wine.colour, "
                 + "vineyard.name AS vineyardName, vineyard.region FROM WINE, VINEYARD "
                 + "WHERE vineyard.id = wine.vineyard";
+
+        // Append onto the sql statement if necessary
         if (search != null) {
             sql +=  " AND (wine.name LIKE ? OR wine.description LIKE ?) ";
         }
+
+        // If the variety is valid, add it to the query
         if (!(Objects.equals(variety, "0")|| variety.equals("null"))) {
             sql += " AND wine.variety = '" + variety + "'";
         }
+        //If the colour is valid, add it to the query
         if (!(Objects.equals(colour, "0")|| Objects.equals(colour, "null"))) {
             sql += " AND wine.colour = '" + colour + "'";
         }
+
+        // If the region is valid, add it to the query
         if (!Objects.equals(region, "0") && region != null) {
             region = region.replace("'", "''");
             sql += " AND vineyard.region = '" + region + "'";
         }
+
+        // If the year is valid, add it to the query
         if (!Objects.equals(year, "0")) {
             sql += " AND wine.year = " + year;
         }
+
+        // If the max price is valid, add it to the query
         if (maxPrice != 800.0) {
             sql += " AND wine.price <= " + maxPrice;
         }
+
+        // If the min price is valid, add it to the query
         if (minPrice != 0.0) {
             sql += " AND wine.price >= " + minPrice;
         }
+
+        // If the rating fields are valid, add them to the query
         if (minRating > 0 && minRating <= 100) {
             sql += " AND wine.rating >= " + minRating;
         }
         //TODO: implement favourite toggle -- wait for review table
 
+        // "cap off" the SQL statement and return it
         sql += ";";
         return sql;
     }
@@ -559,10 +587,53 @@ public class WineDAO implements DAOInterface<Wine> {
                         rs.getInt("price"),
                         rs.getString("variety"),
                         rs.getString("colour"),
-                        new Vineyard(rs.getString("vineyardName"), rs.getString("Region"))
+                        new Vineyard(rs.getInt("id"),
+                                rs.getString("vineyardName"),
+                                rs.getString("Region"))
                 ));
             }
             return searchedWines;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+
+    /**
+     * Gets the list of wines that have been reviewed.
+     *
+     * @return list of Wine objects that have reviews
+     */
+    public List<Wine> getReviewedWines() {
+        List<Wine> reviewedWines = new ArrayList<>();
+        String sql = "SELECT DISTINCT wine.id, wine.name, "
+                + "wine.description, wine.year, wine.rating, "
+                + "wine.variety, wine.price, wine.colour, "
+                + "vineyard.name AS vineyardName, "
+                + "vineyard.region FROM WINE "
+                + "JOIN REVIEW on wine.id = review.wineid "
+                + "JOIN VINEYARD on VINEYARD.id = WINE.vineyard; ";
+        try (Connection conn = databaseService.connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                reviewedWines.add(new Wine(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("year"),
+                        rs.getInt("rating"),
+                        rs.getInt("price"),
+                        rs.getString("variety"),
+                        rs.getString("colour"),
+                        new Vineyard(rs.getInt("id"),
+                                rs.getString("vineyardName"),
+                                rs.getString("Region"))
+                ));
+            }
+            return reviewedWines;
+
         } catch (SQLException e) {
             log.error(e);
             return new ArrayList<>();
