@@ -478,6 +478,7 @@ public class DataListPageController extends PageController {
         yearComboBox.setValue(yearComboBox.getItems().getFirst());
 
         favToggleButton.setSelected(false);
+        addNotification("Search and filters reset", "#d5e958");
     }
 
     /**
