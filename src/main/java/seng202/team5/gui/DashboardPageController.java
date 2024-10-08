@@ -104,6 +104,9 @@ public class DashboardPageController extends PageController {
         }
     }
 
+    /**
+     * Populates the pie chart combo box
+     */
     private void updatePieChartComboBox() {
         ObservableList<String> piechartTypeOptions = FXCollections.observableArrayList();
         piechartTypeOptions.addAll("Variety", "Region", "Year");
@@ -118,6 +121,9 @@ public class DashboardPageController extends PageController {
         piechartTypeComboBox.getSelectionModel().select(0);
     }
 
+    /**
+     * Populates the top labels for user preferences
+     */
     private void updateTopLabels() {
         // get max
         List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();
@@ -136,6 +142,14 @@ public class DashboardPageController extends PageController {
             topYearLabel.setText(String.valueOf(topYear.getFirst().getKey()));
         }
     }
+
+    /**
+     * Creates lists of tags and sets up selection to datalist view
+     *
+     * @param name of tag
+     * @param numWines within tag list
+     * @param colour of tag
+     */
 
     public void createNewTagList(String name, int numWines, int colour) {
         Label nameTag = new Label(name);
@@ -233,9 +247,6 @@ public class DashboardPageController extends PageController {
                 String filterTerm = data.getName();
                 DashboardService.getInstance().setSelectedPieSliceSearch(category,filterTerm);
                 swapPage("/fxml/DataListPage.fxml");
-
-
-
             });
         }
     }
