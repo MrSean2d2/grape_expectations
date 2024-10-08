@@ -133,7 +133,7 @@
                   <Insets bottom="10.0" top="10.0" />
                </GridPane.margin>
             </ComboBox>
-            <PieChart fx:id="pieChart" animated="false" legendVisible="false" prefHeight="300.0" prefWidth="650.0" title="Pie Chart Title" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <PieChart fx:id="pieChart" animated="false" legendVisible="false"  prefHeight="300.0" prefWidth="650.0" title="Pie Chart Title" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Label style="-fx-font-weight: 700;" text="Wine Data" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <font>
                   <Font size="26.0" />

@@ -1,7 +1,9 @@
 package seng202.team5.gui;
 
+import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,6 +17,8 @@ import seng202.team5.repository.*;
 import seng202.team5.services.DashboardService;
 import seng202.team5.services.UserService;
 
+
+import java.awt.event.MouseEvent;
 import java.util.*;
 
 import static seng202.team5.services.ColourLookupService.getTagLabelColour;
@@ -53,17 +57,17 @@ public class DashboardPageController extends PageController {
     private void initialize() {
         userID = UserService.getInstance().getCurrentUser().getId();
 
-        if(userID != 0) {
+        if (userID != 0) {
             titleLabel.setText("Hello, " + UserService.getInstance().getCurrentUser().getUsername() + "!");
         }
 
-        dashboardService = new DashboardService(userID,new VineyardDAO(), new WineDAO(new VineyardDAO()), new ReviewDAO());
+        dashboardService = new DashboardService(userID, new VineyardDAO(), new WineDAO(new VineyardDAO()), new ReviewDAO());
 
         // Show error message if the user needs to rate more wines
         int numWinesReviewed = dashboardService.getUserReviews().size();
         if (numWinesReviewed < 5) {
             pieChart.setVisible(false);
-            notEnoughRatingsMessageLabel.setText("Rate " + (5-numWinesReviewed) + " more wine(s) to view Pie Chart Stats!");
+            notEnoughRatingsMessageLabel.setText("Rate " + (5 - numWinesReviewed) + " more wine(s) to view Pie Chart Stats!");
             notEnoughRatingsMessageLabel.setVisible(true);
             piechartTypeComboBox.setDisable(true);
         } else {
@@ -118,17 +122,17 @@ public class DashboardPageController extends PageController {
         // get max
         List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();
         List<Map.Entry<String, Integer>> topRegion = dashboardService.getTopRegion();
-        List<Map.Entry<Integer,Integer>> topYear = dashboardService.getTopYear();
+        List<Map.Entry<Integer, Integer>> topYear = dashboardService.getTopYear();
 
-        if(!topVariety.isEmpty()) {
+        if (!topVariety.isEmpty()) {
             topVarietyLabel.setText(topVariety.getFirst().getKey());
         }
 
-        if(!topRegion.isEmpty()) {
+        if (!topRegion.isEmpty()) {
             topRegionLabel.setText(topRegion.getFirst().getKey());
         }
 
-        if(!topYear.isEmpty()) {
+        if (!topYear.isEmpty()) {
             topYearLabel.setText(String.valueOf(topYear.getFirst().getKey()));
         }
     }
@@ -167,7 +171,6 @@ public class DashboardPageController extends PageController {
     }
 
 
-
     /**
      * Updates the pie chart data based on selected category
      *
@@ -181,7 +184,7 @@ public class DashboardPageController extends PageController {
         switch (category) {
             case "Variety":
                 List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();
-                for(int i = 0; i < Math.min(5, topVariety.size()); i++) {
+                for (int i = 0; i < Math.min(5, topVariety.size()); i++) {
                     dataList.add(new PieChart.Data(topVariety.get(i).getKey(), topVariety.get(i).getValue()));
                 }
 
@@ -189,7 +192,7 @@ public class DashboardPageController extends PageController {
                 break;
             case "Region":
                 List<Map.Entry<String, Integer>> topRegion = dashboardService.getTopRegion();
-                for(int i = 0; i < Math.min(5, topRegion.size()); i++) {
+                for (int i = 0; i < Math.min(5, topRegion.size()); i++) {
                     dataList.add(new PieChart.Data(topRegion.get(i).getKey(), topRegion.get(i).getValue()));
                 }
 
@@ -197,7 +200,7 @@ public class DashboardPageController extends PageController {
                 break;
             case "Year":
                 List<Map.Entry<Integer, Integer>> topYear = dashboardService.getTopYear();
-                for(int i = 0; i < Math.min(5, topYear.size()); i++) {
+                for (int i = 0; i < Math.min(5, topYear.size()); i++) {
                     dataList.add(new PieChart.Data(String.valueOf(topYear.get(i).getKey()), topYear.get(i).getValue()));
                 }
 
@@ -214,16 +217,21 @@ public class DashboardPageController extends PageController {
         pieChart.setStartAngle(180);
         pieChart.setLabelsVisible(true);
 
-        for (final PieChart.Data data: pieChart.getData()) {
+        for (final PieChart.Data data : pieChart.getData()) {
             double total = pieChart.getData().stream().mapToDouble(PieChart.Data::getPieValue).sum();
-            pieChart.getData().forEach( pieData->{
-                String percentage = String.format("%.2f%%", ((pieData.getPieValue()/total)*100));
+            pieChart.getData().forEach(pieData -> {
+                String percentage = String.format("%.2f%%", ((pieData.getPieValue() / total) * 100));
                 Tooltip tooltip = new Tooltip(percentage);
                 Tooltip.install(pieData.getNode(), tooltip);
             });
-
         }
-
+        pieChart.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getClickCount() == 2) {
+                System.out.print("piechart clicked " + pieChart.getData());
+                swapPage("/fxml/DataListPage.fxml");
+            }
+        });
     }
-
 }
+
+
