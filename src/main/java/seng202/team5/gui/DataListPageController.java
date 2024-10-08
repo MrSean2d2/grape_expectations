@@ -220,11 +220,15 @@ public class DataListPageController extends PageController {
             try {
                 Double newMinPrice = Double.parseDouble(newVal);
                 if (newMinPrice >= priceRangeSlider.getMin()) {
-                    priceRangeSlider.setLowValue(newMinPrice);
-                    minPriceFilter = newMinPrice;
-                    if (isSliderChanging == false) {
-                        applySearchFilters();
-                    }
+                    minPriceValue.setOnKeyPressed(event -> {
+                        if (event.getCode() == KeyCode.ENTER) {
+                            priceRangeSlider.setLowValue(newMinPrice);
+                            minPriceFilter = newMinPrice;
+                            if (!isSliderChanging) {
+                                applySearchFilters();
+                            }
+                        }
+                    });
                 } else {
                     addNotification("Please pick a minimum price greater than " + (int) priceRangeSlider.getMin(), "#d5e958");
                 }
@@ -243,11 +247,15 @@ public class DataListPageController extends PageController {
             try {
                 Double newMaxPrice = Double.parseDouble(newVal);
                 if (newMaxPrice <= priceRangeSlider.getMax()) {
-                    priceRangeSlider.setHighValue(newMaxPrice);
-                    maxPriceFilter = newMaxPrice;
-                    if (isSliderChanging == false) {
-                        applySearchFilters();
-                    }
+                    maxPriceValue.setOnKeyPressed(event -> {
+                        if (event.getCode() == KeyCode.ENTER) {
+                            priceRangeSlider.setHighValue(newMaxPrice);
+                            maxPriceFilter = newMaxPrice;
+                            if (!isSliderChanging) {
+                                applySearchFilters();
+                            }
+                        }
+                    });
                 } else {
                     addNotification("Please pick a maximum price less than " + (int) priceRangeSlider.getMax(), "#d5e958");
                 }
@@ -266,11 +274,15 @@ public class DataListPageController extends PageController {
             try {
                 Double newRating = Double.parseDouble(newVal);
                 if (newRating >= ratingSlider.getMin() && newRating <= ratingSlider.getMax()) {
-                    ratingSlider.setValue(newRating);
-                    minRatingFilter = newRating;
-                    if (isSliderChanging == false) {
-                        applySearchFilters();
-                    }
+                    ratingSliderValue.setOnKeyPressed(event -> {
+                        if (event.getCode() == KeyCode.ENTER) {
+                            ratingSlider.setValue(newRating);
+                            minRatingFilter = newRating;
+                            if (!isSliderChanging) {
+                                applySearchFilters();
+                            }
+                        }
+                    });
                 } else {
                     addNotification("Please pick a rating between " + (int) ratingSlider.getMin() + " and " + (int) ratingSlider.getMax(), "#d5e958");
                 }
@@ -454,8 +466,7 @@ public class DataListPageController extends PageController {
      * Resets search and filters.
      */
     public void onResetSearchFilterButtonClicked() {
-        ratingSlider.setValue(0.0);
-        ratingSliderValue.setText("0");
+        ratingSlider.setValue(ratingSlider.getMin());
         searchTextField.clear();
         wineTable.getItems().clear();
         setDefaults();
