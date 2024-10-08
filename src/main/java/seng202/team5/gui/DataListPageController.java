@@ -484,6 +484,10 @@ public class DataListPageController extends PageController {
             colourFilter = selectedColour;
             setVarietyComboBox();
             applySearchFilters();
+        } else {
+            colourFilter = "0";
+            setVarietyComboBox();
+            applySearchFilters();
         }
     }
 
