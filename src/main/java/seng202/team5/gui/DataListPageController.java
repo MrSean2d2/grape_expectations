@@ -156,21 +156,34 @@ public class DataListPageController extends PageController {
         initializeSliderListeners();
         initializeSliderValueListeners();
 
+        // Initialises with search term after vineyard selected from map
         Vineyard selectedVineyard = VineyardService.getInstance().getSelectedVineyard();
         if (selectedVineyard != null) {
             searchTextField.setText(selectedVineyard.getName());
             applySearchFilters();
             VineyardService.getInstance().setSelectedVineyard(null);
         }
-        List<String> selectedPieSearchTerm = DashboardService.getInstance().getSelectedPieSliceSearch();
-        if(selectedPieSearchTerm!=null) {
-            if (selectedPieSearchTerm.get(0) == "Variety") {
-                varietyComboBox.setValue(selectedPieSearchTerm.get(1));
-                tagComboBox.setValue("All Tags");
-                applySearchFilters();
-                DashboardService.getInstance().setSelectedPieSliceSearch(null,null);
-            }
 
+        // Initialises with filters after pie slice selected from dashboard
+        List<String> selectedPieFilterTerm = DashboardService.getInstance().getSelectedPieSliceSearch();
+
+        if(selectedPieFilterTerm!=null) {
+            String category = selectedPieFilterTerm.get(0);
+            String filterTerm = selectedPieFilterTerm.get(1);
+            switch (category) {
+                case "Variety":
+                    varietyComboBox.setValue(filterTerm);
+                    break;
+                case "Region":
+                    regionComboBox.setValue(filterTerm);
+                    break;
+                case "Year":
+                    yearComboBox.setValue(filterTerm);
+                    break;
+            }
+            tagComboBox.setValue("All Tags");
+            applySearchFilters();
+            DashboardService.getInstance().setSelectedPieSliceSearch(null,null);
         }
 
     }
