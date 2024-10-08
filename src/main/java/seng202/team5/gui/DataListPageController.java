@@ -251,8 +251,10 @@ public class DataListPageController extends PageController {
                     .collect(Collectors.toList());
 
             ObservableList<String> observableTagList =
-                    FXCollections.observableArrayList(tagOptions);
-            observableTagList.addFirst("Tags");
+                    FXCollections.observableArrayList();
+            observableTagList.add("Tags");
+            observableTagList.add("All Tags");
+            observableTagList.addAll(tagOptions);
             tagComboBox.setItems(observableTagList);
             tagComboBox.setDisable(false);
         } else {
@@ -277,7 +279,7 @@ public class DataListPageController extends PageController {
 
         List<Integer> wineIds;
 
-        if ("My Reviewed Wines".equals(selectedTag)) {
+        if ("All Tags".equals(selectedTag)) {
             // Show all wines that the current user has reviewed
             List<Review> userReviews = reviewDAO.getFromUser(currentUserId);
             wineIds = userReviews.stream()
