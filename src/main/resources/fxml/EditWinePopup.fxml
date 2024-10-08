@@ -66,14 +66,15 @@
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="108.0" minHeight="3.0" prefHeight="17.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="108.0" minHeight="13.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="108.0" minHeight="13.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="108.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="108.0" minHeight="6.0" prefHeight="18.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="210.0" minHeight="0.0" prefHeight="31.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="210.0" minHeight="5.0" prefHeight="18.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="226.0" minHeight="34.0" prefHeight="45.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="226.0" minHeight="32.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="247.0" minHeight="158.0" prefHeight="163.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="226.0" minHeight="28.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="226.0" minHeight="34.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="226.0" minHeight="32.0" prefHeight="44.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="247.0" minHeight="148.0" prefHeight="150.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="226.0" minHeight="28.0" prefHeight="37.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label text="Wine Name:" GridPane.rowIndex="1">
@@ -96,94 +97,87 @@
                         <Insets bottom="5.0" right="20.0" top="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="Rating:" GridPane.rowIndex="3">
+                  <Label text="Rating:" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Price:" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                  <Label text="Price:" GridPane.columnIndex="3" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField fx:id="priceField" styleClass="textbox" GridPane.columnIndex="5" GridPane.rowIndex="3">
+                  <TextField fx:id="priceField" styleClass="textbox" GridPane.columnIndex="5" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets bottom="5.0" right="20.0" top="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="\$" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                  <Label text="Variety:" GridPane.rowIndex="5">
+                  <Label text="\$" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+                  <Label text="Variety:" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField fx:id="varietyField" styleClass="textbox" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                  <TextField fx:id="varietyField" styleClass="textbox" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="Vineyard:" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                  <Label text="Vineyard:" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField fx:id="vineyardField" styleClass="textbox" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                  <TextField fx:id="vineyardField" styleClass="textbox" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets bottom="5.0" right="20.0" top="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="Description:" GridPane.rowIndex="7" GridPane.valignment="TOP">
+                  <Label text="Description:" GridPane.rowIndex="8" GridPane.valignment="TOP">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" top="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextArea fx:id="descriptionArea" prefHeight="200.0" prefWidth="200.0" styleClass="textbox" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="7">
+                  <TextArea fx:id="descriptionArea" prefHeight="200.0" prefWidth="200.0" styleClass="textbox" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="8">
                      <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="5.0" />
                      </GridPane.margin>
                   </TextArea>
-                  <Button mnemonicParsing="false" onAction="#submit" text="Submit" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="8" GridPane.valignment="CENTER">
+                  <Button mnemonicParsing="false" onAction="#submit" text="Submit" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="9" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="5.0" />
                      </GridPane.margin>
                   </Button>
-                  <Label fx:id="yearErrorLabel" styleClass="label_error" text="Label" visible="false" wrapText="true" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-                  <Label fx:id="priceErrorLabel" styleClass="label_error" text="Label" visible="false" wrapText="true" GridPane.columnIndex="6" GridPane.rowIndex="3" />
-                  <Label text="Region:" GridPane.columnIndex="3" GridPane.rowIndex="6">
+                  <Label text="Region:" GridPane.columnIndex="3" GridPane.rowIndex="7">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField fx:id="regionField" styleClass="textbox" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                  <TextField fx:id="regionField" styleClass="textbox" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="7">
                      <GridPane.margin>
-                        <Insets right="20.0" />
+                        <Insets bottom="5.0" right="20.0" top="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="Colour:" GridPane.rowIndex="6">
+                  <Label text="Colour:" GridPane.rowIndex="7">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField fx:id="colourField" styleClass="textbox" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                  <TextField fx:id="colourField" styleClass="textbox" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7">
                      <GridPane.margin>
                         <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField fx:id="ratingField" prefHeight="24.0" prefWidth="104.0" styleClass="textbox" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <TextField fx:id="ratingField" prefHeight="24.0" prefWidth="104.0" styleClass="textbox" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Slider fx:id="ratingSlider" showTickLabels="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                  <Slider fx:id="ratingSlider" showTickLabels="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin>
                   </Slider>
-                  <Label fx:id="nameErrorLabel" styleClass="label_error" text="Label" visible="false" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
                   <Label styleClass="warningText" text="*" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
@@ -194,14 +188,29 @@
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label styleClass="warningText" text="*" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                  <Label styleClass="warningText" text="*" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label styleClass="warningText" text="*" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                  <Label styleClass="warningText" text="*" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="nameErrorLabel" styleClass="warningText" text="Label" visible="false" GridPane.columnSpan="3" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="yearErrorLabel" styleClass="warningText" text="Label" visible="false" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="priceErrorLabel" styleClass="warningText" text="Label" visible="false" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="5">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                      </GridPane.margin>
                   </Label>
                </children>
