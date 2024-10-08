@@ -1,22 +1,15 @@
 package seng202.team5.gui;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import seng202.team5.models.*;
 import seng202.team5.repository.*;
 import seng202.team5.services.DashboardService;
@@ -27,6 +20,8 @@ import java.util.*;
 import static seng202.team5.services.ColourLookupService.getTagLabelColour;
 
 public class DashboardPageController extends PageController {
+    @FXML
+    public Label notEnoughRatingsMessageLabel;
     @FXML
     private PieChart pieChart;
 
@@ -42,6 +37,9 @@ public class DashboardPageController extends PageController {
     @FXML
     private VBox userListPane;
 
+    @FXML
+    private Label titleLabel;
+
     public ComboBox<String> piechartTypeComboBox;
     private DashboardService dashboardService;
     private TagsDAO tagsDAO;
@@ -55,15 +53,29 @@ public class DashboardPageController extends PageController {
     private void initialize() {
         userID = UserService.getInstance().getCurrentUser().getId();
 
+        if(userID != 0) {
+            titleLabel.setText("Hello, " + UserService.getInstance().getCurrentUser().getUsername() + "!");
+        }
+
         dashboardService = new DashboardService(userID,new VineyardDAO(), new WineDAO(new VineyardDAO()), new ReviewDAO());
 
+        // Show error message if the user needs to rate more wines
+        int numWinesReviewed = dashboardService.getUserReviews().size();
+        if (numWinesReviewed < 5) {
+            pieChart.setVisible(false);
+            notEnoughRatingsMessageLabel.setText("Rate " + (5-numWinesReviewed) + " more wine(s) to view Pie Chart Stats!");
+            notEnoughRatingsMessageLabel.setVisible(true);
+            piechartTypeComboBox.setDisable(true);
+        } else {
+            pieChart.setVisible(true);
+            notEnoughRatingsMessageLabel.setVisible(false);
+            piechartTypeComboBox.setDisable(false);
+        }
         updateTopLabels();
 
         updatePieChartComboBox();
 
-
         piechartTypeComboBox.setTooltip(new Tooltip("Select Type Of Pie Chart"));
-
 
         // Add tables
         tagsDAO = new TagsDAO();
@@ -201,6 +213,17 @@ public class DashboardPageController extends PageController {
         pieChart.setClockwise(true);
         pieChart.setStartAngle(180);
         pieChart.setLabelsVisible(true);
+
+        for (final PieChart.Data data: pieChart.getData()) {
+            double total = pieChart.getData().stream().mapToDouble(PieChart.Data::getPieValue).sum();
+            pieChart.getData().forEach( pieData->{
+                String percentage = String.format("%.2f%%", ((pieData.getPieValue()/total)*100));
+                Tooltip tooltip = new Tooltip(percentage);
+                Tooltip.install(pieData.getNode(), tooltip);
+            });
+
+        }
+
     }
 
 }

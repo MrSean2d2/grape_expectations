@@ -79,20 +79,8 @@ public class DashboardService {
     public <K, V extends Comparable<V>> List<Map.Entry<K, V>> sortHashMap(Map<K, V> inputMap) {
 
         List<Map.Entry<K, V>> list = new ArrayList<>(inputMap.entrySet());
-//        System.out.println(list.getFirst().getKey());
         list.sort(Map.Entry.<K, V>comparingByValue().reversed());
-//        System.out.println(list.getFirst().getKey());
+
         return list;
     }
-    // region pie chart
-    // variety
-    // tags
-
-
-    /**
-     * get preferences
-     */
-    // top region
-    // top variety
-    // Most used tag?
 }
