@@ -19,12 +19,7 @@ import seng202.team5.services.UserService;
  *
  * @author Sean Reitsma
  */
-public class EditUserPopupController implements ClosableWindow {
-    @FXML
-    private PasswordField confPasswordField;
-
-    @FXML
-    private PasswordField passwordField;
+public class EditUserPopupController extends PageController implements ClosableWindow {
 
     @FXML
     private ComboBox<Role> roleComboBox;
@@ -34,9 +29,6 @@ public class EditUserPopupController implements ClosableWindow {
 
     @FXML
     private Label usernameLabel;
-
-    @FXML
-    private Label errorLabel;
 
     @FXML
     private Button closeButton;
@@ -66,31 +58,19 @@ public class EditUserPopupController implements ClosableWindow {
 
     @FXML
     private void submit() {
-        if (!(passwordField.getText().equals(confPasswordField.getText()))) {
-            errorLabel.setText("Passwords do not match!");
-            errorLabel.setVisible(true);
-            passwordField.getStyleClass().add("field_error");
-            confPasswordField.getStyleClass().add("field_error");
-        } else if (passwordField.getText().isBlank() || confPasswordField.getText().isBlank()) {
-            errorLabel.setText("Password cannot be empty!");
-            errorLabel.setVisible(true);
-            passwordField.getStyleClass().add("field_error");
-            confPasswordField.getStyleClass().add("field_error");
-        } else {
-            errorLabel.setVisible(false);
-            passwordField.getStyleClass().remove("field_error");
-            confPasswordField.getStyleClass().remove("field_error");
-            curUser.setUsername(usernameField.getText());
-            UserService.getInstance().updateUserPassword(curUser, passwordField.getText());
-            curUser.setRole(roleComboBox.getSelectionModel().getSelectedItem());
-            if (editingCurrentUser) {
-                UserService.getInstance().setCurrentUser(curUser);
-            }
-            UserDAO userDAO = new UserDAO();
-            userDAO.update(curUser);
-            closeWindow();
+        curUser.setUsername(usernameField.getText());
+        curUser.setRole(roleComboBox.getSelectionModel().getSelectedItem());
+        if (editingCurrentUser) {
+            UserService.getInstance().setCurrentUser(curUser);
         }
+        UserDAO userDAO = new UserDAO();
+        userDAO.update(curUser);
+        closeWindow();
+    }
 
+    @FXML
+    private void openEditPassword() {
+        openEditPasswordPopup(true, closeButton.getScene().getWindow());
     }
 
 }

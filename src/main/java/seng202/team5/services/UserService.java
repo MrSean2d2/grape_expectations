@@ -42,19 +42,38 @@ public class UserService {
     private static final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);
 
     private User selectedUser;
+    private boolean adminDefaultPassword;
 
     /**
      * Constructor for UserService.
      */
     private UserService() {
         this.userDAO = new UserDAO();
+        adminDefaultPassword = false;
         if (userDAO.getAdminCount() == 0) {
             User admin = registerUser("admin", "admin");
             if (admin != null) {
                 admin.setRole(Role.ADMIN);
                 userDAO.update(admin);
+                adminDefaultPassword = true;
             }
         }
+    }
+
+    /**
+     * Returns true if the admin user has not changed the default password.
+     *
+     * @return true if the admin password needs changing, false otherwise
+     */
+    public boolean isAdminDefaultPassword() {
+        return this.adminDefaultPassword;
+    }
+
+    /**
+     * Sets the admin password as changed and no longer needing changing.
+     */
+    public void changedAdminPassword() {
+        this.adminDefaultPassword = false;
     }
 
     /**
@@ -106,6 +125,54 @@ public class UserService {
 
     public void setSelectedUser(User user) {
         this.selectedUser = user;
+    }
+
+    /**
+     * Checks the username and returns an appropriate error message, or null if
+     * everything is all good.
+     *
+     * @param name the username to check
+     * @return an error message or null if valid
+     */
+    public String checkName(String name) {
+        if (name.isEmpty()) {
+            return "Username cannot be empty!";
+        } else if (name.length() < 4 || name.length() > 20) {
+            return "Username must be between 4 and 20 characters!";
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Check the given password and return a suitable error message or null if
+     * all valid.
+     *
+     * @param password the password to check
+     * @return an error message or null if valid
+     */
+    public String checkPassword(String password) {
+        if (password.isEmpty()) {
+            return "Password cannot be empty!";
+        } else if (password.length() < 8) {
+            return "Password must contain at least 8 characters!";
+        } else {
+            Pattern letter = Pattern.compile("[a-zA-z]");
+            Matcher hasLetter = letter.matcher(password);
+            Pattern digit = Pattern.compile("[0-9]");
+            Matcher hasDigit = digit.matcher(password);
+            Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
+            Matcher hasSpecial = special.matcher(password);
+            if (!hasLetter.find()) {
+                return "Password must contain alphanumeric characters!";
+            } else if (!hasDigit.find()) {
+                return "Password must contain a numeric character!";
+            } else if (!hasSpecial.find()) {
+                return "Password must contain a special character!";
+            } else {
+                return null;
+            }
+        }
     }
 
 
@@ -275,24 +342,4 @@ public class UserService {
         return equals;
     }
 
-    /**
-     * Check the validity of a password.
-     *
-     * @param password the password string to check
-     * @return whether the password was valid or not
-     */
-    public static boolean checkPasswordValidity(String password) {
-        Pattern letter = Pattern.compile("[a-zA-z]");
-        Matcher hasLetter = letter.matcher(password);
-        Pattern digit = Pattern.compile("[0-9]");
-        Matcher hasDigit = digit.matcher(password);
-        Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
-        Matcher hasSpecial = special.matcher(password);
-
-        return (password.length() >= 8
-                && password.length() <= 30
-                && hasLetter.find()
-                && hasDigit.find()
-                && hasSpecial.find());
-    }
 }
