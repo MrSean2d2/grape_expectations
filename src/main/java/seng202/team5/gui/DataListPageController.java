@@ -102,7 +102,6 @@ public class DataListPageController extends PageController {
     private double maxRatingFilter;
     private boolean favouriteFilter;
     private static final Logger log = LogManager.getLogger(DataListPageController.class);
-    private boolean isSliderChanging = false;
 
 
     /**
@@ -227,9 +226,7 @@ public class DataListPageController extends PageController {
                     if (newMinPrice >= priceRangeSlider.getMin()) {
                         priceRangeSlider.setLowValue(newMinPrice);
                         minPriceFilter = newMinPrice;
-                        if (!isSliderChanging) {
-                            applySearchFilters();
-                        }
+                        applySearchFilters();
                     } else {
                         addNotification("Please pick a minimum price greater than "
                                 + (int) priceRangeSlider.getMin(), "#d5e958");
@@ -253,9 +250,7 @@ public class DataListPageController extends PageController {
                     if (newMaxPrice <= priceRangeSlider.getMax()) {
                         priceRangeSlider.setHighValue(newMaxPrice);
                         maxPriceFilter = newMaxPrice;
-                        if (!isSliderChanging) {
-                            applySearchFilters();
-                        }
+                        applySearchFilters();
                     } else {
                         addNotification("Please pick a maximum price less than "
                                 + (int) priceRangeSlider.getMin(), "#d5e958");
@@ -279,9 +274,7 @@ public class DataListPageController extends PageController {
                     if (newRating <= ratingSlider.getMax()) {
                         ratingSlider.setValue(newRating);
                         minRatingFilter = newRating;
-                        if (!isSliderChanging) {
-                            applySearchFilters();
-                        }
+                        applySearchFilters();
                     } else {
                         addNotification("Please pick a minimum rating between "
                                 + (int) priceRangeSlider.getMin() + " and " + (int) priceRangeSlider.getMax(), "#d5e958");
@@ -298,28 +291,21 @@ public class DataListPageController extends PageController {
      */
     private void initializeSliderListeners() {
         priceRangeSlider.setOnMouseReleased(event -> {
-            isSliderChanging = false;
             maxPriceFilter = Float.parseFloat(String.format(
                     "%.1f", priceRangeSlider.getHighValue()));
             applySearchFilters();
         });
 
         priceRangeSlider.setOnMouseReleased(event -> {
-            isSliderChanging = false;
             minPriceFilter = Float.parseFloat(String.format(
                     "%.1f", priceRangeSlider.getLowValue()));
             applySearchFilters();
         });
 
-        priceRangeSlider.setOnMousePressed(event -> isSliderChanging = true);
-
         ratingSlider.setOnMouseReleased(event -> {
-            isSliderChanging = false;
             minRatingFilter = Float.parseFloat(String.format("%.1f", ratingSlider.getValue()));
             applySearchFilters();
         });
-
-        ratingSlider.setOnMousePressed(event -> isSliderChanging = true);
     }
 
     /**
