@@ -382,7 +382,7 @@ public class DataListPageController extends PageController {
      * sets colour combo box options
      */
     public void setColourComboBox() {
-        List<String> colourOptions = List.of(new String[]{"Red", "Rosé", "White"});
+        List<String> colourOptions = List.of(new String[]{"Red", "RosÃ©", "White"});
         ObservableList<String> observableColourList =
                 FXCollections.observableArrayList(colourOptions);
         observableColourList.addFirst("Colour");

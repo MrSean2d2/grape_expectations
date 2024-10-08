@@ -226,7 +226,7 @@ public class DetailedViewPageController extends PageController implements Closab
         switch (selectedWine.getWineColour()) {
             case "Red" -> wineColourImage.setImage(new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/redColourWine.png"))));
             case "White" -> wineColourImage.setImage(new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/whiteColourWine.png"))));
-            case "Rosé" -> wineColourImage.setImage(new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/roseColourWine.png"))));
+            case "RosÃ©" -> wineColourImage.setImage(new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/roseColourWine.png"))));
         }//otherwise keep default image (unknown colour)
     }
 
