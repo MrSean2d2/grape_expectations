@@ -9,12 +9,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,7 +24,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
@@ -276,13 +276,12 @@ public class DetailedViewPageController extends PageController implements Closab
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         // listener for window closing
         Platform.runLater(() -> {
             Stage stage = (Stage) backButton.getScene().getWindow();
             if (stage != null) {
-                stage.setOnCloseRequest(event -> {
-                    close();
-                });
+                stage.setOnCloseRequest(closeevent -> close());
             }
         });
     }

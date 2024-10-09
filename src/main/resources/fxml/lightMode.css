@@ -44,6 +44,9 @@ Light mode for the application
     -fx-text-fill: #000000;
 }
 
+.piechart-button {
+    -fx-background-color: gray;
+}
 
 .dropdown .list-cell {
     -fx-background-color: #ffffff;

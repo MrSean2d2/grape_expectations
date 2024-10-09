@@ -53,13 +53,16 @@
             <PieChart fx:id="pieChart" animated="false" legendVisible="false" prefHeight="398.0" prefWidth="520.0" title="Pie Chart Title" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets top="20.0" />
-               </GridPane.margin></PieChart>
+               </GridPane.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></PieChart>
             <Label style="-fx-font-weight: 700;" text="Wine Data" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <font>
                   <Font size="26.0" />
                </font>
                <GridPane.margin>
-                  <Insets left="10.0" />
+                  <Insets left="20.0" />
                </GridPane.margin>
             </Label>
             <Label fx:id="notEnoughRatingsMessageLabel" text="Rate More Wines To View Pie Chart Stats!" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
@@ -75,11 +78,26 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <RadioButton fx:id="varietyPieChartButton" mnemonicParsing="false" text="Variety" GridPane.columnIndex="1" />
-                  <RadioButton fx:id="colourPieChartButton" mnemonicParsing="false" text="Colour" />
-                  <RadioButton fx:id="regionPieChartButton" mnemonicParsing="false" text="Region" GridPane.columnIndex="2" />
-                  <RadioButton fx:id="yearPieChartButton" mnemonicParsing="false" text="Year" GridPane.columnIndex="3" />
-                  <RadioButton fx:id="tagPieChartRadioButton" mnemonicParsing="false" text="Tags" GridPane.columnIndex="4" />
+                  <RadioButton fx:id="varietyPieChartButton" mnemonicParsing="false" styleClass="piechart-button" text="Variety" GridPane.columnIndex="1">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></RadioButton>
+                  <RadioButton fx:id="colourPieChartButton" mnemonicParsing="false" styleClass="piechart-button" text="Colour">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></RadioButton>
+                  <RadioButton fx:id="regionPieChartButton" mnemonicParsing="false" styleClass="piechart-button" text="Region" GridPane.columnIndex="2">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></RadioButton>
+                  <RadioButton fx:id="yearPieChartButton" mnemonicParsing="false" styleClass="piechart-button" text="Year" GridPane.columnIndex="3">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></RadioButton>
+                  <RadioButton fx:id="tagPieChartRadioButton" mnemonicParsing="false" styleClass="piechart-button" text="Tags" GridPane.columnIndex="4">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></RadioButton>
                </children>
                <GridPane.margin>
                   <Insets left="40.0" right="40.0" />

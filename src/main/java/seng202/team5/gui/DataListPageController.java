@@ -40,7 +40,6 @@ import seng202.team5.services.DashboardService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.VineyardService;
 import seng202.team5.services.WineService;
-import seng202.team5.gui.EditWinePopupController;
 
 /**
  * Controller for the Data List Page.
@@ -189,17 +188,18 @@ public class DataListPageController extends PageController {
         wineTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Initialises with filters after pie slice selected from dashboard
-        List<String> selectedPieFilterTerm = DashboardService.getInstance().getSelectedPieSliceSearch();
+        List<String> selectedPieFilterTerm =
+                DashboardService.getInstance().getSelectedPieSliceSearch();
 
         boolean valid = true;
-
-        for(String term : selectedPieFilterTerm) {
-            if(term == null) {
+        for (String term : selectedPieFilterTerm) {
+            if (term == null) {
                 valid = false;
                 break;
             }
         }
 
+        // Check if the term is valid
         if (valid) {
             String category = selectedPieFilterTerm.get(0);
             String filterTerm = selectedPieFilterTerm.get(1);
@@ -213,10 +213,13 @@ public class DataListPageController extends PageController {
                 case "Year":
                     yearComboBox.setValue(filterTerm);
                     break;
+                default:
+                    // Any other invalid case, break
+                    break;
             }
             tagComboBox.setValue("All Tags");
             applySearchFilters();
-            DashboardService.getInstance().setSelectedPieSliceSearch(null,null);
+            DashboardService.getInstance().setSelectedPieSliceSearch(null, null);
         }
     }
 
@@ -259,14 +262,14 @@ public class DataListPageController extends PageController {
         // sets value of price/rating labels in real time
         priceRangeSlider.highValueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    int value = Integer.valueOf(String.format("%.0f", newVal.floatValue()));
+                    int value = Integer.parseInt(String.format("%.0f", newVal.floatValue()));
                     maxPriceValue.setText(String.valueOf(value));
                 });
 
         minPriceValue.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    Double newMinPrice = Double.parseDouble(minPriceValue.getText());
+                    double newMinPrice = Double.parseDouble(minPriceValue.getText());
                     if (newMinPrice >= priceRangeSlider.getMin()) {
                         priceRangeSlider.setLowValue(newMinPrice);
                         minPriceFilter = newMinPrice;
@@ -285,14 +288,14 @@ public class DataListPageController extends PageController {
 
         priceRangeSlider.lowValueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    int value = Integer.valueOf(String.format("%.0f", newVal.floatValue()));
+                    int value = Integer.parseInt(String.format("%.0f", newVal.floatValue()));
                     minPriceValue.setText(String.valueOf(value));
                 });
 
         maxPriceValue.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    Double newMaxPrice = Double.parseDouble(maxPriceValue.getText());
+                    double newMaxPrice = Double.parseDouble(maxPriceValue.getText());
                     if (newMaxPrice <= priceRangeSlider.getMax()) {
                         priceRangeSlider.setHighValue(newMaxPrice);
                         maxPriceFilter = newMaxPrice;
@@ -311,14 +314,14 @@ public class DataListPageController extends PageController {
 
         ratingSlider.valueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    int value = Integer.valueOf(String.format("%.0f", newVal.floatValue()));
+                    int value = Integer.parseInt(String.format("%.0f", newVal.floatValue()));
                     ratingSliderValue.setText(String.valueOf(value));
                 });
 
         ratingSliderValue.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    Double newRating = Double.parseDouble(ratingSliderValue.getText());
+                    double newRating = Double.parseDouble(ratingSliderValue.getText());
                     if (newRating <= ratingSlider.getMax()) {
                         ratingSlider.setValue(newRating);
                         minRatingFilter = newRating;
@@ -327,7 +330,9 @@ public class DataListPageController extends PageController {
                         }
                     } else {
                         addNotification("Please pick a minimum rating between "
-                                + (int) priceRangeSlider.getMin() + " and " + (int) priceRangeSlider.getMax(), "#d5e958");
+                                + (int) priceRangeSlider.getMin()
+                                + " and "
+                                + (int) priceRangeSlider.getMax(), "#d5e958");
                     }
                 } catch (NumberFormatException e) {
                     addNotification("Invalid Number", "#d5e958");
@@ -393,7 +398,9 @@ public class DataListPageController extends PageController {
     }
 
     /**
-     * takes list of variety options and sets variety combo box to have them as options in drop-down
+     * takes list of variety options and sets variety combo box
+     * to have them as options in drop-down.
+     *
      * @param varietyOptions list of varieties
      */
     public void setVarietyOptions(List<String> varietyOptions) {
@@ -405,7 +412,8 @@ public class DataListPageController extends PageController {
 
 
     /**
-     * Populates the tag combo box with the user specific tags, and initialises the listener for when the box is used.
+     * Populates the tag combo box with the user specific tags
+     * and initialises the listener for when the box is used.
      */
     private void setUpTagFilter() {
         if (UserService.getInstance().getCurrentUser() != null) {
@@ -415,7 +423,7 @@ public class DataListPageController extends PageController {
 
             List<String> tagOptions = tags.stream()
                     .map(Tag::getName)
-                    .collect(Collectors.toList());
+                    .toList();
 
             ObservableList<String> observableTagList =
                     FXCollections.observableArrayList();
@@ -429,7 +437,8 @@ public class DataListPageController extends PageController {
         }
 
         // Handle the tag selection event to filter wines
-        tagComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+        tagComboBox.getSelectionModel().selectedItemProperty().addListener((options,
+                                                                            oldValue, newValue) -> {
             if (newValue != null) {
                 filterWinesByTag(newValue);
             }
@@ -474,10 +483,14 @@ public class DataListPageController extends PageController {
         // Fetch the wines based on the filtered wine IDs and apply other filters
         List<Wine> filteredWines = wineDAO.getAll().stream()
                 .filter(wine -> wineIds.contains(wine.getId()))   // Tag filtering
-                .filter(wine -> varietyFilter.equals("0") || wine.getWineVariety().equals(varietyFilter))  // Variety filter
-                .filter(wine -> regionFilter.equals("0") || wine.getRegion().equals(regionFilter))  // Region filter
-                .filter(wine -> yearFilter.equals("0") || String.valueOf(wine.getYear()).equals(yearFilter))  // Year filter
-                .filter(wine -> wine.getPrice() >= minPriceFilter && wine.getPrice() <= maxPriceFilter)  // Price filter
+                .filter(wine -> varietyFilter.equals("0")
+                        || wine.getWineVariety().equals(varietyFilter))  // Variety filter
+                .filter(wine -> regionFilter.equals("0")
+                        || wine.getRegion().equals(regionFilter))  // Region filter
+                .filter(wine -> yearFilter.equals("0")
+                        || String.valueOf(wine.getYear()).equals(yearFilter))  // Year filter
+                .filter(wine -> wine.getPrice() >= minPriceFilter
+                        && wine.getPrice() <= maxPriceFilter)  // Price filter
                 .filter(wine -> wine.getRating() >= minRatingFilter)  // Rating filter
                 .collect(Collectors.toList());
 
@@ -485,10 +498,23 @@ public class DataListPageController extends PageController {
         wineTable.setItems(filteredWineList);
     }
 
+    /**
+     * Sets the ComboBox selection to the tag from the dashboard.
+     *
+     * @param tagFilter The tag to be selected in the ComboBox.
+     */
+    public void setComboBoxTagSelection(String tagFilter) {
+        tagComboBox.getSelectionModel().select(tagFilter);
+    }
+
+    /**
+     * Set the contents of the variety combo box.
+     */
     public void setVarietyComboBox() {
         List<String> varietyOptions;
 
-        if (colourFilter.equals("0")||colourFilter.equals("Colour")) {//variety filter still at default value
+        // variety filter still at default value
+        if (colourFilter.equals("0") || colourFilter.equals("Colour")) {
             varietyOptions = wineDAO.getVariety();
         } else {
             varietyOptions = wineDAO.getVarietyFromColour(colourFilter);
@@ -501,7 +527,7 @@ public class DataListPageController extends PageController {
     }
 
     /**
-     * sets colour combo box options
+     * sets colour combo box options.
      */
     public void setColourComboBox() {
         List<String> colourOptions = List.of(new String[]{"Red", "Rosé", "White"});
@@ -561,9 +587,10 @@ public class DataListPageController extends PageController {
      * Apply search and filters and updates table.
      */
     public void applySearchFilters() {
-        String sql = wineDAO.queryBuilder(searchTextField.getText(), varietyFilter, colourFilter, regionFilter,
-                yearFilter, minPriceFilter, maxPriceFilter, minRatingFilter,
-                maxRatingFilter);
+        String sql = wineDAO.queryBuilder(searchTextField.getText(),
+                varietyFilter, colourFilter, regionFilter,
+                yearFilter, minPriceFilter, maxPriceFilter,
+                minRatingFilter, maxRatingFilter);
 
         List<Wine> queryResults = wineDAO.executeSearchFilter(sql, searchTextField.getText());
 
