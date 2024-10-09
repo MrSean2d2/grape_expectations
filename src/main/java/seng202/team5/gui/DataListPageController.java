@@ -167,7 +167,16 @@ public class DataListPageController extends PageController {
         // Initialises with filters after pie slice selected from dashboard
         List<String> selectedPieFilterTerm = DashboardService.getInstance().getSelectedPieSliceSearch();
 
-        if(selectedPieFilterTerm!=null) {
+        boolean valid = true;
+
+        for(String term : selectedPieFilterTerm) {
+            if(term == null) {
+                valid = false;
+                break;
+            }
+        }
+
+        if (valid) {
             String category = selectedPieFilterTerm.get(0);
             String filterTerm = selectedPieFilterTerm.get(1);
             switch (category) {
@@ -185,7 +194,6 @@ public class DataListPageController extends PageController {
             applySearchFilters();
             DashboardService.getInstance().setSelectedPieSliceSearch(null,null);
         }
-
     }
 
     /**
