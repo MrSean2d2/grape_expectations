@@ -374,24 +374,6 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
-    public List<String> getVarietyFromColour(String givenColour) {
-        List<String> varieties = new ArrayList<>();
-        String sql = "SELECT DISTINCT variety FROM WINE WHERE colour = ?;";
-
-        try (Connection conn = databaseService.connect();
-             PreparedStatement prepstatement = conn.prepareStatement(sql)) {
-            prepstatement.setString(1, givenColour);
-            ResultSet rs = prepstatement.executeQuery();
-            while (rs.next()) {
-                varieties.add(rs.getString("variety"));
-            }
-            return varieties;
-        } catch (SQLException e) {
-            log.error(e);
-            return new ArrayList<>();
-        }
-    }
-
     /**
      * Gets list of different years of wine.
      *
@@ -505,7 +487,7 @@ public class WineDAO implements DAOInterface<Wine> {
      * @param year to filter
      * @return sql string
      */
-    public String queryBuilder(String search, String variety, String colour, String region, String year,
+    public String queryBuilder(String search, String variety, String region, String year,
                                double minPrice, double maxPrice, double minRating,
                                double maxRating, boolean favourite) {
 
@@ -521,12 +503,8 @@ public class WineDAO implements DAOInterface<Wine> {
         }
 
         // If the variety is valid, add it to the query
-        if (!(Objects.equals(variety, "0")|| variety.equals("null"))) {
+        if (!Objects.equals(variety, "0")) {
             sql += " AND wine.variety = '" + variety + "'";
-        }
-        //If the colour is valid, add it to the query
-        if (!(Objects.equals(colour, "0")|| Objects.equals(colour, "null"))) {
-            sql += " AND wine.colour = '" + colour + "'";
         }
 
         // If the region is valid, add it to the query
