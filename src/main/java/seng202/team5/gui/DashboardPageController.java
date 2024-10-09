@@ -1,11 +1,7 @@
 package seng202.team5.gui;
 
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,8 +15,6 @@ import seng202.team5.repository.*;
 import seng202.team5.services.DashboardService;
 import seng202.team5.services.UserService;
 
-
-import java.awt.event.MouseEvent;
 import java.util.*;
 
 import static seng202.team5.services.ColourLookupService.getTagLabelColour;
@@ -58,16 +52,14 @@ public class DashboardPageController extends PageController {
 
     public ComboBox<String> piechartTypeComboBox;
     private DashboardService dashboardService;
-    private TagsDAO tagsDAO;
-    private int userID;
 
     /**
-     * Initalises the dashboard page
+     * Initialises the dashboard page
      * Fetches user reviews, processes data and updates the pie chart
      */
     @FXML
     private void initialize() {
-        userID = UserService.getInstance().getCurrentUser().getId();
+        int userID = UserService.getInstance().getCurrentUser().getId();
 
         if (userID != 0) {
             titleLabel.setText("Hello, " + UserService.getInstance().getCurrentUser().getUsername() + "!");
@@ -81,22 +73,16 @@ public class DashboardPageController extends PageController {
             pieChart.setVisible(false);
             notEnoughRatingsMessageLabel.setText("Rate " + (5 - numWinesReviewed) + " more wine(s) to view Pie Chart Stats!");
             notEnoughRatingsMessageLabel.setVisible(true);
-           // piechartTypeComboBox.setDisable(true);
         } else {
             pieChart.setVisible(true);
             notEnoughRatingsMessageLabel.setVisible(false);
-          //  piechartTypeComboBox.setDisable(false);
         }
         updateTopLabels();
 
-     //   updatePieChartComboBox();
-
         initialiseRadioButtons();
 
-      //  piechartTypeComboBox.setTooltip(new Tooltip("Select Type Of Pie Chart"));
-
         // Add tables
-        tagsDAO = new TagsDAO();
+        TagsDAO tagsDAO = new TagsDAO();
         AssignedTagsDAO assignedTagsDAO = new AssignedTagsDAO();
         List<Tag> tags = tagsDAO.getFromUser(userID);
 
@@ -108,7 +94,7 @@ public class DashboardPageController extends PageController {
             /*
             Get a list of the assigned tags
             This could be used to get the list of wines that have this tag
-            as the assignedtag would have a wineID also
+            as the assigned tag would have a wineID also
              */
             List<AssignedTag> numWines = assignedTagsDAO.getTagsFromUser(
                     userID,
@@ -138,36 +124,15 @@ public class DashboardPageController extends PageController {
         }
 
         // set up toggle of radio buttons
-        tg.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
-                RadioButton rb = (RadioButton) tg.getSelectedToggle();
-                if(rb!=null) {
-                    String pieChartType = rb.getText().toString();
-                    updatePieChartData(pieChartType);
-                }
-                }
+        tg.selectedToggleProperty().addListener((observableValue, toggle, t1) -> {
+            RadioButton rb = (RadioButton) tg.getSelectedToggle();
+            if (rb != null) {
+                String pieChartType = rb.getText();
+                updatePieChartData(pieChartType);
+            }
         });
         // Initialise pie chart with variety default
         varietyPieChartButton.setSelected(true);
-    }
-
-
-    /**
-     * Populates the pie chart combo box
-     */
-    private void updatePieChartComboBox() {
-        ObservableList<String> piechartTypeOptions = FXCollections.observableArrayList();
-        piechartTypeOptions.addAll("Variety", "Region", "Year");
-        piechartTypeComboBox.setItems(piechartTypeOptions);
-
-        // Update the title and data
-        piechartTypeComboBox.valueProperty().addListener((observable, oldOption, newOption) -> {
-            updatePieChartData(newOption);
-        });
-
-        // Default value (Variety)
-        piechartTypeComboBox.getSelectionModel().select(0);
     }
 
     /**
@@ -292,7 +257,6 @@ public class DashboardPageController extends PageController {
                 Tooltip.install(pieData.getNode(), tooltip);
             });
             data.getNode().setOnMouseClicked(event -> {
-                String message = "you clicked " + data.getName() + " which has vlaue " + data.getPieValue();
                 String filterTerm = data.getName();
                 DashboardService.getInstance().setSelectedPieSliceSearch(category,filterTerm);
                 swapPage("/fxml/DataListPage.fxml");
