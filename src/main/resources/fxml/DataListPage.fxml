@@ -63,6 +63,7 @@
                 <GridPane maxWidth="1.7976931348623157E308" GridPane.rowIndex="1">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="120.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="187.0" />
@@ -73,7 +74,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <ComboBox fx:id="varietyComboBox" onAction="#onVarietyComboBoxClicked" prefWidth="150.0" promptText="Variety" styleClass="dropdown" GridPane.halignment="CENTER">
+                        <ComboBox fx:id="varietyComboBox" onAction="#onVarietyComboBoxClicked" prefWidth="150.0" promptText="Variety" GridPane.columnIndex="1" styleClass="dropdown" GridPane.halignment="CENTER">
                             <GridPane.margin>
                                 <Insets right="10.0" />
                             </GridPane.margin>
@@ -81,7 +82,7 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </ComboBox>
-                        <ComboBox fx:id="yearComboBox" onAction="#onYearComboBoxClicked" prefHeight="24.0" prefWidth="150.0" promptText="Year" styleClass="dropdown" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                        <ComboBox fx:id="yearComboBox" onAction="#onYearComboBoxClicked" prefHeight="24.0" prefWidth="150.0" promptText="Year" styleClass="dropdown" GridPane.columnIndex="3" GridPane.halignment="CENTER">
                             <GridPane.margin>
                                 <Insets right="10.0" />
                             </GridPane.margin>
@@ -89,7 +90,7 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </ComboBox>
-                        <ToggleButton fx:id="favToggleButton" mnemonicParsing="false" onAction="#onFavToggleButtonClicked" prefHeight="24.0" prefWidth="136.0" styleClass="button" text="Toggle Favourites" GridPane.columnIndex="5" GridPane.halignment="RIGHT">
+                        <ToggleButton fx:id="favToggleButton" mnemonicParsing="false" onAction="#onFavToggleButtonClicked" prefHeight="24.0" prefWidth="136.0" styleClass="button" text="Toggle Favourites" GridPane.columnIndex="6" GridPane.halignment="RIGHT">
                             <GridPane.margin>
                                 <Insets left="10.0" />
                             </GridPane.margin>
@@ -97,7 +98,7 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </ToggleButton>
-                        <GridPane GridPane.columnIndex="4">
+                        <GridPane GridPane.columnIndex="5">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
@@ -118,7 +119,7 @@
                                 <TextField fx:id="ratingSliderValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="slidertextbox" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
                             </children>
                         </GridPane>
-                        <GridPane prefHeight="50.0" prefWidth="208.0" GridPane.columnIndex="3">
+                        <GridPane prefHeight="50.0" prefWidth="208.0" GridPane.columnIndex="4">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
@@ -140,7 +141,7 @@
                         <TextField fx:id="maxPriceValue" alignment="CENTER" layoutX="10.0" layoutY="12.0" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="slidertextbox" GridPane.halignment="RIGHT" GridPane.rowSpan="2" />
                             </children>
                         </GridPane>
-                        <ComboBox fx:id="regionComboBox" onAction="#onRegionComboBoxClicked" prefHeight="24.0" prefWidth="148.0" promptText="Region" styleClass="dropdown" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                        <ComboBox fx:id="regionComboBox" onAction="#onRegionComboBoxClicked" prefHeight="24.0" prefWidth="148.0" promptText="Region" styleClass="dropdown" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                             <GridPane.margin>
                                 <Insets right="10.0" />
                             </GridPane.margin>
@@ -148,6 +149,7 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </ComboBox>
+                  <ComboBox fx:id="colourComboBox" onAction="#onColourComboBoxClicked" prefHeight="24.0" prefWidth="120.0" promptText="Colour" styleClass="dropdown" GridPane.columnIndex="0" GridPane.halignment="CENTER" />
                     </children>
                     <GridPane.margin>
                         <Insets />

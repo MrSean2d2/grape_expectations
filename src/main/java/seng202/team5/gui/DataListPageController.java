@@ -48,6 +48,8 @@ public class DataListPageController extends PageController {
     public ComboBox<String> regionComboBox;
     @FXML
     public ComboBox<String> varietyComboBox;
+    @FXML
+    public ComboBox<String> colourComboBox;
 
     @FXML
     public Slider ratingSlider;
@@ -95,6 +97,7 @@ public class DataListPageController extends PageController {
 
     private String yearFilter;
     private String varietyFilter;
+    private String colourFilter;
     private String regionFilter;
     private double minPriceFilter;
     private double maxPriceFilter;
@@ -324,11 +327,52 @@ public class DataListPageController extends PageController {
         observableRegionsList.addFirst("Region");
         regionComboBox.setItems(observableRegionsList);
 
+        setDefaultVarietyBox();
+
+        setColourComboBox();
+
+    }
+
+    public void setDefaultVarietyBox() {
         List<String> varietyOptions = wineDAO.getVariety();
+        setVarietyOptions(varietyOptions);
+    }
+
+    /**
+     * takes list of variety options and sets variety combo box to have them as options in drop-down
+     * @param varietyOptions list of varieties
+     */
+    public void setVarietyOptions(List<String> varietyOptions){
         ObservableList<String> observableVarietyList =
                 FXCollections.observableArrayList(varietyOptions);
         observableVarietyList.addFirst("Variety");
         varietyComboBox.setItems(observableVarietyList);
+    }
+
+    public void setVarietyComboBox() {
+        List<String> varietyOptions;
+
+        if (colourFilter.equals("0")||colourFilter.equals("Colour")) {//variety filter still at default value
+            varietyOptions = wineDAO.getVariety();
+        } else {
+            varietyOptions = wineDAO.getVarietyFromColour(colourFilter);
+            if (!varietyOptions.contains(varietyFilter)) {
+                varietyFilter = "0";
+                varietyComboBox.setValue("Variety");
+            }
+        }
+        setVarietyOptions(varietyOptions);
+    }
+
+    /**
+     * sets colour combo box options
+     */
+    public void setColourComboBox() {
+        List<String> colourOptions = List.of(new String[]{"Red", "Rosé", "White"});
+        ObservableList<String> observableColourList =
+                FXCollections.observableArrayList(colourOptions);
+        observableColourList.addFirst("Colour");
+        colourComboBox.setItems(observableColourList);
     }
 
     /**
@@ -358,6 +402,7 @@ public class DataListPageController extends PageController {
         // Defaults
         this.yearFilter = "0";
         this.varietyFilter = "0";
+        this.colourFilter = "0";
         this.regionFilter = "0";
         this.minPriceFilter = 0.0;
         this.maxPriceFilter = 800.0;
@@ -381,7 +426,7 @@ public class DataListPageController extends PageController {
      * Apply search and filters and updates table.
      */
     public void applySearchFilters() {
-        String sql = wineDAO.queryBuilder(searchTextField.getText(), varietyFilter, regionFilter,
+        String sql = wineDAO.queryBuilder(searchTextField.getText(), varietyFilter, colourFilter, regionFilter,
                 yearFilter, minPriceFilter, maxPriceFilter, minRatingFilter,
                 maxRatingFilter, favouriteFilter);
         List<Wine> queryResults = wineDAO.executeSearchFilter(sql, searchTextField.getText());
@@ -409,10 +454,27 @@ public class DataListPageController extends PageController {
      */
     public void onVarietyComboBoxClicked() {
         String selectedVariety = String.valueOf(varietyComboBox.getValue());
-        if (!(Objects.equals(selectedVariety, "Variety") || selectedVariety == null)) {
+        if (!(Objects.equals(selectedVariety, "Variety"))) {
             varietyFilter = selectedVariety;
+            applySearchFilters();
         }
-        applySearchFilters();
+
+    }
+
+    /**
+     * Handles action of Colour filter selected.
+     */
+    public void onColourComboBoxClicked() {
+        String selectedColour = String.valueOf(colourComboBox.getValue());
+        if (!(Objects.equals(selectedColour, "Colour"))) {
+            colourFilter = selectedColour;
+            setVarietyComboBox();
+            applySearchFilters();
+        } else {
+            colourFilter = "0";
+            setVarietyComboBox();
+            applySearchFilters();
+        }
     }
 
     /**
@@ -462,10 +524,12 @@ public class DataListPageController extends PageController {
         wineTable.setItems(observableWines);
         tableResults.setText(wineTable.getItems().size() + " results");
         varietyComboBox.setValue(varietyComboBox.getItems().getFirst());
+        colourComboBox.setValue(colourComboBox.getItems().getFirst());
         regionComboBox.setValue(regionComboBox.getItems().getFirst());
         yearComboBox.setValue(yearComboBox.getItems().getFirst());
 
         favToggleButton.setSelected(false);
+        setDefaultVarietyBox();
         addNotification("Search and filters reset", "#d5e958");
     }
 

@@ -214,10 +214,25 @@ public class DataLoadService {
         } catch (IOException e) {
             log.error(e);
         }
+
+        List<String[]> wineColourCSV = new ArrayList<>();
+        try (InputStream colourInputStream = this.getClass().getResourceAsStream("/wineColour_NZ_list.csv")) {
+            wineColourCSV = loadFile(colourInputStream);
+        } catch (IOException e) {
+            log.error(e);
+        }
+
         List<Wine> wines = new ArrayList<>();
         for (String[] entry : csvResult) {
             Wine wine = wineFromText(entry);
             if (wine != null) {
+
+                for (String[] strings : wineColourCSV) {
+                    if (strings[0].equals(wine.getWineVariety())) {
+                        wine.setColour(strings[1]);
+                        break;
+                    }
+                }
                 wines.add(wine);
             }
         }

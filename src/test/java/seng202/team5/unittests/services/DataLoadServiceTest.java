@@ -1,5 +1,7 @@
 package seng202.team5.unittests.services;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.spy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.models.Wine;
@@ -82,4 +84,33 @@ public class DataLoadServiceTest {
         List<Wine> wines = dataLoadService.processWinesFromCsv();
         assertEquals(16, wines.size());
     }
+
+    @Test
+    public void testColourPinotNoirWine() {
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        Wine wine = wines.get(4);
+        assertEquals("Pinot Noir", wine.getWineVariety());
+        assertEquals("Red", wine.getWineColour());
+    }
+
+    @Test
+    public void testColourSauvignonBlancWine() {
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        Wine wine = wines.get(2);
+        assertEquals("Sauvignon Blanc", wine.getWineVariety());
+        assertEquals("White", wine.getWineColour());
+    }
+
+//    @Test
+//    public void testUnknownColourWine() {//colours csv only contains those from nz data so some in test data are unknown
+//        List<Wine> wines = dataLoadService.processWinesFromCsv();
+//        Wine wine = wines.get(4);
+//        for (Wine fwine : wines) {
+//            System.out.println(fwine.getWineColour());
+//        }
+//        assertEquals("Tempranillo-Merlot", wine.getWineVariety());
+//        assertEquals("Unknown", wine.getWineColour());
+//    }
+
+
 }
