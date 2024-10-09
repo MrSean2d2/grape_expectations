@@ -81,19 +81,19 @@ public class DashboardPageController extends PageController {
             pieChart.setVisible(false);
             notEnoughRatingsMessageLabel.setText("Rate " + (5 - numWinesReviewed) + " more wine(s) to view Pie Chart Stats!");
             notEnoughRatingsMessageLabel.setVisible(true);
-            piechartTypeComboBox.setDisable(true);
+           // piechartTypeComboBox.setDisable(true);
         } else {
             pieChart.setVisible(true);
             notEnoughRatingsMessageLabel.setVisible(false);
-            piechartTypeComboBox.setDisable(false);
+          //  piechartTypeComboBox.setDisable(false);
         }
         updateTopLabels();
 
-        updatePieChartComboBox();
+     //   updatePieChartComboBox();
 
         initialiseRadioButtons();
 
-        piechartTypeComboBox.setTooltip(new Tooltip("Select Type Of Pie Chart"));
+      //  piechartTypeComboBox.setTooltip(new Tooltip("Select Type Of Pie Chart"));
 
         // Add tables
         tagsDAO = new TagsDAO();
@@ -148,6 +148,8 @@ public class DashboardPageController extends PageController {
                 }
                 }
         });
+        // Initialise pie chart with variety default
+        varietyPieChartButton.setSelected(true);
     }
 
 
