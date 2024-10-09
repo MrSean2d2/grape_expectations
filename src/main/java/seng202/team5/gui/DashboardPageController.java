@@ -1,6 +1,8 @@
 package seng202.team5.gui;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -26,6 +28,16 @@ import static seng202.team5.services.ColourLookupService.getTagLabelColour;
 public class DashboardPageController extends PageController {
     @FXML
     public Label notEnoughRatingsMessageLabel;
+    @FXML
+    public RadioButton varietyPieChartButton;
+    @FXML
+    public RadioButton regionPieChartButton;
+    @FXML
+    public RadioButton colourPieChartButton;
+    @FXML
+    public RadioButton yearPieChartButton;
+    @FXML
+    public RadioButton tagPieChartRadioButton;
     @FXML
     private PieChart pieChart;
 
@@ -79,6 +91,8 @@ public class DashboardPageController extends PageController {
 
         updatePieChartComboBox();
 
+        initialiseRadioButtons();
+
         piechartTypeComboBox.setTooltip(new Tooltip("Select Type Of Pie Chart"));
 
         // Add tables
@@ -103,6 +117,36 @@ public class DashboardPageController extends PageController {
             createNewTagList(tag.getName(), numWines.size(), tag.getColour());
         }
     }
+
+    private void initialiseRadioButtons() {
+        List<RadioButton> radioButtonList = new ArrayList<>();
+        radioButtonList.add(colourPieChartButton);
+        radioButtonList.add(varietyPieChartButton);
+        radioButtonList.add(regionPieChartButton);
+        radioButtonList.add(yearPieChartButton);
+        radioButtonList.add(tagPieChartRadioButton);
+
+        ToggleGroup tg = new ToggleGroup();
+
+        for(RadioButton button: radioButtonList){
+            button.getStyleClass().remove("radio-button");
+            button.getStyleClass().add("button");
+            button.setToggleGroup(tg);
+        }
+
+        // set up toggle of radio buttons
+        tg.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+                RadioButton rb = (RadioButton) tg.getSelectedToggle();
+                if(rb!=null) {
+                    String pieChartType = rb.getText().toString();
+                    updatePieChartData(pieChartType);
+                }
+                }
+        });
+    }
+
 
     /**
      * Populates the pie chart combo box

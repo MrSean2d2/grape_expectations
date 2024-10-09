@@ -227,6 +227,7 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 }
 
 
+
 .popover {
     -fx-background-radius: 15;
 }
