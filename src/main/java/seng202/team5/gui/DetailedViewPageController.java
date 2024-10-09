@@ -39,6 +39,7 @@ import seng202.team5.models.Wine;
 import seng202.team5.repository.AssignedTagsDAO;
 import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
+import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
 
@@ -47,17 +48,20 @@ import seng202.team5.services.WineService;
  *
  * @author Finn Brown
  */
-public class DetailedViewPageController extends PageController {
+public class DetailedViewPageController extends PageController implements ClosableWindow {
     private static final Logger log = LogManager.getLogger(DetailedViewPageController.class);
     private final Image emptyStar = new Image(
             Objects.requireNonNull(getClass().getResourceAsStream("/images/empty_star.png")));
     private final Image filledStar = new Image(
             Objects.requireNonNull(getClass().getResourceAsStream("/images/filled_star.png")));
+
     Label addLabel;
     boolean canAddTag = true;
     TagsDAO tagsDAO;
     AssignedTagsDAO assignedTagsDAO;
     List<Tag> tagsList;
+    @FXML
+    public Label ratingLogInLabel;
     @FXML
     private Button backButton;
     @FXML
@@ -110,24 +114,24 @@ public class DetailedViewPageController extends PageController {
     private ReviewDAO reviewDAO;
     private Review review;
 
-    private static List<DetailedViewPageController> openInstances = new ArrayList<>();
-
 
     /**
      * Initializes DetailedViewPage.
      */
     @FXML
     private void initialize() {
+        OpenWindowsService.getInstance().addWindow(this);
+
         Wine selectedWine = WineService.getInstance().getSelectedWine();
         selectedWineId = selectedWine.getId();
         reviewDAO = new ReviewDAO();
         review = null;
 
+
         initWineInfo(selectedWine);
         initUserReviews();
         initAdminActions();
 
-        openInstances.add(this);
 
     }
 
@@ -177,7 +181,9 @@ public class DetailedViewPageController extends PageController {
             }
 
             // Done Loading Tags
+            ratingLogInLabel.setVisible(false);
             logInMessageLabel.setText("");
+            ratingStars.setVisible(true);
             addTagLabel.setText("");
             if (review != null) {
                 notesTextArea.setText(review.getNotes());
@@ -190,6 +196,8 @@ public class DetailedViewPageController extends PageController {
             notesTextArea.setEditable(true);
         } else {
             logInMessageLabel.setText("Log in to save your notes!");
+            ratingLogInLabel.setVisible(true);
+            ratingStars.setVisible(false);
             addTagLabel.setText("Log in to add tags!");
             favoriteToggleButton.setDisable(true);
             saveNotesButton.setDisable(true);
@@ -197,6 +205,9 @@ public class DetailedViewPageController extends PageController {
         }
     }
 
+    /**
+     * Initialise the button for the admin to edit a wine.
+     */
     private void initAdminActions() {
         if (UserService.getInstance().getCurrentUser() != null
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
@@ -209,6 +220,11 @@ public class DetailedViewPageController extends PageController {
         }
     }
 
+    /**
+     * Called when the admin clicks the edit wine button.
+     *
+     * @param event the ActionEvent associated with the button click
+     */
     private void editWine(ActionEvent event) {
         Wine selectedWine = WineService.getInstance().getSelectedWine();
         try {
@@ -503,33 +519,38 @@ public class DetailedViewPageController extends PageController {
      * Closes the page.
      */
     @FXML
-    private void handleBackButtonAction() {
+    @Override
+    public void closeWindow() {
+        OpenWindowsService.getInstance().closeWindow(this);
         close();
     }
 
     /**
-     * Closes the page.
+     * Closes the page and updates the review if necessary.
      */
-    private void close() {
+    public void close() {
+
         try {
             if (UserService.getInstance().getCurrentUser() != null) {
-                assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
+                if (assignedTagsDAO != null) {
 
-                // Add review to this wine
-                if (!tagsList.isEmpty()) {
-                    createReviewIfNotExists();
-                }
+                    assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
 
-                // Add to assigned tags db
-                for (Tag tag : tagsList) {
-                    assignedTagsDAO.add(new AssignedTag(tag.getTagId(), userId, selectedWineId));
+                    // Add review to this wine
+                    if (!tagsList.isEmpty()) {
+                        createReviewIfNotExists();
+                    }
+
+                    // Add to assigned tags db
+                    for (Tag tag : tagsList) {
+                        assignedTagsDAO.add(new AssignedTag(tag.getTagId(),
+                                userId, selectedWineId));
+                    }
                 }
             }
         } catch (DuplicateEntryException e) {
             throw new RuntimeException(e);
         }
-        openInstances.remove(this);
-
         backButton.getScene().getWindow().hide();
 
         // Show update message if it was updated
@@ -538,14 +559,6 @@ public class DetailedViewPageController extends PageController {
         }
     }
 
-    /**
-     * Closes all open instances of detailed view pages.
-     */
-    public static void closeAll() {
-        for (DetailedViewPageController instance : new ArrayList<>(openInstances)) {
-            instance.close();
-        }
-    }
 
 
     /**

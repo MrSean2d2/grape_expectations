@@ -37,9 +37,9 @@ public class VineyardService {
     }
 
     /**
-     * Returns the singleton WineService instance.
+     * Returns the singleton VineyardService instance.
      *
-     * @return instance of wine service class
+     * @return instance of vineyard service class
      */
     public static VineyardService getInstance() {
         if (instance == null) {

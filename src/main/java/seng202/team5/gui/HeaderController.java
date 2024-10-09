@@ -2,6 +2,8 @@ package seng202.team5.gui;
 
 import java.io.IOException;
 import java.util.Objects;
+
+import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -9,13 +11,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -130,22 +136,35 @@ public class HeaderController {
         }
 
         // Uses different method for loading as WebView messes with the loader
-        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/MapPage.fxml"));
-        Node loader = baseLoader.load();
-        PageController pageController = baseLoader.getController();
+        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
+        Node loadingScreen = baseLoader.load();
+        pageContainer.getChildren().setAll(loadingScreen);
+        PauseTransition pause = new PauseTransition(Duration.millis(200));
 
-        if (pageController != null) {
-            pageController.setHeaderController(headerController);
-        }
+        pause.setOnFinished(event -> {
+            try {
+                FXMLLoader mapLoader = new FXMLLoader(getClass().getResource("/fxml/MapPage.fxml"));
+                Node mapPage = mapLoader.load();
+                PageController pageController = mapLoader.getController();
 
-        pageContainer.getChildren().setAll(loader);
+                if (pageController != null) {
+                    pageController.setHeaderController(headerController);
+                }
 
-        homeButton.getStyleClass().remove("active");
-        dataListButton.getStyleClass().remove("active");
-        mapButton.getStyleClass().remove("active");
-        accountButton.getStyleClass().remove("active");
+                pageContainer.getChildren().setAll(mapPage);
 
-        mapButton.getStyleClass().add("active");
+                // Update active button styles
+                homeButton.getStyleClass().remove("active");
+                dataListButton.getStyleClass().remove("active");
+                mapButton.getStyleClass().remove("active");
+                accountButton.getStyleClass().remove("active");
+                mapButton.getStyleClass().add("active");
+            } catch (IOException e) {
+                log.error("Failed to load MapPage.fxml: ", e);
+            }
+        });
+
+        pause.play();
     }
 
     /**
@@ -175,6 +194,8 @@ public class HeaderController {
         if (createScene != null && createScene.isRunning()) {
             createScene.cancel(true);
         }
+
+        setHeaderInteractionEnabled(false);
 
         // Begin a new task
         createScene = new Task<>() {
@@ -240,10 +261,27 @@ public class HeaderController {
                 break;
         }
         // Update the scene
-        createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
+        createScene.setOnSucceeded(e -> {
+            pageContainer.getChildren().setAll(createScene.getValue());
+            setHeaderInteractionEnabled(true); // Re-enable interactions after loading
+        });
+
 
         // Begin loading
         new Thread(createScene).start();
+    }
+
+    /**
+     * Disables/enabled interaction with buttons in header.
+     *
+     * @param enabled if buttons should be enabled or disabled
+     */
+    private void setHeaderInteractionEnabled(boolean enabled) {
+        logoButton.setDisable(!enabled);
+        homeButton.setDisable(!enabled);
+        dataListButton.setDisable(!enabled);
+        mapButton.setDisable(!enabled);
+        accountButton.setDisable(!enabled);
     }
 
     /**

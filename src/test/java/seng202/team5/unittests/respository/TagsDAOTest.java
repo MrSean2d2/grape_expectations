@@ -108,8 +108,14 @@ public class TagsDAOTest {
         Tag testTag3 = new Tag(testUser2.getId(), "Tag 3", 0);
         testTag3.setTagId(tagsDAO.add(testTag3));
 
-        List<Tag> tags = tagsDAO.getAll();
-        assertEquals("Tag 1", tags.get(defaultTagCount).getName());
+        Tag tag = tagsDAO.getOne(testTag.getTagId());
+        assertEquals("Tag 1", tag.getName());
+
+        Tag tag2 = tagsDAO.getOne(testTag2.getTagId());
+        assertEquals("Tag 2", tag2.getName());
+
+        Tag tag3 = tagsDAO.getOne(testTag3.getTagId());
+        assertEquals("Tag 3", tag3.getName());
     }
 
 

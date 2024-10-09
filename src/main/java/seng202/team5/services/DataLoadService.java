@@ -113,13 +113,11 @@ public class DataLoadService {
             }
             double price = numFromTextOr0(csvEntry[5]);
 
-
             // Wine Region
             String regionName = csvEntry[6] != null ? csvEntry[6] : "NoRegion";
 
             // Wine Name
             String name = csvEntry[11];
-
 
             // Wine Year
             Pattern yearPattern = Pattern.compile("\\d{4}");
@@ -139,13 +137,14 @@ public class DataLoadService {
             Vineyard vineyard = new Vineyard(winery, regionName);
             geolocatorService.queryAddress(vineyard);
 
-            // Wine Description.
-            // Description can be empty
+            // Wine Description - description can be empty
             String description = csvEntry[2];
 
             // Return the created Wine object
             Wine resultWine = new Wine(name, description, year, ratingValue, price,
                     varietyName, "Unknown", vineyard);
+
+            // Check if the new wine is valid and return it
             if (wineService.isValidWine(resultWine)) {
                 return resultWine;
             } else {

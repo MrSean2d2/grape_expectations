@@ -10,23 +10,16 @@ import javafx.stage.Stage;
 import seng202.team5.models.Role;
 import seng202.team5.models.User;
 import seng202.team5.repository.UserDAO;
+import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A controller for the edit user window.
  *
  * @author Sean Reitsma
  */
-public class EditUserPopupController extends PageController {
-
-    @FXML
-    private PasswordField confPasswordField;
-
-    @FXML
-    private PasswordField passwordField;
+public class EditUserPopupController extends PageController implements ClosableWindow {
 
     @FXML
     private ComboBox<Role> roleComboBox;
@@ -38,16 +31,14 @@ public class EditUserPopupController extends PageController {
     private Label usernameLabel;
 
     @FXML
-    private Label errorLabel;
-
-    @FXML
     private Button closeButton;
     private User curUser;
-    private static List<EditUserPopupController> openInstances = new ArrayList<>();
     private boolean editingCurrentUser;
 
     @FXML
     private void initialize() {
+        OpenWindowsService.getInstance().addWindow(this);
+
         curUser = UserService.getInstance().getSelectedUser();
         editingCurrentUser = curUser.equals(UserService.getInstance().getCurrentUser());
         usernameLabel.setText(curUser.getUsername());
@@ -55,53 +46,31 @@ public class EditUserPopupController extends PageController {
         roleComboBox.setDisable(editingCurrentUser);
         roleComboBox.getItems().setAll(Role.values());
         roleComboBox.getSelectionModel().select(curUser.getRole());
-
-        openInstances.add(this);
     }
 
     @FXML
-    private void close() {
-        openInstances.remove(this);
+    @Override
+    public void closeWindow() {
+        OpenWindowsService.getInstance().closeWindow(this);
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
 
     @FXML
     private void submit() {
-        if (!(passwordField.getText().equals(confPasswordField.getText()))) {
-            errorLabel.setText("Passwords do not match!");
-            errorLabel.setVisible(true);
-            passwordField.getStyleClass().add("field_error");
-            confPasswordField.getStyleClass().add("field_error");
-        } else if (passwordField.getText().isBlank() || confPasswordField.getText().isBlank()) {
-            errorLabel.setText("Password cannot be empty!");
-            errorLabel.setVisible(true);
-            passwordField.getStyleClass().add("field_error");
-            confPasswordField.getStyleClass().add("field_error");
-        } else {
-            errorLabel.setVisible(false);
-            passwordField.getStyleClass().remove("field_error");
-            confPasswordField.getStyleClass().remove("field_error");
-            curUser.setUsername(usernameField.getText());
-            UserService.getInstance().updateUserPassword(curUser, passwordField.getText());
-            curUser.setRole(roleComboBox.getSelectionModel().getSelectedItem());
-            if (editingCurrentUser) {
-                UserService.getInstance().setCurrentUser(curUser);
-            }
-            UserDAO userDAO = new UserDAO();
-            userDAO.update(curUser);
-            close();
+        curUser.setUsername(usernameField.getText());
+        curUser.setRole(roleComboBox.getSelectionModel().getSelectedItem());
+        if (editingCurrentUser) {
+            UserService.getInstance().setCurrentUser(curUser);
         }
-
+        UserDAO userDAO = new UserDAO();
+        userDAO.update(curUser);
+        closeWindow();
     }
-    /**
-     * Closes all open instances of detailed view pages
-     */
+
     @FXML
-    public static void closeAll(){
-        for(EditUserPopupController instance : new ArrayList<>(openInstances)) {
-            instance.close();
-        }
+    private void openEditPassword() {
+        openEditPasswordPopup(true, closeButton.getScene().getWindow());
     }
 
 }
