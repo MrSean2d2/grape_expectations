@@ -711,7 +711,7 @@ public class DataListPageController extends PageController {
             Parent root = loader.load();
 
             // Set the header controller reference to the new page controller
-            PageController pageController = loader.getController();
+            DetailedViewPageController pageController = loader.getController();
             if (pageController != null) {
                 pageController.setHeaderController(headerController);
             }
@@ -722,6 +722,9 @@ public class DataListPageController extends PageController {
 
             String styleSheetUrl = MainWindow.styleSheet;
             scene.getStylesheets().add(styleSheetUrl);
+            if (pageController != null) {
+                pageController.init(stage);
+            }
 
             stage.setScene(scene);
             stage.show();

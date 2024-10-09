@@ -131,6 +131,16 @@ public class DetailedViewPageController extends PageController implements Closab
 
 
     /**
+     * Initialise the stage. This is called by the class which loads the
+     * DetailedViewPage and initialises the onCloseWindowRequest.
+     *
+     * @param stage the current fxml stage
+     */
+    public void init(Stage stage) {
+        stage.setOnCloseRequest(windowEvent -> closeWindow());
+    }
+
+    /**
      * Initializes DetailedViewPage.
      */
     @FXML
@@ -277,13 +287,6 @@ public class DetailedViewPageController extends PageController implements Closab
             throw new RuntimeException(e);
         }
 
-        // listener for window closing
-        Platform.runLater(() -> {
-            Stage stage = (Stage) backButton.getScene().getWindow();
-            if (stage != null) {
-                stage.setOnCloseRequest(closeevent -> close());
-            }
-        });
     }
 
     /**
