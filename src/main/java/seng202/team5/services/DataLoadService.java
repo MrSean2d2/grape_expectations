@@ -38,6 +38,8 @@ import seng202.team5.models.Wine;
 public class DataLoadService {
     private static final Logger log = LogManager.getLogger(DataLoadService.class);
 
+    private final WineService wineService;
+
     private final Path fileName;
 
     private final GeolocatorService geolocatorService = new GeolocatorService();
@@ -47,6 +49,7 @@ public class DataLoadService {
      */
     public DataLoadService() {
         this.fileName = pathFromConfig();
+        this.wineService = WineService.getInstance();
         log.info(fileName);
     }
 
@@ -56,6 +59,7 @@ public class DataLoadService {
      */
     public DataLoadService(String specifiedFileName) {
         this.fileName = Path.of(specifiedFileName);
+        this.wineService = WineService.getInstance();
     }
 
     /**
@@ -109,13 +113,11 @@ public class DataLoadService {
             }
             double price = numFromTextOr0(csvEntry[5]);
 
-
             // Wine Region
             String regionName = csvEntry[6] != null ? csvEntry[6] : "NoRegion";
 
             // Wine Name
             String name = csvEntry[11];
-
 
             // Wine Year
             Pattern yearPattern = Pattern.compile("\\d{4}");
@@ -128,21 +130,22 @@ public class DataLoadService {
             }
 
             // Wine Variety
-            String varietyName = csvEntry[12];
+            String varietyName = wineService.validVariety(csvEntry[12]);
 
             // Winery
             String winery = csvEntry[13];
             Vineyard vineyard = new Vineyard(winery, regionName);
             geolocatorService.queryAddress(vineyard);
 
-            // Wine Description.
-            // Description can be empty
+            // Wine Description - description can be empty
             String description = csvEntry[2];
 
             // Return the created Wine object
             Wine resultWine = new Wine(name, description, year, ratingValue, price,
                     varietyName, "Unknown", vineyard);
-            if (resultWine.isValidWine()) {
+
+            // Check if the new wine is valid and return it
+            if (wineService.isValidWine(resultWine)) {
                 return resultWine;
             } else {
                 return null;
@@ -211,10 +214,25 @@ public class DataLoadService {
         } catch (IOException e) {
             log.error(e);
         }
+
+        List<String[]> wineColourCSV = new ArrayList<>();
+        try (InputStream colourInputStream = this.getClass().getResourceAsStream("/wineColour_NZ_list.csv")) {
+            wineColourCSV = loadFile(colourInputStream);
+        } catch (IOException e) {
+            log.error(e);
+        }
+
         List<Wine> wines = new ArrayList<>();
         for (String[] entry : csvResult) {
             Wine wine = wineFromText(entry);
             if (wine != null) {
+
+                for (String[] strings : wineColourCSV) {
+                    if (strings[0].equals(wine.getWineVariety())) {
+                        wine.setColour(strings[1]);
+                        break;
+                    }
+                }
                 wines.add(wine);
             }
         }

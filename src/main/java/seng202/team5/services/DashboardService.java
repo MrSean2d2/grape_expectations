@@ -1,5 +1,9 @@
 package seng202.team5.services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import seng202.team5.models.Review;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
@@ -17,7 +21,7 @@ import java.util.Map;
  */
 public class DashboardService {
 
-    private final int userID;
+    private final int userId;
     private final VineyardDAO vineyardDAO;
     private final WineDAO wineDAO;
     private final ReviewDAO reviewDAO;
@@ -72,14 +76,14 @@ public class DashboardService {
      * Initialises data for service, aggregates ratings by variety, region, year
      */
     public void initializeData() {
-        userReviews = reviewDAO.getFromUser(userID);
+        userReviews = reviewDAO.getFromUser(userId);
 
         // Create a hash map for each property
-        for(Review review : userReviews) {
+        for (Review review : userReviews) {
             Wine wine = wineDAO.getOne(review.getWineId());
             Vineyard vineyard = wine.getVineyard();
 
-            // Add to maps
+            // Populate the maps
             varietyMap.merge(wine.getWineVariety(), review.getRating(), Integer::sum);
             regionMap.merge(vineyard.getRegion(), review.getRating(), Integer::sum);
             yearMap.merge(wine.getYear(), review.getRating(), Integer::sum);
@@ -119,7 +123,7 @@ public class DashboardService {
      *
      * @return the list of reviews for the logged-in user
      */
-    public List<Review> getUserReviews(){
+    public List<Review> getUserReviews() {
         return userReviews;
     }
 
@@ -159,6 +163,6 @@ public class DashboardService {
         selectedValues.add(selectedCategory);
         selectedValues.add(selectedFilterTerm);
         return selectedValues;
-        
+
     }
 }

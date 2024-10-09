@@ -2,28 +2,24 @@ package seng202.team5.gui;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.services.UserService;
@@ -241,6 +237,8 @@ public class HeaderController {
             createScene.cancel(true);
         }
 
+        setHeaderInteractionEnabled(false);
+
         // Begin a new task
         createScene = new Task<>() {
             @Override
@@ -306,10 +304,27 @@ public class HeaderController {
                 break;
         }
         // Update the scene
-        createScene.setOnSucceeded(e -> pageContainer.getChildren().setAll(createScene.getValue()));
+        createScene.setOnSucceeded(e -> {
+            pageContainer.getChildren().setAll(createScene.getValue());
+            setHeaderInteractionEnabled(true); // Re-enable interactions after loading
+        });
+
 
         // Begin loading
         new Thread(createScene).start();
+    }
+
+    /**
+     * Disables/enabled interaction with buttons in header.
+     *
+     * @param enabled if buttons should be enabled or disabled
+     */
+    private void setHeaderInteractionEnabled(boolean enabled) {
+        logoButton.setDisable(!enabled);
+        homeButton.setDisable(!enabled);
+        dataListButton.setDisable(!enabled);
+        mapButton.setDisable(!enabled);
+        accountButton.setDisable(!enabled);
     }
 
     /**

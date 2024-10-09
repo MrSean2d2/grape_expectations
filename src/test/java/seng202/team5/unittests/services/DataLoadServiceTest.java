@@ -1,18 +1,21 @@
 package seng202.team5.unittests.services;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.spy;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import seng202.team5.models.Wine;
+import seng202.team5.services.DataLoadService;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import seng202.team5.models.Wine;
-import seng202.team5.services.DataLoadService;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.spy;
 
 public class DataLoadServiceTest {
     private DataLoadService dataLoadService;
@@ -34,7 +37,7 @@ public class DataLoadServiceTest {
                 Path.of(csvFilePath)));
         String[] expectedFirst = {"174", "New Zealand", "The Stoneleigh style traditionally favors ripeness over herbaceousness, and the 2008 holds true to form," +
                 " offering up grapefruit and nectarine aromas and an appealing blend of citrus and stone-fruit flavors. " +
-                "It's plump and round, yet finishes fresh. Good as an apéritif or with light dishes.", null,
+                new String("It's plump and round, yet finishes fresh. Good as an apéritif or with light dishes.".getBytes(), StandardCharsets.UTF_8), null,
                 "88", "19", "Marlborough",
                 null, null, "Joe Czerwinski",
                 "@JoeCz", "Stoneleigh 2008 Sauvignon Blanc (Marlborough)",
@@ -81,4 +84,33 @@ public class DataLoadServiceTest {
         List<Wine> wines = dataLoadService.processWinesFromCsv();
         assertEquals(16, wines.size());
     }
+
+    @Test
+    public void testColourPinotNoirWine() {
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        Wine wine = wines.get(4);
+        assertEquals("Pinot Noir", wine.getWineVariety());
+        assertEquals("Red", wine.getWineColour());
+    }
+
+    @Test
+    public void testColourSauvignonBlancWine() {
+        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        Wine wine = wines.get(2);
+        assertEquals("Sauvignon Blanc", wine.getWineVariety());
+        assertEquals("White", wine.getWineColour());
+    }
+
+//    @Test
+//    public void testUnknownColourWine() {//colours csv only contains those from nz data so some in test data are unknown
+//        List<Wine> wines = dataLoadService.processWinesFromCsv();
+//        Wine wine = wines.get(4);
+//        for (Wine fwine : wines) {
+//            System.out.println(fwine.getWineColour());
+//        }
+//        assertEquals("Tempranillo-Merlot", wine.getWineVariety());
+//        assertEquals("Unknown", wine.getWineColour());
+//    }
+
+
 }

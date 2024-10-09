@@ -1,5 +1,10 @@
 package seng202.team5.gui;
 
+import static seng202.team5.services.ColourLookupService.getTagLabelColour;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,15 +15,20 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import seng202.team5.models.*;
-import seng202.team5.repository.*;
+import seng202.team5.models.AssignedTag;
+import seng202.team5.models.Tag;
+import seng202.team5.repository.AssignedTagsDAO;
+import seng202.team5.repository.ReviewDAO;
+import seng202.team5.repository.TagsDAO;
+import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
 import seng202.team5.services.DashboardService;
 import seng202.team5.services.UserService;
 
-import java.util.*;
 
-import static seng202.team5.services.ColourLookupService.getTagLabelColour;
-
+/**
+ * Controller for the Dashboard Page.
+ */
 public class DashboardPageController extends PageController {
     @FXML
     public Label notEnoughRatingsMessageLabel;
@@ -52,6 +62,8 @@ public class DashboardPageController extends PageController {
 
     public ComboBox<String> piechartTypeComboBox;
     private DashboardService dashboardService;
+    private TagsDAO tagsDAO;
+    private int userId;
 
     /**
      * Initialises the dashboard page
@@ -65,7 +77,11 @@ public class DashboardPageController extends PageController {
             titleLabel.setText("Hello, " + UserService.getInstance().getCurrentUser().getUsername() + "!");
         }
 
-        dashboardService = new DashboardService(userID, new VineyardDAO(), new WineDAO(new VineyardDAO()), new ReviewDAO());
+        dashboardService = new DashboardService(
+                userID,
+                new VineyardDAO(),
+                new WineDAO(new VineyardDAO()),
+                new ReviewDAO());
 
         // Show error message if the user needs to rate more wines
         int numWinesReviewed = dashboardService.getUserReviews().size();
@@ -84,7 +100,7 @@ public class DashboardPageController extends PageController {
         // Add tables
         TagsDAO tagsDAO = new TagsDAO();
         AssignedTagsDAO assignedTagsDAO = new AssignedTagsDAO();
-        List<Tag> tags = tagsDAO.getFromUser(userID);
+        List<Tag> tags = tagsDAO.getFromUser(userId);
 
         // Add default reviewed options
         createNewTagList("My Reviewed Wines", dashboardService.getUserReviews().size(), -1);
@@ -97,7 +113,7 @@ public class DashboardPageController extends PageController {
             as the assigned tag would have a wineID also
              */
             List<AssignedTag> numWines = assignedTagsDAO.getTagsFromUser(
-                    userID,
+                    userId,
                     tag.getTagId());
 
             createNewTagList(tag.getName(), numWines.size(), tag.getColour());
@@ -158,13 +174,12 @@ public class DashboardPageController extends PageController {
     }
 
     /**
-     * Creates lists of tags and sets up selection to datalist view
+     * Create a new list of tags on the dashboard page.
      *
-     * @param name of tag
-     * @param numWines within tag list
-     * @param colour of tag
+     * @param name the name to display
+     * @param numWines the number of wines to display
+     * @param colour the background colour of the chip
      */
-
     public void createNewTagList(String name, int numWines, int colour) {
         Label nameTag = new Label(name);
         nameTag.setStyle(nameTag.getStyle() + "-fx-font-weight: 700;");
@@ -204,11 +219,10 @@ public class DashboardPageController extends PageController {
 
 
     /**
-     * Updates the pie chart data based on selected category
+     * Updates the pie chart data based on selected category.
      *
      * @param category selected for pie chart
      */
-
     public void updatePieChartData(String category) {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         List<PieChart.Data> dataList = new ArrayList<>();
@@ -242,6 +256,8 @@ public class DashboardPageController extends PageController {
                 // Don't add any data!!!
                 break;
         }
+
+        // Set the pie chart data and parameters
         pieChartData.addAll(dataList);
         pieChart.setData(pieChartData);
         pieChart.setTitle("Favourite " + category);

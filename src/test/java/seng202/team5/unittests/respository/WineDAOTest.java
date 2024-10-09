@@ -3,6 +3,8 @@ package seng202.team5.unittests.respository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +105,16 @@ public class WineDAOTest {
         assertEquals(testWine, wine);
     }
 
+    /**
+     * Test that trying to retrieve a wine which is not in the database returns
+     * null.
+     */
+    @Test
+    public void testGetOneNoWines() {
+        Wine wine = wineDAO.getOne(1);
+        assertNull(wine);
+    }
+
 
     /**
      * Test retrieving a wine from the database via its name.
@@ -118,6 +130,27 @@ public class WineDAOTest {
         assertNotNull(wine);
 
         assertEquals(wine, testWine);
+    }
+
+    /**
+     * Test that the {@link NotFoundException} is thrown when the wine can't be
+     * found.
+     */
+    @Test
+    public void testGetFromNameNoWines() {
+        assertThrows(NotFoundException.class, () -> wineDAO.getWineFromName("A nice wine"));
+    }
+
+    /**
+     * Test that {@link NotFoundException} is thrown when the wine can't be found.
+     */
+    @Test
+    public void testGetFromNameNonExistentWine() {
+        Vineyard vineyard = new Vineyard("Test", "Test");
+        Wine testWine = new Wine("Test Wine", "Test Wine is a nice wine", 2024,
+                99, 7.99, "Pinot Noir", "Red", vineyard);
+        wineDAO.add(testWine);
+        assertThrows(NotFoundException.class, () -> wineDAO.getWineFromName("Not test wine"));
     }
 
 

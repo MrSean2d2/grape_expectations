@@ -56,32 +56,6 @@ public class Vineyard {
     }
 
     /**
-     * Sets the name of the vineyard.
-     *
-     * @param name the name of the vineyard
-     */
-    public Vineyard(String name) {
-        this.name = name;
-        this.lat = 40.9006F;
-        this.lon = 174.8860F;
-        this.id = 0;
-    }
-
-    /**
-     * Sets the name of the vineyard.
-     *
-     * @param name the name of the vineyard
-     * @param lat the latitude
-     * @param lon the longitude
-     */
-    public Vineyard(int id, String name, double lat, double lon) {
-        this.name = name;
-        this.lat = lat;
-        this.lon = lon;
-        this.id = 0;
-    }
-
-    /**
      * Gets the name of the vineyard.
      */
     public String getName() {

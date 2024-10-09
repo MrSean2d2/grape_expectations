@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -21,8 +21,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import javafx.scene.Parent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
@@ -34,6 +35,7 @@ import seng202.team5.models.Wine;
 import seng202.team5.repository.AssignedTagsDAO;
 import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
+import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
 
@@ -42,53 +44,85 @@ import seng202.team5.services.WineService;
  *
  * @author Finn Brown
  */
-public class DetailedViewPageController extends PageController {
+public class DetailedViewPageController extends PageController implements ClosableWindow {
     private static final Logger log = LogManager.getLogger(DetailedViewPageController.class);
     private final Image emptyStar = new Image(
             Objects.requireNonNull(getClass().getResourceAsStream("/images/empty_star.png")));
     private final Image filledStar = new Image(
             Objects.requireNonNull(getClass().getResourceAsStream("/images/filled_star.png")));
+
     Label addLabel;
     boolean canAddTag = true;
     TagsDAO tagsDAO;
     AssignedTagsDAO assignedTagsDAO;
     List<Tag> tagsList;
-    @FXML
-    private Button backButton;
-    @FXML
-    private Label nameLabel;
-    @FXML
-    private Label priceLabel;
-    @FXML
-    private Label yearLabel;
-    @FXML
-    private Label ratingLabel;
-    @FXML
-    private Label wineDescriptionLabel;
-    @FXML
-    private Label logInMessageLabel;
+
     @FXML
     private Label addTagLabel;
+
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private HBox headerBar;
+
+    @FXML
+    private HBox headerButtonContainer;
+
+    @FXML
+    private Label logInMessageLabel;
+
+    @FXML
+    private Label nameLabel;
+
+    @FXML
+    private TextArea noteTextArea;
+
+    @FXML
+    private Label priceLabel;
+
     @FXML
     private Label provinceLabel;
+
     @FXML
-    private Label varietyLabel;
-    @FXML
-    private TextArea notesTextArea;
+    private Label ratingLabel;
+
     @FXML
     private HBox ratingStars;
+
     @FXML
     private ImageView star1;
+
     @FXML
     private ImageView star2;
+
     @FXML
     private ImageView star3;
+
     @FXML
     private ImageView star4;
+
     @FXML
     private ImageView star5;
+
     @FXML
     private FlowPane tagBox;
+
+    @FXML
+    private Label varietyLabel;
+
+    @FXML
+    private Label vineyardLabel;
+
+    @FXML
+    private ImageView wineColourImage;
+
+    @FXML
+    private Label wineDescriptionLabel;
+
+    @FXML
+    private Label yearLabel;
+
     private int selectedWineId;
     private int userId;
     private PopOver tagPopover;
@@ -101,11 +135,24 @@ public class DetailedViewPageController extends PageController {
      */
     @FXML
     private void initialize() {
+        OpenWindowsService.getInstance().addWindow(this);
+
         Wine selectedWine = WineService.getInstance().getSelectedWine();
         selectedWineId = selectedWine.getId();
         reviewDAO = new ReviewDAO();
         review = null;
 
+        initWineInfo(selectedWine);
+        initUserReviews();
+        initAdminActions();
+    }
+
+    /**
+     * Init all the labels with the wine information of the selected wine.
+     *
+     * @param selectedWine the selected wine object
+     */
+    private void initWineInfo(Wine selectedWine) {
         if (selectedWine != null) {
             nameLabel.setText(selectedWine.getName());
             priceLabel.setText("Price: $" + selectedWine.getPrice());
@@ -113,9 +160,19 @@ public class DetailedViewPageController extends PageController {
             ratingLabel.setText("Score: " + selectedWine.getRating());
             wineDescriptionLabel.setText(selectedWine.getDescription());
             provinceLabel.setText("Province: " + selectedWine.getRegion());
-            varietyLabel.setText("Variety: " + selectedWine.getWineVariety());
+            varietyLabel.setText("Variety: "
+                    + selectedWine.getWineColour()
+                    + " - "
+                    + selectedWine.getWineVariety());
+            setColourImage(selectedWine);
+            vineyardLabel.setText("Vineyard: " + selectedWine.getVineyard().getName());
         }
+    }
 
+    /**
+     * Initialise user specific review info and tags if applicable.
+     */
+    private void initUserReviews() {
         if (UserService.getInstance().getCurrentUser() != null) {
             // Get the user ID
             userId = UserService.getInstance().getCurrentUser().getId();
@@ -140,18 +197,84 @@ public class DetailedViewPageController extends PageController {
             }
 
             // Done Loading Tags
-            logInMessageLabel.setText("");
-            addTagLabel.setText("");
+            logInMessageLabel.setVisible(false);
+            logInMessageLabel.setManaged(false);
+            addTagLabel.setVisible(false);
+
+            noteTextArea.setDisable(false);
+            ratingStars.setDisable(false);
+
             if (review != null) {
-                notesTextArea.setText(review.getNotes());
+                noteTextArea.setText(review.getNotes());
                 updateStarDisplay(review.getRating());
             }
-
-            notesTextArea.setEditable(true);
         } else {
-            logInMessageLabel.setText("Log in to save your notes!");
-            addTagLabel.setText("Log in to add tags!");
-            notesTextArea.setEditable(false);
+            logInMessageLabel.setVisible(true);
+            addTagLabel.setVisible(true);
+            noteTextArea.setDisable(true);
+            ratingStars.setDisable(true);
+        }
+    }
+
+    /**
+     * sets the image to the corresponding colour.
+     * red, white, rose or unknown
+     * helps with usability and accessibility
+     */
+    private void setColourImage(Wine selectedWine) {
+        switch (selectedWine.getWineColour()) {
+            case "Red" -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/redColourWine.png"))));
+            case "White" -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/whiteColourWine.png"))));
+            case "Rosé" -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/roseColourWine.png"))));
+            default -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/unknownColourWine.png"))));
+        }
+    }
+
+    /**
+     * Initialise the button for the admin to edit a wine.
+     */
+    private void initAdminActions() {
+        if (UserService.getInstance().getCurrentUser() != null
+                && UserService.getInstance().getCurrentUser().getIsAdmin()) {
+            Button editWineButton = new Button("Edit Wine");
+            editWineButton.getStyleClass().add("detailed_view");
+            editWineButton.setOnAction(this::editWine);
+            headerButtonContainer.getChildren().add(editWineButton);
+        }
+    }
+
+    /**
+     * Called when the admin clicks the edit wine button.
+     *
+     * @param event the ActionEvent associated with the button click
+     */
+    private void editWine(ActionEvent event) {
+        Wine selectedWine = WineService.getInstance().getSelectedWine();
+        try {
+            FXMLLoader editWineLoader = new FXMLLoader(getClass()
+                    .getResource("/fxml/EditWinePopup.fxml"));
+            Parent root = editWineLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setMinHeight(486);
+            stage.setMinWidth(762);
+            stage.setTitle(String.format("Edit wine %s", selectedWine.getName()));
+            String styleSheetUrl = MainWindow.styleSheet;
+            scene.getStylesheets().add(styleSheetUrl);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+            initWineInfo(selectedWine);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         // listener for window closing
         Platform.runLater(() -> {
@@ -291,7 +414,7 @@ public class DetailedViewPageController extends PageController {
      *
      * @param tag the text to display
      */
-    public Label addTag(Tag tag) {
+    public void addTag(Tag tag) {
         Label newTag = new Label(tag.getName());
         newTag.getStyleClass().add("tag");
         newTag.getStyleClass().add(getTagLabelColour(tag.getColour()));
@@ -312,7 +435,6 @@ public class DetailedViewPageController extends PageController {
         tagsList.add(tag);
 
         updateTags();
-        return newTag;
     }
 
     /**
@@ -399,46 +521,39 @@ public class DetailedViewPageController extends PageController {
     }
 
     /**
-     * Saves the notes that are currently in the text box.
-     */
-    private void saveNotes() {
-        if (UserService.getInstance().getCurrentUser() == null) {
-            close();
-        } else {
-            createReviewIfNotExists();
-            if (review != null) {
-                review.setNotes(notesTextArea.getText());
-            }
-        }
-    }
-
-
-    /**
      * Closes the page.
      */
     @FXML
-    private void handleBackButtonAction() {
+    @Override
+    public void closeWindow() {
+        OpenWindowsService.getInstance().closeWindow(this);
         close();
     }
 
 
     /**
-     * Closes the page.
+     * Closes the page and updates the review if necessary.
      */
-    private void close() {
+    public void close() {
         try {
             if (UserService.getInstance().getCurrentUser() != null) {
-                assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
+                if (assignedTagsDAO != null) {
 
-                saveNotes();
-                // Add review to this wine
-                if (!tagsList.isEmpty()) {
-                    createReviewIfNotExists();
-                }
+                    assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
 
-                // Add to assigned tags db
-                for (Tag tag : tagsList) {
-                    assignedTagsDAO.add(new AssignedTag(tag.getTagId(), userId, selectedWineId));
+                    // Add review to this wine
+                    if (!tagsList.isEmpty() || !noteTextArea.getText().isEmpty()) {
+                        createReviewIfNotExists();
+                    }
+
+                    // Add to assigned tags db
+                    for (Tag tag : tagsList) {
+                        assignedTagsDAO.add(new AssignedTag(tag.getTagId(),
+                                userId, selectedWineId));
+                    }
+
+                    // Set the review text
+                    review.setNotes(noteTextArea.getText());
                 }
             }
         } catch (DuplicateEntryException e) {
@@ -451,6 +566,7 @@ public class DetailedViewPageController extends PageController {
             addNotification("Updated Wine Review", "#d5e958");
         }
     }
+
 
 
     /**
