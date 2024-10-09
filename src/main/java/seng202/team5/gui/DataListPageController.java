@@ -166,28 +166,34 @@ public class DataListPageController extends PageController {
 
         // Initialises with filters after pie slice selected from dashboard
         List<String> selectedPieFilterTerm = DashboardService.getInstance().getSelectedPieSliceSearch();
-        for ( String term : selectedPieFilterTerm) {
-            if(term!=null) {
-                String category = selectedPieFilterTerm.get(0);
-                String filterTerm = selectedPieFilterTerm.get(1);
-                switch (category) {
-                    case "Variety":
-                        varietyComboBox.setValue(filterTerm);
-                        break;
-                    case "Region":
-                        regionComboBox.setValue(filterTerm);
-                        break;
-                    case "Year":
-                        yearComboBox.setValue(filterTerm);
-                        break;
-                }
-                tagComboBox.setValue("All Tags");
-                applySearchFilters();
-                DashboardService.getInstance().setSelectedPieSliceSearch(null,null);
+
+        boolean valid = true;
+
+        for(String term : selectedPieFilterTerm) {
+            if(term == null) {
+                valid = false;
+                break;
             }
         }
 
-
+        if (valid) {
+            String category = selectedPieFilterTerm.get(0);
+            String filterTerm = selectedPieFilterTerm.get(1);
+            switch (category) {
+                case "Variety":
+                    varietyComboBox.setValue(filterTerm);
+                    break;
+                case "Region":
+                    regionComboBox.setValue(filterTerm);
+                    break;
+                case "Year":
+                    yearComboBox.setValue(filterTerm);
+                    break;
+            }
+            tagComboBox.setValue("All Tags");
+            applySearchFilters();
+            DashboardService.getInstance().setSelectedPieSliceSearch(null,null);
+        }
     }
 
     /**
