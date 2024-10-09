@@ -33,6 +33,7 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 
 .button.detailed_view {
     -fx-font-size: 16;
+    -fx-cursor: HAND;
 }
 
 .button:hover {

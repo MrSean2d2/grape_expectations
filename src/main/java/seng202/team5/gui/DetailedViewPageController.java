@@ -11,7 +11,6 @@ import java.util.Random;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -23,7 +22,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -43,7 +41,6 @@ import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
 
-import java.util.Objects;
 
 
 /**
@@ -63,56 +60,72 @@ public class DetailedViewPageController extends PageController implements Closab
     TagsDAO tagsDAO;
     AssignedTagsDAO assignedTagsDAO;
     List<Tag> tagsList;
-    @FXML
-    public Label ratingLogInLabel;
-    @FXML
-    private Button backButton;
-    @FXML
-    private Label nameLabel;
-    @FXML
-    private Label priceLabel;
-    @FXML
-    private Label yearLabel;
-    @FXML
-    private Label ratingLabel;
-    @FXML
-    private Label wineDescriptionLabel;
-    @FXML
-    private Label logInMessageLabel;
+
     @FXML
     private Label addTagLabel;
+
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private HBox headerBar;
+
+    @FXML
+    private HBox headerButtonContainer;
+
+    @FXML
+    private Label logInMessageLabel;
+
+    @FXML
+    private Label nameLabel;
+
+    @FXML
+    private TextArea noteTextArea;
+
+    @FXML
+    private Label priceLabel;
+
     @FXML
     private Label provinceLabel;
+
+    @FXML
+    private Label ratingLabel;
+
+    @FXML
+    private HBox ratingStars;
+
+    @FXML
+    private ImageView star1;
+
+    @FXML
+    private ImageView star2;
+
+    @FXML
+    private ImageView star3;
+
+    @FXML
+    private ImageView star4;
+
+    @FXML
+    private ImageView star5;
+
+    @FXML
+    private FlowPane tagBox;
+
     @FXML
     private Label varietyLabel;
 
     @FXML
-    private Label colourLabel;
+    private Label vineyardLabel;
 
     @FXML
     private ImageView wineColourImage;
 
     @FXML
-    private Label vineyardLabel;
-    @FXML
-    private TextArea notesTextArea;
-    @FXML
-    private HBox ratingStars;
-    @FXML
-    private ImageView star1;
-    @FXML
-    private ImageView star2;
-    @FXML
-    private ImageView star3;
-    @FXML
-    private ImageView star4;
-    @FXML
-    private ImageView star5;
-    @FXML
-    private FlowPane tagBox;
+    private Label wineDescriptionLabel;
 
     @FXML
-    private GridPane headerGridPane;
+    private Label yearLabel;
 
     private int selectedWineId;
     private int userId;
@@ -154,8 +167,10 @@ public class DetailedViewPageController extends PageController implements Closab
             ratingLabel.setText("Score: " + selectedWine.getRating());
             wineDescriptionLabel.setText(selectedWine.getDescription());
             provinceLabel.setText("Province: " + selectedWine.getRegion());
-            varietyLabel.setText("Variety: " + selectedWine.getWineVariety());
-            colourLabel.setText(selectedWine.getWineColour());
+            varietyLabel.setText("Variety: "
+                    + selectedWine.getWineColour()
+                    + " - "
+                    + selectedWine.getWineVariety());
             setColourImage(selectedWine);
             vineyardLabel.setText("Vineyard: " + selectedWine.getVineyard().getName());
         }
@@ -189,35 +204,45 @@ public class DetailedViewPageController extends PageController implements Closab
             }
 
             // Done Loading Tags
-            ratingLogInLabel.setVisible(false);
-            logInMessageLabel.setText("");
-            ratingStars.setVisible(true);
-            addTagLabel.setText("");
+            logInMessageLabel.setVisible(false);
+            logInMessageLabel.setManaged(false);
+            addTagLabel.setVisible(false);
+
+            noteTextArea.setDisable(false);
+            ratingStars.setDisable(false);
+
             if (review != null) {
-                notesTextArea.setText(review.getNotes());
+                noteTextArea.setText(review.getNotes());
                 updateStarDisplay(review.getRating());
             }
-            notesTextArea.setEditable(true);
         } else {
-            logInMessageLabel.setText("Log in to save your notes!");
-            ratingLogInLabel.setVisible(true);
-            ratingStars.setVisible(false);
-            addTagLabel.setText("Log in to add tags!");
-            notesTextArea.setEditable(false);
+            logInMessageLabel.setVisible(true);
+            addTagLabel.setVisible(true);
+            noteTextArea.setDisable(true);
+            ratingStars.setDisable(true);
         }
     }
 
     /**
-     * sets the image to the corresponding colour:
+     * sets the image to the corresponding colour.
      * red, white, rose or unknown
      * helps with usability and accessibility
      */
     private void setColourImage(Wine selectedWine) {
         switch (selectedWine.getWineColour()) {
-            case "Red" -> wineColourImage.setImage(new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/redColourWine.png"))));
-            case "White" -> wineColourImage.setImage(new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/whiteColourWine.png"))));
-            case "Rosé" -> wineColourImage.setImage(new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/roseColourWine.png"))));
-        }//otherwise keep default image (unknown colour)
+            case "Red" -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/redColourWine.png"))));
+            case "White" -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/whiteColourWine.png"))));
+            case "Rosé" -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/roseColourWine.png"))));
+            default -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/unknownColourWine.png"))));
+        }
     }
 
     /**
@@ -228,10 +253,8 @@ public class DetailedViewPageController extends PageController implements Closab
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
             Button editWineButton = new Button("Edit Wine");
             editWineButton.getStyleClass().add("detailed_view");
-            editWineButton.applyCss();
             editWineButton.setOnAction(this::editWine);
-            headerGridPane.add(editWineButton, 1, 0);
-            GridPane.setMargin(editWineButton, new Insets(0, 10, 10, 0));
+            headerButtonContainer.getChildren().add(editWineButton);
         }
     }
 
@@ -389,7 +412,7 @@ public class DetailedViewPageController extends PageController implements Closab
      *
      * @param tag the text to display
      */
-    public Label addTag(Tag tag) {
+    public void addTag(Tag tag) {
         Label newTag = new Label(tag.getName());
         newTag.getStyleClass().add("tag");
         newTag.getStyleClass().add(getTagLabelColour(tag.getColour()));
@@ -410,7 +433,6 @@ public class DetailedViewPageController extends PageController implements Closab
         tagsList.add(tag);
 
         updateTags();
-        return newTag;
     }
 
     /**
@@ -496,22 +518,6 @@ public class DetailedViewPageController extends PageController implements Closab
         }
     }
 
-//    /**
-//     * Saves the notes that are currently in the text box.
-//     */
-//    @FXML
-//    private void handleSaveNotes() {
-//        if (UserService.getInstance().getCurrentUser() == null) {
-//            close();
-//        } else {
-//            createReviewIfNotExists();
-//            if (review != null) {
-//                review.setNotes(notesTextArea.getText());
-//            }
-//        }
-//    }
-//
-
     /**
      * Closes the page.
      */
@@ -534,7 +540,7 @@ public class DetailedViewPageController extends PageController implements Closab
                     assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
 
                     // Add review to this wine
-                    if (!tagsList.isEmpty()) {
+                    if (!tagsList.isEmpty() || !noteTextArea.getText().isEmpty()) {
                         createReviewIfNotExists();
                     }
 
@@ -543,6 +549,9 @@ public class DetailedViewPageController extends PageController implements Closab
                         assignedTagsDAO.add(new AssignedTag(tag.getTagId(),
                                 userId, selectedWineId));
                     }
+
+                    // Set the review text
+                    review.setNotes(noteTextArea.getText());
                 }
             }
         } catch (DuplicateEntryException e) {
