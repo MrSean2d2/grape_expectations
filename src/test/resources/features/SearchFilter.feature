@@ -31,8 +31,8 @@ Feature: Filter feature
 
   Scenario: Apply multiple filters and a search
     Given the user is on the base search page,
-    When the user applies filters variety "Chardonnay", colour "White", region name "Central Otago", year  2006, min price 22, max price 24, min rating 83, search bar "apple".
-    Then the system displays results of wines with Variety "Chardonnay", colour "White", Region "Central Otago", Year 2006, Price between 22 and 24, Rating of 83 or higher, and containing "apple" in the name
+    When the user applies filters variety "Chardonnay", region name "Central Otago", year  2006, min price 22, max price 24, min rating 83, search bar "apple".
+    Then the system displays results of wines with Variety "Chardonnay", Region "Central Otago", Year 2006, Price between 22 and 24, Rating of 83 or higher, and containing "apple" in the name
 
   Scenario: No entries are shown when no entries match filter
     Given the user is on the base search page,
