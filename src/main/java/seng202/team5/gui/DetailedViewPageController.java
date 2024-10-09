@@ -554,7 +554,9 @@ public class DetailedViewPageController extends PageController implements Closab
                     }
 
                     // Set the review text
-                    review.setNotes(noteTextArea.getText());
+                    if (review != null) {
+                        review.setNotes(noteTextArea.getText());
+                    }
                 }
             }
         } catch (DuplicateEntryException e) {
