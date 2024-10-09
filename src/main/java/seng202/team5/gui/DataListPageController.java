@@ -105,7 +105,6 @@ public class DataListPageController extends PageController {
     private String varietyFilter;
     private String colourFilter;
     private String regionFilter;
-    private String tagFilter;
     private double minPriceFilter;
     private double maxPriceFilter;
     private double minRatingFilter;
@@ -185,7 +184,7 @@ public class DataListPageController extends PageController {
             VineyardService.getInstance().setSelectedVineyard(null);
         }
         initAdminAction();
-        wineTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        wineTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         // Initialises with filters after pie slice selected from dashboard
         List<String> selectedPieFilterTerm =
@@ -578,7 +577,6 @@ public class DataListPageController extends PageController {
      */
     @FXML
     private void searchClicked() {
-        String searching = searchTextField.getText();
         applySearchFilters();
         addNotification("Applied Search", "#d5e958");
     }
