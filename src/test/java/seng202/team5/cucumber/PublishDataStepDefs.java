@@ -35,6 +35,6 @@ public class PublishDataStepDefs {
     }
     @Then("the system detects wine with same name in database and rejects duplicate")
     public void cannotAddDuplicateWine() throws NotFoundException {
-        Assertions.assertEquals("test wine", wineDAO.getWineFromName(duplicateWine.getName()).getName());
+        Assertions.assertEquals(wineDAO.getWineFromName(wine.getName()).getName(), wineDAO.getWineFromName(duplicateWine.getName()).getName());
     }
 }
