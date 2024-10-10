@@ -170,7 +170,7 @@ public class DataListPageController extends PageController {
             applySearchFilters();
         }
         initAdminAction();
-        wineTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        wineTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
     }
 
     private void initAdminAction() {
