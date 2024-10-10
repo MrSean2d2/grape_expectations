@@ -67,5 +67,13 @@ public class EditDataStepDefs {
     public void nameReject() {
         Assertions.assertFalse(validName);
     }
-    //TODO: delete wine
+    @When("the admin deletes {string}")
+    public void deleteWine(String wine) throws NotFoundException {
+        wineDAO.delete(wineDAO.getWineFromName(wine).getId());
+    }
+    @Then("{string} is no longer in the database")
+    public void wineNotInDatabase(String wine) {
+        wineService = WineService.getInstance();
+        Assertions.assertFalse(wineService.checkExistingWine(wine));
+    }
 }

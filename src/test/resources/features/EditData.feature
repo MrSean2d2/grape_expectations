@@ -19,4 +19,8 @@ Feature: Edit Wine Data
     And wine with details "test e wine", "is a nice wine", 2024, 95, 30, "test variety", "red", vineyard in database
     When the user submits "" in the name field
     Then data is not saved, error message name can't be blank
-#TODO: Add delete wine test
+  Scenario: As an admin, I want to be able to delete existing wine records from the database
+    Given a vineyard "test vineyard" in "test region"
+    And wine with details "test e wine", "is a nice wine", 2024, 95, 30, "test variety", "red", vineyard in database
+    When the admin deletes "test e wine"
+    Then "test e wine" is no longer in the database
