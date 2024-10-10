@@ -21,10 +21,11 @@ public class LogInStepDefs {
     }
     @Given("is not yet logged in")
     public void userLoggedOut() {
+        userService = UserService.getInstance();
         userService.signOut();
     }
     @When("username {string} with incorrect password {string} is used to log in")
-    public void correctUsernameIncorrectPassword(String username, String password) throws NotFoundException, PasswordIncorrectException {
+    public void correctUsernameIncorrectPassword(String username, String password) throws NotFoundException {
         try {
             userService.signinUser(username, password);
         } catch (PasswordIncorrectException e) {
@@ -45,7 +46,7 @@ public class LogInStepDefs {
         Assertions.assertEquals("tester", loggedInUser.getUsername());
     }
     @When("incorrect username {string} with password {string} is used to log in")
-    public void incorrectUsernameCorrectPassword(String username, String password) throws NotFoundException, PasswordIncorrectException {
+    public void incorrectUsernameCorrectPassword(String username, String password) throws PasswordIncorrectException {
         try {
             userService.signinUser(username, password);
         } catch (NotFoundException e) {
