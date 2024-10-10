@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -36,6 +37,10 @@ public class AdminPageController extends PageController {
 
     @FXML
     private TableColumn<User, String> usernameColumn;
+
+    @FXML
+    private Label resultsLabel;
+
     private UserDAO userDAO;
 
     @FXML
@@ -49,6 +54,7 @@ public class AdminPageController extends PageController {
 
         ObservableList<User> users = FXCollections.observableArrayList(userDAO.getAll());
         userTable.setItems(users);
+        resultsLabel.setText(String.format("Found %d users", users.size()));
     }
 
     @FXML
@@ -70,6 +76,8 @@ public class AdminPageController extends PageController {
         List<User> results = userDAO.getMatchingUserName(searchField.getText());
         ObservableList<User> users = FXCollections.observableArrayList(results);
         userTable.setItems(users);
+        resultsLabel.setText(String.format("Found %d users with name '%s'",
+                users.size(), searchField.getText()));
     }
 
 }
