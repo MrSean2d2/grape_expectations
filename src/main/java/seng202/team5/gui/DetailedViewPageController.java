@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -254,6 +255,8 @@ public class DetailedViewPageController extends PageController implements Closab
             scene.getStylesheets().add(styleSheetUrl);
             stage.initOwner(backButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
+            WineService.getInstance().getWineList().addListener(
+                    (ListChangeListener<Wine>) change -> closeWindow());
             stage.showAndWait();
         } catch (IOException e) {
             throw new RuntimeException(e);

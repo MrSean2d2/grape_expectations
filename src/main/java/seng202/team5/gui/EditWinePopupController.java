@@ -210,6 +210,7 @@ public class EditWinePopupController extends PageController implements ClosableW
                 VineyardDAO vineyardDAO = new VineyardDAO();
                 WineDAO wineDAO = new WineDAO(vineyardDAO);
                 wineDAO.delete(wine.getId());
+                wineService.getWineList().remove(wine);
                 closeWindow();
                 addNotification("Wine deleted", "#d5e958");
             }
