@@ -26,7 +26,7 @@ import seng202.team5.services.WineService;
  *
  * @author Sean Reitsma
  */
-public class EditWinePopupController extends PageController implements ClosableWindow {
+public class EditWinePopupController extends FormErrorController implements ClosableWindow {
 
     @FXML
     private Button closeButton;
@@ -185,7 +185,8 @@ public class EditWinePopupController extends PageController implements ClosableW
      * @param  field the TextField containing the error
      * @param errorLabel the label to show the error message on
      */
-    private void fieldError(String message, TextField field, Label errorLabel) {
+    @Override
+    protected void fieldError(TextField field, Label errorLabel, String message) {
         field.getStyleClass().add("field_error");
         errorLabel.setText(message);
         errorLabel.setVisible(true);
@@ -197,7 +198,8 @@ public class EditWinePopupController extends PageController implements ClosableW
      *
      * @param field the TextField containing the error
      */
-    private void fieldError(TextField field) {
+    @Override
+    protected void fieldError(TextField field) {
         field.getStyleClass().add("field_error");
         isWineValid = false;
     }
@@ -215,7 +217,7 @@ public class EditWinePopupController extends PageController implements ClosableW
             year = Integer.parseInt(yearField.getText());
             checkYear(year);
         } catch (NumberFormatException e) {
-            fieldError("Year must be a number!", yearField, yearErrorLabel);
+            fieldError(yearField, yearErrorLabel, "Year must be a number!");
         }
         return year;
     }
@@ -231,7 +233,7 @@ public class EditWinePopupController extends PageController implements ClosableW
         try {
             price = Double.parseDouble(priceField.getText());
         } catch (NumberFormatException e) {
-            fieldError("Price must be a number", priceField, priceErrorLabel);
+            fieldError(priceField, priceErrorLabel, "Price must be a number");
         }
         return price;
     }
@@ -312,10 +314,10 @@ public class EditWinePopupController extends PageController implements ClosableW
      */
     private void showErrors(String name, double price) {
         if (!wineService.validName(name)) {
-            fieldError("Name can't be blank!", nameField, nameErrorLabel);
+            fieldError(nameField, nameErrorLabel, "Name can't be blank!");
         }
         if (!wineService.validPrice(price)) {
-            fieldError("Price can't be negative!", priceField, priceErrorLabel);
+            fieldError(priceField, priceErrorLabel, "Price can't be negative!");
         }
     }
 
@@ -326,7 +328,7 @@ public class EditWinePopupController extends PageController implements ClosableW
      */
     private void checkYear(int year) {
         if (!wineService.validYear(year)) {
-            fieldError("Year can't be in the future or older than 1700", yearField, yearErrorLabel);
+            fieldError(yearField, yearErrorLabel, "Year can't be in the future or older than 1700");
         }
     }
 

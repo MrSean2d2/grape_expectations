@@ -117,14 +117,17 @@ public class EditPasswordPopupController extends FormErrorController {
     private void submit() {
         String password = passwordField.getText();
         String repeatPassword = repeatPasswordField.getText();
+        TextField currentPassField = passwordVisible ? passwordVisibleField : passwordField;
+        TextField currentRepeatField = repeatPasswordVisible ? repeatPasswordVisibleField
+                : repeatPasswordField;
 
         UserService userService = UserService.getInstance();
         String message = userService.checkPassword(password);
         if (message != null) {
-            fieldError(passwordField, errorLabel, message);
+            fieldError(currentPassField, errorLabel, message);
         } else if (!password.equals(repeatPassword)) {
-            fieldError(passwordField);
-            fieldError(repeatPasswordField, errorLabel, "Passwords do not match!");
+            fieldError(currentPassField);
+            fieldError(currentRepeatField, errorLabel, "Passwords do not match!");
         } else {
             User user = userService.getSelectedUser();
             userService.updateUserPassword(user, password);
