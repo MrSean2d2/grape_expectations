@@ -1,0 +1,31 @@
+#!/bin/sh
+phase=3
+toplevel="seng202_2024_team5_${phase}"
+jardir="${toplevel}/seng202_2024_team5_${phase}_jar"
+
+# Create the directory if it doesn't exist
+if [ ! -d "${jardir}" ]
+then
+  mkdir -p "${jardir}"
+fi
+# Set console output log level to fatal
+sed -e "s/\(appender.console.filter.threshold.level=\)info/\1fatal/" src/main/resources/log4j2.properties > tmp && mv tmp src/main/resources/log4j2.properties
+# Build jar
+./gradlew jar && cp build/libs/grape_expectations-*.jar "${jardir}" && chmod u+x ${jardir}/grape_expectations-*.jar
+
+# Reset the console log output after build for development
+sed -e "s/\(appender.console.filter.threshold.level=\)fatal/\1info/" src/main/resources/log4j2.properties > tmp && mv tmp src/main/resources/log4j2.properties
+
+# Create the readme using the existing README.md info and references adding
+# user specific instructions, please ensure that the instructions and the readme are
+# up to date when preparing the submission package.
+readmepath="${toplevel}/seng202_2024_team5_${phase}_README.txt"
+# First 14 and last 4 lines of README.md are used, please update if you change the README
+head -n 14 README.md > $readmepath
+{ printf "\n"; cat user_instructions.txt; printf "\n\n"; tail -n 4 README.md; printf "\n"; } >> $readmepath
+
+# Download the design doc in PDF format
+wget "https://docs.google.com/document/d/1wE6c949DCYe4v5V_dZtw4fwzKqrRi4VYudtyXYAP9WI/export?format=pdf" -O "${toplevel}/seng202_2024_team5_${phase}_report.pdf"
+
+# Zip everything up
+zip -r "$toplevel" "$toplevel"

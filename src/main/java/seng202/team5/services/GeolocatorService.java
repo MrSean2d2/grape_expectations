@@ -8,6 +8,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,6 +22,7 @@ import seng202.team5.models.Vineyard;
  * @author Morgan English
  */
 public class GeolocatorService {
+    private static final Logger log = LogManager.getLogger(GeolocatorService.class);
     private final Map<String, double[]> coordsCache = new HashMap<>();
 
     private static GeolocatorService instance;
@@ -49,11 +52,10 @@ public class GeolocatorService {
         }
         String logMessage = String.format("Requesting geolocation from Nominatim for region: %s, "
                 + "New Zealand", vineyard.getRegion());
-        System.out.println(logMessage);
+        log.info(logMessage);
         String formattedRegion = vineyard.getRegion().replace(' ', '+');
-        try {
+        try (HttpClient client = HttpClient.newHttpClient()) {
             // Creating the http request
-            HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder(
                     URI.create("https://nominatim.openstreetmap.org/search?q=" + formattedRegion + ",+New+Zealand&format=json")
             ).build();
@@ -63,16 +65,16 @@ public class GeolocatorService {
             // Parsing the json response to get the latitude and longitude co-ordinates
             JSONParser parser = new JSONParser();
             JSONArray results = (JSONArray)  parser.parse(response.body());
-            JSONObject bestResult = (JSONObject) results.get(0);
+            JSONObject bestResult = (JSONObject) results.getFirst();
             double lat = Double.parseDouble((String) bestResult.get("lat"));
             double lon = Double.parseDouble((String) bestResult.get("lon"));
             coordsCache.put(region, new double[]{lat, lon});
             vineyard.setLat(lat);
             vineyard.setLon(lon);
         } catch (IOException | ParseException e) {
-            System.err.println(e);
+            log.error("Problem retrieving API response", e);
         } catch (InterruptedException ie) {
-            System.err.println(ie);
+            log.error("Interrupt received!", ie);
             Thread.currentThread().interrupt();
         }
     }

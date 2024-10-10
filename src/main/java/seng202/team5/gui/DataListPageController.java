@@ -134,8 +134,7 @@ public class DataListPageController extends PageController {
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
 
-        ObservableList<Wine> wines = FXCollections.observableArrayList(WineService.getInstance()
-                .getWineList());
+        ObservableList<Wine> wines = WineService.getInstance().getWineList();
 
         // Add data to TableView
         wineTable.setItems(wines);
@@ -194,9 +193,9 @@ public class DataListPageController extends PageController {
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setMinHeight(controller.getMinHeight());
-            stage.setMinWidth(controller.getMinWidth());
             stage.setTitle("Add new wine");
+            controller.init(stage);
+            controller.setHeaderController(getHeaderController());
             String styleSheetUrl = MainWindow.styleSheet;
             scene.getStylesheets().add(styleSheetUrl);
             stage.initModality(Modality.WINDOW_MODAL);
@@ -381,12 +380,11 @@ public class DataListPageController extends PageController {
      * Apply search and filters and updates table.
      */
     public void applySearchFilters() {
-        String sql = wineDAO.queryBuilder(searchTextField.getText(), varietyFilter, regionFilter,
+        WineService.getInstance().searchWines(searchTextField.getText(), varietyFilter, regionFilter,
                 yearFilter, minPriceFilter, maxPriceFilter, minRatingFilter,
                 maxRatingFilter, favouriteFilter);
-        List<Wine> queryResults = wineDAO.executeSearchFilter(sql, searchTextField.getText());
-        ObservableList<Wine> observableQueryResults =
-                FXCollections.observableArrayList(queryResults);
+
+        ObservableList<Wine> observableQueryResults = WineService.getInstance().getWineList();
         wineTable.setItems(observableQueryResults);
         tableResults.setText(wineTable.getItems().size() + " results");
         addNotification("Applied Filter", "#d5e958");
@@ -458,7 +456,7 @@ public class DataListPageController extends PageController {
         searchTextField.clear();
         wineTable.getItems().clear();
         setDefaults();
-        ObservableList<Wine> observableWines = FXCollections.observableArrayList(wineDAO.getAll());
+        ObservableList<Wine> observableWines = WineService.getInstance().getWineList();
         wineTable.setItems(observableWines);
         tableResults.setText(wineTable.getItems().size() + " results");
         varietyComboBox.setValue(varietyComboBox.getItems().getFirst());
@@ -493,7 +491,7 @@ public class DataListPageController extends PageController {
             scene.getStylesheets().add(styleSheetUrl);
 
             stage.setScene(scene);
-            stage.show();
+            stage.showAndWait();
 
 
         } catch (Exception e) {

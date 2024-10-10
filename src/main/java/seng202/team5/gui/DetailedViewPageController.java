@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +36,7 @@ import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.AssignedTag;
 import seng202.team5.models.Review;
 import seng202.team5.models.Tag;
+import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.AssignedTagsDAO;
 import seng202.team5.repository.ReviewDAO;
@@ -142,14 +144,25 @@ public class DetailedViewPageController extends PageController implements Closab
      */
     private void initWineInfo(Wine selectedWine) {
         if (selectedWine != null) {
-            nameLabel.setText(selectedWine.getName());
+            nameLabel.textProperty().bind(selectedWine.nameProperty());
+            priceLabel.textProperty().bind(selectedWine.priceProperty().asString("Price: $%.2f"));
+            yearLabel.textProperty().bind(selectedWine.yearProperty().asString("Year: %d"));
+            ratingLabel.textProperty().bind(selectedWine.ratingValueProperty()
+                    .asString("Score: %d"));
+            wineDescriptionLabel.textProperty().bind(selectedWine.descriptionProperty());
+            provinceLabel.textProperty().bind(selectedWine.vineyardProperty().map(
+                    Vineyard::getRegion));
+            varietyLabel.textProperty().bind(selectedWine.wineVarietyProperty());
+            vineyardLabel.textProperty().bind(selectedWine.vineyardProperty()
+                    .map(Vineyard::getName));
+            /*nameLabel.setText(selectedWine.getName());
             priceLabel.setText("Price: $" + selectedWine.getPrice());
             yearLabel.setText("Year: " + selectedWine.getYear());
             ratingLabel.setText("Score: " + selectedWine.getRating());
             wineDescriptionLabel.setText(selectedWine.getDescription());
             provinceLabel.setText("Province: " + selectedWine.getRegion());
             varietyLabel.setText("Variety: " + selectedWine.getWineVariety());
-            vineyardLabel.setText("Vineyard: " + selectedWine.getVineyard().getName());
+            vineyardLabel.setText("Vineyard: " + selectedWine.getVineyard().getName());*/
         }
     }
 
@@ -231,17 +244,20 @@ public class DetailedViewPageController extends PageController implements Closab
             FXMLLoader editWineLoader = new FXMLLoader(getClass()
                     .getResource("/fxml/EditWinePopup.fxml"));
             Parent root = editWineLoader.load();
+            EditWinePopupController controller = editWineLoader.getController();
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setMinHeight(486);
-            stage.setMinWidth(762);
             stage.setTitle(String.format("Edit wine %s", selectedWine.getName()));
+            controller.init(stage);
+            controller.setHeaderController(getHeaderController());
             String styleSheetUrl = MainWindow.styleSheet;
             scene.getStylesheets().add(styleSheetUrl);
+            stage.initOwner(backButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
+            WineService.getInstance().getWineList().addListener(
+                    (ListChangeListener<Wine>) change -> closeWindow());
             stage.showAndWait();
-            initWineInfo(selectedWine);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
