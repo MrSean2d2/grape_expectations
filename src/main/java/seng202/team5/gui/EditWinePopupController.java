@@ -79,6 +79,8 @@ public class EditWinePopupController extends PageController implements ClosableW
     private final int maxChars = 500;
     private Wine wine;
     private boolean isWineValid = true;
+    private final int minWidth = 762;
+    private final int minHeight = 486;
 
     private WineService wineService;
 
@@ -139,6 +141,11 @@ public class EditWinePopupController extends PageController implements ClosableW
         TextFields.bindAutoCompletion(vineyardField, vineyardSuggestions);
         List<String> regionSuggestions = vineyardDAO.getRegions();
         TextFields.bindAutoCompletion(regionField, regionSuggestions);
+    }
+
+    public void init(Stage stage) {
+        stage.setMinWidth(minWidth);
+        stage.setMinHeight(minHeight);
     }
 
     /**
@@ -277,14 +284,16 @@ public class EditWinePopupController extends PageController implements ClosableW
         showErrors(name, price);
         if (isWineValid) {
             if (wine == null) {
-                wine = new Wine(name, description, year, rating, price, variety, colour, vineyard);
+                // We are adding a new wine
                 try {
                     Wine existingEntry = wineDAO.getWineFromName(name);
                     if (existingEntry != null) {
                         addNotification("Wine already exists!", "#e95958");
+                        fieldError("Wine already exists!", nameField, nameErrorLabel);
                     }
                 } catch (NotFoundException e) {
                     // Not found is actually the blue sky outcome here
+                    wine = new Wine(name, description, year, rating, price, variety, colour, vineyard);
                     wineDAO.add(wine);
                     closeWindow();
                 }

@@ -231,12 +231,13 @@ public class DetailedViewPageController extends PageController implements Closab
             FXMLLoader editWineLoader = new FXMLLoader(getClass()
                     .getResource("/fxml/EditWinePopup.fxml"));
             Parent root = editWineLoader.load();
+            EditWinePopupController controller = editWineLoader.getController();
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setMinHeight(486);
-            stage.setMinWidth(762);
             stage.setTitle(String.format("Edit wine %s", selectedWine.getName()));
+            controller.init(stage);
+            controller.setHeaderController(getHeaderController());
             String styleSheetUrl = MainWindow.styleSheet;
             scene.getStylesheets().add(styleSheetUrl);
             stage.initModality(Modality.WINDOW_MODAL);

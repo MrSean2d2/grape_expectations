@@ -194,9 +194,9 @@ public class DataListPageController extends PageController {
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setMinHeight(controller.getMinHeight());
-            stage.setMinWidth(controller.getMinWidth());
             stage.setTitle("Add new wine");
+            controller.init(stage);
+            controller.setHeaderController(getHeaderController());
             String styleSheetUrl = MainWindow.styleSheet;
             scene.getStylesheets().add(styleSheetUrl);
             stage.initModality(Modality.WINDOW_MODAL);
