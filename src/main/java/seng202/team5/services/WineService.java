@@ -2,6 +2,7 @@ package seng202.team5.services;
 
 import java.time.Year;
 import java.util.List;
+import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
@@ -73,6 +74,25 @@ public class WineService {
      */
     public Wine getSelectedWine() {
         return selectedWine;
+    }
+
+    /**
+     * Check if the wine's name is a duplicate of one in the database.
+     *
+     * @param wineName the name of the wine to check
+     * @return true if the wine's name is already taken, false otherwise
+     */
+    public boolean checkExistingWine(String wineName) {
+        boolean result = false;
+        try {
+            Wine existing = wineDAO.getWineFromName(wineName);
+            if (existing != null) {
+                result = true;
+            }
+        } catch (NotFoundException e) {
+            result = false;
+        }
+        return result;
     }
 
     /**

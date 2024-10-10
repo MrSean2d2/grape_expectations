@@ -134,8 +134,8 @@ public class DataListPageController extends PageController {
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
 
-        ObservableList<Wine> wines = FXCollections.observableArrayList(WineService.getInstance()
-                .getWineList());
+        ObservableList<Wine> wines = FXCollections.observableList(WineService.getInstance()
+                .getWineList(), Wine.extractor());
 
         // Add data to TableView
         wineTable.setItems(wines);
@@ -386,7 +386,7 @@ public class DataListPageController extends PageController {
                 maxRatingFilter, favouriteFilter);
         List<Wine> queryResults = wineDAO.executeSearchFilter(sql, searchTextField.getText());
         ObservableList<Wine> observableQueryResults =
-                FXCollections.observableArrayList(queryResults);
+                FXCollections.observableList(queryResults, Wine.extractor());
         wineTable.setItems(observableQueryResults);
         tableResults.setText(wineTable.getItems().size() + " results");
         addNotification("Applied Filter", "#d5e958");
@@ -458,7 +458,8 @@ public class DataListPageController extends PageController {
         searchTextField.clear();
         wineTable.getItems().clear();
         setDefaults();
-        ObservableList<Wine> observableWines = FXCollections.observableArrayList(wineDAO.getAll());
+        ObservableList<Wine> observableWines = FXCollections.observableList(
+                WineService.getInstance().getWineList(), Wine.extractor());
         wineTable.setItems(observableWines);
         tableResults.setText(wineTable.getItems().size() + " results");
         varietyComboBox.setValue(varietyComboBox.getItems().getFirst());
@@ -493,7 +494,7 @@ public class DataListPageController extends PageController {
             scene.getStylesheets().add(styleSheetUrl);
 
             stage.setScene(scene);
-            stage.show();
+            stage.showAndWait();
 
 
         } catch (Exception e) {

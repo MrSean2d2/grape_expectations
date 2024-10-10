@@ -35,10 +35,13 @@ import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.AssignedTag;
 import seng202.team5.models.Review;
 import seng202.team5.models.Tag;
+import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.AssignedTagsDAO;
 import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
+import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
 import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
@@ -142,14 +145,23 @@ public class DetailedViewPageController extends PageController implements Closab
      */
     private void initWineInfo(Wine selectedWine) {
         if (selectedWine != null) {
-            nameLabel.setText(selectedWine.getName());
+            nameLabel.textProperty().bind(selectedWine.nameProperty());
+            priceLabel.textProperty().bind(selectedWine.priceProperty().asString("Price: $%.2f"));
+            yearLabel.textProperty().bind(selectedWine.yearProperty().asString("Year: %d"));
+            ratingLabel.textProperty().bind(selectedWine.ratingValueProperty().asString("Score: %d"));
+            wineDescriptionLabel.textProperty().bind(selectedWine.descriptionProperty());
+            provinceLabel.textProperty().bind(selectedWine.vineyardProperty().map(
+                    Vineyard::getRegion));
+            varietyLabel.textProperty().bind(selectedWine.wineVarietyProperty());
+            vineyardLabel.textProperty().bind(selectedWine.vineyardProperty().map(Vineyard::getName));
+            /*nameLabel.setText(selectedWine.getName());
             priceLabel.setText("Price: $" + selectedWine.getPrice());
             yearLabel.setText("Year: " + selectedWine.getYear());
             ratingLabel.setText("Score: " + selectedWine.getRating());
             wineDescriptionLabel.setText(selectedWine.getDescription());
             provinceLabel.setText("Province: " + selectedWine.getRegion());
             varietyLabel.setText("Variety: " + selectedWine.getWineVariety());
-            vineyardLabel.setText("Vineyard: " + selectedWine.getVineyard().getName());
+            vineyardLabel.setText("Vineyard: " + selectedWine.getVineyard().getName());*/
         }
     }
 
@@ -240,9 +252,9 @@ public class DetailedViewPageController extends PageController implements Closab
             controller.setHeaderController(getHeaderController());
             String styleSheetUrl = MainWindow.styleSheet;
             scene.getStylesheets().add(styleSheetUrl);
+            stage.initOwner(backButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             stage.showAndWait();
-            initWineInfo(selectedWine);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
