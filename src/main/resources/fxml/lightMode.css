@@ -33,7 +33,7 @@ Light mode for the application
     -fx-text-fill: #e95958;
 }
 
-.button, .textbox, .dropdown {
+.button, .textbox, .dropdown, .slidertextbox {
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
     -fx-border-color: transparent;

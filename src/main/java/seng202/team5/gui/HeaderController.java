@@ -2,6 +2,8 @@ package seng202.team5.gui;
 
 import java.io.IOException;
 import java.util.Objects;
+
+import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -134,22 +136,35 @@ public class HeaderController {
         }
 
         // Uses different method for loading as WebView messes with the loader
-        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/MapPage.fxml"));
-        Node loader = baseLoader.load();
-        PageController pageController = baseLoader.getController();
+        FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
+        Node loadingScreen = baseLoader.load();
+        pageContainer.getChildren().setAll(loadingScreen);
+        PauseTransition pause = new PauseTransition(Duration.millis(200));
 
-        if (pageController != null) {
-            pageController.setHeaderController(headerController);
-        }
+        pause.setOnFinished(event -> {
+            try {
+                FXMLLoader mapLoader = new FXMLLoader(getClass().getResource("/fxml/MapPage.fxml"));
+                Node mapPage = mapLoader.load();
+                PageController pageController = mapLoader.getController();
 
-        pageContainer.getChildren().setAll(loader);
+                if (pageController != null) {
+                    pageController.setHeaderController(headerController);
+                }
 
-        homeButton.getStyleClass().remove("active");
-        dataListButton.getStyleClass().remove("active");
-        mapButton.getStyleClass().remove("active");
-        accountButton.getStyleClass().remove("active");
+                pageContainer.getChildren().setAll(mapPage);
 
-        mapButton.getStyleClass().add("active");
+                // Update active button styles
+                homeButton.getStyleClass().remove("active");
+                dataListButton.getStyleClass().remove("active");
+                mapButton.getStyleClass().remove("active");
+                accountButton.getStyleClass().remove("active");
+                mapButton.getStyleClass().add("active");
+            } catch (IOException e) {
+                log.error("Failed to load MapPage.fxml: ", e);
+            }
+        });
+
+        pause.play();
     }
 
     /**

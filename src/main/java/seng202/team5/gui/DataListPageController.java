@@ -102,7 +102,6 @@ public class DataListPageController extends PageController {
     private double maxRatingFilter;
     private boolean favouriteFilter;
     private static final Logger log = LogManager.getLogger(DataListPageController.class);
-    private boolean isSliderChanging = false;
 
 
     /**
@@ -122,9 +121,13 @@ public class DataListPageController extends PageController {
         regionComboBox.setTooltip(new Tooltip("Filter by region"));
         yearComboBox.setTooltip(new Tooltip("Filter by year"));
         priceRangeSlider.setTooltip(new Tooltip("Select a price range"));
-        ratingSlider.setTooltip(new Tooltip("Select a minimum price"));
+        maxPriceValue.setTooltip(new Tooltip("Set a maximum price"));
+        minPriceValue.setTooltip(new Tooltip("Set a minimum price"));
+        ratingSlider.setTooltip(new Tooltip("Select a minimum rating"));
+        ratingSliderValue.setTooltip(new Tooltip("Set a minimum rating"));
         searchButton.setTooltip(new Tooltip("Enter search query"));
         resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
+
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -216,25 +219,21 @@ public class DataListPageController extends PageController {
                     maxPriceValue.setText(String.valueOf(value));
                 });
 
-        minPriceValue.textProperty().addListener((observable, oldVal, newVal) -> {
-            try {
-                Double newMinPrice = Double.parseDouble(newVal);
-                if (newMinPrice >= priceRangeSlider.getMin()) {
-                    minPriceValue.setOnKeyPressed(event -> {
-                        if (event.getCode() == KeyCode.ENTER) {
-                            priceRangeSlider.setLowValue(newMinPrice);
-                            minPriceFilter = newMinPrice;
-                            if (!isSliderChanging) {
-                                applySearchFilters();
-                            }
-                        }
-                    });
-                } else {
-                    addNotification("Please pick a minimum price greater than "
-                            + (int) priceRangeSlider.getMin(), "#d5e958");
+        minPriceValue.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                try {
+                    Double newMinPrice = Double.parseDouble(minPriceValue.getText());
+                    if (newMinPrice >= priceRangeSlider.getMin()) {
+                        priceRangeSlider.setLowValue(newMinPrice);
+                        minPriceFilter = newMinPrice;
+                        applySearchFilters();
+                    } else {
+                        addNotification("Please pick a minimum price greater than "
+                                + (int) priceRangeSlider.getMin(), "#d5e958");
+                    }
+                } catch (NumberFormatException e) {
+                    addNotification("Invalid Number", "#d5e958");
                 }
-            } catch (NumberFormatException e) {
-                addNotification("Invalid Number", "#d5e958");
             }
         });
 
@@ -244,26 +243,21 @@ public class DataListPageController extends PageController {
                     minPriceValue.setText(String.valueOf(value));
                 });
 
-        maxPriceValue.textProperty().addListener((observable, oldVal, newVal) -> {
-            try {
-                Double newMaxPrice = Double.parseDouble(newVal);
-                if (newMaxPrice <= priceRangeSlider.getMax()) {
-                    maxPriceValue.setOnKeyPressed(event -> {
-                        if (event.getCode() == KeyCode.ENTER) {
-                            priceRangeSlider.setHighValue(newMaxPrice);
-                            maxPriceFilter = newMaxPrice;
-                            if (!isSliderChanging) {
-                                applySearchFilters();
-                            }
-                        }
-                    });
-                } else {
-                    addNotification("Please pick a maximum price less than "
-                            + (int) priceRangeSlider.getMax(), "#d5e958");
+        maxPriceValue.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                try {
+                    Double newMaxPrice = Double.parseDouble(maxPriceValue.getText());
+                    if (newMaxPrice <= priceRangeSlider.getMax()) {
+                        priceRangeSlider.setHighValue(newMaxPrice);
+                        maxPriceFilter = newMaxPrice;
+                        applySearchFilters();
+                    } else {
+                        addNotification("Please pick a maximum price less than "
+                                + (int) priceRangeSlider.getMin(), "#d5e958");
+                    }
+                } catch (NumberFormatException e) {
+                    addNotification("Invalid Number", "#d5e958");
                 }
-            } catch (NumberFormatException e) {
-                addNotification("Please pick a price between " + (int) priceRangeSlider.getMin()
-                        + " and " + (int) priceRangeSlider.getMax(), "#d5e958");
             }
         });
 
@@ -273,27 +267,22 @@ public class DataListPageController extends PageController {
                     ratingSliderValue.setText(String.valueOf(value));
                 });
 
-        ratingSliderValue.textProperty().addListener((observable, oldVal, newVal) -> {
-            try {
-                Double newRating = Double.parseDouble(newVal);
-                if (newRating >= ratingSlider.getMin() && newRating <= ratingSlider.getMax()) {
-                    ratingSliderValue.setOnKeyPressed(event -> {
-                        if (event.getCode() == KeyCode.ENTER) {
-                            ratingSlider.setValue(newRating);
-                            minRatingFilter = newRating;
-                            if (!isSliderChanging) {
-                                applySearchFilters();
-                            }
-                        }
-                    });
-                } else {
-                    addNotification("Please pick a rating between " + (int) ratingSlider.getMin()
-                            + " and " + (int) ratingSlider.getMax(), "#d5e958");
+        ratingSliderValue.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                try {
+                    Double newRating = Double.parseDouble(ratingSliderValue.getText());
+                    if (newRating <= ratingSlider.getMax()) {
+                        ratingSlider.setValue(newRating);
+                        minRatingFilter = newRating;
+                        applySearchFilters();
+                    } else {
+                        addNotification("Please pick a minimum rating between "
+                                + (int) priceRangeSlider.getMin() + " and " + (int) priceRangeSlider.getMax(), "#d5e958");
+                    }
+                } catch (NumberFormatException e) {
+                    addNotification("Invalid Number", "#d5e958");
                 }
-            } catch (NumberFormatException e) {
-                addNotification("Invalid Number", "#d5e958");
             }
-
         });
     }
 
@@ -302,28 +291,21 @@ public class DataListPageController extends PageController {
      */
     private void initializeSliderListeners() {
         priceRangeSlider.setOnMouseReleased(event -> {
-            isSliderChanging = false;
             maxPriceFilter = Float.parseFloat(String.format(
                     "%.1f", priceRangeSlider.getHighValue()));
             applySearchFilters();
         });
 
         priceRangeSlider.setOnMouseReleased(event -> {
-            isSliderChanging = false;
             minPriceFilter = Float.parseFloat(String.format(
                     "%.1f", priceRangeSlider.getLowValue()));
             applySearchFilters();
         });
 
-        priceRangeSlider.setOnMousePressed(event -> isSliderChanging = true);
-
         ratingSlider.setOnMouseReleased(event -> {
-            isSliderChanging = false;
             minRatingFilter = Float.parseFloat(String.format("%.1f", ratingSlider.getValue()));
             applySearchFilters();
         });
-
-        ratingSlider.setOnMousePressed(event -> isSliderChanging = true);
     }
 
     /**

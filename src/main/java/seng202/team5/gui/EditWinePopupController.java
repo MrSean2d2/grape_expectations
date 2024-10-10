@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import org.controlsfx.control.textfield.TextFields;
+import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
@@ -38,6 +39,9 @@ public class EditWinePopupController extends PageController implements ClosableW
 
     @FXML
     private TextField nameField;
+
+    @FXML
+    private Label nameErrorLabel;
 
     @FXML
     private TextField priceField;
@@ -177,14 +181,13 @@ public class EditWinePopupController extends PageController implements ClosableW
     /**
      * Show a field error and set the current wine information as invalid.
      *
-     * @param  fieldName the name of the field which has the error (to be used
-     *                   in the error message)
+     * @param  message the error message
      * @param  field the TextField containing the error
      * @param errorLabel the label to show the error message on
      */
-    private void fieldError(String fieldName, TextField field, Label errorLabel) {
+    private void fieldError(String message, TextField field, Label errorLabel) {
         field.getStyleClass().add("field_error");
-        errorLabel.setText(String.format("Invalid %s!", fieldName));
+        errorLabel.setText(message);
         errorLabel.setVisible(true);
         isWineValid = false;
     }
@@ -210,8 +213,9 @@ public class EditWinePopupController extends PageController implements ClosableW
         int year = 0;
         try {
             year = Integer.parseInt(yearField.getText());
+            checkYear(year);
         } catch (NumberFormatException e) {
-            fieldError("year", yearField, yearErrorLabel);
+            fieldError("Year must be a number!", yearField, yearErrorLabel);
         }
         return year;
     }
@@ -227,7 +231,7 @@ public class EditWinePopupController extends PageController implements ClosableW
         try {
             price = Double.parseDouble(priceField.getText());
         } catch (NumberFormatException e) {
-            fieldError("price", priceField, priceErrorLabel);
+            fieldError("Price must be a number", priceField, priceErrorLabel);
         }
         return price;
     }
@@ -239,6 +243,7 @@ public class EditWinePopupController extends PageController implements ClosableW
         isWineValid = true;
         priceErrorLabel.setVisible(false);
         yearErrorLabel.setVisible(false);
+        nameErrorLabel.setVisible(false);
         yearField.getStyleClass().remove("field_error");
         priceField.getStyleClass().remove("field_error");
         nameField.getStyleClass().remove("field_error");
@@ -252,7 +257,6 @@ public class EditWinePopupController extends PageController implements ClosableW
     @FXML
     private void submit() {
         resetErrors();
-        String colour = colourField.getText();
         int year = validateYear();
         double price = validatePrice();
         int rating = ratingSlider.valueProperty().intValue();
@@ -269,11 +273,21 @@ public class EditWinePopupController extends PageController implements ClosableW
         WineDAO wineDAO = new WineDAO(vineyardDAO);
         String description = descriptionArea.getText();
         String name = nameField.getText();
-        showErrors(name, year, price);
+        String colour = colourField.getText();
+        showErrors(name, price);
         if (isWineValid) {
             if (wine == null) {
                 wine = new Wine(name, description, year, rating, price, variety, colour, vineyard);
-                wineDAO.add(wine);
+                try {
+                    Wine existingEntry = wineDAO.getWineFromName(name);
+                    if (existingEntry != null) {
+                        addNotification("Wine already exists!", "#e95958");
+                    }
+                } catch (NotFoundException e) {
+                    // Not found is actually the blue sky outcome here
+                    wineDAO.add(wine);
+                    closeWindow();
+                }
             } else {
                 wine.setName(name);
                 wine.setDescription(description);
@@ -284,8 +298,8 @@ public class EditWinePopupController extends PageController implements ClosableW
                 wine.setColour(colour);
                 wine.setVineyard(vineyard);
                 wineDAO.update(wine);
+                closeWindow();
             }
-            closeWindow();
         }
     }
 
@@ -294,18 +308,25 @@ public class EditWinePopupController extends PageController implements ClosableW
      * messages if any are invalid.
      *
      * @param name the name field (shouldn't be blank)
-     * @param year the year field (shouldn't be in the future or ridiculously old)
      * @param price the price field (shouldn't be negative)
      */
-    private void showErrors(String name, int year, double price) {
+    private void showErrors(String name, double price) {
         if (!wineService.validName(name)) {
-            fieldError(nameField);
+            fieldError("Name can't be blank!", nameField, nameErrorLabel);
         }
         if (!wineService.validPrice(price)) {
-            fieldError("price", priceField, priceErrorLabel);
+            fieldError("Price can't be negative!", priceField, priceErrorLabel);
         }
+    }
+
+    /**
+     * Validate the year once we are sure a valid integer was entered.
+     *
+     * @param year the year
+     */
+    private void checkYear(int year) {
         if (!wineService.validYear(year)) {
-            fieldError("year", yearField, yearErrorLabel);
+            fieldError("Year can't be in the future or older than 1700", yearField, yearErrorLabel);
         }
     }
 
