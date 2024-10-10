@@ -45,6 +45,8 @@ public class DashboardPageController extends PageController {
     @FXML
     public Label topColourLabel;
     @FXML
+    public Label noTagMessageLabel;
+    @FXML
     private PieChart pieChart;
 
     @FXML
@@ -230,6 +232,7 @@ public class DashboardPageController extends PageController {
     public void updatePieChartData(String category) {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         List<PieChart.Data> dataList = new ArrayList<>();
+        noTagMessageLabel.setVisible(false);
 
         switch (category) {
             case "Variety":
@@ -266,11 +269,17 @@ public class DashboardPageController extends PageController {
                 break;
             case "Tags":
                 List<Map.Entry<String, Integer>> topTags = dashboardService.getTopTags();
-                for ( Map.Entry<String, Integer> entryTag : topTags) {
-                    if (entryTag.getValue() > 0) {
-                        dataList.add(new PieChart.Data(String.valueOf(entryTag.getKey()), entryTag.getValue()));
+                if (topTags.getFirst().getValue() <=0) {
+                    noTagMessageLabel.setVisible(true);
+                } else {
+                    noTagMessageLabel.setVisible(false);
+                    for ( Map.Entry<String, Integer> entryTag : topTags) {
+                        if (entryTag.getValue() > 0) {
+                            dataList.add(new PieChart.Data(String.valueOf(entryTag.getKey()), entryTag.getValue()));
+                        }
                     }
                 }
+
                 break;
             default:
                 // Don't add any data!!!
