@@ -2,6 +2,9 @@ package seng202.team5.services;
 
 import java.time.Year;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Wine;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
@@ -12,6 +15,7 @@ import seng202.team5.repository.WineDAO;
 public class WineService {
     private Wine selectedWine;
     private final WineDAO wineDAO;
+    private ObservableList<Wine> wineList;
     private static WineService instance;
 
     public WineService() {
@@ -35,13 +39,38 @@ public class WineService {
      *
      * @return Wine list
      */
-    public List<Wine> getWineList() {
-        List<Wine> dbWines = wineDAO.getAll();
-        if (dbWines.isEmpty()) {
-            populateDatabase(new DataLoadService());
-            dbWines = wineDAO.getAll();
+    public ObservableList<Wine> getWineList() {
+        if (wineList == null) {
+            List<Wine> dbWines = wineDAO.getAll();
+            if (dbWines.isEmpty()) {
+                populateDatabase(new DataLoadService());
+                dbWines = wineDAO.getAll();
+            }
+            wineList = FXCollections.observableList(dbWines, Wine.extractor());
         }
-        return dbWines;
+        return wineList;
+    }
+
+    /**
+     * Execute a search query and set the Observable wine list to the result.
+     *
+     * @param search search term
+     * @param variety variety
+     * @param region region
+     * @param year year
+     * @param minPrice min price
+     * @param maxPrice max price
+     * @param minRating min rating
+     * @param maxRating max rating
+     * @param favourite match favourites
+     */
+    public void searchWines(String search, String variety, String region, String year,
+                            double minPrice, double maxPrice, double minRating,
+                            double maxRating, boolean favourite) {
+        String sql = wineDAO.queryBuilder(search, variety, region, year,
+                minPrice, maxPrice, minRating, maxRating, favourite);
+        List<Wine> wines = wineDAO.executeSearchFilter(sql, search);
+        wineList = FXCollections.observableList(wines, Wine.extractor());
     }
 
     /**
@@ -73,6 +102,25 @@ public class WineService {
      */
     public Wine getSelectedWine() {
         return selectedWine;
+    }
+
+    /**
+     * Check if the wine's name is a duplicate of one in the database.
+     *
+     * @param wineName the name of the wine to check
+     * @return true if the wine's name is already taken, false otherwise
+     */
+    public boolean checkExistingWine(String wineName) {
+        boolean result = false;
+        try {
+            Wine existing = wineDAO.getWineFromName(wineName);
+            if (existing != null) {
+                result = true;
+            }
+        } catch (NotFoundException e) {
+            result = false;
+        }
+        return result;
     }
 
     /**

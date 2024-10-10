@@ -1,6 +1,16 @@
 package seng202.team5.models;
 
 import java.util.Objects;
+import javafx.beans.Observable;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.util.Callback;
 
 /**
  * Default Wine class.
@@ -9,39 +19,40 @@ import java.util.Objects;
  */
 public class Wine {
     private int id;
-    private String name;
-    private String description;
-    private int year;
-    private int ratingValue;
-    private double price;
-    private String wineVariety;
-    private String colour;
-    private Vineyard vineyard;
+    private StringProperty name;
+    private StringProperty description;
+    private IntegerProperty year;
+    private IntegerProperty ratingValue;
+    private DoubleProperty price;
+    private StringProperty wineVariety;
+    private StringProperty colour;
+    private ObjectProperty<Vineyard> vineyard;
 
     /**
      * Constructor for creating a wine object with a name,
      * description, year, rating, price and favourite status.
      *
-     * @param id the wine's id
-     * @param name name of wine
+     * @param id          the wine's id
+     * @param name        name of wine
      * @param description description of wine
-     * @param year year of wine
+     * @param year        year of wine
      * @param ratingValue rating value of wine
-     * @param price current market price of wine
+     * @param price       current market price of wine
      * @param wineVariety variety of the wine
-     * @param vineYard the vineyard the wine comes from
+     * @param colour      the wine's colour
+     * @param vineYard    the vineyard the wine comes from
      */
     public Wine(int id, String name, String description, int year, int ratingValue, double price,
                 String wineVariety, String colour, Vineyard vineYard) {
         this.id = id;
-        this.name = name;
-        this.description = description;
-        this.year = year;
-        this.ratingValue = ratingValue;
-        this.wineVariety = wineVariety;
-        this.price = price;
-        this.colour = colour;
-        this.vineyard = vineYard;
+        setName(name);
+        setDescription(description);
+        setYear(year);
+        setRating(ratingValue);
+        setVariety(wineVariety);
+        setPrice(price);
+        setColour(colour);
+        setVineyard(vineYard);
     }
 
     /**
@@ -49,25 +60,122 @@ public class Wine {
      * description, year, rating, price and favourite status. The wine's id is
      * determined by the database.
      *
-     * @param name the name of the wine
+     * @param name        the name of the wine
      * @param description the wine's description
-     * @param year the year the wine was produced
+     * @param year        the year the wine was produced
      * @param ratingValue the wine's rating value (0 - 100)
-     * @param price the wine's price
+     * @param price       the wine's price
      * @param wineVariety the grape variety of the wine
-     * @param vineyard the vineyard which produced the wine
+     * @param colour      the wine's colour
+     * @param vineyard    the vineyard which produced the wine
      */
     public Wine(String name, String description, int year, int ratingValue,
                 double price, String wineVariety, String colour, Vineyard vineyard) {
-        this.colour = colour;
+        setColour(colour);
         this.id = 0;
-        this.name = name;
-        this.description = description;
-        this.year = year;
-        this.ratingValue = ratingValue;
-        this.price = price;
-        this.wineVariety = wineVariety;
-        this.vineyard = vineyard;
+        setName(name);
+        setDescription(description);
+        setYear(year);
+        setRating(ratingValue);
+        setPrice(price);
+        setVariety(wineVariety);
+        setVineyard(vineyard);
+    }
+
+    /**
+     * Property getter for name.
+     *
+     * @return the StringProperty for the wine's name
+     */
+    public final StringProperty nameProperty() {
+        if (name == null) {
+            name = new SimpleStringProperty();
+        }
+        return name;
+    }
+
+    /**
+     * Property getter for the description.
+     *
+     * @return the StringProperty for the wine's description
+     */
+    public final StringProperty descriptionProperty() {
+        if (description == null) {
+            description = new SimpleStringProperty();
+        }
+        return description;
+    }
+
+    /**
+     * Property getter for the year.
+     *
+     * @return the IntegerProperty for the wine's year
+     */
+    public final IntegerProperty yearProperty() {
+        if (year == null) {
+            year = new SimpleIntegerProperty();
+        }
+        return year;
+    }
+
+    /**
+     * Property getter for the wine's rating.
+     *
+     * @return the IntegerProperty for the ratingValue
+     */
+    public final IntegerProperty ratingValueProperty() {
+        if (ratingValue == null) {
+            ratingValue = new SimpleIntegerProperty();
+        }
+        return ratingValue;
+    }
+
+    /**
+     * Property getter for the wine's price.
+     *
+     * @return the DoubleProperty for the price
+     */
+    public final DoubleProperty priceProperty() {
+        if (price == null) {
+            price = new SimpleDoubleProperty();
+        }
+        return price;
+    }
+
+    /**
+     * Property getter for the wine's variety.
+     *
+     * @return the StringProperty for the wine's variety
+     */
+    public final StringProperty wineVarietyProperty() {
+        if (wineVariety == null) {
+            wineVariety = new SimpleStringProperty();
+        }
+        return wineVariety;
+    }
+
+    /**
+     * Property getter for the wine's colour.
+     *
+     * @return the StringProperty for the colour
+     */
+    public final StringProperty colourProperty() {
+        if (colour == null) {
+            colour = new SimpleStringProperty();
+        }
+        return colour;
+    }
+
+    /**
+     * Property getter for the wine's vineyard object.
+     *
+     * @return the ObjectProperty for the vineyard
+     */
+    public final ObjectProperty<Vineyard> vineyardProperty() {
+        if (vineyard == null) {
+            vineyard = new SimpleObjectProperty<>();
+        }
+        return vineyard;
     }
 
     /**
@@ -75,8 +183,8 @@ public class Wine {
      *
      * @return name
      */
-    public String getName() {
-        return name;
+    public final String getName() {
+        return nameProperty().get();
     }
 
 
@@ -85,8 +193,8 @@ public class Wine {
      *
      * @return price
      */
-    public double getPrice() {
-        return price;
+    public final double getPrice() {
+        return priceProperty().get();
     }
 
     /**
@@ -94,8 +202,8 @@ public class Wine {
      *
      * @param price the new wine to set
      */
-    public void setPrice(double price) {
-        this.price = price;
+    public final void setPrice(double price) {
+        priceProperty().set(price);
     }
 
     /**
@@ -103,8 +211,8 @@ public class Wine {
      *
      * @return year
      */
-    public int getYear() {
-        return year;
+    public final int getYear() {
+        return yearProperty().get();
     }
 
     /**
@@ -112,8 +220,8 @@ public class Wine {
      *
      * @param year the year
      */
-    public void setYear(int year) {
-        this.year = year;
+    public final void setYear(int year) {
+        yearProperty().set(year);
     }
 
 
@@ -122,8 +230,8 @@ public class Wine {
      *
      * @return ratingValue
      */
-    public int getRating() {
-        return ratingValue;
+    public final int getRating() {
+        return ratingValueProperty().get();
     }
 
     /**
@@ -131,8 +239,8 @@ public class Wine {
      *
      * @param rating the rating
      */
-    public void setRating(int rating) {
-        this.ratingValue = rating;
+    public final void setRating(int rating) {
+        ratingValueProperty().set(rating);
     }
 
 
@@ -151,12 +259,12 @@ public class Wine {
      *
      * @return description
      */
-    public String getDescription() {
-        return description;
+    public final String getDescription() {
+        return descriptionProperty().get();
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public final void setDescription(String description) {
+        descriptionProperty().set(description);
     }
 
 
@@ -165,12 +273,12 @@ public class Wine {
      *
      * @return vineyard object
      */
-    public Vineyard getVineyard() {
-        return vineyard;
+    public final Vineyard getVineyard() {
+        return vineyardProperty().get();
     }
 
-    public void setVineyard(Vineyard vineyard) {
-        this.vineyard = vineyard;
+    public final void setVineyard(Vineyard vineyard) {
+        vineyardProperty().set(vineyard);
     }
 
 
@@ -179,8 +287,8 @@ public class Wine {
      *
      * @return wine variety
      */
-    public String getWineVariety() {
-        return wineVariety;
+    public final String getWineVariety() {
+        return wineVarietyProperty().get();
     }
 
     /**
@@ -188,8 +296,8 @@ public class Wine {
      *
      * @param unknownVariety string value to save as variety name
      */
-    public void setVariety(String unknownVariety) {
-        this.wineVariety = unknownVariety;
+    public final void setVariety(String unknownVariety) {
+        wineVarietyProperty().set(unknownVariety);
     }
 
     /**
@@ -197,8 +305,8 @@ public class Wine {
      *
      * @return the colour of the wine
      */
-    public String getWineColour() {
-        return colour;
+    public final String getWineColour() {
+        return colourProperty().get();
     }
 
 
@@ -207,8 +315,8 @@ public class Wine {
      *
      * @return wine region
      */
-    public String getRegion() {
-        return vineyard.getRegion();
+    public final String getRegion() {
+        return vineyardProperty().get().getRegion();
     }
 
 
@@ -227,8 +335,8 @@ public class Wine {
      *
      * @param name the wine's new name
      */
-    public void setName(String name) {
-        this.name = name;
+    public final void setName(String name) {
+        nameProperty().set(name);
     }
 
 
@@ -237,17 +345,22 @@ public class Wine {
      *
      * @param colour the wine's new colour
      */
-    public void setColour(String colour) {
-        this.colour = colour;
+    public final void setColour(String colour) {
+        colourProperty().set(colour);
+    }
+
+    /**
+     * Defines extractor callback to be used by Observable lists.
+     *
+     * @return a Callback containing an array of Observable properties of this Object
+     */
+    public static Callback<Wine, Observable[]> extractor() {
+        return (Wine w) -> new Observable[]{w.nameProperty(), w.descriptionProperty(),
+        w.yearProperty(), w.ratingValueProperty(), w.priceProperty(), w.wineVarietyProperty(),
+        w.colourProperty(), w.vineyardProperty()};
     }
 
 
-    /**
-     * Check if this object is equal to another given object.
-     *
-     * @param o the object to compare
-     * @return true if the objects are equal, false otherwise
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -257,24 +370,13 @@ public class Wine {
             return false;
         }
         Wine wine = (Wine) o;
-        return id == wine.id && year == wine.year
-                &&
-                ratingValue == wine.ratingValue
-                &&
-                Double.compare(price, wine.price) == 0
-                &&
-                Objects.equals(name, wine.name)
-                &&
-                Objects.equals(description, wine.description)
-                &&
-                Objects.equals(wineVariety, wine.wineVariety)
-                &&
-                Objects.equals(colour, wine.colour)
-                &&
-                (Objects.equals(vineyard.getName(), wine.vineyard.getName()));
+        return id == wine.id && Objects.equals(getName(), wine.getName())
+                && Objects.equals(getDescription(), wine.getDescription())
+                && getYear() == wine.getYear()
+                && getRating() == wine.getRating()
+                && Double.compare(getPrice(), wine.getPrice()) == 0
+                && Objects.equals(getWineVariety(), wine.getWineVariety())
+                && Objects.equals(getWineColour(), wine.getWineColour())
+                && getVineyard().equals(wine.getVineyard());
     }
-
-
-
-
 }

@@ -1,8 +1,12 @@
 package seng202.team5.gui;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
@@ -30,6 +34,9 @@ public class EditWinePopupController extends PageController implements ClosableW
 
     @FXML
     private Button closeButton;
+
+    @FXML
+    private Button deleteButton;
 
     @FXML
     private Label actionLabel;
@@ -79,6 +86,8 @@ public class EditWinePopupController extends PageController implements ClosableW
     private final int maxChars = 500;
     private Wine wine;
     private boolean isWineValid = true;
+    private final int minWidth = 762;
+    private final int minHeight = 486;
 
     private WineService wineService;
 
@@ -141,6 +150,11 @@ public class EditWinePopupController extends PageController implements ClosableW
         TextFields.bindAutoCompletion(regionField, regionSuggestions);
     }
 
+    public void init(Stage stage) {
+        stage.setMinWidth(minWidth);
+        stage.setMinHeight(minHeight);
+    }
+
     /**
      * Initialise the edit wine popup.
      */
@@ -158,6 +172,7 @@ public class EditWinePopupController extends PageController implements ClosableW
             initRatingSlider();
             actionLabel.setText("Add wine: ");
             wineLabel.setVisible(false);
+            deleteButton.setVisible(false);
         }
         descriptionArea.setTextFormatter(new TextFormatter<String>(change ->
                 change.getControlNewText().length() <= maxChars ? change : null));
@@ -176,6 +191,30 @@ public class EditWinePopupController extends PageController implements ClosableW
         OpenWindowsService.getInstance().closeWindow(this);
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
+    }
+
+    /**
+     * Delete the selected wine.
+     */
+    @FXML
+    private void deleteWine() {
+        if (wine != null) {
+            Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confAlert.setTitle("Delete Wine?");
+            confAlert.setHeaderText(String.format("Delete %s?", wine.getName()));
+            confAlert.setContentText("Are you sure you want to delete this wine?");
+
+            Optional<ButtonType> result = confAlert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                VineyardDAO vineyardDAO = new VineyardDAO();
+                WineDAO wineDAO = new WineDAO(vineyardDAO);
+                wineDAO.delete(wine.getId());
+                wineService.getWineList().remove(wine);
+                closeWindow();
+                addNotification("Wine deleted", "#d5e958");
+            }
+        }
     }
 
     /**
@@ -277,31 +316,40 @@ public class EditWinePopupController extends PageController implements ClosableW
         showErrors(name, price);
         if (isWineValid) {
             if (wine == null) {
-                wine = new Wine(name, description, year, rating, price, variety, colour, vineyard);
+                // We are adding a new wine
                 try {
                     Wine existingEntry = wineDAO.getWineFromName(name);
                     if (existingEntry != null) {
                         addNotification("Wine already exists!", "#e95958");
+                        fieldError("Wine already exists!", nameField, nameErrorLabel);
                     }
                 } catch (NotFoundException e) {
                     // Not found is actually the blue sky outcome here
+                    wine = new Wine(name, description, year, rating, price,
+                            variety, colour, vineyard);
                     wineDAO.add(wine);
                     closeWindow();
                 }
             } else {
-                wine.setName(name);
-                wine.setDescription(description);
-                wine.setYear(year);
-                wine.setPrice(price);
-                wine.setRating(rating);
-                wine.setVariety(variety);
-                wine.setColour(colour);
-                wine.setVineyard(vineyard);
-                wineDAO.update(wine);
-                closeWindow();
+                if (!Objects.equals(name, wine.getName()) && wineService.checkExistingWine(name)) {
+                    addNotification("Wine name is taken!", "#e95958");
+                    fieldError("Wine name is taken!", nameField, nameErrorLabel);
+                } else {
+                    wine.setName(name);
+                    wine.setDescription(description);
+                    wine.setYear(year);
+                    wine.setPrice(price);
+                    wine.setRating(rating);
+                    wine.setVariety(variety);
+                    wine.setColour(colour);
+                    wine.setVineyard(vineyard);
+                    wineDAO.update(wine);
+                    closeWindow();
+                }
             }
         }
     }
+
 
     /**
      * Validate the fields which need validating using WineService and show error
@@ -330,25 +378,4 @@ public class EditWinePopupController extends PageController implements ClosableW
         }
     }
 
-    /**
-     * Get the minimum height for this window. Use this to set the stage minimum
-     * height.
-     *
-     * @return the min height
-     */
-    public int getMinHeight() {
-        int minHeight = 486;
-        return minHeight;
-    }
-
-    /**
-     * Get the minimum width for this window. Use this to set the stage minimum
-     * width.
-     *
-     * @return the min width
-     */
-    public int getMinWidth() {
-        int minWidth = 762;
-        return minWidth;
-    }
 }
