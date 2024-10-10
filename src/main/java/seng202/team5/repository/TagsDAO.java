@@ -179,15 +179,20 @@ public class TagsDAO implements DAOInterface<Tag> {
 
     /**
      * implementation of DAOInterface delete.
+     * We're deleting the created tags as well as all of their assigned wines
      *
      * @param tagId id of object to delete
      */
     @Override
     public void delete(int tagId) {
         String sql = "DELETE FROM created_tags WHERE tagid=?";
+        String cleanup = "DELETE FROM assigned_tags WHERE tagid=?";
         try (Connection conn = databaseService.connect();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                PreparedStatement ps_cleanup = conn.prepareStatement(cleanup)) {
+            ps_cleanup.setInt(1, tagId);
             ps.setInt(1, tagId);
+            ps_cleanup.executeUpdate();
             ps.executeUpdate();
         } catch (SQLException sqlException) {
             log.error(sqlException);

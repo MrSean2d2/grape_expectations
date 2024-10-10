@@ -464,7 +464,7 @@ public class DetailedViewPageController extends PageController implements Closab
             // Determine which tag to add
             if (nameIsValid) {
                 Random rand = new Random();
-                Tag newTag = new Tag(userId, customTag, rand.nextInt(5));
+                Tag newTag = new Tag(userId, customTag, rand.nextInt(6));
 
                 // Try to add the new tag to the db
                 newTag.setTagId(tagsDAO.add(newTag));

@@ -2,19 +2,26 @@ package seng202.team5.gui;
 
 import static seng202.team5.services.ColourLookupService.getTagLabelColour;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import seng202.team5.models.AssignedTag;
 import seng202.team5.models.Tag;
 import seng202.team5.repository.AssignedTagsDAO;
@@ -23,6 +30,7 @@ import seng202.team5.repository.TagsDAO;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
 import seng202.team5.services.DashboardService;
+import seng202.team5.services.TagService;
 import seng202.team5.services.UserService;
 
 
@@ -71,14 +79,14 @@ public class DashboardPageController extends PageController {
      */
     @FXML
     private void initialize() {
-        int userID = UserService.getInstance().getCurrentUser().getId();
+        userId = UserService.getInstance().getCurrentUser().getId();
 
-        if (userID != 0) {
+        if (userId != 0) {
             titleLabel.setText("Hello, " + UserService.getInstance().getCurrentUser().getUsername() + "!");
         }
 
         dashboardService = new DashboardService(
-                userID,
+                userId,
                 new VineyardDAO(),
                 new WineDAO(new VineyardDAO()),
                 new ReviewDAO());
@@ -98,30 +106,37 @@ public class DashboardPageController extends PageController {
         initialiseRadioButtons();
 
         // Add tables
-        TagsDAO tagsDAO = new TagsDAO();
+        tagsDAO = new TagsDAO();
+
+        initialiseTagList();
+    }
+
+    /**
+     * Populates the user data list.
+     */
+    private void initialiseTagList() {
+        // Clear the user list pane in preparation to add the reviewed items
+        userListPane.getChildren().clear();
+
         AssignedTagsDAO assignedTagsDAO = new AssignedTagsDAO();
         List<Tag> tags = tagsDAO.getFromUser(userId);
 
         // Add default reviewed options
-        createNewTagList("My Reviewed Wines", dashboardService.getUserReviews().size(), -1);
+        createNewTagList("My Reviewed Wines", dashboardService.getUserReviews().size(), -1, 0, false);
 
-        // Add all of the user tag options
+        // Add all user tag options
         for (Tag tag : tags) {
-            /*
-            Get a list of the assigned tags
-            This could be used to get the list of wines that have this tag
-            as the assigned tag would have a wineID also
-             */
             List<AssignedTag> numWines = assignedTagsDAO.getTagsFromUser(
                     userId,
                     tag.getTagId());
 
-            createNewTagList(tag.getName(), numWines.size(), tag.getColour());
+            boolean canEdit = (tag.getUserId() == userId);
+            createNewTagList(tag.getName(), numWines.size(), tag.getColour(), tag.getTagId(), canEdit);
         }
     }
 
     /**
-     * Populates the pie chart combo box
+     * Populates the pie chart combo box.
      */
     private void initialiseRadioButtons() {
         List<RadioButton> radioButtonList = new ArrayList<>();
@@ -133,7 +148,7 @@ public class DashboardPageController extends PageController {
 
         ToggleGroup tg = new ToggleGroup();
 
-        for(RadioButton button: radioButtonList){
+        for (RadioButton button: radioButtonList) {
             button.getStyleClass().remove("radio-button");
             button.getStyleClass().add("button");
             button.setToggleGroup(tg);
@@ -179,31 +194,72 @@ public class DashboardPageController extends PageController {
      * @param name the name to display
      * @param numWines the number of wines to display
      * @param colour the background colour of the chip
+     * @param id id of the tag list
+     * @param canEdit if the tag list can be edited by the user
      */
-    public void createNewTagList(String name, int numWines, int colour) {
+    public void createNewTagList(String name, int numWines, int colour, int id, boolean canEdit) {
         Label nameTag = new Label(name);
         nameTag.setStyle(nameTag.getStyle() + "-fx-font-weight: 700;");
         nameTag.setPadding(new Insets(5));
-        Label optionTag = new Label(numWines + " Wines");
+
+        // Show the number of wine(s)
+        Label optionTag = new Label(numWines + " Wine" + (numWines != 1 ? "s" : ""));
         optionTag.setAlignment(Pos.CENTER_RIGHT);
         optionTag.setMaxWidth(Double.MAX_VALUE);
         optionTag.setPadding(new Insets(5));
         HBox.setHgrow(optionTag, Priority.ALWAYS);
 
+        // Edit button
         HBox tagContainer = new HBox(nameTag, optionTag);
+        tagContainer.setAlignment(Pos.CENTER_LEFT);
+        tagContainer.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(tagContainer, Priority.ALWAYS);
         tagContainer.getStyleClass().addAll("tag", "max-width");
 
+        // Wrap in a bigger box to allow for the edit button
+        HBox biggerContainer = new HBox(tagContainer);
+        biggerContainer.getStyleClass().add( "max-width");
+        biggerContainer.setAlignment(Pos.CENTER_LEFT);
+
+        // Add an edit button if the user has the ability to
+        if (canEdit) {
+            Label editButton = new Label("Edit");
+            editButton.setAlignment(Pos.CENTER_RIGHT);
+            editButton.setMaxHeight(Double.MAX_VALUE);
+            HBox.setMargin(editButton, new Insets(0, 0, 0, 10));
+            editButton.getStyleClass().add("button");
+            editButton.setCursor(Cursor.HAND);
+
+            // Click event - if the user can edit it
+            editButton.setOnMouseClicked(event -> {
+                try {
+                    // Set the selected tag to the tag represented by this list
+                    Tag selectedTag = tagsDAO.getOne(id);
+                    TagService.getInstance().setSelectedTag(selectedTag);
+
+                    showEditTagPopup();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            // Append the edit button to the end of the container
+            biggerContainer.getChildren().add(editButton);
+        }
+
+        // If the tag has a colour, add it to the container
         if (colour != -1) {
             tagContainer.getStyleClass().add(getTagLabelColour(colour));
         }
 
+        // More general styling stuff
         tagContainer.setStyle(tagContainer.getStyle() + "-fx-background-radius: 5;");
 
         // Set click event to pass tag name to DataListPage
         tagContainer.setOnMouseClicked(event -> {
             try {
                 HeaderController headerController = getHeaderController();
-                if (name.equals("My Reviewed Wines")) {
+                if (id == 0) {
                     headerController.loadDataListPageWithTag("All Tags"); // Case for when top button is clicked
                 } else {
                     headerController.loadDataListPageWithTag(name); // Pass tag name or ID to DataListPage
@@ -214,9 +270,61 @@ public class DashboardPageController extends PageController {
             }
         });
 
-        userListPane.getChildren().add(tagContainer);
+        userListPane.getChildren().add(biggerContainer);
     }
 
+
+    /**
+     * Create a new tag popup.
+     * If the selected tag is null it will prompt the user
+     * to create a new tag.
+     *
+     * @throws IOException if the page can't be loaded
+     */
+    public void showEditTagPopup() throws IOException {
+        Tag selectedTag = TagService.getInstance().getSelectedTag();
+
+        FXMLLoader editWineLoader = new FXMLLoader(getClass()
+                .getResource("/fxml/EditTagPopup.fxml"));
+
+        Parent root = editWineLoader.load();
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setMinHeight(486);
+        stage.setMinWidth(762);
+
+        if (selectedTag != null) {
+            stage.setTitle(String.format("Edit tag %s", selectedTag.getName()));
+        } else {
+            stage.setTitle("Create new tag");
+        }
+        String styleSheetUrl = MainWindow.styleSheet;
+        scene.getStylesheets().add(styleSheetUrl);
+        stage.initOwner(userListPane.getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+
+        // Show the popup and wait for it to be closed
+        stage.showAndWait();
+
+        // Clear and refresh
+        initialiseTagList();
+    }
+
+    /**
+     * Add a new tag
+     */
+    @FXML
+    private void addNewTag() {
+        // Try to create a new tag
+        try {
+            // Set the selected tag to the tag represented by this list
+            TagService.getInstance().setSelectedTag(null);
+            showEditTagPopup();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Updates the pie chart data based on selected category.
@@ -279,7 +387,6 @@ public class DashboardPageController extends PageController {
             });
         }
     }
-
 }
 
 
