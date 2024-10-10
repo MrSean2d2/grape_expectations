@@ -10,6 +10,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import seng202.team5.models.User;
@@ -131,6 +133,13 @@ public class EditPasswordPopupController extends FormErrorController {
             UserDAO userDAO = new UserDAO();
             userDAO.update(user);
             close();
+        }
+    }
+
+    @FXML
+    private void enterPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            submit();
         }
     }
 
