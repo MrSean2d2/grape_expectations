@@ -719,6 +719,10 @@ public class DataListPageController extends PageController {
 
             stage.setScene(scene);
             stage.show();
+
+            stage.setOnHidden(event -> {
+                initialize();
+            });
         } catch (Exception e) {
             log.error(e);
         }
