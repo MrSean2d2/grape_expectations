@@ -721,6 +721,7 @@ public class DataListPageController extends PageController {
             stage.show();
 
             stage.setOnHidden(event -> {
+                applySearchFilters();
                 setUpTagFilter();
             });
         } catch (Exception e) {
