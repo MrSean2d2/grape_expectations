@@ -1,29 +1,17 @@
 package seng202.team5.gui;
 
+import java.util.Optional;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
-import javafx.util.converter.NumberStringConverter;
-import org.controlsfx.control.textfield.TextFields;
 import seng202.team5.exceptions.DuplicateEntryException;
-import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.Tag;
-import seng202.team5.models.User;
-import seng202.team5.models.Vineyard;
-import seng202.team5.models.Wine;
 import seng202.team5.repository.TagsDAO;
-import seng202.team5.repository.VineyardDAO;
-import seng202.team5.repository.WineDAO;
-import seng202.team5.services.*;
-
-import java.util.List;
-import java.util.Optional;
+import seng202.team5.services.ColourLookupService;
+import seng202.team5.services.OpenWindowsService;
+import seng202.team5.services.TagService;
+import seng202.team5.services.UserService;
 
 /**
  * A controller for the edit wine popup window.
@@ -163,11 +151,12 @@ public class EditTagPopupController extends PageController implements ClosableWi
     }
 
     /**
-     * Update the tag preview
+     * Update the tag preview.
      */
     private void updatePreview() {
         tagPreview.getStyleClass().clear();
-        tagPreview.getStyleClass().addAll("tag", ColourLookupService.getTagLabelColour(tagColourId));
+        tagPreview.getStyleClass().addAll("tag",
+                ColourLookupService.getTagLabelColour(tagColourId));
         tagPreview.setText(nameField.getText());
     }
 
