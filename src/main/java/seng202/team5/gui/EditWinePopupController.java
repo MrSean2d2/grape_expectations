@@ -378,25 +378,4 @@ public class EditWinePopupController extends PageController implements ClosableW
         }
     }
 
-    /**
-     * Get the minimum height for this window. Use this to set the stage minimum
-     * height.
-     *
-     * @return the min height
-     */
-    public int getMinHeight() {
-        int minHeight = 486;
-        return minHeight;
-    }
-
-    /**
-     * Get the minimum width for this window. Use this to set the stage minimum
-     * width.
-     *
-     * @return the min width
-     */
-    public int getMinWidth() {
-        int minWidth = 762;
-        return minWidth;
-    }
 }

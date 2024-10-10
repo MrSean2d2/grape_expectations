@@ -41,8 +41,6 @@ import seng202.team5.models.Wine;
 import seng202.team5.repository.AssignedTagsDAO;
 import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
-import seng202.team5.repository.VineyardDAO;
-import seng202.team5.repository.WineDAO;
 import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
@@ -149,12 +147,14 @@ public class DetailedViewPageController extends PageController implements Closab
             nameLabel.textProperty().bind(selectedWine.nameProperty());
             priceLabel.textProperty().bind(selectedWine.priceProperty().asString("Price: $%.2f"));
             yearLabel.textProperty().bind(selectedWine.yearProperty().asString("Year: %d"));
-            ratingLabel.textProperty().bind(selectedWine.ratingValueProperty().asString("Score: %d"));
+            ratingLabel.textProperty().bind(selectedWine.ratingValueProperty()
+                    .asString("Score: %d"));
             wineDescriptionLabel.textProperty().bind(selectedWine.descriptionProperty());
             provinceLabel.textProperty().bind(selectedWine.vineyardProperty().map(
                     Vineyard::getRegion));
             varietyLabel.textProperty().bind(selectedWine.wineVarietyProperty());
-            vineyardLabel.textProperty().bind(selectedWine.vineyardProperty().map(Vineyard::getName));
+            vineyardLabel.textProperty().bind(selectedWine.vineyardProperty()
+                    .map(Vineyard::getName));
             /*nameLabel.setText(selectedWine.getName());
             priceLabel.setText("Price: $" + selectedWine.getPrice());
             yearLabel.setText("Year: " + selectedWine.getYear());
