@@ -323,7 +323,7 @@ public class EditWinePopupController extends FormErrorController implements Clos
                     Wine existingEntry = wineDAO.getWineFromName(name);
                     if (existingEntry != null) {
                         addNotification("Wine already exists!", "#e95958");
-                        fieldError("Wine already exists!", nameField, nameErrorLabel);
+                        fieldError(nameField, nameErrorLabel, "Wine already exists!");
                     }
                 } catch (NotFoundException e) {
                     // Not found is actually the blue sky outcome here
@@ -335,7 +335,7 @@ public class EditWinePopupController extends FormErrorController implements Clos
             } else {
                 if (!Objects.equals(name, wine.getName()) && wineService.checkExistingWine(name)) {
                     addNotification("Wine name is taken!", "#e95958");
-                    fieldError("Wine name is taken!", nameField, nameErrorLabel);
+                    fieldError(nameField, nameErrorLabel, "Wine name is taken!");
                 } else {
                     wine.setName(name);
                     wine.setDescription(description);

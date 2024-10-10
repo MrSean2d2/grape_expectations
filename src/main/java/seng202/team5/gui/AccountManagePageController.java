@@ -34,6 +34,9 @@ public class AccountManagePageController extends PageController {
     private Button adminButton;
 
     @FXML
+    private Button changePasswordButton;
+
+    @FXML
     private Label usernameLabel;
 
     @FXML
@@ -64,6 +67,10 @@ public class AccountManagePageController extends PageController {
         User curUser = UserService.getInstance().getCurrentUser();
         if (curUser.getIsAdmin()) {
             adminButton.setDisable(false);
+            adminButton.setVisible(true);
+        } else {
+            changePasswordButton.setDisable(false);
+            changePasswordButton.setVisible(true);
         }
 
         // Create a new cutout circle to display the image in
@@ -149,6 +156,14 @@ public class AccountManagePageController extends PageController {
             UserService.getInstance().deleteUser(UserService.getInstance().getCurrentUser());
             signOutUserInstance();
         }
+    }
+
+    @FXML
+    private void changePassword() {
+        UserService userService = UserService.getInstance();
+        User curUser = userService.getCurrentUser();
+        userService.setSelectedUser(curUser);
+        openEditPasswordPopup(true, changePasswordButton.getScene().getWindow());
     }
 
     @FXML
