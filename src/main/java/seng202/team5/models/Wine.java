@@ -39,6 +39,7 @@ public class Wine {
      * @param ratingValue rating value of wine
      * @param price       current market price of wine
      * @param wineVariety variety of the wine
+     * @param colour      the wine's colour
      * @param vineYard    the vineyard the wine comes from
      */
     public Wine(int id, String name, String description, int year, int ratingValue, double price,
@@ -65,6 +66,7 @@ public class Wine {
      * @param ratingValue the wine's rating value (0 - 100)
      * @param price       the wine's price
      * @param wineVariety the grape variety of the wine
+     * @param colour      the wine's colour
      * @param vineyard    the vineyard which produced the wine
      */
     public Wine(String name, String description, int year, int ratingValue,
@@ -368,13 +370,13 @@ public class Wine {
             return false;
         }
         Wine wine = (Wine) o;
-        return id == wine.id && Objects.equals(name, wine.name)
-                && Objects.equals(description, wine.description)
-                && Objects.equals(year, wine.year)
-                && Objects.equals(ratingValue, wine.ratingValue)
-                && Objects.equals(price, wine.price)
-                && Objects.equals(wineVariety, wine.wineVariety)
-                && Objects.equals(colour, wine.colour)
-                && Objects.equals(vineyard, wine.vineyard);
+        return id == wine.id && Objects.equals(getName(), wine.getName())
+                && Objects.equals(getDescription(), wine.getDescription())
+                && getYear() == wine.getYear()
+                && getRating() == wine.getRating()
+                && Double.compare(getPrice(), wine.getPrice()) == 0
+                && Objects.equals(getWineVariety(), wine.getWineVariety())
+                && Objects.equals(getWineColour(), wine.getWineColour())
+                && getVineyard().equals(wine.getVineyard());
     }
 }
