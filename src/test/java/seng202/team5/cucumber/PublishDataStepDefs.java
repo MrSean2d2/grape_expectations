@@ -20,14 +20,15 @@ public class PublishDataStepDefs {
         vineyard = new Vineyard(name, region);
     }
     @When("the vineyard owner enters wine with details {string}, {string}, {int}, {int}, {int}, {string}, {string}, vineyard")
-    public void newWine(String name, String description, Integer year, Integer rating, Integer price, String variety, String colour) {
+    public void newWine(String name, String description, Integer year, Integer rating, Integer price, String variety, String colour) throws NotFoundException {
         wine = new Wine(name, description, year, rating, price, variety, colour, vineyard);
         wineDAO = new WineDAO(new VineyardDAO());
         wineDAO.add(wine);
+        wine = wineDAO.getWineFromName(name);
     }
     @Then("the data is saved, and the record is added")
     public void wineToDatabase() throws NotFoundException {
-        Assertions.assertEquals("is a nice wine", wineDAO.getWineFromName("test wine").getDescription());
+        Assertions.assertEquals("is a nice wine", wineDAO.getWineFromName("test p wine").getDescription());
     }
     @When("attempts to add another wine with same details {string}, {string}, {int}, {int}, {int}, {string}, {string}, vineyard")
     public void duplicateWine(String name, String description, Integer year, Integer rating, Integer price, String variety, String colour) {
@@ -35,6 +36,6 @@ public class PublishDataStepDefs {
     }
     @Then("the system detects wine with same name in database and rejects duplicate")
     public void cannotAddDuplicateWine() throws NotFoundException {
-        Assertions.assertEquals(wineDAO.getWineFromName(wine.getName()).getName(), wineDAO.getWineFromName(duplicateWine.getName()).getName());
+        Assertions.assertEquals(wine, wineDAO.getWineFromName(duplicateWine.getName()));
     }
 }
