@@ -72,21 +72,22 @@ public class DashboardService {
      */
     public void initializeData() {
         userReviews = reviewDAO.getFromUser(userId);
-//        TagsDAO tagsDAO = new TagsDAO();
-//        AssignedTag assignedTag = new AssignedTag();
-//        AssignedTagsDAO assignedTagsDAO = new AssignedTagsDAO();
-//        List<Tag> tags = tagsDAO.getFromUser(userId);
+        TagsDAO tagsDAO = new TagsDAO();
 
         // Create a hash map for each property
         for (Review review : userReviews) {
             Wine wine = wineDAO.getOne(review.getWineId());
             Vineyard vineyard = wine.getVineyard();
+            List<Tag> tags = tagsDAO.getFromWine(review.getWineId());
 
             // Populate the maps
             varietyMap.merge(wine.getWineVariety(), review.getRating(), Integer::sum);
             regionMap.merge(vineyard.getRegion(), review.getRating(), Integer::sum);
             yearMap.merge(wine.getYear(), review.getRating(), Integer::sum);
             colourMap.merge(wine.getWineColour(), review.getRating(), Integer::sum);
+            for (Tag tag : tags) {
+                tagMap.merge(tag.getName(), review.getRating(), Integer::sum);
+            }
         }
 
     }
@@ -126,8 +127,14 @@ public class DashboardService {
     public List<Map.Entry<String, Integer>> getTopColour() {
         return sortHashMap(colourMap);
     }
-
-
+    /**
+     * Retrieves the top tags based on user ratings.
+     *
+     * @return sorted list of entries containing wine tags
+     */
+    public List<Map.Entry<String, Integer>> getTopTags() {
+        return sortHashMap(tagMap);
+    }
     /**
      * Retrieves the list of user reviews.
      *
@@ -175,6 +182,7 @@ public class DashboardService {
         return selectedValues;
 
     }
+
 
 
 }

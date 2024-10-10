@@ -264,6 +264,14 @@ public class DashboardPageController extends PageController {
                     }
                 }
                 break;
+            case "Tags":
+                List<Map.Entry<String, Integer>> topTags = dashboardService.getTopTags();
+                for ( Map.Entry<String, Integer> entryTag : topTags) {
+                    if (entryTag.getValue() > 0) {
+                        dataList.add(new PieChart.Data(String.valueOf(entryTag.getKey()), entryTag.getValue()));
+                    }
+                }
+                break;
             default:
                 // Don't add any data!!!
                 break;
