@@ -23,8 +23,9 @@
          <children>
             <GridPane>
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="565.0" minWidth="10.0" prefWidth="153.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="565.0" minWidth="10.0" prefWidth="345.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="565.0" minWidth="10.0" prefWidth="95.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="565.0" minWidth="88.0" prefWidth="172.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="565.0" minWidth="10.0" prefWidth="217.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="290.0" minWidth="10.0" prefWidth="111.0" />
               </columnConstraints>
               <rowConstraints>
@@ -36,12 +37,12 @@
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Label styleClass="header-label" text="Edit User" GridPane.halignment="RIGHT">
+                  <Label styleClass="header-label" text="Edit User" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label fx:id="usernameLabel" styleClass="header-label" text="&lt;name&gt;" GridPane.columnIndex="1">
+                  <Label fx:id="usernameLabel" styleClass="header-label" text="&lt;name&gt;" GridPane.columnIndex="2">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin></Label>
