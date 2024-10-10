@@ -1,7 +1,6 @@
 package seng202.team5.gui;
 
 import java.util.Optional;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -102,13 +101,7 @@ public class AccountManagePageController extends PageController {
         userJoinDateLabel.setText("---");
 
         // Make the account button change text
-        usernameLabel.textProperty().bind(
-                Bindings.createStringBinding(() ->
-                    curUser != null
-                    ? curUser.getUsername() : "Null user!",
-                    UserService.getInstance().getUserProperty()
-                )
-        );
+        usernameLabel.textProperty().bind(curUser.usernameProperty());
     }
 
     /**

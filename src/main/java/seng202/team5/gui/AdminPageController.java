@@ -52,13 +52,14 @@ public class AdminPageController extends PageController {
         actionColumn.setCellFactory(new ManageUserActionCellFactory());
         actionColumn.setSortable(false);
 
-        ObservableList<User> users = FXCollections.observableArrayList(userDAO.getAll());
+        ObservableList<User> users = FXCollections.observableList(userDAO.getAll(),
+                User.extractor());
         userTable.setItems(users);
         resultsLabel.setText(String.format("Found %d users", users.size()));
     }
 
     @FXML
-    private void done(ActionEvent e) {
+    private void done() {
         // Close open edit user pop ups
         OpenWindowsService.getInstance().closeAllWindows();
         swapPage("/fxml/AccountManagePage.fxml");
@@ -74,7 +75,7 @@ public class AdminPageController extends PageController {
     @FXML
     private void searchPressed() {
         List<User> results = userDAO.getMatchingUserName(searchField.getText());
-        ObservableList<User> users = FXCollections.observableArrayList(results);
+        ObservableList<User> users = FXCollections.observableList(results, User.extractor());
         userTable.setItems(users);
         resultsLabel.setText(String.format("Found %d users with name '%s'",
                 users.size(), searchField.getText()));
