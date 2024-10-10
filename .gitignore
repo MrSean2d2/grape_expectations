@@ -19,3 +19,6 @@ build/
 
 # Gradle
 .gradle/
+
+# Submission package
+seng202_2024_team5_*

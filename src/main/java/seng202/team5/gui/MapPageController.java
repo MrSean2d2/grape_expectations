@@ -76,7 +76,7 @@ public class MapPageController extends PageController {
                         javaScriptConnector.call("initMap");
                         addVineyardsToMap();
 
-                        System.out.println("Loaded map");
+                        log.info("Loaded map");
                     }
                 });
         vineyardTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -118,13 +118,13 @@ public class MapPageController extends PageController {
                                 vineyard.getRegion(), vineyard.getLat(), vineyard.getLon());
                         regions.add(vineyard.getRegion());
                     } else {
-                        log.info(String.format("Skipping vineyard: %s, "
-                                + "region %s already has a marker", vineyard.getName(),
-                                vineyard.getRegion()));
+                        log.info("Skipping vineyard: {}, "
+                                + "region {} already has a marker", vineyard.getName(),
+                                vineyard.getRegion());
                     }
                 } else {
-                    log.error(String.format("Invalid coordinates for vineyard: %s",
-                            vineyard.getName()));
+                    log.error("Invalid coordinates for vineyard: {}",
+                            vineyard.getName());
                 }
             }
         }
