@@ -387,10 +387,13 @@ public class DataListPageController extends PageController {
 
         setDefaultVarietyBox();
 
-        setColourComboBox();
+        //setColourComboBox();
 
     }
 
+    /**
+     *set default options of variety combobox to all varieties
+     */
     public void setDefaultVarietyBox() {
         List<String> varietyOptions = wineDAO.getVariety();
         setVarietyOptions(varietyOptions);
@@ -525,16 +528,6 @@ public class DataListPageController extends PageController {
         setVarietyOptions(varietyOptions);
     }
 
-    /**
-     * sets colour combo box options.
-     */
-    public void setColourComboBox() {
-        List<String> colourOptions = List.of(new String[]{"Red", "Rosé", "White"});
-        ObservableList<String> observableColourList =
-                FXCollections.observableArrayList(colourOptions);
-        observableColourList.addFirst("Colour");
-        colourComboBox.setItems(observableColourList);
-    }
 
     /**
      * Sets filters, sliders, and labels to default values.
