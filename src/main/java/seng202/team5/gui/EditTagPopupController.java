@@ -41,7 +41,7 @@ public class EditTagPopupController extends PageController implements ClosableWi
     @FXML
     private Button deleteButton;
 
-    private final int maxChars = 40;
+    private final int maxChars = 20;
     private Tag tag;
     private boolean isTagValid = true;
     private TagService tagService;
@@ -73,7 +73,6 @@ public class EditTagPopupController extends PageController implements ClosableWi
         tag = tagService.getSelectedTag();
         tagsDAO = new TagsDAO();
 
-
         // Default colour options
         for (int i = 0; i < 6; i++) {
             String colourName = ColourLookupService.getTagLabelColour(i);
@@ -90,20 +89,18 @@ public class EditTagPopupController extends PageController implements ClosableWi
         }
 
         // On name change, update the preview
-        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
-            updatePreview();
-        });
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> updatePreview());
 
         // Check if we're editing a tag
         if (tag != null) {
             initLabels();
-
             tagColourId = tag.getColour();
-            updatePreview();
         } else {
             // Button to delete tag should only be shown if we're editing one
             deleteButton.setVisible(false);
         }
+
+        updatePreview();
     }
 
     /**
@@ -227,7 +224,7 @@ public class EditTagPopupController extends PageController implements ClosableWi
             isTagValid = false;
         } else {
             if (name.length() > maxChars) {
-                fieldError("Tag name is too long!", nameField, nameErrorLabel);
+                fieldError(String.format("Tag name is too long! Must be no more than %s characters.", maxChars), nameField, nameErrorLabel);
                 isTagValid = false;
             }
         }

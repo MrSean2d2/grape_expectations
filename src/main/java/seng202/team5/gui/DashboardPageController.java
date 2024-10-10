@@ -22,6 +22,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import seng202.team5.models.AssignedTag;
 import seng202.team5.models.Tag;
 import seng202.team5.repository.AssignedTagsDAO;
@@ -38,6 +40,9 @@ import seng202.team5.services.UserService;
  * Controller for the Dashboard Page.
  */
 public class DashboardPageController extends PageController {
+
+    private static final Logger log = LogManager.getLogger(DashboardPageController.class);
+
     @FXML
     public Label notEnoughRatingsMessageLabel;
     @FXML
@@ -266,7 +271,7 @@ public class DashboardPageController extends PageController {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e);
             }
         });
 
@@ -297,7 +302,7 @@ public class DashboardPageController extends PageController {
         if (selectedTag != null) {
             stage.setTitle(String.format("Edit tag %s", selectedTag.getName()));
         } else {
-            stage.setTitle("Create new tag");
+            stage.setTitle("Create new Tag");
         }
         String styleSheetUrl = MainWindow.styleSheet;
         scene.getStylesheets().add(styleSheetUrl);

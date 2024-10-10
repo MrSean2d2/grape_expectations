@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="623.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.EditTagPopupController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="623.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.EditTagPopupController">
    <children>
       <GridPane alignment="TOP_CENTER" layoutX="200.0" layoutY="155.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -29,7 +29,7 @@
             <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 5;" GridPane.rowIndex="1">
                <children>
                   <Label maxWidth="1.7976931348623157E308" text="Tag Preview" />
-                  <Label fx:id="tagPreview" maxWidth="1.7976931348623157E308" style="-fx-font-size: 18;" styleClass="tag" text="Label">
+                  <Label fx:id="tagPreview" maxWidth="1.7976931348623157E308" style="-fx-font-size: 18;" styleClass="tag" text="Example Tag">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -46,7 +46,7 @@
                         <Insets top="30.0" />
                      </padding>
                   </Label>
-                  <TextField fx:id="nameField" styleClass="textbox" />
+                  <TextField fx:id="nameField" styleClass="textbox" text="Example Tag" />
                   <Label fx:id="nameErrorLabel" styleClass="warningText" text="Error label" visible="false" />
                   <Label text="Tag Colour" />
                   <FlowPane fx:id="tagColourBox" hgap="10.0" vgap="10.0" />
@@ -63,7 +63,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label fx:id="tagLabel" styleClass="header-label" text="&lt;Tag Name&gt;">
+            <Label fx:id="tagLabel" styleClass="header-label" text="Create new Tag">
                <font>
                   <Font size="18.0" />
                </font>

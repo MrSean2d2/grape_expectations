@@ -38,6 +38,7 @@ import seng202.team5.repository.AssignedTagsDAO;
 import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
 import seng202.team5.services.OpenWindowsService;
+import seng202.team5.services.TagService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
 
@@ -125,6 +126,7 @@ public class DetailedViewPageController extends PageController implements Closab
     private int selectedWineId;
     private int userId;
     private PopOver tagPopover;
+    private VBox existingTagBox;
     private ReviewDAO reviewDAO;
     private Review review;
 
@@ -312,63 +314,24 @@ public class DetailedViewPageController extends PageController implements Closab
                     // Set the Popup to close when clicking outside
                     tagPopover.setAutoHide(true);
 
-                    VBox existingBox = (VBox) baseLoader.getNamespace().get("existingBox");
-                    List<Tag> tags = tagsDAO.getFromUser(userId);
-                    List<Label> labels = new ArrayList<>();
 
-                    for (Tag tag : tags) {
-                        /*
-                         Can't use .contains because tag ID will be
-                         different (with default ones) : (
-                         */
-                        boolean found = false;
-                        for (Tag existingTag : tagsList) {
-                            if (existingTag.getTagId() == tag.getTagId()) {
-                                found = true;
-                                break;
-                            }
-                        }
+                    existingTagBox = (VBox) baseLoader.getNamespace().get("existingBox");
 
-                        // Skip if it was found
-                        if (found) {
-                            continue;
-                        }
-
-                        // Set the user ID to be the current user id, override the default
-                        //  user ID may be -1, for default tags
-                        tag.setUserId(userId);
-
-                        // Add non-existing ones :D
-                        Label newTag = new Label(tag.getName());
-                        newTag.getStyleClass().add("tag");
-                        newTag.getStyleClass().add("max-width");
-
-                        newTag.getStyleClass().add(getTagLabelColour(tag.getColour()));
-
-                        // Add on click
-                        newTag.setOnMouseClicked(event -> {
-                            if (!(tagsList.contains(tag)) && tagPopover.isShowing()) {
-                                addTag(tag);
-                                updateTags();
-                                closePopOver();
-                            }
-                        });
-
-                        labels.add(newTag);
-                    }
-                    existingBox.getChildren().addAll(labels);
+                    addTagLabels();
 
                     content.lookup("#closeButton").setOnMouseClicked(event -> closePopOver());
 
                     // Add a button to confirm selection
-                    Button confirmButton = (Button) content.lookup("#submitButton");
+                    Button confirmButton = (Button) content.lookup("#createTagButton");
                     confirmButton.setOnAction(event -> {
+                        TagService.getInstance().setSelectedTag(null);
                         try {
-                            addTagWithCustomName(content);
-                        } catch (DuplicateEntryException e) {
-                            throw new RuntimeException(e);
+                            showAddTagPopup();
+                        } catch(IOException e) {
+                            log.error(e);
                         }
                     });
+
 
                     // Show the Popup below the button
                     tagPopover.show(addLabel);
@@ -377,6 +340,90 @@ public class DetailedViewPageController extends PageController implements Closab
                 }
             }
         }
+    }
+
+    /**
+     * Create a new tag popup.
+     * This allows the user to create a new tag.
+     *
+     * @throws IOException if the page can't be loaded
+     */
+    public void showAddTagPopup() throws IOException {
+        FXMLLoader editWineLoader = new FXMLLoader(getClass()
+                .getResource("/fxml/EditTagPopup.fxml"));
+
+        Parent root = editWineLoader.load();
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setMinHeight(486);
+        stage.setMinWidth(762);
+
+        stage.setTitle("Create new Tag");
+        String styleSheetUrl = MainWindow.styleSheet;
+        scene.getStylesheets().add(styleSheetUrl);
+        stage.initOwner(backButton.getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+
+        // Show the popup and wait for it to be closed
+        stage.showAndWait();
+
+        // Clear and refresh
+        addTagLabels();
+    }
+
+    /**
+     * Add the tag labels to the popover.
+     */
+    public void addTagLabels() {
+        List<Tag> tags = tagsDAO.getFromUser(userId);
+        List<Label> labels = new ArrayList<>();
+
+        existingTagBox.getChildren().clear();
+
+        for (Tag tag : tags) {
+            /*
+             Can't use .contains because tag ID will be
+             different (with default ones) : (
+             */
+            boolean found = false;
+            for (Tag existingTag : tagsList) {
+                if (existingTag.getTagId() == tag.getTagId()) {
+                    found = true;
+                    break;
+                }
+            }
+
+            // Skip if it was found
+            if (found) {
+                continue;
+            }
+
+            // Set the user ID to be the current user id, override the default
+            //  user ID may be -1, for default tags
+            tag.setUserId(userId);
+
+            // Add non-existing ones :D
+            Label newTag = new Label(tag.getName());
+            newTag.getStyleClass().add("tag");
+            newTag.getStyleClass().add("max-width");
+
+            newTag.getStyleClass().add(getTagLabelColour(tag.getColour()));
+
+            // Add on click
+            newTag.setOnMouseClicked(event -> {
+                if (!(tagsList.contains(tag)) && tagPopover.isShowing()) {
+                    addTag(tag);
+                    updateTags();
+                    closePopOver();
+                }
+            });
+
+            labels.add(newTag);
+        }
+
+        // Add labels to the box
+        existingTagBox.getChildren().addAll(labels);
     }
 
     /**
