@@ -151,6 +151,9 @@ public class AccountManagePageController extends PageController {
         }
     }
 
+    /**
+     *  Opens the edit password pop up when user wants to change password
+     */
     @FXML
     private void changePassword() {
         UserService userService = UserService.getInstance();
@@ -159,6 +162,9 @@ public class AccountManagePageController extends PageController {
         openEditPasswordPopup(true, changePasswordButton.getScene().getWindow());
     }
 
+    /**
+     * Loads admin page
+     */
     @FXML
     private void loadAdminPage() {
         swapPage("/fxml/AdminPage.fxml");

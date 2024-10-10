@@ -43,6 +43,9 @@ public class AdminPageController extends PageController {
 
     private UserDAO userDAO;
 
+    /**
+     * Initialise columns
+     */
     @FXML
     private void initialize() {
         userDAO = new UserDAO();
@@ -58,13 +61,19 @@ public class AdminPageController extends PageController {
         resultsLabel.setText(String.format("Found %d users", users.size()));
     }
 
+    /**
+     * Closes admin page, swap to account manage page
+     */
     @FXML
     private void done() {
-        // Close open edit user pop ups
         OpenWindowsService.getInstance().closeAllWindows();
         swapPage("/fxml/AccountManagePage.fxml");
     }
 
+    /**
+     * Handles event of search after enter pressed
+     * @param event
+     */
     @FXML
     private void enterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -72,6 +81,9 @@ public class AdminPageController extends PageController {
         }
     }
 
+    /**
+     * Handles event of search pressed, searches users for term in search field
+     */
     @FXML
     private void searchPressed() {
         List<User> results = userDAO.getMatchingUserName(searchField.getText());

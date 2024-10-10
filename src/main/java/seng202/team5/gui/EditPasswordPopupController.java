@@ -139,6 +139,11 @@ public class EditPasswordPopupController extends FormErrorController {
         }
     }
 
+    /**
+     * Handles event of enter pressed
+     * @param event
+     */
+
     @FXML
     private void enterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {

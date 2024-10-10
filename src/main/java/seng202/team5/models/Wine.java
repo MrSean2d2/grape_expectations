@@ -360,6 +360,11 @@ public class Wine {
         w.colourProperty(), w.vineyardProperty()};
     }
 
+    /**
+     * Checking for equality of wine objects
+     * @param o object to check equality
+     * @return true if equal
+     */
 
     @Override
     public boolean equals(Object o) {
