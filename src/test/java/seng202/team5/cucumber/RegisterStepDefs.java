@@ -19,16 +19,16 @@ public class RegisterStepDefs {
     @Given("the user {string} does not already have an account")
     public void userNotExist(String username) {
         userDAO = new UserDAO();
+        userService = UserService.getInstance();
         try {
-            int userId = userDAO.getFromUserName(username).getId();
-            userDAO.delete(userId);
+            User user = userDAO.getFromUserName(username);
+            userService.deleteUser(user);
         } catch (NotFoundException ignored) {
 
         }
     }
     @Given("is not logged in on the account page")
     public void userSignedOut() {
-        userService = UserService.getInstance();
         userService.signOut();
     }
     @When("username {string} with password {string} is registered")
