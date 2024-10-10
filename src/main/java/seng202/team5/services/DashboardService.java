@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import seng202.team5.models.Review;
-import seng202.team5.models.Vineyard;
-import seng202.team5.models.Wine;
-import seng202.team5.repository.ReviewDAO;
-import seng202.team5.repository.VineyardDAO;
-import seng202.team5.repository.WineDAO;
+
+import seng202.team5.models.*;
+import seng202.team5.repository.*;
 
 /**
  * Service class that handles operations related to the dashboard.
@@ -26,6 +23,8 @@ public class DashboardService {
     private Map<String, Integer> varietyMap = new HashMap<>();
     private Map<String, Integer> regionMap = new HashMap<>();
     private Map<Integer, Integer> yearMap = new HashMap<>();
+    private Map<String, Integer> colourMap = new HashMap<>();
+    private Map<String, Integer> tagMap = new HashMap<>();
     private String selectedCategory;
     private String selectedFilterTerm;
 
@@ -73,6 +72,10 @@ public class DashboardService {
      */
     public void initializeData() {
         userReviews = reviewDAO.getFromUser(userId);
+//        TagsDAO tagsDAO = new TagsDAO();
+//        AssignedTag assignedTag = new AssignedTag();
+//        AssignedTagsDAO assignedTagsDAO = new AssignedTagsDAO();
+//        List<Tag> tags = tagsDAO.getFromUser(userId);
 
         // Create a hash map for each property
         for (Review review : userReviews) {
@@ -83,6 +86,7 @@ public class DashboardService {
             varietyMap.merge(wine.getWineVariety(), review.getRating(), Integer::sum);
             regionMap.merge(vineyard.getRegion(), review.getRating(), Integer::sum);
             yearMap.merge(wine.getYear(), review.getRating(), Integer::sum);
+            colourMap.merge(wine.getWineColour(), review.getRating(), Integer::sum);
         }
 
     }
@@ -113,6 +117,16 @@ public class DashboardService {
     public List<Map.Entry<Integer, Integer>> getTopYear() {
         return sortHashMap(yearMap);
     }
+
+    /**
+     * Retrieves the top colour based on user ratings.
+     *
+     * @return sorted list of entries containing wine colour
+     */
+    public List<Map.Entry<String, Integer>> getTopColour() {
+        return sortHashMap(colourMap);
+    }
+
 
     /**
      * Retrieves the list of user reviews.
@@ -161,4 +175,6 @@ public class DashboardService {
         return selectedValues;
 
     }
+
+
 }

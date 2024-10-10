@@ -164,7 +164,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <Label text="Your user score is">
+                  <Label text="Your top Colour is">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -172,7 +172,7 @@
                         <Insets top="40.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="userScoreLabel" style="-fx-font-weight: 700;" styleClass="special-info-text" text="--">
+                  <Label fx:id="topColourLabel" style="-fx-font-weight: 700;" styleClass="special-info-text" text="--">
                      <font>
                         <Font size="24.0" />
                      </font>
