@@ -25,8 +25,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
-import javafx.util.converter.NumberStringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.RangeSlider;
@@ -214,14 +212,14 @@ public class DataListPageController extends PageController {
         // sets value of price/rating labels in real time
         priceRangeSlider.highValueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    int value = Integer.valueOf(String.format("%.0f", newVal.floatValue()));
+                    int value = Integer.parseInt(String.format("%.0f", newVal.floatValue()));
                     maxPriceValue.setText(String.valueOf(value));
                 });
 
         minPriceValue.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    Double newMinPrice = Double.parseDouble(minPriceValue.getText());
+                    double newMinPrice = Double.parseDouble(minPriceValue.getText());
                     if (newMinPrice >= priceRangeSlider.getMin()) {
                         priceRangeSlider.setLowValue(newMinPrice);
                         minPriceFilter = newMinPrice;
@@ -238,14 +236,14 @@ public class DataListPageController extends PageController {
 
         priceRangeSlider.lowValueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    int value = Integer.valueOf(String.format("%.0f", newVal.floatValue()));
+                    int value = Integer.parseInt(String.format("%.0f", newVal.floatValue()));
                     minPriceValue.setText(String.valueOf(value));
                 });
 
         maxPriceValue.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    Double newMaxPrice = Double.parseDouble(maxPriceValue.getText());
+                    double newMaxPrice = Double.parseDouble(maxPriceValue.getText());
                     if (newMaxPrice <= priceRangeSlider.getMax()) {
                         priceRangeSlider.setHighValue(newMaxPrice);
                         maxPriceFilter = newMaxPrice;
@@ -262,21 +260,22 @@ public class DataListPageController extends PageController {
 
         ratingSlider.valueProperty().addListener(
                 (ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
-                    int value = Integer.valueOf(String.format("%.0f", newVal.floatValue()));
+                    int value = Integer.parseInt(String.format("%.0f", newVal.floatValue()));
                     ratingSliderValue.setText(String.valueOf(value));
                 });
 
         ratingSliderValue.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    Double newRating = Double.parseDouble(ratingSliderValue.getText());
+                    double newRating = Double.parseDouble(ratingSliderValue.getText());
                     if (newRating <= ratingSlider.getMax()) {
                         ratingSlider.setValue(newRating);
                         minRatingFilter = newRating;
                         applySearchFilters();
                     } else {
                         addNotification("Please pick a minimum rating between "
-                                + (int) priceRangeSlider.getMin() + " and " + (int) priceRangeSlider.getMax(), "#d5e958");
+                                + (int) priceRangeSlider.getMin() + " and "
+                                + (int) priceRangeSlider.getMax(), "#d5e958");
                     }
                 } catch (NumberFormatException e) {
                     addNotification("Invalid Number", "#d5e958");
@@ -292,10 +291,6 @@ public class DataListPageController extends PageController {
         priceRangeSlider.setOnMouseReleased(event -> {
             maxPriceFilter = Float.parseFloat(String.format(
                     "%.1f", priceRangeSlider.getHighValue()));
-            applySearchFilters();
-        });
-
-        priceRangeSlider.setOnMouseReleased(event -> {
             minPriceFilter = Float.parseFloat(String.format(
                     "%.1f", priceRangeSlider.getLowValue()));
             applySearchFilters();
@@ -371,7 +366,6 @@ public class DataListPageController extends PageController {
      */
     @FXML
     private void searchClicked() {
-        String searching = searchTextField.getText();
         applySearchFilters();
         addNotification("Applied Search", "#d5e958");
     }
@@ -380,8 +374,8 @@ public class DataListPageController extends PageController {
      * Apply search and filters and updates table.
      */
     public void applySearchFilters() {
-        WineService.getInstance().searchWines(searchTextField.getText(), varietyFilter, regionFilter,
-                yearFilter, minPriceFilter, maxPriceFilter, minRatingFilter,
+        WineService.getInstance().searchWines(searchTextField.getText(), varietyFilter,
+                regionFilter, yearFilter, minPriceFilter, maxPriceFilter, minRatingFilter,
                 maxRatingFilter, favouriteFilter);
 
         ObservableList<Wine> observableQueryResults = WineService.getInstance().getWineList();
