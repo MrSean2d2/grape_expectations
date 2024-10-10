@@ -72,6 +72,7 @@ public class HeaderController {
      */
     public void init(Stage stage) throws Exception {
         loadHomePage();
+        dashboardButton.setVisible(false);
         dashboardButton.setManaged(false);
 
         scrollPane.setOnMousePressed(Event::consume);
@@ -79,8 +80,10 @@ public class HeaderController {
 
         UserService.getInstance().getUserProperty().addListener((observable, oldUser, newUser) -> {
             if (newUser != null) {
+                dashboardButton.setVisible(true);
                 dashboardButton.setManaged(true);
             } else {
+                dashboardButton.setVisible(false);
                 dashboardButton.setManaged(false);
             }
         });
