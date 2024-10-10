@@ -45,7 +45,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="1041.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.HeaderController">
+<VBox prefHeight="400.0" prefWidth="1041.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.HeaderController">
     <children>
         <GridPane fx:id="toolBar" maxWidth="1.7976931348623157E308" prefHeight="85.0" prefWidth="1041.0" styleClass="accent">
             <columnConstraints>
@@ -94,6 +94,21 @@
                             </ImageView>
                         </graphic>
                     </Button>
+                  <Button fx:id="dashboardButton" onAction="#loadDashboardPage" prefHeight="50.0" prefWidth="50.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <graphic>
+                        <ImageView id="icon" fx:id="dashboardIcon" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Dashboard.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                    <Button fx:id="dataListButton" onAction="#loadDataListPage" prefHeight="50.0" prefWidth="50.0">
                        <cursor>
                            <Cursor fx:constant="HAND" />
