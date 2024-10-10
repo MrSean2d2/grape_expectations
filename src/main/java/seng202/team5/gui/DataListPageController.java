@@ -493,7 +493,10 @@ public class DataListPageController extends PageController {
                         || String.valueOf(wine.getYear()).equals(yearFilter))  // Year filter
                 .filter(wine -> wine.getPrice() >= minPriceFilter
                         && wine.getPrice() <= maxPriceFilter)  // Price filter
+                .filter(wine -> colourFilter.equals("0")
+                        || wine.getWineColour().equals(colourFilter)) // Colour filter
                 .filter(wine -> wine.getRating() >= minRatingFilter)  // Rating filter
+                .filter(wine -> wine.getName().contains(searchTextField.getText())) // Search filter
                 .collect(Collectors.toList());
 
         ObservableList<Wine> filteredWineList = FXCollections.observableArrayList(filteredWines);
@@ -595,9 +598,6 @@ public class DataListPageController extends PageController {
             wineTable.setItems(observableQueryResults);
         }
 
-        ObservableList<Wine> observableQueryResults =
-                FXCollections.observableArrayList(queryResults);
-        wineTable.setItems(observableQueryResults);
         tableResults.setText(wineTable.getItems().size() + " results");
         addNotification("Applied Filter", "#d5e958");
     }
@@ -623,8 +623,8 @@ public class DataListPageController extends PageController {
             varietyFilter = "0";
         } else if (selectedVariety != null) {
             varietyFilter = selectedVariety;
-            applySearchFilters();
         }
+        applySearchFilters();
     }
 
     /**
