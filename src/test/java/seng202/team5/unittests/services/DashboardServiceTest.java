@@ -1,5 +1,6 @@
 package seng202.team5.unittests.services;
 
+import com.opencsv.exceptions.CsvFieldAssignmentException;
 import impl.org.controlsfx.collections.MappingChange;
 import org.assertj.core.api.AbstractAssert;
 import org.junit.Assert;
@@ -11,10 +12,7 @@ import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.*;
-import seng202.team5.repository.ReviewDAO;
-import seng202.team5.repository.UserDAO;
-import seng202.team5.repository.VineyardDAO;
-import seng202.team5.repository.WineDAO;
+import seng202.team5.repository.*;
 import seng202.team5.services.DashboardService;
 import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
@@ -22,21 +20,35 @@ import seng202.team5.services.UserService;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Unit tests for Dashboard Service Class
+ */
 public class DashboardServiceTest {
     private DashboardService dashboardService;
     private ReviewDAO reviewDAO;
     private WineDAO wineDAO;
     private VineyardDAO vineyardDAO;
+    private TagsDAO tagsDAO;
     private UserDAO userDAO;
     public static DatabaseService databaseService;
     private UserService userService;
 
+    /**
+     * Sets up database
+     * @throws DuplicateEntryException if duplicate entry added
+     * @throws InstanceAlreadyExistsException if entry already exists
+     */
     @BeforeAll
     public static void setup() throws DuplicateEntryException, InstanceAlreadyExistsException {
         DatabaseService.removeInstance();
         databaseService = DatabaseService.initialiseInstanceWithUrl(
                 "jdbc:sqlite:./src/test/resources/test_database.db");
     }
+
+    /**
+     * Resets the database before each test
+     * @throws DuplicateEntryException if duplicate entry added
+     */
     @BeforeEach
     public void resetDB() throws DuplicateEntryException {
 
@@ -50,6 +62,7 @@ public class DashboardServiceTest {
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
         userDAO = new UserDAO();
+        tagsDAO = new TagsDAO();
 
         User testUser = new User("Test User!", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
@@ -71,6 +84,11 @@ public class DashboardServiceTest {
         wine2.setId(wineDAO.add(wine2));
         wine3.setId(wineDAO.add(wine3));
 
+//        Tag fruityTag = new Tag("Fruity");
+//        fruityTag.setTagId(tagsDAO.add(fruityTag));
+//        AssignedTag assignedTag = new AssignedTag(fruityTag)
+//        assignedTagDAO.add(assignedTag);
+
 
         reviewDAO.add(new Review(wine1.getId(), testUser.getId(), true, "Great", 5));
         reviewDAO.add(new Review(wine2.getId(), testUser.getId(), true, "Mid", 3));
@@ -79,6 +97,9 @@ public class DashboardServiceTest {
         dashboardService.initializeData();
     }
 
+    /**
+     * Tests method retrieving the top wine varieties based on ratings
+     */
     @Test
     public void testGetTopVariety(){
         List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();
@@ -88,6 +109,9 @@ public class DashboardServiceTest {
         Assertions.assertEquals(5, topVariety.get(0).getValue().intValue());
 
     }
+    /**
+     * Tests method retrieving the top wine regions based on ratings
+     */
     @Test
     public void testTopRegion(){
         List<Map.Entry<String, Integer>> topRegion = dashboardService.getTopRegion();
@@ -96,6 +120,10 @@ public class DashboardServiceTest {
         Assertions.assertEquals(5, topRegion.get(0).getValue().intValue());
 
     }
+
+    /**
+     * Tests method retrieving the top wine years based on ratings
+     */
     @Test
     public void testTopYear(){
         List<Map.Entry<Integer, Integer>> topYear = dashboardService.getTopYear();
@@ -105,6 +133,29 @@ public class DashboardServiceTest {
 
     }
 
+    /**
+     * Tests method retrieving the top wine colours based on ratings
+     */
+    @Test
+    public void testTopColour(){
+        List<Map.Entry<String, Integer>> topColour = dashboardService.getTopColour();
+        Assertions.assertEquals("white", topColour.get(0).getKey());
+    }
+
+    //TODO: implement tag test
+//    /**
+//     * Tests method retrieving the top wine tags based on ratings
+//     */
+//    @Test
+//    public void testTopTags(){
+//        List<Map.Entry<String, Integer>> topTag = dashboardService.getTopTags();
+//        Assertions.assertEquals("white", topTag.get(0).getKey());
+//    }
+
+    /**
+     * Tests the sorting of Hashmaps containing wine varieties and years
+     * @throws DuplicateEntryException if a duplicate entry is added
+     */
     @Test
     public void testSortHashMap() throws DuplicateEntryException {
         Wine wine4 = new Wine("TestWine4", "nice", 2021, 50, 10, "Pinot Noir", "red", vineyardDAO.getOne(1));

@@ -43,6 +43,10 @@ public class DashboardPageController extends PageController {
     @FXML
     public RadioButton tagPieChartRadioButton;
     @FXML
+    public Label topColourLabel;
+    @FXML
+    public Label noTagMessageLabel;
+    @FXML
     private PieChart pieChart;
 
     @FXML
@@ -59,8 +63,6 @@ public class DashboardPageController extends PageController {
 
     @FXML
     private Label titleLabel;
-
-    public ComboBox<String> piechartTypeComboBox;
     private DashboardService dashboardService;
     private TagsDAO tagsDAO;
     private int userId;
@@ -159,6 +161,7 @@ public class DashboardPageController extends PageController {
         List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();
         List<Map.Entry<String, Integer>> topRegion = dashboardService.getTopRegion();
         List<Map.Entry<Integer, Integer>> topYear = dashboardService.getTopYear();
+        List<Map.Entry<String, Integer>> topColour = dashboardService.getTopColour();
 
         if (!topVariety.isEmpty()) {
             topVarietyLabel.setText(topVariety.getFirst().getKey());
@@ -170,6 +173,9 @@ public class DashboardPageController extends PageController {
 
         if (!topYear.isEmpty()) {
             topYearLabel.setText(String.valueOf(topYear.getFirst().getKey()));
+        }
+        if (!topColour.isEmpty()) {
+            topColourLabel.setText(String.valueOf(topColour.getFirst().getKey()));
         }
     }
 
@@ -226,6 +232,7 @@ public class DashboardPageController extends PageController {
     public void updatePieChartData(String category) {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         List<PieChart.Data> dataList = new ArrayList<>();
+        noTagMessageLabel.setVisible(false);
 
         switch (category) {
             case "Variety":
@@ -251,6 +258,28 @@ public class DashboardPageController extends PageController {
                     dataList.add(new PieChart.Data(String.valueOf(entryYear.getKey()), entryYear.getValue()));
                     }
                 }
+                break;
+            case "Colour":
+                List<Map.Entry<String, Integer>> topColour = dashboardService.getTopColour();
+                for ( Map.Entry<String, Integer> entryColour : topColour) {
+                    if (entryColour.getValue() > 0) {
+                        dataList.add(new PieChart.Data(String.valueOf(entryColour.getKey()), entryColour.getValue()));
+                    }
+                }
+                break;
+            case "Tags":
+                List<Map.Entry<String, Integer>> topTags = dashboardService.getTopTags();
+                if (topTags.getFirst().getValue() <=0) {
+                    noTagMessageLabel.setVisible(true);
+                } else {
+                    noTagMessageLabel.setVisible(false);
+                    for ( Map.Entry<String, Integer> entryTag : topTags) {
+                        if (entryTag.getValue() > 0) {
+                            dataList.add(new PieChart.Data(String.valueOf(entryTag.getKey()), entryTag.getValue()));
+                        }
+                    }
+                }
+
                 break;
             default:
                 // Don't add any data!!!

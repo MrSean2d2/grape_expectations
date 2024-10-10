@@ -202,6 +202,7 @@ public class DataListPageController extends PageController {
         if (valid) {
             String category = selectedPieFilterTerm.get(0);
             String filterTerm = selectedPieFilterTerm.get(1);
+            tagComboBox.setValue("All Tags");
             switch (category) {
                 case "Variety":
                     varietyComboBox.setValue(filterTerm);
@@ -212,11 +213,16 @@ public class DataListPageController extends PageController {
                 case "Year":
                     yearComboBox.setValue(filterTerm);
                     break;
+                case "Colour":
+                    colourComboBox.setValue(filterTerm);
+                    break;
+                case "Tags":
+                    tagComboBox.setValue(filterTerm);
+                    break;
                 default:
                     // Any other invalid case, break
                     break;
             }
-            tagComboBox.setValue("All Tags");
             applySearchFilters();
             DashboardService.getInstance().setSelectedPieSliceSearch(null, null);
         }
