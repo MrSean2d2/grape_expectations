@@ -104,6 +104,11 @@ public class DashboardServiceTest {
         Assertions.assertEquals(5, topYear.get(0).getValue().intValue());
 
     }
+    @Test
+    public void testTopColour(){
+        List<Map.Entry<String, Integer>> topColour = dashboardService.getTopColour();
+        Assertions.assertEquals("white", topColour.get(0).getKey());
+    }
 
     @Test
     public void testSortHashMap() throws DuplicateEntryException {
