@@ -67,4 +67,5 @@ public class EditDataStepDefs {
     public void nameReject() {
         Assertions.assertFalse(validName);
     }
+    //TODO: delete wine
 }

@@ -19,3 +19,4 @@ Feature: Edit Wine Data
     And wine with details "test e wine", "is a nice wine", 2024, 95, 30, "test variety", "red", vineyard in database
     When the user submits "" in the name field
     Then data is not saved, error message name can't be blank
+#TODO: Add delete wine test
