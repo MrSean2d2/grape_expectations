@@ -206,8 +206,10 @@ public class DataListPageController extends PageController {
                     yearComboBox.setValue(filterTerm);
                     break;
                 case "Colour":
-                    colourFilter = filterTerm;
-                    colourComboBox.setValue(filterTerm);
+                    if (!filterTerm.equals("Unknown")) {
+                        colourFilter = filterTerm;
+                        colourComboBox.setValue(filterTerm);
+                    }
                     break;
                 case "Tags":
                     tagComboBox.setValue(filterTerm);
