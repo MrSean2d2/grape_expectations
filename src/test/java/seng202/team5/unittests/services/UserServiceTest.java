@@ -21,6 +21,7 @@ import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.exceptions.PasswordIncorrectException;
 import seng202.team5.models.Role;
 import seng202.team5.models.User;
+import seng202.team5.repository.UserDAO;
 import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
 
@@ -114,6 +115,18 @@ public class UserServiceTest {
     public void registerNullUserTest() {
         User testUser = userService.registerUser("", "");
         assertNull(testUser);
+    }
+
+    @Test
+    public void registerBlankNameTest() {
+        User user = userService.registerUser("", "password1!");
+        assertNull(user);
+    }
+
+    @Test
+    public void registerBlankPasswordTest() {
+        User user = userService.registerUser("user", "");
+        assertNull(user);
     }
 
     /**
@@ -307,6 +320,44 @@ public class UserServiceTest {
             userService.updateUserPassword(user, "newPassword");
             assertEquals(oldPassword, user.getPassword());
         }
+    }
+
+    /**
+     * Test deleting a user.
+     */
+    @Test
+    public void testDeleteUser() {
+        User user = userService.registerUser("testUser", "password");
+        userService.deleteUser(user);
+        UserDAO userDAO = new UserDAO();
+        assertNull(userDAO.getOne(user.getId()));
+    }
+
+    /**
+     * Verify that the only admin user cannot be deleted.
+     *
+     * @throws NotFoundException if the default admin user doesn't exist
+     * @throws PasswordIncorrectException if the default admin password is incorrect
+     */
+    @Test
+    public void testDeleteDefaultAdmin() throws NotFoundException, PasswordIncorrectException {
+        User user = userService.signinUser("admin", "admin");
+        userService.deleteUser(user);
+        UserDAO userDAO = new UserDAO();
+        assertEquals(user, userDAO.getOne(user.getId()));
+    }
+
+    /**
+     * Test deleting a second admin.
+     */
+    @Test
+    public void testDeleteExtraAdmin() {
+        User user = userService.registerUser("testUser", "password");
+        user.setRole(Role.ADMIN);
+        UserDAO userDAO = new UserDAO();
+        userDAO.update(user);
+        userService.deleteUser(user);
+        assertNull(userDAO.getOne(user.getId()));
     }
 
 
