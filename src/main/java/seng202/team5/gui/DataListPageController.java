@@ -228,25 +228,7 @@ public class DataListPageController extends PageController {
 
     private void addWine(ActionEvent event) {
         WineService.getInstance().setSelectedWine(null);
-        try {
-            FXMLLoader addWineLoader = new FXMLLoader(getClass().getResource(
-                    "/fxml/EditWinePopup.fxml"));
-            Parent root = addWineLoader.load();
-            EditWinePopupController controller = addWineLoader.getController();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Add new wine");
-            controller.init(stage);
-            controller.setHeaderController(getHeaderController());
-            String styleSheetUrl = MainWindow.styleSheet;
-            scene.getStylesheets().add(styleSheetUrl);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.showAndWait();
-            onResetSearchFilterButtonClicked();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        openPopup("/fxml/EditWinePopup.fxml", "Add new wine", addWineButton.getScene().getWindow());
     }
 
     /**

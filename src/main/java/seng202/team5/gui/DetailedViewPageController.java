@@ -273,27 +273,9 @@ public class DetailedViewPageController extends PageController implements Closab
      */
     private void editWine(ActionEvent event) {
         Wine selectedWine = WineService.getInstance().getSelectedWine();
-        try {
-            FXMLLoader editWineLoader = new FXMLLoader(getClass()
-                    .getResource("/fxml/EditWinePopup.fxml"));
-            Parent root = editWineLoader.load();
-            EditWinePopupController controller = editWineLoader.getController();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle(String.format("Edit wine %s", selectedWine.getName()));
-            controller.init(stage);
-            controller.setHeaderController(getHeaderController());
-            String styleSheetUrl = MainWindow.styleSheet;
-            scene.getStylesheets().add(styleSheetUrl);
-            stage.initOwner(backButton.getScene().getWindow());
-            stage.initModality(Modality.WINDOW_MODAL);
-            WineService.getInstance().getWineList().addListener(
-                    (ListChangeListener<Wine>) change -> closeWindow());
-            stage.showAndWait();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        openPopup("/fxml/EditWinePopup.fxml",
+                selectedWine.nameProperty().map(n -> String.format("Edit Wine: %s", n)),
+                backButton.getScene().getWindow());
     }
 
     /**
