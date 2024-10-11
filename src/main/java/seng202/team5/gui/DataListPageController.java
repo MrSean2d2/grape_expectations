@@ -209,7 +209,7 @@ public class DataListPageController extends PageController {
                         colourComboBox.setValue(filterTerm);
                     }
                     break;
-                case "Tags":
+                case "Tag":
                     tagComboBox.setValue(filterTerm);
                     break;
                 default:
@@ -390,7 +390,7 @@ public class DataListPageController extends PageController {
 
             ObservableList<String> observableTagList =
                     FXCollections.observableArrayList();
-            observableTagList.add("Tags");
+            observableTagList.add("Tag");
             observableTagList.add("All Reviews");
             observableTagList.addAll(tagOptions);
             tagComboBox.setItems(observableTagList);

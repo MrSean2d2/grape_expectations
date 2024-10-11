@@ -94,7 +94,7 @@ public class WineService {
             int currentUserId = UserService.getInstance().getCurrentUser().getId();
 
             List<Integer> wineIds;
-            if (!selectedTag.equals("Tags")) {
+            if (!selectedTag.equals("Tag")) {
                 if (selectedTag.equals("All Reviews")) {
                     // Show all wines that the current user has reviewed
                     wineIds = reviewDAO.getIdsFromUser(currentUserId);
