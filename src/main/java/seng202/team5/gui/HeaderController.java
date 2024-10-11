@@ -3,13 +3,13 @@ package seng202.team5.gui;
 import java.io.IOException;
 import java.util.Objects;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team5.services.DashboardService;
 import seng202.team5.services.UserService;
 
 
@@ -109,16 +108,15 @@ public class HeaderController {
      * Load the home page.
      */
     @FXML
-    private void loadHomePage() throws Exception {
+    private void loadHomePage() {
         loadPage("/fxml/HomePage.fxml");
     }
 
     /**
-     * load the dashboard page
-     * @throws Exception if loading the page fails
+     * Load the dashboard page.
      */
     @FXML
-    private void loadDashboardPage() throws Exception {
+    private void loadDashboardPage() {
         loadPage("/fxml/DashboardPage.fxml");
     }
 
@@ -133,7 +131,8 @@ public class HeaderController {
     @FXML
     void loadDataListPageWithTag(String tagFilter) throws Exception {
         // Load the loading page first
-        FXMLLoader loaderSpinner = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
+        FXMLLoader loaderSpinner = new FXMLLoader(
+                getClass().getResource("/fxml/LoadingSpinner.fxml"));
         Node loader = loaderSpinner.load();
 
         // Display the loading spinner in the container
@@ -144,7 +143,8 @@ public class HeaderController {
             @Override
             protected Node call() throws Exception {
                 // Load the Data List page (this will run in a background thread)
-                FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/DataListPage.fxml"));
+                FXMLLoader baseLoader = new FXMLLoader(
+                        getClass().getResource("/fxml/DataListPage.fxml"));
                 Node page = baseLoader.load();
 
                 // Get the controller for the Data List page
