@@ -128,7 +128,8 @@ public class DashboardPageController extends PageController {
 
     /**
      * set radio buttons and container of radio buttons to hide or show depending on if
-     * a pie chart can be made (enough wines have been reviewed)
+     * a pie chart can be made (enough wines have been reviewed).
+     *
      * @param visibility boolean whether buttons should be shown
      */
     public void setPieChartButtons(boolean visibility) {
