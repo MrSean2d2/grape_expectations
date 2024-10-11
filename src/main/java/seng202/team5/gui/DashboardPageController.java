@@ -233,6 +233,11 @@ public class DashboardPageController extends PageController {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         List<PieChart.Data> dataList = new ArrayList<>();
         noTagMessageLabel.setVisible(false);
+        int numWinesReviewed = dashboardService.getUserReviews().size();
+        if (numWinesReviewed < 5) {
+            pieChart.setVisible(false);
+            notEnoughRatingsMessageLabel.setVisible(true);
+        }
 
         switch (category) {
             case "Variety":
@@ -269,8 +274,9 @@ public class DashboardPageController extends PageController {
                 break;
             case "Tags":
                 List<Map.Entry<String, Integer>> topTags = dashboardService.getTopTags();
-                if (topTags.getFirst().getValue() <=0) {
+                if (topTags.size() == 0) {
                     noTagMessageLabel.setVisible(true);
+                    notEnoughRatingsMessageLabel.setVisible(false);
                 } else {
                     noTagMessageLabel.setVisible(false);
                     for ( Map.Entry<String, Integer> entryTag : topTags) {
