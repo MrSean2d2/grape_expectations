@@ -525,7 +525,7 @@ public class WineDAO implements DAOInterface<Wine> {
 
         // Append onto the sql statement if necessary
         if (search != null) {
-            sql +=  " AND (wine.name LIKE ? OR wine.description LIKE ?) ";
+            sql +=  " AND (wine.name LIKE ? OR wine.description LIKE ?)";
         }
 
         // If the variety is valid, add it to the query

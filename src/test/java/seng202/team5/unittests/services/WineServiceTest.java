@@ -8,8 +8,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
 
+import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.Vineyard;
@@ -249,5 +251,44 @@ public class WineServiceTest {
         wineService.populateDatabase(dataLoadService);
         WineDAO wineDAO = new WineDAO(new VineyardDAO());
         assertEquals(16, wineDAO.getAll().size());
+    }
+
+
+    @Nested
+    class TestSearchFilter {
+        @BeforeEach
+        public void init() {
+            WineDAO wineDAO = new WineDAO(new VineyardDAO());
+            Vineyard testVineyard1 = new Vineyard("Test Vineyard", "Test Region");
+            Vineyard testVineyard2 = new Vineyard("Test Vineyard", "Test Region");
+
+            Wine testWine1 = new Wine("Test Wine 1 delish", "YUMMY", 2005,
+                    88, 32, "testVariety", "Red", testVineyard1);
+            Wine testWine2 = new Wine("Test Wine 2 delish", "OKAY", 2005,
+                    88, 98, "testVariety", "White", testVineyard2);
+            Wine testWine3 = new Wine("Test Wine 3", "YUCK", 2021,
+                    96, 54, "testVariety", "Red", testVineyard1);
+            Wine testWine4 = new Wine("Test Wine 4 delish", "GROSS", 2005,
+                    65, 34, "testVariety", "White", testVineyard2);
+            Wine testWine5 = new Wine("Test Wine 5", "PERFECT", 2008,
+                    88, 25, "testVariety", "Red", testVineyard1);
+            wineDAO.add(testWine1);
+            wineDAO.add(testWine2);
+            wineDAO.add(testWine3);
+            wineDAO.add(testWine4);
+            wineDAO.add(testWine5);
+        }
+
+        /**
+         * Test searching
+         */
+        @Test
+        public void testSearch() {
+            wineService.searchWines("YUMMY", "0", "0",
+                    "0", "0", 800.0, -1, -1, -1, "Tags");
+            ObservableList<Wine> result = wineService.getWineList();
+            assertEquals(1, result.size());
+            assertTrue(result.getFirst().getDescription().contains("YUMMY"));
+        }
     }
 }
