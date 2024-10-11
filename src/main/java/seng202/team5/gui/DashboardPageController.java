@@ -113,10 +113,11 @@ public class DashboardPageController extends PageController {
             pieChart.setVisible(true);
             notEnoughRatingsMessageLabel.setVisible(false);
             setPieChartButtons(true);
-        }
-        updateTopLabels();
 
+        }
         initialiseRadioButtons();
+
+        updateTopLabels();
 
         // Add tables
         tagsDAO = new TagsDAO();
@@ -179,6 +180,7 @@ public class DashboardPageController extends PageController {
         yearPieChartButton.setTooltip(new Tooltip("Favourite Year Pie Chart"));
         tagPieChartRadioButton.setTooltip(new Tooltip("Favourite Tag Pie Chart"));
         addNewTagButton.setTooltip(new Tooltip("Add a new tag"));
+
         List<RadioButton> radioButtonList = new ArrayList<>();
         radioButtonList.add(colourPieChartButton);
         radioButtonList.add(varietyPieChartButton);

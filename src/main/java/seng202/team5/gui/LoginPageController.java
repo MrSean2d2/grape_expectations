@@ -17,6 +17,8 @@ import seng202.team5.models.User;
 import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 
+import javax.tools.Tool;
+
 /**
  * Controller for the login page.
  *
@@ -58,6 +60,7 @@ public class LoginPageController extends PasswordVisibilityController {
         loginButton.setTooltip(new Tooltip("Log in to account"));
         registerButton.setTooltip(new Tooltip("Go to register page"));
 
+
         passwordVisibleField.textProperty().bindBidirectional(
                 passwordField.textProperty());
 
@@ -77,6 +80,11 @@ public class LoginPageController extends PasswordVisibilityController {
         setVisible(passwordVisible, passwordField, passwordVisibleField);
         registerButton.requestFocus();
         toggleVisibility.setImage(passwordVisible ? shownIcon : hiddenIcon);
+        if (passwordVisible) {
+            Tooltip.install(toggleVisibility, new Tooltip("Hide Password"));
+        } else {
+            Tooltip.install(toggleVisibility, new Tooltip("View Password"));
+        }
     }
 
     /**

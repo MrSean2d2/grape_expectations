@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" maxWidth="1000.0" prefHeight="420.0" prefWidth="1000.0" style="-fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DashboardPageController">
+<GridPane alignment="CENTER" maxWidth="1000.0" prefHeight="420.0" prefWidth="1000.0" style="-fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DashboardPageController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" />
       <ColumnConstraints />
@@ -270,7 +270,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" onAction="#addNewTag" text="Add a new tag">
+            <Button fx:id="addNewTagButton" mnemonicParsing="false" onAction="#addNewTag" text="Add a new tag">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
