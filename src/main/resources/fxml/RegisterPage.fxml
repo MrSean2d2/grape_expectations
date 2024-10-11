@@ -56,7 +56,7 @@
                <children>
                   <Label focusTraversable="false" maxWidth="1.7976931348623157E308" text="Username" />
                   <TextField fx:id="usernameField" onKeyReleased="#enterPressed" promptText="Username" styleClass="textbox" />
-                  <Label ellipsisString="-----" maxWidth="1.7976931348623157E308" prefHeight="91.0" prefWidth="377.0" text="* Password must be at least 8 characters long and contain: a letter, a number, and a special character" textAlignment="CENTER" wrapText="true" />
+                  <Label ellipsisString="-" maxWidth="1.7976931348623157E308" prefHeight="99.0" prefWidth="377.0" text="* Password must be 8 - 20 characters long and contain: a letter, a number, and a special character" textAlignment="CENTER" wrapText="true" />
                   <Label focusTraversable="false" maxWidth="1.7976931348623157E308" text="Password">
                      <padding>
                         <Insets bottom="10.0" />
@@ -112,7 +112,7 @@
                         </ImageView>
                      </children>
                   </GridPane>
-                  <Label fx:id="errorLabel" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="36.0" prefWidth="377.0" styleClass="warningText" text="Error" textFill="#d05b5b" wrapText="true" />
+                  <Label fx:id="errorLabel" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="29.0" prefWidth="377.0" styleClass="warningText" text="Error" textFill="#d05b5b" wrapText="true" />
                   <Button fx:id="registerButton" maxWidth="1.7976931348623157E308" minWidth="200.0" mnemonicParsing="false" onAction="#attemptRegister" prefHeight="25.0" text="Register Account">
                      <cursor>
                         <Cursor fx:constant="HAND" />
