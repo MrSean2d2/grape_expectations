@@ -1,6 +1,7 @@
 package seng202.team5.gui;
 
 import java.io.IOException;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,6 +17,17 @@ import org.apache.logging.log4j.Logger;
 public class PageController {
     private static final Logger log = LogManager.getLogger(PageController.class);
     private HeaderController headerController;
+
+    /**
+     * Initialiser method. This implementation is intentionally left blank. Implementation is left
+     * to those child classes which require separate initialisation than provided
+     * by the FXML method (such as setting properties of the stage). It is defined
+     * here so that openPopup can call it and if it is not required then simply
+     * nothing will happen.
+     *
+     * @param stage the stage for this controller
+     */
+    public void init(Stage stage) {}
 
     /**
      * Method to set the header controller reference.
@@ -79,6 +91,73 @@ public class PageController {
             stage.initOwner(owner);
             stage.setScene(scene);
             stage.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Initialise the stage as a modal window.
+     *
+     * @param owner The hierarchical owner of the stage
+     * @param root the root element of the fxml document
+     * @param controller the PageController for this stage
+     * @param stage the stage itself
+     */
+    private void initStageModal(Window owner, Parent root, PageController controller, Stage stage) {
+        Scene scene = new Scene(root);
+        String styleSheetUrl = MainWindow.styleSheet;
+        scene.getStylesheets().add(styleSheetUrl);
+        controller.init(stage);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(owner);
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+
+    /**
+     * Open the popup with the specified fxml file, title, and owner.
+     *
+     * @param fxml the fxml file of the popup window to load
+     * @param title the title of the new stage
+     * @param owner the hierarchical owner of the popup window, generally the window
+     *              which created the popup
+     */
+    public void openPopup(String fxml, String title, Window owner) {
+        try {
+            FXMLLoader popupLoader = new FXMLLoader(getClass().getResource(fxml));
+            Parent root = popupLoader.load();
+            PageController controller = popupLoader.getController();
+            if (headerController != null) {
+                controller.setHeaderController(headerController);
+            }
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            initStageModal(owner, root, controller, stage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Open the popup with the specified fxml file, title, and owner.
+     *
+     * @param fxml the fxml file of the popup window to load
+     * @param titleProperty the Observable title of the new stage
+     * @param owner the hierarchical owner of the popup window, generally the window
+     *              which created the popup
+     */
+    public void openPopup(String fxml, ObservableValue<String> titleProperty, Window owner) {
+        try {
+            FXMLLoader popupLoader = new FXMLLoader(getClass().getResource(fxml));
+            Parent root = popupLoader.load();
+            PageController controller = popupLoader.getController();
+            if (headerController != null) {
+                controller.setHeaderController(headerController);
+            }
+            Stage stage = new Stage();
+            stage.titleProperty().bind(titleProperty);
+            initStageModal(owner, root, controller, stage);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
