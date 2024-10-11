@@ -11,230 +11,226 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.RangeSlider?>
 
-<GridPane alignment="TOP_CENTER" prefHeight="905.0" prefWidth="1031.0" styleClass="primary" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+<GridPane alignment="TOP_CENTER" prefHeight="841.0" prefWidth="1037.0" styleClass="primary" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="100.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="179.99999237060547" minHeight="100.0" prefHeight="112.00000508626303" vgrow="NEVER" />
-        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="568.0" vgrow="ALWAYS" />
-        <RowConstraints maxHeight="-Infinity" minHeight="20.0" prefHeight="20.0" vgrow="ALWAYS" />
+        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="1.7976931348623157E308" vgrow="ALWAYS" />
     </rowConstraints>
     <children>
-        <GridPane maxWidth="1000.0" prefHeight="129.0" prefWidth="1000.0" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-            <children>
-                <GridPane maxWidth="1.7976931348623157E308" prefHeight="50.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="644.0" />
-                        <ColumnConstraints hgrow="NEVER" maxWidth="185.0" minWidth="10.0" prefWidth="133.0" />
-                        <ColumnConstraints hgrow="NEVER" maxWidth="202.0" minWidth="10.0" prefWidth="202.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <children>
-                        <TextField fx:id="searchTextField" onKeyReleased="#enterPressed" promptText="Input Search..." styleClass="textbox">
-                            <GridPane.margin>
-                                <Insets right="10.0" />
-                            </GridPane.margin>
-                        </TextField>
-                        <Button fx:id="searchButton" maxWidth="1.7976931348623157E308" minWidth="10.0" mnemonicParsing="false" onAction="#searchClicked" prefHeight="24.0" prefWidth="157.0" text="Search" GridPane.columnIndex="1" GridPane.halignment="CENTER">
-                            <GridPane.margin>
-                                <Insets left="10.0" right="10.0" />
-                            </GridPane.margin>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                        </Button>
-                        <Button fx:id="resetSearchFilterButton" maxWidth="1.7976931348623157E308" minWidth="10.0" mnemonicParsing="false" onAction="#onResetSearchFilterButtonClicked" prefHeight="24.0" prefWidth="157.0" text="Reset Search and Filter" GridPane.columnIndex="2">
-                            <GridPane.margin>
-                                <Insets left="10.0" />
-                            </GridPane.margin>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                        </Button>
-                    </children>
-                </GridPane>
-                <GridPane maxWidth="1.7976931348623157E308" GridPane.rowIndex="1">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.66668701171875" minWidth="10.0" prefWidth="172.66668701171875" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="212.66664632161462" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <children>
-                        <ComboBox fx:id="varietyComboBox" maxWidth="1.7976931348623157E308" onAction="#onVarietyComboBoxClicked" promptText="Variety" styleClass="dropdown" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
-                            <GridPane.margin>
-                                <Insets right="10.0" />
-                            </GridPane.margin>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                        </ComboBox>
-                        <ComboBox fx:id="yearComboBox" maxWidth="1.7976931348623157E308" onAction="#onYearComboBoxClicked" promptText="Year" styleClass="dropdown" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
-                            <GridPane.margin>
-                                <Insets right="10.0" />
-                            </GridPane.margin>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                        </ComboBox>
-                        <GridPane GridPane.columnIndex="6">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints maxHeight="30.666661580403645" minHeight="10.0" prefHeight="23.999989827473957" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <children>
-                                <Slider fx:id="ratingSlider" blockIncrement="5.0" majorTickUnit="10.0" maxWidth="-Infinity" min="80.0" minorTickCount="4" prefHeight="38.0" prefWidth="155.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                                    <padding>
-                                        <Insets left="20.0" />
-                                    </padding>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </Slider>
-                                <Label alignment="CENTER" ellipsisString="---" prefHeight="17.0" prefWidth="111.0" text="Minimum Rating" textOverrun="CLIP" GridPane.halignment="CENTER" />
-                                <TextField fx:id="ratingSliderValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="slidertextbox" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
-                            </children>
-                        </GridPane>
-                        <GridPane prefHeight="50.0" prefWidth="208.0" GridPane.columnIndex="5">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints maxHeight="30.666661580403645" minHeight="10.0" prefHeight="23.999989827473957" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="39.66667175292969" minHeight="10.0" prefHeight="26.666676839192707" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <children>
-                                <RangeSlider fx:id="priceRangeSlider" blockIncrement="25.0" highValue="1.0" highValueChanging="true" lowValue="0.0" lowValueChanging="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="4" prefHeight="30.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
-                                    <padding>
-                                        <Insets top="5.0" />
-                                    </padding>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </RangeSlider>
-                                <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Price Range" GridPane.halignment="CENTER" />
-                        <TextField fx:id="minPriceValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="slidertextbox" />
-                        <TextField fx:id="maxPriceValue" alignment="CENTER" layoutX="10.0" layoutY="12.0" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="slidertextbox" GridPane.halignment="RIGHT" />
-                            </children>
-                        </GridPane>
-                        <ComboBox fx:id="regionComboBox" maxWidth="1.7976931348623157E308" onAction="#onRegionComboBoxClicked" promptText="Region" styleClass="dropdown" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
-                            <GridPane.margin>
-                                <Insets right="10.0" />
-                            </GridPane.margin>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                        </ComboBox>
-                  <ComboBox fx:id="colourComboBox" maxWidth="1.7976931348623157E308" onAction="#onColourComboBoxClicked" promptText="Colour" styleClass="dropdown" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
-                      <items>
-                          <FXCollections fx:factory="observableArrayList">
-                              <String fx:value="Colour" />
-                              <String fx:value="Red" />
-                              <String fx:value="Rosé" />
-                              <String fx:value="White" />
-                          </FXCollections>
-                      </items>
-                      <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></ComboBox>
-                  <ComboBox fx:id="tagComboBox" maxWidth="1.7976931348623157E308" promptText="Tag" styleClass="dropdown" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                  </ComboBox>
-                    </children>
-                    <GridPane.margin>
-                        <Insets />
-                    </GridPane.margin>
-                </GridPane>
-            </children>
-        </GridPane>
-        <VBox alignment="CENTER" prefHeight="575.0" prefWidth="901.0" spacing="20" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP">
-            <TableView fx:id="wineTable" maxWidth="1000.0" prefHeight="290.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="640.0" resizable="false" text="Wine Name" />
-                    <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="114.0" resizable="false" text="Price" />
-                    <TableColumn fx:id="yearColumn" prefWidth="115.0" resizable="false" text="Year" />
-                    <TableColumn fx:id="ratingColumn" prefWidth="114.0" resizable="false" text="Rating" />
-                </columns>
-                <cursor>
-                    <Cursor fx:constant="HAND" />
-                </cursor>
-            </TableView>
-        </VBox>
-        <GridPane maxWidth="1000.0" prefHeight="123.0" prefWidth="901.0" GridPane.halignment="CENTER">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="901.0" minWidth="771.0" prefWidth="901.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="442.0" minWidth="0.0" prefWidth="0.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints minHeight="80.0" prefHeight="123.0" vgrow="ALWAYS" />
-            </rowConstraints>
-            <children>
-                <Label style="-fx-font-weight: 700;" text="Wine Database" GridPane.columnSpan="2147483647">
-                    <font>
-                        <Font size="24.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets />
-                    </GridPane.margin>
-                </Label>
-                <Button fx:id="addWineButton" mnemonicParsing="false" text="+" visible="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-                    </GridPane.margin>
-                </Button>
-                <Label maxWidth="935.0" prefHeight="80.0" prefWidth="935.0" text="Here you can see a list of the wines currently in the database and filter them! Make sure to press enter when manually entering ranges for price and rating. Double click on a wine to view more information about it!" wrapText="true" GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
-                    <font>
+      <HBox fillHeight="false" maxHeight="1.7976931348623157E308" maxWidth="1000.0" minHeight="-Infinity" spacing="15.0">
+         <children>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/List.png" />
+               </image>
+               <HBox.margin>
+                  <Insets top="3.0" />
+               </HBox.margin>
+            </ImageView>
+            <VBox minHeight="-Infinity">
+               <children>
+                  <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="titleLabel1" style="-fx-font-weight: 700;" text="Wine Database">
+                           <font>
+                              <Font size="26.0" />
+                           </font>
+                        </Label>
+                        <Region maxWidth="1.7976931348623157E308" prefHeight="0.0" HBox.hgrow="ALWAYS" />
+                            <Button fx:id="addWineButton" mnemonicParsing="false" text="+">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                            </Button>
+                     </children>
+                  </HBox>
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Here you can see a list of the wines currently in the database and filter them! Make sure to press enter when manually entering ranges for price and rating. Double click on a wine to view more information about it!" wrapText="true">
+                     <font>
                         <Font size="18.0" />
-                    </font>
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-                </Label>
-            </children>
-        </GridPane>
-        <Label fx:id="tableResults" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1000.0" minWidth="800.0" prefHeight="16.0" prefWidth="1000.0" text="Label" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
-            <GridPane.margin>
-                <Insets />
-            </GridPane.margin>
-        </Label>
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+               <HBox.margin>
+                  <Insets right="45.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+         <GridPane.margin>
+            <Insets bottom="30.0" />
+         </GridPane.margin>
+      </HBox>
+      <VBox styleClass="info-area" GridPane.rowIndex="1">
+         <children>
+            <HBox spacing="10.0">
+               <children>
+                  <VBox maxWidth="1.7976931348623157E308" spacing="10.0" HBox.hgrow="ALWAYS">
+                     <children>
+                              <TextField fx:id="searchTextField" onKeyReleased="#enterPressed" prefHeight="40.0" prefWidth="600.0" promptText="Input Search..." styleClass="textbox">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                              </TextField>
+                        <HBox spacing="10.0">
+                           <children>
+                              <VBox HBox.hgrow="ALWAYS">
+                                 <children>
+                                          <ComboBox fx:id="regionComboBox" maxWidth="1.7976931348623157E308" onAction="#onRegionComboBoxClicked" prefHeight="35.0" promptText="Region" styleClass="dropdown">
+                                              <cursor>
+                                                  <Cursor fx:constant="HAND" />
+                                              </cursor>
+                                          </ComboBox>
+                                    <Label alignment="CENTER" ellipsisString="---" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="169.0" text="Minimum Rating" textOverrun="CLIP">
+                                       <padding>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </padding>
+                                    </Label>
+                                    <HBox prefHeight="40.0" spacing="10.0">
+                                       <children>
+                                          <TextField fx:id="ratingSliderValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="textbox" />
+                                          <StackPane maxWidth="1.7976931348623157E308">
+                                             <children>
+                                                <Slider fx:id="ratingSlider" blockIncrement="5.0" majorTickUnit="10.0" min="80.0" minorTickCount="4" prefHeight="40.0" prefWidth="120.0" showTickLabels="true" showTickMarks="true" snapToTicks="true">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </Slider>
+                                             </children>
+                                          </StackPane>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox HBox.hgrow="ALWAYS">
+                                 <children>
+                                          <ComboBox fx:id="varietyComboBox" maxWidth="1.7976931348623157E308" onAction="#onVarietyComboBoxClicked" prefHeight="35.0" promptText="Variety" styleClass="dropdown">
+                                              <cursor>
+                                                  <Cursor fx:constant="HAND" />
+                                              </cursor>
+                                          </ComboBox>
+                                    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="101.0" text="Price Range">
+                                       <padding>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </padding>
+                                    </Label>
+                                    <HBox prefHeight="40.0" spacing="10.0">
+                                       <children>
+                                          <TextField fx:id="minPriceValue" alignment="TOP_CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="textbox" />
+                                          <StackPane maxWidth="1.7976931348623157E308">
+                                             <children>
+                                                <RangeSlider fx:id="priceRangeSlider" blockIncrement="25.0" highValue="1.0" highValueChanging="true" lowValue="0.0" lowValueChanging="true" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="4" prefHeight="40.0" prefWidth="120.0" showTickLabels="true" showTickMarks="true" snapToTicks="true">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </RangeSlider>
+                                             </children>
+                                          </StackPane>
+                                          <TextField fx:id="maxPriceValue" alignment="TOP_CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="textbox" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <ComboBox fx:id="colourComboBox" maxWidth="1.7976931348623157E308" onAction="#onColourComboBoxClicked" prefHeight="35.0" promptText="Colour" styleClass="dropdown">
+                                        <items>
+                                            <FXCollections fx:factory="observableArrayList">
+                                                <String fx:value="Colour" />
+                                                <String fx:value="Red" />
+                                                <String fx:value="Rosé" />
+                                                <String fx:value="White" />
+                                            </FXCollections>
+                                        </items>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ComboBox>
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                          <ComboBox fx:id="yearComboBox" maxWidth="1.7976931348623157E308" onAction="#onYearComboBoxClicked" prefHeight="35.0" promptText="Year" styleClass="dropdown">
+                                              <cursor>
+                                                  <Cursor fx:constant="HAND" />
+                                              </cursor>
+                                          </ComboBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox prefWidth="250.0" spacing="10.0">
+                     <children>
+                        <HBox spacing="10.0">
+                           <children>
+                                    <Button fx:id="searchButton" maxWidth="1.7976931348623157E308" minWidth="10.0" mnemonicParsing="false" onAction="#searchClicked" prefHeight="40.0" prefWidth="157.0" styleClass="primary-button" text="Search">
+                                        <cursor>
+                                            <Cursor fx:constant="HAND" />
+                                        </cursor>
+                                    </Button>
+                                    <Button fx:id="resetSearchFilterButton" maxWidth="1.7976931348623157E308" minWidth="10.0" mnemonicParsing="false" onAction="#onResetSearchFilterButtonClicked" prefHeight="40.0" prefWidth="157.0" styleClass="primary-button" text="Clear">
+                                        <cursor>
+                                            <Cursor fx:constant="HAND" />
+                                        </cursor>
+                                    </Button>
+                           </children>
+                        </HBox>
+                        <ComboBox fx:id="tagComboBox" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="192.0" promptText="Tag" styleClass="dropdown">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ComboBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+               <TableView fx:id="wineTable" maxHeight="1.7976931348623157E308" maxWidth="1000.0" prefHeight="290.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
+                   <columns>
+                       <TableColumn fx:id="nameColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="500.0" resizable="false" text="Wine Name" />
+                       <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="114.0" resizable="false" text="Price" />
+                       <TableColumn fx:id="yearColumn" prefWidth="115.0" resizable="false" text="Year" />
+                       <TableColumn fx:id="ratingColumn" prefWidth="114.0" resizable="false" text="Rating" />
+                   </columns>
+                   <cursor>
+                       <Cursor fx:constant="HAND" />
+                   </cursor>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               </TableView>
+              <Label fx:id="tableResults" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1000.0" minWidth="800.0" prefHeight="16.0" prefWidth="1000.0" text="Label" textAlignment="RIGHT">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </VBox.margin>
+              </Label>
+         </children>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <padding>
+            <Insets bottom="20.0" left="45.0" right="45.0" top="25.0" />
+         </padding>
+      </VBox>
     </children>
     <padding>
-        <Insets bottom="50.0" left="10.0" right="10.0" top="50.0" />
+        <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
     </padding>
 </GridPane>

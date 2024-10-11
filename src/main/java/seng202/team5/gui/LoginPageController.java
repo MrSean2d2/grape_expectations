@@ -86,8 +86,6 @@ public class LoginPageController extends PasswordVisibilityController {
     public void attemptLogin() {
         resetFieldError(usernameField);
         resetFieldError(passwordField);
-        TextField currentPassField = passwordVisible ? passwordVisibleField
-                : passwordField;
 
         String username = usernameField.getText();
 
@@ -101,7 +99,8 @@ public class LoginPageController extends PasswordVisibilityController {
 
         if (password.isEmpty()) {
             // Show error
-            fieldError(currentPassField, errorLabel, "Password cannot be empty!");
+            fieldError(passwordVisibleField, errorLabel, "Password cannot be empty!");
+            fieldError(passwordField);
             return;
         }
 
@@ -130,7 +129,8 @@ public class LoginPageController extends PasswordVisibilityController {
         } catch (NotFoundException e) {
             fieldError(usernameField, errorLabel, "User doesn't exist!");
         } catch (PasswordIncorrectException e) {
-            fieldError(currentPassField, errorLabel, "Password is incorrect!");
+            fieldError(passwordVisibleField, errorLabel, "Password is incorrect!");
+            fieldError(passwordField);
         }
     }
 

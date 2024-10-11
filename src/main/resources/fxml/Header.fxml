@@ -101,7 +101,7 @@
                      <graphic>
                         <ImageView id="icon" fx:id="dashboardIcon" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Dashboard.png" />
+                              <Image url="@../images/Data.png" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />

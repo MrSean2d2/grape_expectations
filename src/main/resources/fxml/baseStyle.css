@@ -48,13 +48,23 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 .textbox {
     -fx-padding: 10 10;
     -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+}
+
+.textbox .content {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+.textbox:focused .content {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
 }
 
 .textbox.field_error {
-    -fx-border-width: 2;
     -fx-border-color: #e95958;
-    -fx-border-radius: 5;
-    -fx-border-insets: -5;
 }
 
 .header-label {
@@ -199,11 +209,11 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 }
 
 .seafoam {
-    -fx-background-color: #8DDCDC;
+    -fx-background-color: #8ddcdc;
 }
 
 .seafoam:hover {
-    -fx-background-color: #81d0f1;
+    -fx-background-color: #c9ffff;
 }
 
 .mint {

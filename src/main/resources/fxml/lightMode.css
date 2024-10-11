@@ -5,16 +5,22 @@ Light mode for the application
 @import url(baseStyle.css);
 
 .root {
-    -fx-background-color: #cccccc;
+    -fx-background-color: #e1e3e0;
     -fx-text-fill: #000000;
 }
 
 .primary {
-    -fx-background-color: #cccccc;
+    -fx-background-color: #e1e3e0;
 }
 
 .accent {
     -fx-background-color: #ffffff;
+}
+
+.info-area {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0.0, 3.0);
 }
 
 #backgroundImage{
@@ -39,9 +45,22 @@ Light mode for the application
     -fx-border-color: transparent;
 }
 
+.textbox {
+    -fx-border-color: #bbb;
+    -fx-border-width: 2;
+}
+
 .button:hover, .dropdown:hover {
     -fx-border-color: #bbb;
     -fx-text-fill: #000000;
+}
+
+.primary-button {
+    -fx-background-color: #e7e7e7;
+}
+
+.primary-button:hover {
+    -fx-background-color: #f8f8f8;
 }
 
 .piechart-button {
@@ -60,11 +79,6 @@ Light mode for the application
 .piechart-button:selected{
     -fx-border-color: gray;
 }
-.piechart-background {
-    -fx-background-color: #e7e7e7;
-
-    -fx-background-radius: 10;
-}
 
 .dropdown .list-cell {
     -fx-background-color: #ffffff;
@@ -77,6 +91,13 @@ Light mode for the application
 .dropdown .list-cell:hover {
     -fx-background-color: #bbb;
 }
+
+
+.dropdown {
+    -fx-border-color: #bbb;
+    -fx-border-width: 2;
+}
+
 
 .menu-item {
     -fx-background-color: #ffffff;

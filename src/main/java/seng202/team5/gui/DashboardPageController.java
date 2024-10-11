@@ -246,7 +246,7 @@ public class DashboardPageController extends PageController {
             editButton.setAlignment(Pos.CENTER_RIGHT);
             editButton.setMaxHeight(Double.MAX_VALUE);
             HBox.setMargin(editButton, new Insets(0, 0, 0, 10));
-            editButton.getStyleClass().add("button");
+            editButton.getStyleClass().addAll("button", "primary-button");
             editButton.setCursor(Cursor.HAND);
 
             // Click event - if the user can edit it
