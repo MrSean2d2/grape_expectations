@@ -128,6 +128,9 @@ public class PageController {
             FXMLLoader popupLoader = new FXMLLoader(getClass().getResource(fxml));
             Parent root = popupLoader.load();
             PageController controller = popupLoader.getController();
+            if (headerController != null) {
+                controller.setHeaderController(headerController);
+            }
             Stage stage = new Stage();
             stage.setTitle(title);
             initStageModal(owner, root, controller, stage);
@@ -149,6 +152,9 @@ public class PageController {
             FXMLLoader popupLoader = new FXMLLoader(getClass().getResource(fxml));
             Parent root = popupLoader.load();
             PageController controller = popupLoader.getController();
+            if (headerController != null) {
+                controller.setHeaderController(headerController);
+            }
             Stage stage = new Stage();
             stage.titleProperty().bind(titleProperty);
             initStageModal(owner, root, controller, stage);
