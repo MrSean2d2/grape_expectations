@@ -471,7 +471,8 @@ public class WineDAOTest {
         @Test
         public void testFilterMinPrice() {
             String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
-                    +"wine.rating, wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, "
+                    + "wine.rating, wine.variety, wine.price,"
+                    + "wine.colour, vineyard.name AS vineyardName, "
                     + "vineyard.region FROM WINE, VINEYARD "
                     + "WHERE vineyard.id = wine.vineyard "
                     + "AND wine.year = 5 "
@@ -486,8 +487,10 @@ public class WineDAOTest {
          */
         @Test
         public void testFilterMaxPrice() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name,"
+                    + "wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour,"
+                    + "vineyard.name AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD "
                     + "WHERE vineyard.id = wine.vineyard "
                     + "AND wine.year = 5 AND wine.price <= -1.0 AND wine.price >= 30.0;";
@@ -500,8 +503,10 @@ public class WineDAOTest {
          */
         @Test
         public void testFilterMinMaxPrice() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
-                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name,"
+                    + "wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour,"
+                    + "vineyard.name AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard "
                     + "AND wine.year = 5 AND wine.price <= -1.0 "
                     + "AND wine.price >= 30.0;";
