@@ -1,18 +1,21 @@
 package seng202.team5.unittests.services;
 
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mockStatic;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.exceptions.PasswordIncorrectException;
@@ -95,7 +98,7 @@ public class UserServiceTest {
     }
 
     /**
-     * Test sucessful register of user.
+     * Test successful register of user.
      */
     @Test
     public void registerUserTest() {
@@ -149,15 +152,11 @@ public class UserServiceTest {
      * Test user sign in with incorrect credentials.
      */
     @Test
-    public void incorrectSignInTest() throws NotFoundException {
+    public void incorrectSignInTest() {
         userService.registerUser("testUser", "pass");
 
-        try {
-            User signedInUser = userService.signinUser("testUser", "wrongPass");
-            assertNull(signedInUser);
-        } catch (PasswordIncorrectException e) {
-            assertTrue(true);
-        }
+        assertThrows(PasswordIncorrectException.class,
+                () -> userService.signinUser("testUser", "wrongPass"));
     }
 
     /**
@@ -184,4 +183,131 @@ public class UserServiceTest {
         assertNotNull(admin);
         assertEquals(Role.ADMIN, admin.getRole());
     }
+
+    /**
+     * Test checkName with a username which is too short.
+     */
+    @Test
+    public void testShortUsername() {
+        assertEquals("Username must be between 4 and 20 characters!", userService.checkName("a"));
+    }
+
+    /**
+     * Test checkName with a username which is too long.
+     */
+    @Test
+    public void testLongUsername() {
+        assertEquals("Username must be between 4 and 20 characters!",
+                userService.checkName("averylongusernamewithmorethantwentycharacters"));
+    }
+
+    /**
+     * Test a correct username which is exactly 20 characters long.
+     */
+    @Test
+    public void testCorrectUsernameUpperBound() {
+        assertNull(userService.checkName("aaaaaaaaaaaaaaaaaaaa"));
+    }
+
+    /**
+     * Test a correct username which is exactly 4 characters long.
+     */
+    @Test
+    public void testCorrectUsernameLowerBound() {
+        assertNull(userService.checkName("aaaa"));
+    }
+
+    /**
+     * Test checkName with an empty username.
+     */
+    @Test
+    public void testEmptyUsername() {
+        assertEquals("Username cannot be empty!", userService.checkName(""));
+    }
+
+    /**
+     * Test checkPassword with an empty password.
+     */
+    @Test
+    public void testEmptyPassword() {
+        assertEquals("Password cannot be empty!", userService.checkPassword(""));
+    }
+
+    /**
+     * Test checkPassword with a password of less than 8 characters.
+     */
+    @Test
+    public void testShortPassword() {
+        assertEquals("Password must contain at least 8 characters!",
+                userService.checkPassword("passwor"));
+    }
+
+    /**
+     * Test checkPassword with a password containing no letters.
+     */
+    @Test
+    public void testNoAlphaPassword() {
+        assertEquals("Password must contain alphanumeric characters!",
+                userService.checkPassword("12345678!@"));
+    }
+
+    /**
+     * Test checkPassword with a password containing no numbers.
+     */
+    @Test
+    public void testNoNumberPassword() {
+        assertEquals("Password must contain a numeric character!",
+                userService.checkPassword("password!@"));
+    }
+
+    /**
+     * Test checkPassword with a password containing no special characters.
+     */
+    @Test
+    public void testNoSpecialPassword() {
+        assertEquals("Password must contain a special character!",
+                userService.checkPassword("password12"));
+    }
+
+    /**
+     * Test checkPassword with a password which is valid.
+     */
+    @Test
+    public void testValidPassword() {
+        assertNull(userService.checkPassword("password!1"));
+    }
+
+    /**
+     * Verify that updateUserPassword correctly keeps the old password
+     * if an unexpected {@link NoSuchAlgorithmException} is thrown by hashPassword.
+     */
+    @Test
+    public void testUpdatePasswordNoSuchAlgorithm() {
+        User user = userService.registerUser("testUser", "password");
+        String oldPassword = user.getPassword();
+        try (MockedStatic<UserService> userServiceMockedStatic = mockStatic(UserService.class)) {
+            userServiceMockedStatic.when(() -> UserService.hashPassword(eq("newPassword"), any()))
+                    .thenThrow(NoSuchAlgorithmException.class);
+            userService.updateUserPassword(user, "newPassword");
+            assertEquals(oldPassword, user.getPassword());
+        }
+    }
+
+    /**
+     * Verify that updateUserPassword correctly keeps the old password if an unexpected
+     * {@link InvalidKeySpecException} is thrown by hashPassword.
+     */
+    @Test
+    public void testUpdatePasswordInvalidKeySpec() {
+        User user = userService.registerUser("testUser", "password");
+        String oldPassword = user.getPassword();
+        try (MockedStatic<UserService> userServiceMockedStatic = mockStatic(UserService.class)) {
+            userServiceMockedStatic.when(() -> UserService.hashPassword(eq("newPassword"), any()))
+                    .thenThrow(InvalidKeySpecException.class);
+            userService.updateUserPassword(user, "newPassword");
+            assertEquals(oldPassword, user.getPassword());
+        }
+    }
+
+
 }

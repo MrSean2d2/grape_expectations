@@ -324,6 +324,9 @@ public class UserService {
      * @param password the password to check
      * @param hashedPassword the hashed password
      * @return hashed password as a string
+     * @throws NoSuchAlgorithmException if password hashing fails
+     * @throws InvalidKeySpecException if password hashing fails
+     * @throws PasswordIncorrectException if the password is incorrect
      */
     public static boolean verifyPassword(String password, String hashedPassword)
             throws NoSuchAlgorithmException,
