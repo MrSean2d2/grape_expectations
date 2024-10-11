@@ -202,6 +202,7 @@ public class DataListPageController extends PageController {
         if (valid) {
             String category = selectedPieFilterTerm.get(0);
             String filterTerm = selectedPieFilterTerm.get(1);
+            tagComboBox.setValue("All Tags");
             switch (category) {
                 case "Variety":
                     varietyComboBox.setValue(filterTerm);
@@ -212,11 +213,16 @@ public class DataListPageController extends PageController {
                 case "Year":
                     yearComboBox.setValue(filterTerm);
                     break;
+                case "Colour":
+                    colourComboBox.setValue(filterTerm);
+                    break;
+                case "Tags":
+                    tagComboBox.setValue(filterTerm);
+                    break;
                 default:
                     // Any other invalid case, break
                     break;
             }
-            tagComboBox.setValue("All Tags");
             applySearchFilters();
             DashboardService.getInstance().setSelectedPieSliceSearch(null, null);
         }
@@ -387,10 +393,13 @@ public class DataListPageController extends PageController {
 
         setDefaultVarietyBox();
 
-        setColourComboBox();
+        //setColourComboBox();
 
     }
 
+    /**
+     *set default options of variety combobox to all varieties
+     */
     public void setDefaultVarietyBox() {
         List<String> varietyOptions = wineDAO.getVariety();
         setVarietyOptions(varietyOptions);
@@ -490,7 +499,10 @@ public class DataListPageController extends PageController {
                         || String.valueOf(wine.getYear()).equals(yearFilter))  // Year filter
                 .filter(wine -> wine.getPrice() >= minPriceFilter
                         && wine.getPrice() <= maxPriceFilter)  // Price filter
+                .filter(wine -> colourFilter.equals("0")
+                        || wine.getWineColour().equals(colourFilter)) // Colour filter
                 .filter(wine -> wine.getRating() >= minRatingFilter)  // Rating filter
+                .filter(wine -> wine.getName().contains(searchTextField.getText())) // Search filter
                 .collect(Collectors.toList());
 
         ObservableList<Wine> filteredWineList = FXCollections.observableArrayList(filteredWines);
@@ -525,16 +537,6 @@ public class DataListPageController extends PageController {
         setVarietyOptions(varietyOptions);
     }
 
-    /**
-     * sets colour combo box options.
-     */
-    public void setColourComboBox() {
-        List<String> colourOptions = List.of(new String[]{"Red", "Rosé", "White"});
-        ObservableList<String> observableColourList =
-                FXCollections.observableArrayList(colourOptions);
-        observableColourList.addFirst("Colour");
-        colourComboBox.setItems(observableColourList);
-    }
 
     /**
      * Sets filters, sliders, and labels to default values.
@@ -602,9 +604,6 @@ public class DataListPageController extends PageController {
             wineTable.setItems(observableQueryResults);
         }
 
-        ObservableList<Wine> observableQueryResults =
-                FXCollections.observableArrayList(queryResults);
-        wineTable.setItems(observableQueryResults);
         tableResults.setText(wineTable.getItems().size() + " results");
         addNotification("Applied Filter", "#d5e958");
     }
@@ -630,8 +629,8 @@ public class DataListPageController extends PageController {
             varietyFilter = "0";
         } else if (selectedVariety != null) {
             varietyFilter = selectedVariety;
-            applySearchFilters();
         }
+        applySearchFilters();
     }
 
     /**
@@ -726,6 +725,11 @@ public class DataListPageController extends PageController {
 
             stage.setScene(scene);
             stage.show();
+
+            stage.setOnHidden(event -> {
+                applySearchFilters();
+                setUpTagFilter();
+            });
         } catch (Exception e) {
             log.error(e);
         }

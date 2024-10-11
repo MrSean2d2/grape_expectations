@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import seng202.team5.services.DashboardService;
 import seng202.team5.services.UserService;
 
 
@@ -41,7 +42,7 @@ public class HeaderController {
     private Button homeButton;
 
     @FXML
-    private ImageView homeIcon;
+    private Button dashboardButton;
 
     @FXML
     private Button dataListButton;
@@ -72,31 +73,23 @@ public class HeaderController {
      */
     public void init(Stage stage) {
         loadHomePage();
+        dashboardButton.setVisible(false);
+        dashboardButton.setManaged(false);
 
         scrollPane.setOnMousePressed(Event::consume);
         pageContainer.setOnMousePressed(Event::consume);
 
         UserService.getInstance().getUserProperty().addListener((observable, oldUser, newUser) -> {
             if (newUser != null) {
-                homeIcon.setImage(new Image(
-                        Objects.requireNonNull(
-                                getClass().getResourceAsStream("/images/Dashboard.png"))));
-                homeButton.setTooltip(new Tooltip("Dashboard"));
-
-
-                accountIcon.setImage(new Image(
-                        Objects.requireNonNull(
-                                getClass().getResourceAsStream(newUser.getIcon()))));
-            } else {
-                homeIcon.setImage(new Image(
-                        Objects.requireNonNull(
-                                getClass().getResourceAsStream("/images/Home.png"))));
-                homeButton.setTooltip(new Tooltip("Home page"));
-
+                dashboardButton.setVisible(true);
+                dashboardButton.setManaged(true);
 
                 accountIcon.setImage(new Image(
                         Objects.requireNonNull(
                                 getClass().getResourceAsStream("/images/User.png"))));
+            } else {
+                dashboardButton.setVisible(false);
+                dashboardButton.setManaged(false);
             }
         });
 
@@ -105,6 +98,8 @@ public class HeaderController {
         });
 
         logoButton.setTooltip(new Tooltip("Home page"));
+        homeButton.setTooltip(new Tooltip("Home page"));
+        dashboardButton.setTooltip(new Tooltip("Dashboard page"));
         dataListButton.setTooltip(new Tooltip("Data list page"));
         mapButton.setTooltip(new Tooltip("Map page"));
         accountButton.setTooltip(new Tooltip("Account page"));
@@ -114,12 +109,17 @@ public class HeaderController {
      * Load the home page.
      */
     @FXML
-    private void loadHomePage() {
-        if (UserService.getInstance().getCurrentUser() != null) {
-            loadPage("/fxml/DashboardPage.fxml");
-        } else {
-            loadPage("/fxml/HomePage.fxml");
-        }
+    private void loadHomePage() throws Exception {
+        loadPage("/fxml/HomePage.fxml");
+    }
+
+    /**
+     * load the dashboard page
+     * @throws Exception if loading the page fails
+     */
+    @FXML
+    private void loadDashboardPage() throws Exception {
+        loadPage("/fxml/DashboardPage.fxml");
     }
 
     /**
@@ -167,8 +167,11 @@ public class HeaderController {
             // Update the button styles
             dataListButton.getStyleClass().add("active");
             homeButton.getStyleClass().remove("active");
+            dashboardButton.getStyleClass().remove("active");
             mapButton.getStyleClass().remove("active");
             accountButton.getStyleClass().remove("active");
+            dashboardButton.getStyleClass().remove("active");
+
         });
 
 
@@ -207,6 +210,7 @@ public class HeaderController {
         pageContainer.getChildren().setAll(loader);
 
         homeButton.getStyleClass().remove("active");
+        dashboardButton.getStyleClass().remove("active");
         dataListButton.getStyleClass().remove("active");
         mapButton.getStyleClass().remove("active");
         accountButton.getStyleClass().remove("active");
@@ -269,6 +273,7 @@ public class HeaderController {
 
         // Remove the button styles from the header
         homeButton.getStyleClass().remove("active");
+        dashboardButton.getStyleClass().remove("active");
         dataListButton.getStyleClass().remove("active");
         mapButton.getStyleClass().remove("active");
         accountButton.getStyleClass().remove("active");
@@ -288,8 +293,10 @@ public class HeaderController {
         // Add active status to buttons
         switch (loadedPage) {
             case "HomePage.fxml":
-            case "DashboardPage.fxml":
                 homeButton.getStyleClass().add("active");
+                break;
+            case "DashboardPage.fxml":
+                dashboardButton.getStyleClass().add("active");
                 break;
 
             case "DataListPage.fxml":
@@ -327,6 +334,7 @@ public class HeaderController {
     private void setHeaderInteractionEnabled(boolean enabled) {
         logoButton.setDisable(!enabled);
         homeButton.setDisable(!enabled);
+        dashboardButton.setDisable(!enabled);
         dataListButton.setDisable(!enabled);
         mapButton.setDisable(!enabled);
         accountButton.setDisable(!enabled);

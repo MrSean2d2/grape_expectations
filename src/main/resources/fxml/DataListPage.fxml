@@ -16,6 +16,8 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.RangeSlider?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <GridPane alignment="TOP_CENTER" prefHeight="905.0" prefWidth="1031.0" styleClass="primary" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -137,11 +139,6 @@
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
                                 </RangeSlider>
-                                <Label fx:id="maxPriceLabel" minHeight="-Infinity" minWidth="-Infinity" text="0" GridPane.halignment="RIGHT" GridPane.rowSpan="2" GridPane.valignment="CENTER">
-                                    <padding>
-                                        <Insets right="10.0" />
-                                    </padding>
-                                </Label>
                                 <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Price Range" GridPane.halignment="CENTER" />
                         <TextField fx:id="minPriceValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="slidertextbox" />
                         <TextField fx:id="maxPriceValue" alignment="CENTER" layoutX="10.0" layoutY="12.0" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="slidertextbox" GridPane.halignment="RIGHT" />
@@ -156,7 +153,14 @@
                             </cursor>
                         </ComboBox>
                   <ComboBox fx:id="colourComboBox" maxWidth="1.7976931348623157E308" onAction="#onColourComboBoxClicked" promptText="Colour" styleClass="dropdown" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
-                     <GridPane.margin>
+                      <items>
+                          <FXCollections fx:factory="observableArrayList">
+                              <String fx:value="Red"/>
+                              <String fx:value="Rosé"/>
+                              <String fx:value="White"/>
+                          </FXCollections>
+                      </items>
+                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin></ComboBox>
                   <ComboBox fx:id="tagComboBox" maxWidth="1.7976931348623157E308" promptText="Tag" styleClass="dropdown" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.PieChart?>
@@ -37,9 +38,10 @@
         </columnConstraints>
         <rowConstraints>
             <RowConstraints maxHeight="23.0" minHeight="0.0" prefHeight="0.0" vgrow="NEVER" />
-            <RowConstraints maxHeight="52.0" minHeight="38.0" prefHeight="50.0" vgrow="NEVER" />
-            <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="66.0" vgrow="NEVER" />
-          <RowConstraints maxHeight="400.0" minHeight="200.0" prefHeight="368.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="58.0" minHeight="38.0" prefHeight="55.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="24.0" vgrow="NEVER" />
+          <RowConstraints maxHeight="400.0" minHeight="200.0" prefHeight="355.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="400.0" minHeight="74.0" prefHeight="81.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3">
@@ -50,14 +52,14 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
             </GridPane>
-            <PieChart fx:id="pieChart" animated="false" legendVisible="false" prefHeight="398.0" prefWidth="520.0" title="Pie Chart Title" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <PieChart fx:id="pieChart" animated="false" legendVisible="false" prefHeight="398.0" prefWidth="520.0" title="Pie Chart Title" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2">
                <GridPane.margin>
                   <Insets top="20.0" />
                </GridPane.margin>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></PieChart>
-            <Label style="-fx-font-weight: 700;" text="Wine Data" GridPane.columnSpan="2" GridPane.rowIndex="1">
+            <Label style="-fx-font-weight: 700;" text="Wine Data" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <font>
                   <Font size="26.0" />
                </font>
@@ -66,7 +68,7 @@
                </GridPane.margin>
             </Label>
             <Label fx:id="notEnoughRatingsMessageLabel" text="Rate More Wines To View Pie Chart Stats!" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-            <GridPane prefHeight="34.0" prefWidth="519.0" style="-fx-background-radius: 10px;" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="428.0" style="-fx-background-radius: 10px;" styleClass="piechart-background" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -78,32 +80,53 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <RadioButton fx:id="varietyPieChartButton" mnemonicParsing="false" styleClass="piechart-button" text="Variety" GridPane.columnIndex="1">
+                  <RadioButton fx:id="varietyPieChartButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="76.0" text="Variety" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></RadioButton>
-                  <RadioButton fx:id="colourPieChartButton" mnemonicParsing="false" styleClass="piechart-button" text="Colour">
+                     </cursor>
+                     <styleClass>
+                        <String fx:value="piechart-button" />
+                        <String fx:value=".piechart-button.active" />
+                     </styleClass></RadioButton>
+                  <RadioButton fx:id="colourPieChartButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="76.0" text="Colour" GridPane.halignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></RadioButton>
-                  <RadioButton fx:id="regionPieChartButton" mnemonicParsing="false" styleClass="piechart-button" text="Region" GridPane.columnIndex="2">
+                     </cursor>
+                     <styleClass>
+                        <String fx:value="piechart-button" />
+                        <String fx:value=".piechart-button.active" />
+                     </styleClass></RadioButton>
+                  <RadioButton fx:id="regionPieChartButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="76.0" text="Region" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></RadioButton>
-                  <RadioButton fx:id="yearPieChartButton" mnemonicParsing="false" styleClass="piechart-button" text="Year" GridPane.columnIndex="3">
+                     </cursor>
+                     <styleClass>
+                        <String fx:value="piechart-button" />
+                        <String fx:value=".piechart-button.active" />
+                     </styleClass></RadioButton>
+                  <RadioButton fx:id="yearPieChartButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="76.0" text="Year" GridPane.columnIndex="3" GridPane.halignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></RadioButton>
-                  <RadioButton fx:id="tagPieChartRadioButton" mnemonicParsing="false" styleClass="piechart-button" text="Tags" GridPane.columnIndex="4">
+                     </cursor>
+                     <styleClass>
+                        <String fx:value="piechart-button" />
+                        <String fx:value=".piechart-button.active" />
+                     </styleClass></RadioButton>
+                  <RadioButton fx:id="tagPieChartRadioButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="76.0" text="Tags" GridPane.columnIndex="4" GridPane.halignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></RadioButton>
+                     </cursor>
+                     <styleClass>
+                        <String fx:value="piechart-button" />
+                        <String fx:value=".piechart-button.active" />
+                     </styleClass>
+                  </RadioButton>
                </children>
                <GridPane.margin>
                   <Insets left="40.0" right="40.0" />
                </GridPane.margin>
             </GridPane>
-            <Label alignment="BOTTOM_CENTER" lineSpacing="0.5" prefHeight="50.0" prefWidth="318.0" text="View insights into your preferences and ratings! Click on a slice to see more info!" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <Label alignment="BOTTOM_CENTER" lineSpacing="0.5" prefHeight="50.0" prefWidth="362.0" text="View insights into your favourites based on your wine ratings! Click on a slice to see more info!" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.valignment="TOP">
                <font>
                   <Font size="14.0" />
                </font>
@@ -164,7 +187,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <Label text="Your user score is">
+                  <Label text="Your top Colour is">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -172,7 +195,7 @@
                         <Insets top="40.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="userScoreLabel" style="-fx-font-weight: 700;" styleClass="special-info-text" text="--">
+                  <Label fx:id="topColourLabel" style="-fx-font-weight: 700;" styleClass="special-info-text" text="--">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -182,6 +205,7 @@
                   <Insets left="10.0" top="20.0" />
                </GridPane.margin>
             </VBox>
+            <Label fx:id="noTagMessageLabel" text="Tag More Wines To View Pie Chart Stats!" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
          </children>
       </GridPane>
       <VBox GridPane.rowIndex="1">
