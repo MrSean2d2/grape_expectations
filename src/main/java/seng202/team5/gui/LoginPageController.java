@@ -17,8 +17,6 @@ import seng202.team5.models.User;
 import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 
-import javax.tools.Tool;
-
 /**
  * Controller for the login page.
  *
