@@ -285,7 +285,7 @@ public class WineServiceTest {
         @Test
         public void testSearch() {
             wineService.searchWines("YUMMY", "0", "0",
-                    "0", "0", 800.0, -1, -1, -1, "Tags");
+                    "0", "0", 800.0, -1, -1, "Tags");
             ObservableList<Wine> result = wineService.getWineList();
             assertEquals(1, result.size());
             assertTrue(result.getFirst().getDescription().contains("YUMMY"));

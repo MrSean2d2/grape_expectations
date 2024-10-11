@@ -514,8 +514,7 @@ public class WineDAO implements DAOInterface<Wine> {
     public String queryBuilder(String search, String variety,
                                String colour, String region,
                                String year, double minPrice,
-                               double maxPrice, double minRating,
-                               double maxRating) {
+                               double maxPrice, double minRating) {
 
         // Build the SQL statement
         String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "

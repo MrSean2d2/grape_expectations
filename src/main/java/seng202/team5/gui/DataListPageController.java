@@ -101,7 +101,6 @@ public class DataListPageController extends PageController {
     private double minPriceFilter;
     private double maxPriceFilter;
     private double minRatingFilter;
-    private double maxRatingFilter;
 
     private static final Logger log = LogManager.getLogger(DataListPageController.class);
     private boolean addedWine = false;
@@ -475,7 +474,6 @@ public class DataListPageController extends PageController {
             this.minPriceFilter = 0.0;
             this.maxPriceFilter = 800.0;
             this.minRatingFilter = 0.0;
-            this.maxRatingFilter = 100.0;
         }
         addedWine = false;
     }
@@ -498,7 +496,7 @@ public class DataListPageController extends PageController {
         WineService.getInstance().searchWines(searchTextField.getText(),
                 varietyFilter, colourFilter, regionFilter,
                 yearFilter, minPriceFilter, maxPriceFilter,
-                minRatingFilter, maxRatingFilter, selectedTag);
+                minRatingFilter, selectedTag);
 
         // If a tag is selected, apply tag filtering as well
         ObservableList<Wine> observableQueryResults = WineService.getInstance().getWineList();

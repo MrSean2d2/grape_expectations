@@ -67,15 +67,14 @@ public class WineService {
      * @param minPrice the minimum price
      * @param maxPrice the maximum price
      * @param minRating the minimum rating
-     * @param maxRating the maximum rating
      */
     public void searchWines(String search, String variety,
                             String colour, String region,
                             String year, double minPrice,
                             double maxPrice, double minRating,
-                            double maxRating, String selectedTag) {
+                            String selectedTag) {
         String sql = wineDAO.queryBuilder(search, variety, colour, region, year, minPrice,
-                maxPrice, minRating, maxRating);
+                maxPrice, minRating);
         List<Wine> wines = wineDAO.executeSearchFilter(sql, search);
         wineList = FXCollections.observableList(wines, Wine.extractor());
         filterWinesByTag(selectedTag);
