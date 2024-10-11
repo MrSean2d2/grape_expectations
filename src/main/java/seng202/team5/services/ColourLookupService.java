@@ -15,11 +15,12 @@ public class ColourLookupService {
      */
     public static String getTagLabelColour(int tagId) {
         return switch (tagId) {
-            case (0) -> "purple";
-            case (1) -> "green";
-            case (2) -> "blue";
-            case (3) -> "red";
-            case (4) -> "yellow";
+            case (0) -> "lavender";
+            case (1) -> "mint";
+            case (2) -> "seafoam";
+            case (3) -> "claret";
+            case (4) -> "gold";
+            case (5) -> "rose";
             default -> "";
         };
     }

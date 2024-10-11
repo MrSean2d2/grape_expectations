@@ -144,7 +144,7 @@
                            <Cursor fx:constant="HAND" />
                        </cursor>
                      <graphic>
-                        <ImageView id="icon" fx:id="logo4" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="icon" fx:id="accountIcon" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#loadHomePage" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/User.png" />
                            </image>
