@@ -1,6 +1,14 @@
 package seng202.team5.models;
 
 import java.util.Objects;
+import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.util.Callback;
 
 /**
  * Representation of user.
@@ -9,10 +17,10 @@ import java.util.Objects;
  */
 public class User {
     private int id;
-    private String username;
-    private String password;
-    private Role role;
-    private int icon;
+    private StringProperty username;
+    private StringProperty password;
+    private ObjectProperty<Role> role;
+    private IntegerProperty icon;
 
     /**
      * Initialise a new User without id.
@@ -23,10 +31,10 @@ public class User {
      * @param icon     user's icon number
      */
     public User(String username, String password, Role role, int icon) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.icon = icon;
+        setUsername(username);
+        setPassword(password);
+        setRole(role);
+        iconProperty().set(icon);
     }
 
     /**
@@ -40,10 +48,58 @@ public class User {
      */
     public User(int id, String username, String password, Role role, int icon) {
         this.id = id;
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.icon = icon;
+        setUsername(username);
+        setPassword(password);
+        setRole(role);
+        iconProperty().set(icon);
+    }
+
+    /**
+     * Property getter for name.
+     *
+     * @return the StringProperty for the username
+     */
+    public final StringProperty usernameProperty() {
+        if (username == null) {
+            username = new SimpleStringProperty();
+        }
+        return username;
+    }
+
+    /**
+     * Property getter for (hashed) password.
+     *
+     * @return the StringProperty for the password
+     */
+    public final StringProperty passwordProperty() {
+        if (password == null) {
+            password = new SimpleStringProperty();
+        }
+        return password;
+    }
+
+    /**
+     * Property getter for the user's role.
+     *
+     * @return the ObjectProperty for the Role enum type
+     */
+    public final ObjectProperty<Role> roleProperty() {
+        if (role == null) {
+            role = new SimpleObjectProperty<>();
+        }
+        return role;
+    }
+
+    /**
+     * Property getter for the user's icon number.
+     *
+     * @return the IntegerProperty of the icon number
+     */
+    public final IntegerProperty iconProperty() {
+        if (icon == null) {
+            icon = new SimpleIntegerProperty();
+        }
+        return icon;
     }
 
     /**
@@ -60,8 +116,8 @@ public class User {
      *
      * @return the user's username
      */
-    public String getUsername() {
-        return username;
+    public final String getUsername() {
+        return usernameProperty().get();
     }
 
     /**
@@ -70,8 +126,8 @@ public class User {
      * @return a file path to the user's icon
      */
     public String getIcon() {
-        String iconPath = switch (icon) {
-            case 0, 1, 2, 3, 4 -> "/images/user_profile" + icon + ".png";
+        String iconPath = switch (iconProperty().get()) {
+            case 0, 1, 2, 3, 4 -> "/images/user_profile" + iconProperty().get() + ".png";
             default -> "/images/user_profile0.png";
         };
         return iconPath;
@@ -83,8 +139,8 @@ public class User {
      *
      * @return the user's icon number
      */
-    public int getIconNumber() {
-        return icon;
+    public final int getIconNumber() {
+        return iconProperty().get();
     }
 
 
@@ -95,8 +151,8 @@ public class User {
      *
      * @return the user's (potentially hashed) password
      */
-    public String getPassword() {
-        return password;
+    public final String getPassword() {
+        return passwordProperty().get();
     }
 
 
@@ -105,8 +161,8 @@ public class User {
      *
      * @return the user's role
      */
-    public Role getRole() {
-        return role;
+    public final Role getRole() {
+        return roleProperty().get();
     }
 
 
@@ -116,7 +172,7 @@ public class User {
      * @return true if the user is an admin, false otherwise
      */
     public boolean getIsAdmin() {
-        return (role == Role.ADMIN);
+        return (roleProperty().get() == Role.ADMIN);
     }
 
 
@@ -132,7 +188,7 @@ public class User {
      * Sets the user's role.
      */
     public void setRole(Role role) {
-        this.role = role;
+        roleProperty().set(role);
     }
 
 
@@ -140,7 +196,7 @@ public class User {
      * Sets the user's username.
      */
     public void setUsername(String username) {
-        this.username = username;
+        usernameProperty().set(username);
     }
 
     /**
@@ -151,9 +207,25 @@ public class User {
      * @param password the user's new hashed password
      */
     public void setPassword(String password) {
-        this.password = password;
+        passwordProperty().set(password);
     }
 
+    /**
+     * Defines extractor callback to be used by Observable lists.
+     *
+     * @return a Callback containing an array of Observable properties of this Object
+     */
+    public static Callback<User, Observable[]> extractor() {
+        return (User u) -> new Observable[]{u.usernameProperty(), u.passwordProperty(),
+        u.roleProperty(), u.iconProperty()};
+    }
+
+    /**
+     * Checking for equality of user objects.
+     *
+     * @param o object to check equality
+     * @return true if equal
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -163,9 +235,9 @@ public class User {
             return false;
         }
         User user = (User) o;
-        return id == user.id && icon == user.icon
-                && Objects.equals(username, user.username)
-                && Objects.equals(password, user.password)
-                && Objects.equals(role, user.role);
+        return id == user.id && getIconNumber() == user.getIconNumber()
+                && Objects.equals(getUsername(), user.getUsername())
+                && Objects.equals(getPassword(), user.getPassword())
+                && Objects.equals(getRole(), user.getRole());
     }
 }

@@ -1,11 +1,7 @@
 package seng202.team5.gui;
 
-import java.io.IOException;
 import java.util.Objects;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -15,8 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.exceptions.PasswordIncorrectException;
 import seng202.team5.models.User;
@@ -92,6 +86,8 @@ public class LoginPageController extends PasswordVisibilityController {
     public void attemptLogin() {
         resetFieldError(usernameField);
         resetFieldError(passwordField);
+        TextField currentPassField = passwordVisible ? passwordVisibleField
+                : passwordField;
 
         String username = usernameField.getText();
 
@@ -105,7 +101,7 @@ public class LoginPageController extends PasswordVisibilityController {
 
         if (password.isEmpty()) {
             // Show error
-            fieldError(passwordField, errorLabel, "Password cannot be empty!");
+            fieldError(currentPassField, errorLabel, "Password cannot be empty!");
             return;
         }
 
@@ -134,7 +130,7 @@ public class LoginPageController extends PasswordVisibilityController {
         } catch (NotFoundException e) {
             fieldError(usernameField, errorLabel, "User doesn't exist!");
         } catch (PasswordIncorrectException e) {
-            fieldError(passwordField, errorLabel, "Password is incorrect!");
+            fieldError(currentPassField, errorLabel, "Password is incorrect!");
         }
     }
 

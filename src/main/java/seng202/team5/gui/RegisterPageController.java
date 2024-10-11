@@ -135,9 +135,15 @@ public class RegisterPageController extends FormErrorController {
      */
     @FXML
     private void attemptRegister() {
-        usernameField.getStyleClass().remove("field_error");
-        passwordField.getStyleClass().remove("field_error");
-        repeatPasswordField.getStyleClass().remove("field_error");
+        resetFieldError(usernameField);
+        resetFieldError(passwordField);
+        resetFieldError(repeatPasswordField);
+        resetFieldError(passwordVisibleField);
+        resetFieldError(repeatPasswordVisibleField);
+        TextField currentPassField = passwordVisible ? passwordVisibleField
+                : passwordField;
+        TextField currentRepeatField = repeatPasswordVisible ? repeatPasswordVisibleField
+                : repeatPasswordField;
 
         String username = usernameField.getText();
 
@@ -152,16 +158,15 @@ public class RegisterPageController extends FormErrorController {
         // Password validation
         String passMessage = userService.checkPassword(password);
         if (passMessage != null) {
-            fieldError(passwordField, errorLabel, passMessage);
+            fieldError(currentPassField, errorLabel, passMessage);
             return;
         }
 
         String repeatedPassword = repeatPasswordField.getText();
 
         if (!password.equals(repeatedPassword)) {
-            errorLabel.setText("Passwords don't match!");
-            passwordField.getStyleClass().add("field_error");
-            repeatPasswordField.getStyleClass().add("field_error");
+            fieldError(currentPassField, errorLabel, "Passwords don't match!");
+            fieldError(currentRepeatField);
             return;
         }
 
@@ -176,8 +181,7 @@ public class RegisterPageController extends FormErrorController {
             swapPage("/fxml/AccountManagePage.fxml");
         } else {
             // Show error
-            errorLabel.setText("Account with that username already exists!");
-            usernameField.getStyleClass().add("field_error");
+            fieldError(usernameField, errorLabel, "Account with that username already exists!");
         }
     }
 
