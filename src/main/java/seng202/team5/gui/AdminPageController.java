@@ -59,6 +59,7 @@ public class AdminPageController extends PageController {
                 User.extractor());
         userTable.setItems(users);
         resultsLabel.setText(String.format("Found %d users", users.size()));
+        userTable.setPlaceholder(new Label("No matching users found"));
         searchButton.setTooltip(new Tooltip("Search for query"));
         doneButton.setTooltip(new Tooltip("Return to account page"));
     }

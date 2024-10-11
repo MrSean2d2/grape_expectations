@@ -90,7 +90,7 @@ public class AccountManagePageController extends PageController {
 
         // Update favourite count text
         ReviewDAO reviewDAO = new ReviewDAO();
-        int numWines = reviewDAO.getFromUser(curUser.getId()).size();
+        int numWines = reviewDAO.getFromUser(curUser.getId(), false).size();
         String wineLabel = "wine";
         if (numWines != 1) {
             wineLabel = "wines";

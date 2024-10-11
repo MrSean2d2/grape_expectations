@@ -148,9 +148,9 @@ public class EditWinePopupController extends FormErrorController implements Clos
      * @param stage Top level container for this window
      */
     public void init(Stage stage) {
-        int minWidth = 762;
+        int minWidth = 776;
         stage.setMinWidth(minWidth);
-        int minHeight = 486;
+        int minHeight = 549;
         stage.setMinHeight(minHeight);
     }
 

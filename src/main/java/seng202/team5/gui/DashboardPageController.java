@@ -14,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -50,6 +51,8 @@ public class DashboardPageController extends PageController {
     public RadioButton yearPieChartButton;
     @FXML
     public RadioButton tagPieChartRadioButton;
+    @FXML
+    public GridPane radioButtonContainer;
     @FXML
     public Label topColourLabel;
     @FXML
@@ -105,9 +108,11 @@ public class DashboardPageController extends PageController {
                     + (5 - numWinesReviewed)
                     + " more wine(s) to view Pie Chart Stats!");
             notEnoughRatingsMessageLabel.setVisible(true);
+            setPieChartButtons(false);
         } else {
             pieChart.setVisible(true);
             notEnoughRatingsMessageLabel.setVisible(false);
+            setPieChartButtons(true);
         }
         updateTopLabels();
 
@@ -117,6 +122,21 @@ public class DashboardPageController extends PageController {
         tagsDAO = new TagsDAO();
 
         initialiseTagList();
+    }
+
+
+    /**
+     * set radio buttons and container of radio buttons to hide or show depending on if
+     * a pie chart can be made (enough wines have been reviewed)
+     * @param visibility boolean whether buttons should be shown
+     */
+    public void setPieChartButtons(boolean visibility) {
+        colourPieChartButton.setVisible(visibility);
+        regionPieChartButton.setVisible(visibility);
+        tagPieChartRadioButton.setVisible(visibility);
+        varietyPieChartButton.setVisible(visibility);
+        yearPieChartButton.setVisible(visibility);
+        radioButtonContainer.setVisible(visibility);
     }
 
     /**

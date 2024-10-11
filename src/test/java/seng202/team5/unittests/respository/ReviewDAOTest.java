@@ -174,10 +174,10 @@ public class ReviewDAOTest {
         reviewDAO.add(testReview4);
         reviewDAO.add(testReview5);
 
-        List<Review> reviews1 = reviewDAO.getFromUser(testUser.getId());
+        List<Review> reviews1 = reviewDAO.getFromUser(testUser.getId(), true);
         assertEquals(3, reviews1.size());
 
-        List<Review> reviews2 = reviewDAO.getFromUser(testUser2.getId());
+        List<Review> reviews2 = reviewDAO.getFromUser(testUser2.getId(), true);
         assertEquals(2, reviews2.size());
     }
 
