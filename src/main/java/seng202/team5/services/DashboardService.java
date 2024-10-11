@@ -76,7 +76,7 @@ public class DashboardService {
      * Initialises data for service, aggregates ratings by variety, region, year.
      */
     public void initializeData() {
-        userReviews = reviewDAO.getFromUser(userId);
+        userReviews = reviewDAO.getFromUser(userId, true);
         TagsDAO tagsDAO = new TagsDAO();
 
         // Create a hash map for each property
