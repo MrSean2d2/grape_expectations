@@ -13,7 +13,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Callback;
 import seng202.team5.models.User;
 import seng202.team5.services.UserService;
@@ -62,7 +61,6 @@ public class ManageUserActionCellFactory implements
                             FXMLLoader editUserLoader = new FXMLLoader(getClass()
                                     .getResource("/fxml/EditUserPopup.fxml"));
                             Parent root = editUserLoader.load();
-                            PageController pageController = editUserLoader.getController();
                             Scene scene = new Scene(root);
                             Stage stage = new Stage();
                             stage.setScene(scene);
