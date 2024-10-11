@@ -155,14 +155,6 @@ public class DetailedViewPageController extends PageController implements Closab
             varietyLabel.textProperty().bind(selectedWine.wineVarietyProperty());
             vineyardLabel.textProperty().bind(selectedWine.vineyardProperty()
                     .map(Vineyard::getName));
-            /*nameLabel.setText(selectedWine.getName());
-            priceLabel.setText("Price: $" + selectedWine.getPrice());
-            yearLabel.setText("Year: " + selectedWine.getYear());
-            ratingLabel.setText("Score: " + selectedWine.getRating());
-            wineDescriptionLabel.setText(selectedWine.getDescription());
-            provinceLabel.setText("Province: " + selectedWine.getRegion());
-            varietyLabel.setText("Variety: " + selectedWine.getWineVariety());
-            vineyardLabel.setText("Vineyard: " + selectedWine.getVineyard().getName());*/
         }
     }
 
