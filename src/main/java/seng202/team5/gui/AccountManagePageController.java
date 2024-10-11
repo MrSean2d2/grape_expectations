@@ -64,8 +64,10 @@ public class AccountManagePageController extends PageController {
         User curUser = UserService.getInstance().getCurrentUser();
         if (!curUser.getIsAdmin()) {
             adminButton.setVisible(false);
+            adminButton.setManaged(false);
         } else {
             adminButton.setDisable(false);
+            adminButton.setManaged(true);
         }
 
         // Create a new cutout circle to display the image in
