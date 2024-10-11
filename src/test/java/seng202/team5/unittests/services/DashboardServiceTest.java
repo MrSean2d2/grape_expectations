@@ -32,9 +32,7 @@ public class DashboardServiceTest {
     private WineDAO wineDAO;
     private VineyardDAO vineyardDAO;
     private TagsDAO tagsDAO;
-    private UserDAO userDAO;
     public static DatabaseService databaseService;
-    private UserService userService;
 
     /**
      * Sets up database.
@@ -58,13 +56,13 @@ public class DashboardServiceTest {
     public void resetDB() throws DuplicateEntryException {
         databaseService.resetDb();
         UserService.removeInstance();
-        userService = UserService.getInstance();
+        UserService userService = UserService.getInstance();
         userService.signOut();
 
         reviewDAO = new ReviewDAO();
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
-        userDAO = new UserDAO();
+        UserDAO userDAO = new UserDAO();
         tagsDAO = new TagsDAO();
 
         User testUser = new User("Test User!", "password", Role.USER, 0);
