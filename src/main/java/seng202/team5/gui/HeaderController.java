@@ -86,10 +86,14 @@ public class HeaderController {
 
                 accountIcon.setImage(new Image(
                         Objects.requireNonNull(
-                                getClass().getResourceAsStream("/images/User.png"))));
+                                getClass().getResourceAsStream(newUser.getIcon()))));
             } else {
                 dashboardButton.setVisible(false);
                 dashboardButton.setManaged(false);
+
+                accountIcon.setImage(new Image(
+                        Objects.requireNonNull(
+                                getClass().getResourceAsStream("/images/User.png"))));
             }
         });
 

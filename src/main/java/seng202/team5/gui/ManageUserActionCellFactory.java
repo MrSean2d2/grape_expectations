@@ -13,7 +13,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Callback;
 import seng202.team5.models.User;
 import seng202.team5.services.UserService;
@@ -26,6 +25,17 @@ import seng202.team5.services.UserService;
  */
 public class ManageUserActionCellFactory implements
         Callback<TableColumn<User, Boolean>, TableCell<User, Boolean>> {
+    private final PageController pageController;
+
+    /**
+     * ManageUserActionCellFactory constructor.
+     *
+     * @param pageController reference to the page controller of the page which
+     *                       loads the edit user popup
+     */
+    public ManageUserActionCellFactory(PageController pageController) {
+        this.pageController = pageController;
+    }
 
     @Override
     public TableCell<User, Boolean> call(TableColumn<User, Boolean> userStringTableColumn) {
@@ -62,7 +72,9 @@ public class ManageUserActionCellFactory implements
                             FXMLLoader editUserLoader = new FXMLLoader(getClass()
                                     .getResource("/fxml/EditUserPopup.fxml"));
                             Parent root = editUserLoader.load();
-                            PageController pageController = editUserLoader.getController();
+                            PageController editUserController = editUserLoader.getController();
+                            editUserController.setHeaderController(
+                                    pageController.getHeaderController());
                             Scene scene = new Scene(root);
                             Stage stage = new Stage();
                             stage.setScene(scene);

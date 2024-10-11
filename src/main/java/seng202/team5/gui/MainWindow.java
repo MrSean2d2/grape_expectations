@@ -1,6 +1,7 @@
 package seng202.team5.gui;
 
 import java.io.IOException;
+import java.util.Objects;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,11 +30,13 @@ public class MainWindow extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        int width = 1200;
+        int height = 800;
         System.setProperty("prism.lcdtext", "false");
 
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/Header.fxml"));
         Parent root = baseLoader.load();
-        Scene scene = new Scene(root, 1200, 800);
+        Scene scene = new Scene(root, width, height);
         String styleSheetUrl = styleSheet;
         scene.getStylesheets().add(styleSheetUrl);
 
@@ -42,11 +45,13 @@ public class MainWindow extends Application {
 
         primaryStage.setTitle("Grape Expectations");
         primaryStage.getIcons().add(
-                new Image(getClass().getResource("/images/favicon.png").toExternalForm()));
+                new Image(Objects.requireNonNull(getClass().getResource("/images/favicon.png"))
+                        .toExternalForm()));
 
         primaryStage.setScene(scene);
         primaryStage.show();
-        primaryStage.setResizable(false);
+        primaryStage.setMinHeight(height);
+        primaryStage.setMinWidth(width);
     }
 
     /**

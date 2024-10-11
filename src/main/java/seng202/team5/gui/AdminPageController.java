@@ -3,7 +3,6 @@ package seng202.team5.gui;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -52,7 +51,7 @@ public class AdminPageController extends PageController {
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
         //actionColumn.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
-        actionColumn.setCellFactory(new ManageUserActionCellFactory());
+        actionColumn.setCellFactory(new ManageUserActionCellFactory(this));
         actionColumn.setSortable(false);
 
         ObservableList<User> users = FXCollections.observableList(userDAO.getAll(),

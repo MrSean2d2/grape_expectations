@@ -156,6 +156,8 @@ public class UserService {
             return "Password cannot be empty!";
         } else if (password.length() < 8) {
             return "Password must contain at least 8 characters!";
+        } else if (password.length() > 20) {
+            return "Password cannot exceed 20 characters!";
         } else {
             Pattern letter = Pattern.compile("[a-zA-z]");
             Matcher hasLetter = letter.matcher(password);

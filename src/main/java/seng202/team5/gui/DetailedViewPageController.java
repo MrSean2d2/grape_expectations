@@ -7,23 +7,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,6 +55,8 @@ public class DetailedViewPageController extends PageController implements Closab
     TagsDAO tagsDAO;
     AssignedTagsDAO assignedTagsDAO;
     List<Tag> tagsList;
+
+    final int MAX_REVIEW_CHARACTERS = 500;
 
     @FXML
     private Label addTagLabel;
@@ -216,6 +215,12 @@ public class DetailedViewPageController extends PageController implements Closab
             addTagLabel.setManaged(false);
 
             noteTextArea.setDisable(false);
+            noteTextArea.setTextFormatter(new TextFormatter<String>(change -> {
+                if (change.getControlNewText().length() > MAX_REVIEW_CHARACTERS) {
+                    return null;
+                }
+                return change;
+            }));
             ratingStars.setDisable(false);
 
             if (review != null) {
@@ -273,27 +278,9 @@ public class DetailedViewPageController extends PageController implements Closab
      */
     private void editWine(ActionEvent event) {
         Wine selectedWine = WineService.getInstance().getSelectedWine();
-        try {
-            FXMLLoader editWineLoader = new FXMLLoader(getClass()
-                    .getResource("/fxml/EditWinePopup.fxml"));
-            Parent root = editWineLoader.load();
-            EditWinePopupController controller = editWineLoader.getController();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle(String.format("Edit wine %s", selectedWine.getName()));
-            controller.init(stage);
-            controller.setHeaderController(getHeaderController());
-            String styleSheetUrl = MainWindow.styleSheet;
-            scene.getStylesheets().add(styleSheetUrl);
-            stage.initOwner(backButton.getScene().getWindow());
-            stage.initModality(Modality.WINDOW_MODAL);
-            WineService.getInstance().getWineList().addListener(
-                    (ListChangeListener<Wine>) change -> closeWindow());
-            stage.showAndWait();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        openPopup("/fxml/EditWinePopup.fxml",
+                selectedWine.nameProperty().map(n -> String.format("Edit Wine: %s", n)),
+                backButton.getScene().getWindow());
     }
 
     /**

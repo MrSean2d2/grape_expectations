@@ -153,9 +153,9 @@ public class EditWinePopupController extends FormErrorController implements Clos
      * @param stage Top level container for this window
      */
     public void init(Stage stage) {
-        int minWidth = 762;
+        int minWidth = 776;
         stage.setMinWidth(minWidth);
-        int minHeight = 486;
+        int minHeight = 549;
         stage.setMinHeight(minHeight);
     }
 
@@ -334,6 +334,7 @@ public class EditWinePopupController extends FormErrorController implements Clos
                     wine = new Wine(name, description, year, rating, price,
                             variety, colour, vineyard);
                     wineDAO.add(wine);
+                    addNotification("Wine added", "#d5e958");
                     closeWindow();
                 }
             } else {
@@ -350,6 +351,7 @@ public class EditWinePopupController extends FormErrorController implements Clos
                     wine.setColour(colour);
                     wine.setVineyard(vineyard);
                     wineDAO.update(wine);
+                    addNotification("Wine updated", "#d5e958");
                     closeWindow();
                 }
             }

@@ -1,6 +1,5 @@
 package seng202.team5.gui;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import javafx.beans.value.ObservableValue;
@@ -22,7 +21,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -106,6 +104,7 @@ public class DataListPageController extends PageController {
     private double maxRatingFilter;
 
     private static final Logger log = LogManager.getLogger(DataListPageController.class);
+    private boolean addedWine = false;
 
     /**
      * Initializes the data List by calling {@link seng202.team5.services.WineService}
@@ -194,16 +193,22 @@ public class DataListPageController extends PageController {
             tagComboBox.setValue("All Reviews");
             switch (category) {
                 case "Variety":
+                    varietyFilter = filterTerm;
                     varietyComboBox.setValue(filterTerm);
                     break;
                 case "Region":
+                    regionFilter = filterTerm;
                     regionComboBox.setValue(filterTerm);
                     break;
                 case "Year":
+                    yearFilter = filterTerm;
                     yearComboBox.setValue(filterTerm);
                     break;
                 case "Colour":
-                    colourComboBox.setValue(filterTerm);
+                    colourFilter = filterTerm;
+                    if (!filterTerm.equals("Unknown")) {
+                        colourComboBox.setValue(filterTerm);
+                    }
                     break;
                 case "Tags":
                     tagComboBox.setValue(filterTerm);
@@ -228,25 +233,10 @@ public class DataListPageController extends PageController {
 
     private void addWine(ActionEvent event) {
         WineService.getInstance().setSelectedWine(null);
-        try {
-            FXMLLoader addWineLoader = new FXMLLoader(getClass().getResource(
-                    "/fxml/EditWinePopup.fxml"));
-            Parent root = addWineLoader.load();
-            EditWinePopupController controller = addWineLoader.getController();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Add new wine");
-            controller.init(stage);
-            controller.setHeaderController(getHeaderController());
-            String styleSheetUrl = MainWindow.styleSheet;
-            scene.getStylesheets().add(styleSheetUrl);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.showAndWait();
-            onResetSearchFilterButtonClicked();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        openPopup("/fxml/EditWinePopup.fxml", "Add new wine", addWineButton.getScene().getWindow());
+        addedWine = true;
+        applySearchFilters();
+        setDefaults();
     }
 
     /**
@@ -470,20 +460,24 @@ public class DataListPageController extends PageController {
         // Set the initial values
         priceRangeSlider.setLowValue(minPrice);
         priceRangeSlider.setHighValue(maxPrice);
+        ratingSlider.setValue(minRating);
 
         minPriceValue.setText(String.valueOf(minPrice));
         maxPriceValue.setText(String.valueOf(maxPrice));
         ratingSliderValue.setText(String.valueOf(minRating));
 
         // Defaults
-        this.yearFilter = "0";
-        this.varietyFilter = "0";
-        this.colourFilter = "0";
-        this.regionFilter = "0";
-        this.minPriceFilter = 0.0;
-        this.maxPriceFilter = 800.0;
-        this.minRatingFilter = 0.0;
-        this.maxRatingFilter = 100.0;
+        if (!addedWine) {
+            this.yearFilter = "0";
+            this.varietyFilter = "0";
+            this.colourFilter = "0";
+            this.regionFilter = "0";
+            this.minPriceFilter = 0.0;
+            this.maxPriceFilter = 800.0;
+            this.minRatingFilter = 0.0;
+            this.maxRatingFilter = 100.0;
+        }
+        addedWine = false;
     }
 
     /**
@@ -510,7 +504,9 @@ public class DataListPageController extends PageController {
         ObservableList<Wine> observableQueryResults = WineService.getInstance().getWineList();
         wineTable.setItems(observableQueryResults);
         tableResults.setText(wineTable.getItems().size() + " results");
-        addNotification("Applied Filter", "#d5e958");
+        if (!addedWine) {
+            addNotification("Applied Filter", "#d5e958");
+        }
     }
 
     /**
