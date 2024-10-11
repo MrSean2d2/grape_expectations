@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -58,6 +59,8 @@ public class DetailedViewPageController extends PageController implements Closab
     TagsDAO tagsDAO;
     AssignedTagsDAO assignedTagsDAO;
     List<Tag> tagsList;
+
+    final int MAX_REVIEW_CHARACTERS = 500;
 
     @FXML
     private Label addTagLabel;
@@ -216,6 +219,12 @@ public class DetailedViewPageController extends PageController implements Closab
             addTagLabel.setManaged(false);
 
             noteTextArea.setDisable(false);
+            noteTextArea.setTextFormatter(new TextFormatter<String>(change -> {
+                if (change.getControlNewText().length() > MAX_REVIEW_CHARACTERS) {
+                    return null;
+                }
+                return change;
+            }));
             ratingStars.setDisable(false);
 
             if (review != null) {
