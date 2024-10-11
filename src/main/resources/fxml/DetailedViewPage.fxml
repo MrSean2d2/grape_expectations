@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" prefHeight="889.0" prefWidth="1009.0" styleClass="primary" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DetailedViewPageController">
+<GridPane alignment="CENTER" prefHeight="889.0" prefWidth="1009.0" styleClass="primary" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DetailedViewPageController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="500.0" prefWidth="1000.0" />
     </columnConstraints>
@@ -168,7 +168,7 @@
                         <Insets bottom="10.0" />
                     </VBox.margin>
                 </HBox>
-                <TextArea fx:id="noteTextArea" prefHeight="237.0" prefWidth="854.0" promptText="Enter your notes here" styleClass="textbox">
+                <TextArea fx:id="noteTextArea" prefHeight="237.0" prefWidth="854.0" promptText="Enter your notes here" styleClass="textbox" wrapText="true">
                     <font>
                         <Font size="14.0" />
                     </font>
