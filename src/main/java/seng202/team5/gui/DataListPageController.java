@@ -194,15 +194,19 @@ public class DataListPageController extends PageController {
             tagComboBox.setValue("All Reviews");
             switch (category) {
                 case "Variety":
+                    varietyFilter = filterTerm;
                     varietyComboBox.setValue(filterTerm);
                     break;
                 case "Region":
+                    regionFilter = filterTerm;
                     regionComboBox.setValue(filterTerm);
                     break;
                 case "Year":
+                    yearFilter = filterTerm;
                     yearComboBox.setValue(filterTerm);
                     break;
                 case "Colour":
+                    colourFilter = filterTerm;
                     colourComboBox.setValue(filterTerm);
                     break;
                 case "Tags":
