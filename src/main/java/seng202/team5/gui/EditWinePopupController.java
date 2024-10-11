@@ -26,6 +26,8 @@ import seng202.team5.services.WineService;
 public class EditWinePopupController extends FormErrorController implements ClosableWindow {
 
     @FXML
+    public Button submitButton;
+    @FXML
     private Button closeButton;
 
     @FXML
@@ -111,9 +113,6 @@ public class EditWinePopupController extends FormErrorController implements Clos
         wineLabel.setText(wine.getName());
         nameField.setText(wine.getName());
         yearField.setText(String.valueOf(wine.getYear()));
-
-        closeButton.setTooltip(new Tooltip("Close Window"));
-        deleteButton.setTooltip(new Tooltip("Delete"));
     }
 
     /**
@@ -163,6 +162,14 @@ public class EditWinePopupController extends FormErrorController implements Clos
         OpenWindowsService.getInstance().addWindow(this);
         wineService = WineService.getInstance();
         wine = wineService.getSelectedWine();
+
+        closeButton.setTooltip(new Tooltip("Close window"));
+        deleteButton.setTooltip(new Tooltip("Delete wine"));
+        submitButton.setTooltip(new Tooltip("Submit changes"));
+        yearField.setTooltip(new Tooltip("Year of wine"));
+        priceField.setTooltip(new Tooltip("Price of wine"));
+        ratingField.setTooltip(new Tooltip("Rating of wine"));
+
         if (wine != null) {
             initLabels();
             initRating();
@@ -173,11 +180,15 @@ public class EditWinePopupController extends FormErrorController implements Clos
             actionLabel.setText("Add wine: ");
             wineLabel.setVisible(false);
             deleteButton.setVisible(false);
+
+
         }
         descriptionArea.setTextFormatter(new TextFormatter<String>(change ->
                 change.getControlNewText().length() <= maxChars ? change : null));
 
         initAutoComplete();
+
+        ratingSlider.setTooltip(new Tooltip("Select wine rating"));
 
 
     }

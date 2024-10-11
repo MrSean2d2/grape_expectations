@@ -9,13 +9,18 @@ import seng202.team5.repository.UserDAO;
 import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 
-
 /**
  * A controller for the edit user window.
  *
  * @author Sean Reitsma
  */
 public class EditUserPopupController extends PageController implements ClosableWindow {
+
+    @FXML
+    private Button doneButton;
+
+    @FXML
+    private Button changePasswordButton;
 
     @FXML
     private ComboBox<Role> roleComboBox;
@@ -43,7 +48,11 @@ public class EditUserPopupController extends PageController implements ClosableW
         roleComboBox.getItems().setAll(Role.values());
         roleComboBox.getSelectionModel().select(curUser.getRole());
 
-        closeButton.setTooltip(new Tooltip("Close Window"));
+        closeButton.setTooltip(new Tooltip("Close window"));
+        doneButton.setTooltip(new Tooltip("Submit changes"));
+        changePasswordButton.setTooltip(new Tooltip("Edit user's password"));
+        roleComboBox.setTooltip(new Tooltip("Select user role"));
+
     }
 
     @FXML

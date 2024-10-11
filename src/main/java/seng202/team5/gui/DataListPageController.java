@@ -126,6 +126,7 @@ public class DataListPageController extends PageController {
         searchButton.setTooltip(new Tooltip("Enter search query"));
         resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
         tagComboBox.setTooltip(new Tooltip("Filter by tag"));
+        colourComboBox.setTooltip(new Tooltip("Filter by colour"));
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
