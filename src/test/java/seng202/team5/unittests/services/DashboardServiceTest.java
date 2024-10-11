@@ -37,10 +37,10 @@ public class DashboardServiceTest {
     private UserService userService;
 
     /**
-     * Sets up database
+     * Sets up database.
      *
-     * @throws DuplicateEntryException if duplicate entry added
-     * @throws InstanceAlreadyExistsException if entry already exists
+     * @throws DuplicateEntryException if duplicate entry added.
+     * @throws InstanceAlreadyExistsException if entry already exists.
      */
     @BeforeAll
     public static void setup() throws DuplicateEntryException, InstanceAlreadyExistsException {
@@ -50,9 +50,9 @@ public class DashboardServiceTest {
     }
 
     /**
-     * Resets the database before each test
+     * Resets the database before each test.
      *
-     * @throws DuplicateEntryException if duplicate entry added
+     * @throws DuplicateEntryException if duplicate entry added.
      */
     @BeforeEach
     public void resetDB() throws DuplicateEntryException {
@@ -96,7 +96,7 @@ public class DashboardServiceTest {
     }
 
     /**
-     * Tests method retrieving the top wine varieties based on ratings
+     * Tests method retrieving the top wine varieties based on ratings.
      */
     @Test
     public void testGetTopVariety() {
@@ -109,7 +109,7 @@ public class DashboardServiceTest {
     }
 
     /**
-     * Tests method retrieving the top wine regions based on ratings
+     * Tests method retrieving the top wine regions based on ratings.
      */
     @Test
     public void testTopRegion() {
@@ -121,7 +121,7 @@ public class DashboardServiceTest {
     }
 
     /**
-     * Tests method retrieving the top wine years based on ratings
+     * Tests method retrieving the top wine years based on ratings.
      */
     @Test
     public void testTopYear() {
@@ -133,7 +133,7 @@ public class DashboardServiceTest {
     }
 
     /**
-     * Tests method retrieving the top wine colours based on ratings
+     * Tests method retrieving the top wine colours based on ratings.
      */
     @Test
     public void testTopColour() {
@@ -152,8 +152,8 @@ public class DashboardServiceTest {
 //    }
 
     /**
-     * Tests the sorting of Hashmaps containing wine varieties and years
-     * @throws DuplicateEntryException if a duplicate entry is added
+     * Tests the sorting of Hashmaps containing wine varieties and years.
+     * @throws DuplicateEntryException if a duplicate entry is added.
      */
     @Test
     public void testSortHashMap() throws DuplicateEntryException {
@@ -172,5 +172,32 @@ public class DashboardServiceTest {
         Assertions.assertEquals("Pinot Noir", topVariety.getFirst().getKey());
 
         Assertions.assertEquals(2020, topYear.getFirst().getKey().intValue());
+    }
+
+    /**
+     * Tests method with an invalid label.
+     */
+    @Test
+    public void testSetandGetSelectedPieSearchWithInvalidLabel(){
+        String category = "Wine Variety";
+        String filterTerm = "Pinot Noir";
+        dashboardService.setSelectedPieSliceSearch(category,filterTerm);
+
+        List<String> result = dashboardService.getSelectedPieSliceSearch();
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(2,result.size());
+        Assertions.assertEquals(category,result.getFirst());
+        Assertions.assertEquals(filterTerm,result.get(1));
+    }
+
+    /**
+     * Tests the initialisation of data. Ensures user reviews is not null.
+     */
+    @Test
+    public void testInitialiseData(){
+        dashboardService.initializeData();
+        Assertions.assertNotNull(dashboardService.getUserReviews());
+
     }
 }
