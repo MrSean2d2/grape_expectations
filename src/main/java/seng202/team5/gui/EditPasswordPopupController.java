@@ -140,8 +140,9 @@ public class EditPasswordPopupController extends FormErrorController {
     }
 
     /**
-     * Handles event of enter pressed
-     * @param event
+     * Handles event of enter pressed.
+     *
+     * @param event the KeyEvent
      */
 
     @FXML

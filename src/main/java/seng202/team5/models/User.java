@@ -221,11 +221,11 @@ public class User {
     }
 
     /**
-     * Checking for equality of user objects
+     * Checking for equality of user objects.
+     *
      * @param o object to check equality
      * @return true if equal
      */
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

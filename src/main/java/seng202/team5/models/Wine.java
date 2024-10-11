@@ -361,11 +361,11 @@ public class Wine {
     }
 
     /**
-     * Checking for equality of wine objects
+     * Checking for equality of wine objects.
+     *
      * @param o object to check equality
      * @return true if equal
      */
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
