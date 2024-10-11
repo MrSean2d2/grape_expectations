@@ -1,19 +1,18 @@
 package seng202.team5.unittests.services;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import seng202.team5.models.Wine;
-import seng202.team5.services.DataLoadService;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.spy;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.spy;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import seng202.team5.models.Wine;
+import seng202.team5.services.DataLoadService;
 
 public class DataLoadServiceTest {
     private DataLoadService dataLoadService;
@@ -33,9 +32,13 @@ public class DataLoadServiceTest {
     public void loadFileTestFirst() throws IOException {
         List<String[]> records = dataLoadService.loadFile(Files.newInputStream(
                 Path.of(csvFilePath)));
-        String[] expectedFirst = {"174", "New Zealand", "The Stoneleigh style traditionally favors ripeness over herbaceousness, and the 2008 holds true to form," +
-                " offering up grapefruit and nectarine aromas and an appealing blend of citrus and stone-fruit flavors. " +
-                new String("It's plump and round, yet finishes fresh. Good as an apéritif or with light dishes.".getBytes(), StandardCharsets.UTF_8), null,
+        String[] expectedFirst = {"174", "New Zealand", "The Stoneleigh style traditionally "
+                + "favors ripeness over herbaceousness, and the 2008 holds true to form,"
+                + " offering up grapefruit and nectarine aromas and an "
+                + "appealing blend of citrus and stone-fruit flavors. "
+                + new String(("It's plump and round, yet finishes fresh. "
+                + "Good as an apéritif or with light dishes.").getBytes(),
+                StandardCharsets.UTF_8), null,
                 "88", "19", "Marlborough",
                 null, null, "Joe Czerwinski",
                 "@JoeCz", "Stoneleigh 2008 Sauvignon Blanc (Marlborough)",

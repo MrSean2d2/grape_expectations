@@ -43,6 +43,9 @@ public class AdminPageController extends PageController {
 
     private UserDAO userDAO;
 
+    /**
+     * Initialise columns.
+     */
     @FXML
     private void initialize() {
         userDAO = new UserDAO();
@@ -52,18 +55,26 @@ public class AdminPageController extends PageController {
         actionColumn.setCellFactory(new ManageUserActionCellFactory());
         actionColumn.setSortable(false);
 
-        ObservableList<User> users = FXCollections.observableArrayList(userDAO.getAll());
+        ObservableList<User> users = FXCollections.observableList(userDAO.getAll(),
+                User.extractor());
         userTable.setItems(users);
         resultsLabel.setText(String.format("Found %d users", users.size()));
     }
 
+    /**
+     * Closes admin page, swap to account manage page.
+     */
     @FXML
-    private void done(ActionEvent e) {
-        // Close open edit user pop ups
+    private void done() {
         OpenWindowsService.getInstance().closeAllWindows();
         swapPage("/fxml/AccountManagePage.fxml");
     }
 
+    /**
+     * Handles event of search after enter pressed.
+     *
+     * @param event key event
+     */
     @FXML
     private void enterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -71,10 +82,13 @@ public class AdminPageController extends PageController {
         }
     }
 
+    /**
+     * Handles event of search pressed, searches users for term in search field.
+     */
     @FXML
     private void searchPressed() {
         List<User> results = userDAO.getMatchingUserName(searchField.getText());
-        ObservableList<User> users = FXCollections.observableArrayList(results);
+        ObservableList<User> users = FXCollections.observableList(results, User.extractor());
         userTable.setItems(users);
         resultsLabel.setText(String.format("Found %d users with name '%s'",
                 users.size(), searchField.getText()));

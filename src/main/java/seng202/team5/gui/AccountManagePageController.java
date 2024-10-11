@@ -1,7 +1,6 @@
 package seng202.team5.gui;
 
 import java.util.Optional;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -34,6 +33,9 @@ public class AccountManagePageController extends PageController {
     private Button adminButton;
 
     @FXML
+    private Button changePasswordButton;
+
+    @FXML
     private Label usernameLabel;
 
     @FXML
@@ -64,6 +66,15 @@ public class AccountManagePageController extends PageController {
         User curUser = UserService.getInstance().getCurrentUser();
         if (curUser.getIsAdmin()) {
             adminButton.setDisable(false);
+
+            adminButton.setManaged(true);
+            adminButton.setVisible(true);
+        } else {
+            changePasswordButton.setDisable(false);
+            changePasswordButton.setVisible(true);
+
+            adminButton.setVisible(false);
+            adminButton.setManaged(false);
         }
 
         // Create a new cutout circle to display the image in
@@ -95,13 +106,7 @@ public class AccountManagePageController extends PageController {
         userJoinDateLabel.setText("---");
 
         // Make the account button change text
-        usernameLabel.textProperty().bind(
-                Bindings.createStringBinding(() ->
-                    curUser != null
-                    ? curUser.getUsername() : "Null user!",
-                    UserService.getInstance().getUserProperty()
-                )
-        );
+        usernameLabel.textProperty().bind(curUser.usernameProperty());
     }
 
     /**
@@ -151,6 +156,20 @@ public class AccountManagePageController extends PageController {
         }
     }
 
+    /**
+     *  Opens the edit password pop up when user wants to change password.
+     */
+    @FXML
+    private void changePassword() {
+        UserService userService = UserService.getInstance();
+        User curUser = userService.getCurrentUser();
+        userService.setSelectedUser(curUser);
+        openEditPasswordPopup(true, changePasswordButton.getScene().getWindow());
+    }
+
+    /**
+     * Loads the admin page.
+     */
     @FXML
     private void loadAdminPage() {
         swapPage("/fxml/AdminPage.fxml");

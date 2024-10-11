@@ -7,24 +7,19 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvException;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.yaml.snakeyaml.Yaml;
 import seng202.team5.exceptions.InvalidCsvEntryException;
 import seng202.team5.models.Vineyard;
 import seng202.team5.models.Wine;
@@ -48,9 +43,8 @@ public class DataLoadService {
      * DataLoadService constructor.
      */
     public DataLoadService() {
-        this.fileName = pathFromConfig();
+        this.fileName = null;
         this.wineService = WineService.getInstance();
-        log.info("Selected {} for populating database", fileName);
     }
 
     /**
@@ -60,35 +54,6 @@ public class DataLoadService {
     public DataLoadService(String specifiedFileName) {
         this.fileName = Path.of(specifiedFileName);
         this.wineService = WineService.getInstance();
-    }
-
-    /**
-     * Gets the csv file path from the config file if it exists returning null
-     * otherwise.
-     *
-     * @return the Path of the csv file (null if not found).
-     */
-    private Path pathFromConfig() {
-        Yaml yaml = new Yaml();
-        String configPath = this.getClass().getProtectionDomain()
-                .getCodeSource().getLocation().getPath();
-        configPath = URLDecoder.decode(configPath, StandardCharsets.UTF_8);
-        File jarDir = new File(configPath);
-        configPath = jarDir.getParentFile() + "/config.yaml";
-        try (InputStream inputStream = Files.newInputStream(Paths.get(configPath))) {
-            Map<String, Object> obj = yaml.load(inputStream);
-            Object result = obj.get("csvPath");
-            if (result instanceof String) {
-                log.info("Parsed csvPath: {}", result);
-                return Path.of((String) result);
-            } else {
-                log.error("Unable to parse config file, 'csvPath' value is not a string");
-                return null;
-            }
-        } catch (IOException e) {
-            log.warn("No config file present", e);
-            return null;
-        }
     }
 
     /**
@@ -104,7 +69,6 @@ public class DataLoadService {
             if (csvEntry[4] == null) {
                 throw new InvalidCsvEntryException("Invalid rating");
             }
-            int ratingValue = numFromTextOr0(csvEntry[4]);
 
             // Wine Price
             if (csvEntry[5] == null) {
@@ -139,6 +103,7 @@ public class DataLoadService {
 
             // Wine Description - description can be empty
             String description = csvEntry[2];
+            int ratingValue = numFromTextOr0(csvEntry[4]);
 
             // Return the created Wine object
             Wine resultWine = new Wine(name, description, year, ratingValue, price,

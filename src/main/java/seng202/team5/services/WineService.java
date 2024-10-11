@@ -2,10 +2,15 @@ package seng202.team5.services;
 
 import java.time.Year;
 import java.util.List;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seng202.team5.exceptions.NotFoundException;
+import seng202.team5.models.AssignedTag;
 import seng202.team5.models.Wine;
+import seng202.team5.repository.AssignedTagsDAO;
+import seng202.team5.repository.ReviewDAO;
+import seng202.team5.repository.TagsDAO;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
 
@@ -52,25 +57,61 @@ public class WineService {
     }
 
     /**
-     * Execute a search query and set the Observable wine list to the result.
+     * Execute the search query and store the results in the observable wine list.
      *
-     * @param search search term
-     * @param variety variety
-     * @param region region
-     * @param year year
-     * @param minPrice min price
-     * @param maxPrice max price
-     * @param minRating min rating
-     * @param maxRating max rating
-     * @param favourite match favourites
+     * @param search the search term
+     * @param variety the variety
+     * @param colour the colour
+     * @param region the region
+     * @param year the year
+     * @param minPrice the minimum price
+     * @param maxPrice the maximum price
+     * @param minRating the minimum rating
+     * @param maxRating the maximum rating
      */
-    public void searchWines(String search, String variety, String region, String year,
-                            double minPrice, double maxPrice, double minRating,
-                            double maxRating, boolean favourite) {
-        String sql = wineDAO.queryBuilder(search, variety, region, year,
-                minPrice, maxPrice, minRating, maxRating, favourite);
+    public void searchWines(String search, String variety,
+                            String colour, String region,
+                            String year, double minPrice,
+                            double maxPrice, double minRating,
+                            double maxRating, String selectedTag) {
+        String sql = wineDAO.queryBuilder(search, variety, colour, region, year, minPrice,
+                maxPrice, minRating, maxRating);
         List<Wine> wines = wineDAO.executeSearchFilter(sql, search);
         wineList = FXCollections.observableList(wines, Wine.extractor());
+        filterWinesByTag(selectedTag);
+    }
+
+    /**
+     * Filters wines by the selected tag.
+     *
+     * @param selectedTag tag selected to filter by.
+     */
+    public void filterWinesByTag(String selectedTag) {
+        if (UserService.getInstance().getCurrentUser() != null && selectedTag != null) {
+            ReviewDAO reviewDAO = new ReviewDAO();
+            TagsDAO tagsDAO = new TagsDAO();
+            AssignedTagsDAO assignedTagsDAO = new AssignedTagsDAO();
+            int currentUserId = UserService.getInstance().getCurrentUser().getId();
+
+            List<Integer> wineIds;
+            if (!selectedTag.equals("Tags")) {
+                if (selectedTag.equals("All Reviews")) {
+                    // Show all wines that the current user has reviewed
+                    wineIds = reviewDAO.getIdsFromUser(currentUserId);
+                } else {
+                    // Filter reviews that contain the selected tag
+                    int tagId = tagsDAO.getIdFromName(selectedTag, currentUserId);
+                    wineIds = assignedTagsDAO.getTagsFromUser(currentUserId, tagId).stream()
+                            .map(AssignedTag::getWineId).toList();
+
+                }
+                List<Wine> filteredWines = wineList.stream()
+                        .filter(wine -> wineIds.contains(wine.getId()))   // Tag filtering
+                        .collect(Collectors.toList());
+
+                wineList = FXCollections.observableList(filteredWines, Wine.extractor());
+            }
+        }
     }
 
     /**

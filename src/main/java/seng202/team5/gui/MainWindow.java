@@ -15,7 +15,7 @@ import javafx.stage.Stage;
  */
 public class MainWindow extends Application {
 
-    static String styleSheet = "/fxml/lightMode.css";
+    public static String styleSheet = "/fxml/lightMode.css";
 
     public MainWindow() { }
 

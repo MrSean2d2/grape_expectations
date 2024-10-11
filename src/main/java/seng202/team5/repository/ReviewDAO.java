@@ -107,6 +107,29 @@ public class ReviewDAO implements DAOInterface<Review> {
         }
     }
 
+    /**
+     * Get the list of wine ids from the user id.
+     *
+     * @param userid the user id
+     * @return the list of wine ids which the user has reviewed
+     */
+    public List<Integer> getIdsFromUser(int userid) {
+        List<Integer> ids = new ArrayList<>();
+        String sql = "SELECT wineid FROM review WHERE userid=?";
+        try (Connection conn = databaseService.connect();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userid);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ids.add(rs.getInt("wineid"));
+            }
+            return ids;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
 
     /**
      * Gets a list of a given wine's reviews (by id).
