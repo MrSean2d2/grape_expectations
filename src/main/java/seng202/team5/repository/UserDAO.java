@@ -235,15 +235,20 @@ public class UserDAO implements DAOInterface<User> {
     public void delete(int id) {
         String sql = "DELETE FROM user WHERE id=?";
         String sqlReview = "DELETE FROM review WHERE userid=?";
+        String sqlAssignedTag = "DELETE FROM assigned_tags WHERE userid=?";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql);
-                PreparedStatement rps = conn.prepareStatement(sqlReview)) {
+                PreparedStatement rps = conn.prepareStatement(sqlReview);
+                PreparedStatement atps = conn.prepareStatement(sqlAssignedTag)) {
 
             ps.setInt(1, id);
             ps.executeUpdate();
 
             rps.setInt(1, id);
             rps.executeUpdate();
+
+            atps.setInt(1, id);
+            atps.executeUpdate();
 
         } catch (SQLException sqlException) {
             log.error(sqlException);
