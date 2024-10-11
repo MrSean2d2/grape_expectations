@@ -84,9 +84,13 @@ public class ReviewDAO implements DAOInterface<Review> {
      * @param id id of the user
      * @return list of reviews from the given user
      */
-    public List<Review> getFromUser(int id) {
+    public List<Review> getFromUser(int id, boolean onlyRated) {
         List<Review> reviews = new ArrayList<>();
         String sql = "SELECT * FROM review WHERE userid=?";
+        if (onlyRated) {
+            sql += "AND rating !=-1";
+            System.out.println("only rated");
+        }
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
