@@ -1,10 +1,7 @@
 package seng202.team5.gui;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import seng202.team5.models.Role;
 import seng202.team5.models.User;
@@ -45,6 +42,8 @@ public class EditUserPopupController extends PageController implements ClosableW
         roleComboBox.setDisable(editingCurrentUser);
         roleComboBox.getItems().setAll(Role.values());
         roleComboBox.getSelectionModel().select(curUser.getRole());
+
+        closeButton.setTooltip(new Tooltip("Close Window"));
     }
 
     @FXML

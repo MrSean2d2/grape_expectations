@@ -5,11 +5,7 @@ import java.util.Optional;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -45,6 +41,9 @@ public class ManageUserActionCellFactory implements
             final Button editUserButton = new Button("Edit");
             @Override
             public void updateItem(Boolean item, boolean empty) {
+                deleteUserButton.setTooltip(new Tooltip("Delete User"));
+                editUserButton.setTooltip(new Tooltip("Edit User"));
+
                 super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);

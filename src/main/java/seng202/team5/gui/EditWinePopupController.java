@@ -4,14 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
@@ -118,6 +111,9 @@ public class EditWinePopupController extends FormErrorController implements Clos
         wineLabel.setText(wine.getName());
         nameField.setText(wine.getName());
         yearField.setText(String.valueOf(wine.getYear()));
+
+        closeButton.setTooltip(new Tooltip("Close Window"));
+        deleteButton.setTooltip(new Tooltip("Delete"));
     }
 
     /**

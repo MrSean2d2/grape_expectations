@@ -12,10 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -37,6 +34,8 @@ import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.TagService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
+
+import javax.tools.Tool;
 
 /**
  * Controller for the detailed view page.
@@ -144,6 +143,8 @@ public class DetailedViewPageController extends PageController implements Closab
      */
     @FXML
     private void initialize() {
+        backButton.setTooltip(new Tooltip("Close Window"));
+
         OpenWindowsService.getInstance().addWindow(this);
 
         Wine selectedWine = WineService.getInstance().getSelectedWine();
@@ -154,6 +155,8 @@ public class DetailedViewPageController extends PageController implements Closab
         initWineInfo(selectedWine);
         initUserReviews();
         initAdminActions();
+
+
     }
 
     /**

@@ -125,6 +125,7 @@ public class DataListPageController extends PageController {
         ratingSliderValue.setTooltip(new Tooltip("Set a minimum rating"));
         searchButton.setTooltip(new Tooltip("Enter search query"));
         resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
+        tagComboBox.setTooltip(new Tooltip("Filter by tag"));
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -221,6 +222,7 @@ public class DataListPageController extends PageController {
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
             addWineButton.setVisible(true);
             addWineButton.setOnAction(this::addWine);
+            addWineButton.setTooltip(new Tooltip("Add Wine"));
         }
     }
 

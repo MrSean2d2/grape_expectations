@@ -154,6 +154,11 @@ public class DashboardPageController extends PageController {
      * Populates the pie chart combo box.
      */
     private void initialiseRadioButtons() {
+        colourPieChartButton.setTooltip(new Tooltip("Favourite Colour Pie Chart"));
+        varietyPieChartButton.setTooltip(new Tooltip("Favourite Variety Pie Chart"));
+        regionPieChartButton.setTooltip(new Tooltip("Favourite Region Pie Chart"));
+        yearPieChartButton.setTooltip(new Tooltip("Favourite Year Pie Chart"));
+        tagPieChartRadioButton.setTooltip(new Tooltip("Favourite Tag Pie Chart"));
         List<RadioButton> radioButtonList = new ArrayList<>();
         radioButtonList.add(colourPieChartButton);
         radioButtonList.add(varietyPieChartButton);
@@ -243,6 +248,7 @@ public class DashboardPageController extends PageController {
         // Add an edit button if the user has the ability to
         if (canEdit) {
             Label editButton = new Label("Edit");
+            editButton.setTooltip(new Tooltip("Edit Wine List"));
             editButton.setAlignment(Pos.CENTER_RIGHT);
             editButton.setMaxHeight(Double.MAX_VALUE);
             HBox.setMargin(editButton, new Insets(0, 0, 0, 10));
@@ -276,7 +282,7 @@ public class DashboardPageController extends PageController {
 
         // More general styling stuff
         tagContainer.setStyle(tagContainer.getStyle() + "-fx-background-radius: 5;");
-
+        Tooltip.install(tagContainer,new Tooltip( name + " Wine List"));
         // Set click event to pass tag name to DataListPage
         tagContainer.setOnMouseClicked(event -> {
             try {
