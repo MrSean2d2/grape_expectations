@@ -274,7 +274,7 @@ public class DashboardPageController extends PageController {
                 break;
             case "Tags":
                 List<Map.Entry<String, Integer>> topTags = dashboardService.getTopTags();
-                if (topTags.size() == 0) {
+                if (topTags.isEmpty()) {
                     noTagMessageLabel.setVisible(true);
                     notEnoughRatingsMessageLabel.setVisible(false);
                 } else {
