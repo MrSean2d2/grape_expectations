@@ -104,6 +104,7 @@ public class DataListPageController extends PageController {
     private double maxRatingFilter;
 
     private static final Logger log = LogManager.getLogger(DataListPageController.class);
+    private boolean addedWine = false;
 
     /**
      * Initializes the data List by calling {@link seng202.team5.services.WineService}
@@ -233,6 +234,9 @@ public class DataListPageController extends PageController {
     private void addWine(ActionEvent event) {
         WineService.getInstance().setSelectedWine(null);
         openPopup("/fxml/EditWinePopup.fxml", "Add new wine", addWineButton.getScene().getWindow());
+        addedWine = true;
+        applySearchFilters();
+        setDefaults();
     }
 
     /**
@@ -456,20 +460,24 @@ public class DataListPageController extends PageController {
         // Set the initial values
         priceRangeSlider.setLowValue(minPrice);
         priceRangeSlider.setHighValue(maxPrice);
+        ratingSlider.setValue(minRating);
 
         minPriceValue.setText(String.valueOf(minPrice));
         maxPriceValue.setText(String.valueOf(maxPrice));
         ratingSliderValue.setText(String.valueOf(minRating));
 
         // Defaults
-        this.yearFilter = "0";
-        this.varietyFilter = "0";
-        this.colourFilter = "0";
-        this.regionFilter = "0";
-        this.minPriceFilter = 0.0;
-        this.maxPriceFilter = 800.0;
-        this.minRatingFilter = 0.0;
-        this.maxRatingFilter = 100.0;
+        if (!addedWine) {
+            this.yearFilter = "0";
+            this.varietyFilter = "0";
+            this.colourFilter = "0";
+            this.regionFilter = "0";
+            this.minPriceFilter = 0.0;
+            this.maxPriceFilter = 800.0;
+            this.minRatingFilter = 0.0;
+            this.maxRatingFilter = 100.0;
+        }
+        addedWine = false;
     }
 
     /**
@@ -496,7 +504,9 @@ public class DataListPageController extends PageController {
         ObservableList<Wine> observableQueryResults = WineService.getInstance().getWineList();
         wineTable.setItems(observableQueryResults);
         tableResults.setText(wineTable.getItems().size() + " results");
-        addNotification("Applied Filter", "#d5e958");
+        if (!addedWine) {
+            addNotification("Applied Filter", "#d5e958");
+        }
     }
 
     /**
