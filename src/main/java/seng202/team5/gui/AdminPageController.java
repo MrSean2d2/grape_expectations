@@ -58,6 +58,7 @@ public class AdminPageController extends PageController {
                 User.extractor());
         userTable.setItems(users);
         resultsLabel.setText(String.format("Found %d users", users.size()));
+        userTable.setPlaceholder(new Label("No matching users found"));
     }
 
     /**
