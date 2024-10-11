@@ -2,7 +2,11 @@ package seng202.team5.gui;
 
 import java.util.Optional;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import seng202.team5.exceptions.DuplicateEntryException;
@@ -18,7 +22,7 @@ import seng202.team5.services.UserService;
  *
  * @author Sean Reitsma
  */
-public class EditTagPopupController extends PageController implements ClosableWindow {
+public class EditTagPopupController extends FormErrorController implements ClosableWindow {
 
     @FXML
     private Button closeButton;
@@ -63,6 +67,19 @@ public class EditTagPopupController extends PageController implements ClosableWi
         originalName = tagName;
     }
 
+
+    /**
+     * Initialize the window.
+     *
+     * @param stage Top level container for this window
+     */
+    public void init(Stage stage) {
+        int minWidth = 762;
+        stage.setMinWidth(minWidth);
+        int minHeight = 486;
+        stage.setMinHeight(minHeight);
+    }
+
     /**
      * Initialise the edit wine popup.
      */
@@ -71,6 +88,7 @@ public class EditTagPopupController extends PageController implements ClosableWi
         OpenWindowsService.getInstance().addWindow(this);
         tagService = TagService.getInstance();
         tag = tagService.getSelectedTag();
+
         tagsDAO = new TagsDAO();
 
         // Default colour options
@@ -129,16 +147,6 @@ public class EditTagPopupController extends PageController implements ClosableWi
     }
 
     /**
-     * Show a field error and set the current wine information as invalid.
-     *
-     * @param field the TextField containing the error
-     */
-    private void fieldError(TextField field) {
-        field.getStyleClass().add("field_error");
-        isTagValid = false;
-    }
-
-    /**
      * Reset the error state and hide all the error labels.
      */
     private void resetErrors() {
@@ -173,7 +181,8 @@ public class EditTagPopupController extends PageController implements ClosableWi
             if (tag == null) {
                 tag = new Tag(userId, name, tagColourId);
                 try {
-                    tagsDAO.add(tag);
+                    tag.setTagId(tagsDAO.add(tag));
+                    TagService.getInstance().setCreatedTag(tag);
                     closeWindow();
                 } catch (DuplicateEntryException e) {
                     // There was a duplicate entry
@@ -224,36 +233,17 @@ public class EditTagPopupController extends PageController implements ClosableWi
             isTagValid = false;
         } else {
             if (name.length() > maxChars) {
-                fieldError(String.format("Tag name is too long! Must be no more than %s characters.", maxChars), nameField, nameErrorLabel);
+                fieldError(
+                        String.format("Tag name is too long! Must be no more than %s characters.",
+                        maxChars), nameField, nameErrorLabel);
                 isTagValid = false;
             }
         }
 
         if (tagService.checkTagExists(name, userId) && (!name.equals(originalName))) {
-            fieldError("A tag with this name already exists!", nameField, nameErrorLabel);
+            fieldError("A tag with this name already exists!",
+                    nameField, nameErrorLabel);
             isTagValid = false;
         }
-    }
-
-    /**
-     * Get the minimum height for this window. Use this to set the stage minimum
-     * height.
-     *
-     * @return the min height
-     */
-    public int getMinHeight() {
-        int minHeight = 486;
-        return minHeight;
-    }
-
-    /**
-     * Get the minimum width for this window. Use this to set the stage minimum
-     * width.
-     *
-     * @return the min width
-     */
-    public int getMinWidth() {
-        int minWidth = 762;
-        return minWidth;
     }
 }

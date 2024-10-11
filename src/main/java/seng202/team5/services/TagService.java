@@ -1,19 +1,25 @@
 package seng202.team5.services;
 
-import seng202.team5.models.Tag;
-import seng202.team5.models.Wine;
-import seng202.team5.repository.TagsDAO;
-import seng202.team5.repository.VineyardDAO;
-import seng202.team5.repository.WineDAO;
-
-import java.time.Year;
+import java.io.IOException;
 import java.util.List;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+import seng202.team5.gui.EditTagPopupController;
+import seng202.team5.gui.HeaderController;
+import seng202.team5.gui.MainWindow;
+import seng202.team5.models.Tag;
+import seng202.team5.repository.TagsDAO;
 
 /**
  * Service Class to manage wine actions.
  */
 public class TagService {
     private Tag selectedTag;
+    private Tag createdTag;
     private final TagsDAO tagsDAO;
     private static TagService instance;
 
@@ -52,7 +58,25 @@ public class TagService {
     }
 
     /**
-     * Check if a tag with this name already exists
+     * Sets createdTag to the created tag.
+     *
+     * @param tag the tag that was just created
+     */
+    public void setCreatedTag(Tag tag) {
+        this.createdTag = tag;
+    }
+
+    /**
+     * Returns the most recently createdTag.
+     *
+     * @return createTag
+     */
+    public Tag getCreatedTag() {
+        return createdTag;
+    }
+
+    /**
+     * Check if a tag with this name already exists.
      *
      * @return if the tag already exists
      */
@@ -70,5 +94,43 @@ public class TagService {
 
         // Tag doesn't exist
         return false;
+    }
+
+    /**
+     * Create a new tag popup. If the selected tag is null,
+     * it will prompt the user to create a new tag.
+     *
+     * @param ownerWindow the window that owns the popup
+     * @param headerController the header controller to use
+     * @throws IOException if the page can't be loaded
+     */
+    public void showEditTagPopup(Window ownerWindow,
+                                 HeaderController headerController) throws IOException {
+        FXMLLoader editWineLoader = new FXMLLoader(getClass()
+                .getResource("/fxml/EditTagPopup.fxml"));
+
+        Parent root = editWineLoader.load();
+        EditTagPopupController controller = editWineLoader.getController();
+
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        controller.init(stage);
+        controller.setHeaderController(headerController);
+
+        Tag selectedTag = getSelectedTag();
+
+        if (selectedTag != null) {
+            stage.setTitle(String.format("Edit tag %s", selectedTag.getName()));
+        } else {
+            stage.setTitle("Create new Tag");
+        }
+        String styleSheetUrl = MainWindow.styleSheet;
+        scene.getStylesheets().add(styleSheetUrl);
+        stage.initOwner(ownerWindow);
+        stage.initModality(Modality.WINDOW_MODAL);
+
+        // Show the popup and wait for it to be closed
+        stage.showAndWait();
     }
 }

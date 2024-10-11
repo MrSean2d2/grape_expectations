@@ -126,7 +126,8 @@ public class SearchFilterStepDefs {
             + "Price between {int} and {int}, Rating of {int} or higher, "
             + "and containing {string} in the name")
     public void theSystemDisplays(
-            String variety, String colour, String region, int year, int minPrice, int maxPrice, int minRating,
+            String variety, String colour, String region,
+            int year, int minPrice, int maxPrice, int minRating,
             String search) {
         for (Wine wine : filteredWines) {
             Assert.assertEquals(wine.getWineVariety(), variety);

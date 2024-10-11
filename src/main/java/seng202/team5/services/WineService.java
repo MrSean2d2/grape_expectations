@@ -8,7 +8,11 @@ import javafx.collections.ObservableList;
 import seng202.team5.exceptions.NotFoundException;
 import seng202.team5.models.AssignedTag;
 import seng202.team5.models.Wine;
-import seng202.team5.repository.*;
+import seng202.team5.repository.AssignedTagsDAO;
+import seng202.team5.repository.ReviewDAO;
+import seng202.team5.repository.TagsDAO;
+import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
 
 /**
  * Service Class to manage wine actions.

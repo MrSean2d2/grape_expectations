@@ -9,8 +9,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
-import seng202.team5.models.*;
-import seng202.team5.repository.*;
+import seng202.team5.models.Review;
+import seng202.team5.models.Role;
+import seng202.team5.models.User;
+import seng202.team5.models.Vineyard;
+import seng202.team5.models.Wine;
+import seng202.team5.repository.ReviewDAO;
+import seng202.team5.repository.TagsDAO;
+import seng202.team5.repository.UserDAO;
+import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
 import seng202.team5.services.DashboardService;
 import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
@@ -99,6 +107,7 @@ public class DashboardServiceTest {
         Assertions.assertEquals(5, topVariety.getFirst().getValue().intValue());
 
     }
+
     /**
      * Tests method retrieving the top wine regions based on ratings
      */

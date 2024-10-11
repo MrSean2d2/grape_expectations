@@ -9,19 +9,17 @@ import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team5.models.AssignedTag;
@@ -258,7 +256,10 @@ public class DashboardPageController extends PageController {
                     Tag selectedTag = tagsDAO.getOne(id);
                     TagService.getInstance().setSelectedTag(selectedTag);
 
-                    showEditTagPopup();
+                    TagService.getInstance().showEditTagPopup(userListPane.getScene().getWindow(),
+                            getHeaderController());
+                    // Clear and refresh
+                    initialiseTagList();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -298,43 +299,6 @@ public class DashboardPageController extends PageController {
 
 
     /**
-     * Create a new tag popup.
-     * If the selected tag is null it will prompt the user
-     * to create a new tag.
-     *
-     * @throws IOException if the page can't be loaded
-     */
-    public void showEditTagPopup() throws IOException {
-        Tag selectedTag = TagService.getInstance().getSelectedTag();
-
-        FXMLLoader editWineLoader = new FXMLLoader(getClass()
-                .getResource("/fxml/EditTagPopup.fxml"));
-
-        Parent root = editWineLoader.load();
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setMinHeight(486);
-        stage.setMinWidth(762);
-
-        if (selectedTag != null) {
-            stage.setTitle(String.format("Edit tag %s", selectedTag.getName()));
-        } else {
-            stage.setTitle("Create new Tag");
-        }
-        String styleSheetUrl = MainWindow.styleSheet;
-        scene.getStylesheets().add(styleSheetUrl);
-        stage.initOwner(userListPane.getScene().getWindow());
-        stage.initModality(Modality.WINDOW_MODAL);
-
-        // Show the popup and wait for it to be closed
-        stage.showAndWait();
-
-        // Clear and refresh
-        initialiseTagList();
-    }
-
-    /**
      * Add a new tag.
      */
     @FXML
@@ -343,7 +307,10 @@ public class DashboardPageController extends PageController {
         try {
             // Set the selected tag to the tag represented by this list
             TagService.getInstance().setSelectedTag(null);
-            showEditTagPopup();
+            TagService.getInstance().showEditTagPopup(userListPane.getScene().getWindow(),
+                    getHeaderController());
+            // Clear and refresh
+            initialiseTagList();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

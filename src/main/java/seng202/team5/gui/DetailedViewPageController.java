@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +18,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -170,12 +168,12 @@ public class DetailedViewPageController extends PageController implements Closab
             priceLabel.textProperty().bind(selectedWine.priceProperty().asString("Price: $%.2f"));
             yearLabel.textProperty().bind(selectedWine.yearProperty().asString("Year: %d"));
             ratingLabel.textProperty().bind(selectedWine.ratingValueProperty()
-                    .asString("Score: %d"));
+                    .asString("Score: %d/100"));
             wineDescriptionLabel.textProperty().bind(selectedWine.descriptionProperty());
             provinceLabel.textProperty().bind(selectedWine.vineyardProperty().map(
                     v -> String.format("Region: %s", v.getRegion())));
             varietyLabel.textProperty().bind(selectedWine.wineVarietyProperty().map(
-                    v -> String.format("Variety: %s - %s", v, selectedWine.colourProperty().get())
+                    v -> String.format("Variety: %s - %s", selectedWine.colourProperty().get(), v)
             ));
             vineyardLabel.textProperty().bind(selectedWine.vineyardProperty()
                     .map(v -> String.format("Vineyard: %s", v.getName())));
@@ -215,6 +213,7 @@ public class DetailedViewPageController extends PageController implements Closab
             logInMessageLabel.setVisible(false);
             logInMessageLabel.setManaged(false);
             addTagLabel.setVisible(false);
+            addTagLabel.setManaged(false);
 
             noteTextArea.setDisable(false);
             ratingStars.setDisable(false);
@@ -226,6 +225,7 @@ public class DetailedViewPageController extends PageController implements Closab
         } else {
             logInMessageLabel.setVisible(true);
             addTagLabel.setVisible(true);
+            addTagLabel.setManaged(true);
             noteTextArea.setDisable(true);
             ratingStars.setDisable(true);
         }
@@ -319,25 +319,34 @@ public class DetailedViewPageController extends PageController implements Closab
 
                     // Set the Popup to close when clicking outside
                     tagPopover.setAutoHide(true);
-
-
                     existingTagBox = (VBox) baseLoader.getNamespace().get("existingBox");
-
                     addTagLabels();
-
                     content.lookup("#closeButton").setOnMouseClicked(event -> closePopOver());
 
                     // Add a button to confirm selection
                     Button confirmButton = (Button) content.lookup("#createTagButton");
                     confirmButton.setOnAction(event -> {
-                        TagService.getInstance().setSelectedTag(null);
                         try {
-                            showAddTagPopup();
-                        } catch(IOException e) {
+                            TagService.getInstance().setSelectedTag(null);
+                            TagService.getInstance().showEditTagPopup(
+                                    backButton.getScene().getWindow(),
+                                    getHeaderController());
+
+                            // Clear and refresh
+                            Tag createdTag = TagService.getInstance().getCreatedTag();
+                            if (createdTag != null) {
+                                addTag(createdTag);
+                                TagService.getInstance().setCreatedTag(null);
+
+                                updateTags();
+                            }
+
+                            // Close the popover
+                            closePopOver();
+                        } catch (IOException e) {
                             log.error(e);
                         }
                     });
-
 
                     // Show the Popup below the button
                     tagPopover.show(addLabel);
@@ -346,36 +355,6 @@ public class DetailedViewPageController extends PageController implements Closab
                 }
             }
         }
-    }
-
-    /**
-     * Create a new tag popup.
-     * This allows the user to create a new tag.
-     *
-     * @throws IOException if the page can't be loaded
-     */
-    public void showAddTagPopup() throws IOException {
-        FXMLLoader editWineLoader = new FXMLLoader(getClass()
-                .getResource("/fxml/EditTagPopup.fxml"));
-
-        Parent root = editWineLoader.load();
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setMinHeight(486);
-        stage.setMinWidth(762);
-
-        stage.setTitle("Create new Tag");
-        String styleSheetUrl = MainWindow.styleSheet;
-        scene.getStylesheets().add(styleSheetUrl);
-        stage.initOwner(backButton.getScene().getWindow());
-        stage.initModality(Modality.WINDOW_MODAL);
-
-        // Show the popup and wait for it to be closed
-        stage.showAndWait();
-
-        // Clear and refresh
-        addTagLabels();
     }
 
     /**
@@ -489,45 +468,6 @@ public class DetailedViewPageController extends PageController implements Closab
         tagsList.add(tag);
 
         updateTags();
-    }
-
-    /**
-     * Handles adding a tag with a custom name (from the custom name field).
-     */
-    public void addTagWithCustomName(Node content) throws DuplicateEntryException {
-        if (canAddTag && tagPopover.isShowing()) {
-            String customTag = ((TextField) content.lookup("#addField")).getText();
-            customTag = customTag.trim();
-
-            // Name validity checks
-            boolean nameIsValid = true;
-            if (customTag.isEmpty()) {
-                nameIsValid = false;
-            } else {
-                // Check that this tag doesn't already exist
-                List<Tag> userTags = tagsDAO.getFromUser(userId);
-                for (Tag tag : userTags) {
-                    if (customTag.equals(tag.getName())) {
-                        nameIsValid = false;
-                        break;
-                    }
-                }
-            }
-
-            // Determine which tag to add
-            if (nameIsValid) {
-                Random rand = new Random();
-                Tag newTag = new Tag(userId, customTag, rand.nextInt(6));
-
-                // Try to add the new tag to the db
-                newTag.setTagId(tagsDAO.add(newTag));
-                addTag(newTag);
-            }
-
-            canAddTag = false;
-
-            closePopOver();
-        }
     }
 
     /**

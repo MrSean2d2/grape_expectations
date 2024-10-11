@@ -86,8 +86,6 @@ public class EditWinePopupController extends FormErrorController implements Clos
     private final int maxChars = 500;
     private Wine wine;
     private boolean isWineValid = true;
-    private final int minWidth = 762;
-    private final int minHeight = 486;
 
     private WineService wineService;
 
@@ -98,7 +96,6 @@ public class EditWinePopupController extends FormErrorController implements Clos
     private void initRating() {
         ratingSlider.setValue(wine.getRating());
         initRatingSlider();
-
     }
 
     /**
@@ -150,8 +147,15 @@ public class EditWinePopupController extends FormErrorController implements Clos
         TextFields.bindAutoCompletion(regionField, regionSuggestions);
     }
 
+    /**
+     * Initialize the window.
+     *
+     * @param stage Top level container for this window
+     */
     public void init(Stage stage) {
+        int minWidth = 762;
         stage.setMinWidth(minWidth);
+        int minHeight = 486;
         stage.setMinHeight(minHeight);
     }
 

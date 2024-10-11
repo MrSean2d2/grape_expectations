@@ -13,6 +13,7 @@ import seng202.team5.services.UserService;
 public class GeolocatorServiceTest {
     private static DatabaseService databaseService;
     private GeolocatorService geolocatorService;
+    
     @BeforeAll
     public static void setUp() throws InstanceAlreadyExistsException {
         DatabaseService.removeInstance();

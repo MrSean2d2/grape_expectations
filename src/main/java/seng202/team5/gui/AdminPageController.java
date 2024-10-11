@@ -62,7 +62,7 @@ public class AdminPageController extends PageController {
     }
 
     /**
-     * Closes admin page, swap to account manage page
+     * Closes admin page, swap to account manage page.
      */
     @FXML
     private void done() {

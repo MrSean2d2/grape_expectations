@@ -4,8 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import seng202.team5.models.*;
-import seng202.team5.repository.*;
+import seng202.team5.models.Review;
+import seng202.team5.models.Tag;
+import seng202.team5.models.Vineyard;
+import seng202.team5.models.Wine;
+import seng202.team5.repository.ReviewDAO;
+import seng202.team5.repository.TagsDAO;
+import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
 
 /**
  * Service class that handles operations related to the dashboard.

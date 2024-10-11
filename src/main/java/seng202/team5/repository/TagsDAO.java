@@ -130,7 +130,7 @@ public class TagsDAO implements DAOInterface<Tag> {
                 + "JOIN assigned_tags ON created_tags.tagid = assigned_tags.tagid "
                 + "WHERE assigned_tags.wineid=?";
         try (Connection conn = databaseService.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, wineId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
