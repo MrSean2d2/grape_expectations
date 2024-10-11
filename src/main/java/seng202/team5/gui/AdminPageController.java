@@ -50,7 +50,6 @@ public class AdminPageController extends PageController {
         userDAO = new UserDAO();
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
-        //actionColumn.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
         actionColumn.setCellFactory(new ManageUserActionCellFactory(this));
         actionColumn.setSortable(false);
 

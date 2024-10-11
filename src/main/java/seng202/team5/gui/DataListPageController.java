@@ -104,6 +104,7 @@ public class DataListPageController extends PageController {
     private double maxRatingFilter;
 
     private static final Logger log = LogManager.getLogger(DataListPageController.class);
+    private boolean addedWine = false;
 
     /**
      * Initializes the data List by calling {@link seng202.team5.services.WineService}
@@ -222,6 +223,9 @@ public class DataListPageController extends PageController {
         applySearchFilters();
     }
 
+    /**
+     * Shows add wine button if user is an admin.
+     */
     private void initAdminAction() {
         if (UserService.getInstance().getCurrentUser() != null
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
@@ -230,13 +234,21 @@ public class DataListPageController extends PageController {
         }
     }
 
+    /**
+     * Opens popup to add new wine.
+     *
+     * @param event button click event
+     */
     private void addWine(ActionEvent event) {
         WineService.getInstance().setSelectedWine(null);
         openPopup("/fxml/EditWinePopup.fxml", "Add new wine", addWineButton.getScene().getWindow());
+        addedWine = true;
+        applySearchFilters();
+        setDefaults();
     }
 
     /**
-     * Initialize listeners to change the slider values in real time to reflect
+     * Initialize listeners to change the slider and slider values in real time to reflect
      * the current selection.
      */
     private void initializeSliderValueListeners() {
@@ -354,7 +366,7 @@ public class DataListPageController extends PageController {
     }
 
     /**
-     *set default options of variety combobox to all varieties.
+     * set default options of variety combobox to all varieties.
      */
     public void setDefaultVarietyBox() {
         List<String> varietyOptions = wineDAO.getVariety();
@@ -456,25 +468,28 @@ public class DataListPageController extends PageController {
         // Set the initial values
         priceRangeSlider.setLowValue(minPrice);
         priceRangeSlider.setHighValue(maxPrice);
+        ratingSlider.setValue(minRating);
 
         minPriceValue.setText(String.valueOf(minPrice));
         maxPriceValue.setText(String.valueOf(maxPrice));
         ratingSliderValue.setText(String.valueOf(minRating));
 
         // Defaults
-        this.yearFilter = "0";
-        this.varietyFilter = "0";
-        this.colourFilter = "0";
-        this.regionFilter = "0";
-        this.minPriceFilter = 0.0;
-        this.maxPriceFilter = 800.0;
-        this.minRatingFilter = 0.0;
-        this.maxRatingFilter = 100.0;
+        if (!addedWine) {
+            this.yearFilter = "0";
+            this.varietyFilter = "0";
+            this.colourFilter = "0";
+            this.regionFilter = "0";
+            this.minPriceFilter = 0.0;
+            this.maxPriceFilter = 800.0;
+            this.minRatingFilter = 0.0;
+            this.maxRatingFilter = 100.0;
+        }
+        addedWine = false;
     }
 
     /**
-     * Gets text from search bar and uses wineDAO to get matching wines
-     * to display on table.
+     * Applies search when search button is clicked.
      */
     @FXML
     private void searchClicked() {
@@ -496,7 +511,9 @@ public class DataListPageController extends PageController {
         ObservableList<Wine> observableQueryResults = WineService.getInstance().getWineList();
         wineTable.setItems(observableQueryResults);
         tableResults.setText(wineTable.getItems().size() + " results");
-        addNotification("Applied Filter", "#d5e958");
+        if (!addedWine) {
+            addNotification("Applied Filter", "#d5e958");
+        }
     }
 
     /**
@@ -557,7 +574,6 @@ public class DataListPageController extends PageController {
      * Handles action of Year filter selected.
      */
     public void onYearComboBoxClicked() {
-        //TODO: come back to - string vs int
         String selectedYear = String.valueOf(yearComboBox.getValue());
         if (Objects.equals(selectedYear, "Year")) {
             yearFilter = "0";

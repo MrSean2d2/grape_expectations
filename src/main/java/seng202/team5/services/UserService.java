@@ -115,14 +115,29 @@ public class UserService {
         currentUser.set(user);
     }
 
+    /**
+     * Gets current user.
+     *
+     * @return current user
+     */
     public User getCurrentUser() {
         return currentUser.get();
     }
 
+    /**
+     * Gets selected user.
+     *
+     * @return selected user
+     */
     public User getSelectedUser() {
         return selectedUser;
     }
 
+    /**
+     * Sets selected user.
+     *
+     * @param user selected user
+     */
     public void setSelectedUser(User user) {
         this.selectedUser = user;
     }
