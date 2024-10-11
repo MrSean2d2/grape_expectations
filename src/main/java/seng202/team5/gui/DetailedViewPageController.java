@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+
+import javafx.beans.property.StringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,6 +44,7 @@ import seng202.team5.repository.AssignedTagsDAO;
 import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
 import seng202.team5.services.OpenWindowsService;
+import seng202.team5.services.TagService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
 
@@ -62,60 +65,87 @@ public class DetailedViewPageController extends PageController implements Closab
     TagsDAO tagsDAO;
     AssignedTagsDAO assignedTagsDAO;
     List<Tag> tagsList;
-    @FXML
-    public Label ratingLogInLabel;
-    @FXML
-    private Button backButton;
-    @FXML
-    private Button favoriteToggleButton;
-    @FXML
-    private Label nameLabel;
-    @FXML
-    private Label priceLabel;
-    @FXML
-    private Label yearLabel;
-    @FXML
-    private Label ratingLabel;
-    @FXML
-    private Label wineDescriptionLabel;
-    @FXML
-    private Label logInMessageLabel;
+
     @FXML
     private Label addTagLabel;
+
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private HBox headerButtonContainer;
+
+    @FXML
+    private Label logInMessageLabel;
+
+    @FXML
+    private Label nameLabel;
+
+    @FXML
+    private TextArea noteTextArea;
+
+    @FXML
+    private Label priceLabel;
+
     @FXML
     private Label provinceLabel;
+
     @FXML
-    private Label varietyLabel;
-    @FXML
-    private Label vineyardLabel;
-    @FXML
-    private TextArea notesTextArea;
-    @FXML
-    private Button saveNotesButton;
+    private Label ratingLabel;
+
     @FXML
     private HBox ratingStars;
+
     @FXML
     private ImageView star1;
+
     @FXML
     private ImageView star2;
+
     @FXML
     private ImageView star3;
+
     @FXML
     private ImageView star4;
+
     @FXML
     private ImageView star5;
+
     @FXML
     private FlowPane tagBox;
 
     @FXML
-    private GridPane headerGridPane;
+    private Label varietyLabel;
+
+    @FXML
+    private Label vineyardLabel;
+
+    @FXML
+    private ImageView wineColourImage;
+
+    @FXML
+    private Label wineDescriptionLabel;
+
+    @FXML
+    private Label yearLabel;
 
     private int selectedWineId;
     private int userId;
     private PopOver tagPopover;
+    private VBox existingTagBox;
     private ReviewDAO reviewDAO;
     private Review review;
 
+
+    /**
+     * Initialise the stage. This is called by the class which loads the
+     * DetailedViewPage and initialises the onCloseWindowRequest.
+     *
+     * @param stage the current fxml stage
+     */
+    public void init(Stage stage) {
+        stage.setOnCloseRequest(windowEvent -> closeWindow());
+    }
 
     /**
      * Initializes DetailedViewPage.
@@ -129,12 +159,9 @@ public class DetailedViewPageController extends PageController implements Closab
         reviewDAO = new ReviewDAO();
         review = null;
 
-
         initWineInfo(selectedWine);
         initUserReviews();
         initAdminActions();
-
-
     }
 
     /**
@@ -151,10 +178,14 @@ public class DetailedViewPageController extends PageController implements Closab
                     .asString("Score: %d"));
             wineDescriptionLabel.textProperty().bind(selectedWine.descriptionProperty());
             provinceLabel.textProperty().bind(selectedWine.vineyardProperty().map(
-                    Vineyard::getRegion));
-            varietyLabel.textProperty().bind(selectedWine.wineVarietyProperty());
+                    v -> String.format("Region: %s", v.getRegion())));
+            varietyLabel.textProperty().bind(selectedWine.wineVarietyProperty().map(
+                    v -> String.format("Variety: %s - %s", v, selectedWine.colourProperty().get())
+            ));
             vineyardLabel.textProperty().bind(selectedWine.vineyardProperty()
-                    .map(Vineyard::getName));
+                    .map(v -> String.format("Vineyard: %s", v.getName())));
+
+            setColourImage(selectedWine);
         }
     }
 
@@ -186,27 +217,44 @@ public class DetailedViewPageController extends PageController implements Closab
             }
 
             // Done Loading Tags
-            ratingLogInLabel.setVisible(false);
-            logInMessageLabel.setText("");
-            ratingStars.setVisible(true);
-            addTagLabel.setText("");
+            logInMessageLabel.setVisible(false);
+            logInMessageLabel.setManaged(false);
+            addTagLabel.setVisible(false);
+
+            noteTextArea.setDisable(false);
+            ratingStars.setDisable(false);
+
             if (review != null) {
-                notesTextArea.setText(review.getNotes());
-                updateFavoriteButton(review.isFavourite());
+                noteTextArea.setText(review.getNotes());
                 updateStarDisplay(review.getRating());
             }
-
-            favoriteToggleButton.setDisable(false);
-            saveNotesButton.setDisable(false);
-            notesTextArea.setEditable(true);
         } else {
-            logInMessageLabel.setText("Log in to save your notes!");
-            ratingLogInLabel.setVisible(true);
-            ratingStars.setVisible(false);
-            addTagLabel.setText("Log in to add tags!");
-            favoriteToggleButton.setDisable(true);
-            saveNotesButton.setDisable(true);
-            notesTextArea.setEditable(false);
+            logInMessageLabel.setVisible(true);
+            addTagLabel.setVisible(true);
+            noteTextArea.setDisable(true);
+            ratingStars.setDisable(true);
+        }
+    }
+
+    /**
+     * sets the image to the corresponding colour.
+     * red, white, rose or unknown
+     * helps with usability and accessibility
+     */
+    private void setColourImage(Wine selectedWine) {
+        switch (selectedWine.getWineColour()) {
+            case "Red" -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/redColourWine.png"))));
+            case "White" -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/whiteColourWine.png"))));
+            case "Rosé" -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/roseColourWine.png"))));
+            default -> wineColourImage.setImage(
+                    new Image(Objects.requireNonNull(
+                            this.getClass().getResourceAsStream("/images/unknownColourWine.png"))));
         }
     }
 
@@ -218,10 +266,8 @@ public class DetailedViewPageController extends PageController implements Closab
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
             Button editWineButton = new Button("Edit Wine");
             editWineButton.getStyleClass().add("detailed_view");
-            editWineButton.applyCss();
             editWineButton.setOnAction(this::editWine);
-            headerGridPane.add(editWineButton, 1, 0);
-            GridPane.setMargin(editWineButton, new Insets(0, 10, 10, 0));
+            headerButtonContainer.getChildren().add(editWineButton);
         }
     }
 
@@ -279,63 +325,24 @@ public class DetailedViewPageController extends PageController implements Closab
                     // Set the Popup to close when clicking outside
                     tagPopover.setAutoHide(true);
 
-                    VBox existingBox = ((VBox) content.lookup("#tester"));
-                    List<Tag> tags = tagsDAO.getFromUser(userId);
-                    List<Label> labels = new ArrayList<>();
 
-                    for (Tag tag : tags) {
-                        /*
-                         Can't use .contains because tag ID will be
-                         different (with default ones) : (
-                         */
-                        boolean found = false;
-                        for (Tag existingTag : tagsList) {
-                            if (existingTag.getTagId() == tag.getTagId()) {
-                                found = true;
-                                break;
-                            }
-                        }
+                    existingTagBox = (VBox) baseLoader.getNamespace().get("existingBox");
 
-                        // Skip if it was found
-                        if (found) {
-                            continue;
-                        }
-
-                        // Set the user ID to be the current user id, override the default
-                        //  user ID may be -1, for default tags
-                        tag.setUserId(userId);
-
-                        // Add non-existing ones :D
-                        Label newTag = new Label(tag.getName());
-                        newTag.getStyleClass().add("tag");
-                        newTag.getStyleClass().add("max-width");
-
-                        newTag.getStyleClass().add(getTagLabelColour(tag.getColour()));
-
-                        // Add on click
-                        newTag.setOnMouseClicked(event -> {
-                            if (!(tagsList.contains(tag)) && tagPopover.isShowing()) {
-                                addTag(tag);
-                                updateTags();
-                                closePopOver();
-                            }
-                        });
-
-                        labels.add(newTag);
-                    }
-                    existingBox.getChildren().addAll(labels);
+                    addTagLabels();
 
                     content.lookup("#closeButton").setOnMouseClicked(event -> closePopOver());
 
                     // Add a button to confirm selection
-                    Button confirmButton = (Button) content.lookup("#submitButton");
+                    Button confirmButton = (Button) content.lookup("#createTagButton");
                     confirmButton.setOnAction(event -> {
+                        TagService.getInstance().setSelectedTag(null);
                         try {
-                            addTagWithCustomName(content);
-                        } catch (DuplicateEntryException e) {
-                            throw new RuntimeException(e);
+                            showAddTagPopup();
+                        } catch(IOException e) {
+                            log.error(e);
                         }
                     });
+
 
                     // Show the Popup below the button
                     tagPopover.show(addLabel);
@@ -344,6 +351,90 @@ public class DetailedViewPageController extends PageController implements Closab
                 }
             }
         }
+    }
+
+    /**
+     * Create a new tag popup.
+     * This allows the user to create a new tag.
+     *
+     * @throws IOException if the page can't be loaded
+     */
+    public void showAddTagPopup() throws IOException {
+        FXMLLoader editWineLoader = new FXMLLoader(getClass()
+                .getResource("/fxml/EditTagPopup.fxml"));
+
+        Parent root = editWineLoader.load();
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setMinHeight(486);
+        stage.setMinWidth(762);
+
+        stage.setTitle("Create new Tag");
+        String styleSheetUrl = MainWindow.styleSheet;
+        scene.getStylesheets().add(styleSheetUrl);
+        stage.initOwner(backButton.getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+
+        // Show the popup and wait for it to be closed
+        stage.showAndWait();
+
+        // Clear and refresh
+        addTagLabels();
+    }
+
+    /**
+     * Add the tag labels to the popover.
+     */
+    public void addTagLabels() {
+        List<Tag> tags = tagsDAO.getFromUser(userId);
+        List<Label> labels = new ArrayList<>();
+
+        existingTagBox.getChildren().clear();
+
+        for (Tag tag : tags) {
+            /*
+             Can't use .contains because tag ID will be
+             different (with default ones) : (
+             */
+            boolean found = false;
+            for (Tag existingTag : tagsList) {
+                if (existingTag.getTagId() == tag.getTagId()) {
+                    found = true;
+                    break;
+                }
+            }
+
+            // Skip if it was found
+            if (found) {
+                continue;
+            }
+
+            // Set the user ID to be the current user id, override the default
+            //  user ID may be -1, for default tags
+            tag.setUserId(userId);
+
+            // Add non-existing ones :D
+            Label newTag = new Label(tag.getName());
+            newTag.getStyleClass().add("tag");
+            newTag.getStyleClass().add("max-width");
+
+            newTag.getStyleClass().add(getTagLabelColour(tag.getColour()));
+
+            // Add on click
+            newTag.setOnMouseClicked(event -> {
+                if (!(tagsList.contains(tag)) && tagPopover.isShowing()) {
+                    addTag(tag);
+                    updateTags();
+                    closePopOver();
+                }
+            });
+
+            labels.add(newTag);
+        }
+
+        // Add labels to the box
+        existingTagBox.getChildren().addAll(labels);
     }
 
     /**
@@ -382,7 +473,7 @@ public class DetailedViewPageController extends PageController implements Closab
      *
      * @param tag the text to display
      */
-    public Label addTag(Tag tag) {
+    public void addTag(Tag tag) {
         Label newTag = new Label(tag.getName());
         newTag.getStyleClass().add("tag");
         newTag.getStyleClass().add(getTagLabelColour(tag.getColour()));
@@ -403,7 +494,6 @@ public class DetailedViewPageController extends PageController implements Closab
         tagsList.add(tag);
 
         updateTags();
-        return newTag;
     }
 
     /**
@@ -432,7 +522,7 @@ public class DetailedViewPageController extends PageController implements Closab
             // Determine which tag to add
             if (nameIsValid) {
                 Random rand = new Random();
-                Tag newTag = new Tag(userId, customTag, rand.nextInt(5));
+                Tag newTag = new Tag(userId, customTag, rand.nextInt(6));
 
                 // Try to add the new tag to the db
                 newTag.setTagId(tagsDAO.add(newTag));
@@ -490,40 +580,6 @@ public class DetailedViewPageController extends PageController implements Closab
     }
 
     /**
-     * handles the event where the toggle favorite button is pressed.
-     */
-    @FXML
-    private void handleToggleFavourite() {
-        if (UserService.getInstance().getCurrentUser() == null) {
-            close();
-        } else {
-            createReviewIfNotExists();
-
-            if (review != null) {
-                review.toggleFavourite(review.isFavourite());
-                updateFavoriteButton(review.isFavourite());
-            }
-        }
-    }
-
-
-    /**
-     * Saves the notes that are currently in the text box.
-     */
-    @FXML
-    private void handleSaveNotes() {
-        if (UserService.getInstance().getCurrentUser() == null) {
-            close();
-        } else {
-            createReviewIfNotExists();
-            if (review != null) {
-                review.setNotes(notesTextArea.getText());
-            }
-        }
-    }
-
-
-    /**
      * Closes the page.
      */
     @FXML
@@ -537,7 +593,6 @@ public class DetailedViewPageController extends PageController implements Closab
      * Closes the page and updates the review if necessary.
      */
     public void close() {
-
         try {
             if (UserService.getInstance().getCurrentUser() != null) {
                 if (assignedTagsDAO != null) {
@@ -545,7 +600,7 @@ public class DetailedViewPageController extends PageController implements Closab
                     assignedTagsDAO.deleteFromUserWineId(userId, selectedWineId);
 
                     // Add review to this wine
-                    if (!tagsList.isEmpty()) {
+                    if (!tagsList.isEmpty() || !noteTextArea.getText().isEmpty()) {
                         createReviewIfNotExists();
                     }
 
@@ -553,6 +608,11 @@ public class DetailedViewPageController extends PageController implements Closab
                     for (Tag tag : tagsList) {
                         assignedTagsDAO.add(new AssignedTag(tag.getTagId(),
                                 userId, selectedWineId));
+                    }
+
+                    // Set the review text
+                    if (review != null) {
+                        review.setNotes(noteTextArea.getText());
                     }
                 }
             }
@@ -580,25 +640,5 @@ public class DetailedViewPageController extends PageController implements Closab
         star3.setImage(rating >= 3 ? filledStar : emptyStar);
         star4.setImage(rating >= 4 ? filledStar : emptyStar);
         star5.setImage(rating >= 5 ? filledStar : emptyStar);
-    }
-
-    /**
-     * Updates text of the toggle favorite button based on if the wine is favorited or not.
-     *
-     * @param isFavorited whether the wine is currently favourited
-     */
-    private void updateFavoriteButton(boolean isFavorited) {
-
-        if (UserService.getInstance().getCurrentUser() == null) {
-            close();
-        } else {
-            if (isFavorited) {
-                favoriteToggleButton.setText("Unfavourite");
-                favoriteToggleButton.setStyle("-fx-background-color: #ffdd00");
-            } else {
-                favoriteToggleButton.setText("Favourite");
-                favoriteToggleButton.setStyle(null);
-            }
-        }
     }
 }

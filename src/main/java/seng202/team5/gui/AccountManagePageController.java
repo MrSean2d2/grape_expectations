@@ -66,10 +66,15 @@ public class AccountManagePageController extends PageController {
         User curUser = UserService.getInstance().getCurrentUser();
         if (curUser.getIsAdmin()) {
             adminButton.setDisable(false);
+
+            adminButton.setManaged(true);
             adminButton.setVisible(true);
         } else {
             changePasswordButton.setDisable(false);
             changePasswordButton.setVisible(true);
+
+            adminButton.setVisible(false);
+            adminButton.setManaged(false);
         }
 
         // Create a new cutout circle to display the image in
@@ -152,7 +157,7 @@ public class AccountManagePageController extends PageController {
     }
 
     /**
-     *  Opens the edit password pop up when user wants to change password
+     *  Opens the edit password pop up when user wants to change password.
      */
     @FXML
     private void changePassword() {
@@ -163,7 +168,7 @@ public class AccountManagePageController extends PageController {
     }
 
     /**
-     * Loads admin page
+     * Loads the admin page.
      */
     @FXML
     private void loadAdminPage() {

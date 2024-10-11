@@ -2,26 +2,22 @@ package seng202.team5.gui;
 
 import java.io.IOException;
 import java.util.Objects;
-
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,7 +42,7 @@ public class HeaderController {
     private Button homeButton;
 
     @FXML
-    private ImageView homeIcon;
+    private Button dashboardButton;
 
     @FXML
     private Button dataListButton;
@@ -56,6 +52,9 @@ public class HeaderController {
 
     @FXML
     private Button accountButton;
+
+    @FXML
+    private ImageView accountIcon;
 
     @FXML
     private ScrollPane scrollPane;
@@ -72,23 +71,25 @@ public class HeaderController {
      *
      * @param stage Top level container for this window
      */
-    public void init(Stage stage) throws Exception {
+    public void init(Stage stage) {
         loadHomePage();
+        dashboardButton.setVisible(false);
+        dashboardButton.setManaged(false);
 
         scrollPane.setOnMousePressed(Event::consume);
         pageContainer.setOnMousePressed(Event::consume);
 
         UserService.getInstance().getUserProperty().addListener((observable, oldUser, newUser) -> {
             if (newUser != null) {
-                homeIcon.setImage(new Image(
+                dashboardButton.setVisible(true);
+                dashboardButton.setManaged(true);
+
+                accountIcon.setImage(new Image(
                         Objects.requireNonNull(
-                                getClass().getResourceAsStream("/images/Dashboard.png"))));
-                homeButton.setTooltip(new Tooltip("Dashboard"));
+                                getClass().getResourceAsStream("/images/User.png"))));
             } else {
-                homeIcon.setImage(new Image(
-                        Objects.requireNonNull(
-                                getClass().getResourceAsStream("/images/Home.png"))));
-                homeButton.setTooltip(new Tooltip("Home page"));
+                dashboardButton.setVisible(false);
+                dashboardButton.setManaged(false);
             }
         });
 
@@ -97,6 +98,8 @@ public class HeaderController {
         });
 
         logoButton.setTooltip(new Tooltip("Home page"));
+        homeButton.setTooltip(new Tooltip("Home page"));
+        dashboardButton.setTooltip(new Tooltip("Dashboard page"));
         dataListButton.setTooltip(new Tooltip("Data list page"));
         mapButton.setTooltip(new Tooltip("Map page"));
         accountButton.setTooltip(new Tooltip("Account page"));
@@ -107,11 +110,15 @@ public class HeaderController {
      */
     @FXML
     private void loadHomePage() {
-        if (UserService.getInstance().getCurrentUser() != null) {
-            loadPage("/fxml/DashboardPage.fxml");
-        } else {
-            loadPage("/fxml/HomePage.fxml");
-        }
+        loadPage("/fxml/HomePage.fxml");
+    }
+
+    /**
+     * Load the dashboard page.
+     */
+    @FXML
+    private void loadDashboardPage() {
+        loadPage("/fxml/DashboardPage.fxml");
     }
 
     /**
@@ -121,6 +128,63 @@ public class HeaderController {
     private void loadDataListPage() {
         loadPage("/fxml/DataListPage.fxml");
     }
+
+    @FXML
+    private void loadDataListPageWithTag(String tagFilter) throws Exception {
+        // Load the loading page first
+        FXMLLoader loaderSpinner = new FXMLLoader(
+                getClass().getResource("/fxml/LoadingSpinner.fxml"));
+        Node loader = loaderSpinner.load();
+
+        // Display the loading spinner in the container
+        pageContainer.getChildren().setAll(loader);
+
+        // Create a Task to load the DataListPage in the background
+        Task<Node> loadDataListTask = new Task<>() {
+            @Override
+            protected Node call() throws Exception {
+                // Load the Data List page (this will run in a background thread)
+                FXMLLoader baseLoader = new FXMLLoader(
+                        getClass().getResource("/fxml/DataListPage.fxml"));
+                Node page = baseLoader.load();
+
+                // Get the controller for the Data List page
+                DataListPageController dataListPageController = baseLoader.getController();
+
+                // Pass the tag filter to the controller
+                if (dataListPageController != null) {
+                    dataListPageController.filterWinesByTag(tagFilter);
+                    dataListPageController.setComboBoxTagSelection(tagFilter);
+                }
+
+                return page;
+            }
+        };
+
+
+        loadDataListTask.setOnSucceeded(event -> {
+            pageContainer.getChildren().setAll(loadDataListTask.getValue());
+
+            // Update the button styles
+            dataListButton.getStyleClass().add("active");
+            homeButton.getStyleClass().remove("active");
+            dashboardButton.getStyleClass().remove("active");
+            mapButton.getStyleClass().remove("active");
+            accountButton.getStyleClass().remove("active");
+            dashboardButton.getStyleClass().remove("active");
+
+        });
+
+
+        loadDataListTask.setOnFailed(event -> {
+            Throwable exception = loadDataListTask.getException();
+
+            System.err.println("Failed to load the Data List page: " + exception.getMessage());
+        });
+
+        new Thread(loadDataListTask).start();
+    }
+
 
 
     /**
@@ -155,6 +219,7 @@ public class HeaderController {
 
                 // Update active button styles
                 homeButton.getStyleClass().remove("active");
+                dashboardButton.getStyleClass().remove("active");
                 dataListButton.getStyleClass().remove("active");
                 mapButton.getStyleClass().remove("active");
                 accountButton.getStyleClass().remove("active");
@@ -222,6 +287,7 @@ public class HeaderController {
 
         // Remove the button styles from the header
         homeButton.getStyleClass().remove("active");
+        dashboardButton.getStyleClass().remove("active");
         dataListButton.getStyleClass().remove("active");
         mapButton.getStyleClass().remove("active");
         accountButton.getStyleClass().remove("active");
@@ -230,7 +296,7 @@ public class HeaderController {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/LoadingSpinner.fxml"));
         try {
             Node loader = baseLoader.load();
-            pageContainer.getChildren().setAll(loader);
+            Platform.runLater(() -> pageContainer.getChildren().setAll(loader));
         } catch (IOException e) {
             log.error(e);
         }
@@ -240,8 +306,10 @@ public class HeaderController {
         // Add active status to buttons
         switch (loadedPage) {
             case "HomePage.fxml":
-            case "DashboardPage.fxml":
                 homeButton.getStyleClass().add("active");
+                break;
+            case "DashboardPage.fxml":
+                dashboardButton.getStyleClass().add("active");
                 break;
 
             case "DataListPage.fxml":
@@ -279,6 +347,7 @@ public class HeaderController {
     private void setHeaderInteractionEnabled(boolean enabled) {
         logoButton.setDisable(!enabled);
         homeButton.setDisable(!enabled);
+        dashboardButton.setDisable(!enabled);
         dataListButton.setDisable(!enabled);
         mapButton.setDisable(!enabled);
         accountButton.setDisable(!enabled);

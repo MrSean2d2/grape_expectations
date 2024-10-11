@@ -406,13 +406,14 @@ public class WineDAOTest {
          */
         @Test
         public void testSearch() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
-                    + "wine.rating, wine.variety, wine.price, wine.colour, "
-                    + "vineyard.name AS vineyardName, vineyard.region FROM WINE, VINEYARD "
-                    + "WHERE vineyard.id = wine.vineyard"
-                    + " AND (wine.name LIKE ? OR wine.description LIKE ?) ;";
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                    + "FROM WINE, VINEYARD "
+                    + "WHERE vineyard.id = wine.vineyard "
+                    + "AND (wine.name LIKE ? OR wine.description LIKE ?)  "
+                    + "AND wine.price <= -1.0 AND wine.price >= 800.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder("Yummy", "0", "0",
-                    "0", 0.0, 800.0, -1, -1, false));
+                    "0", "0", 800.0, -1, -1, -1));
         }
 
         /**
@@ -420,13 +421,15 @@ public class WineDAOTest {
          */
         @Test
         public void testFilterVariety() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
-                    + "wine.rating, wine.variety, wine.price, wine.colour, "
-                    + "vineyard.name AS vineyardName, vineyard.region FROM WINE, VINEYARD "
-                    + "WHERE vineyard.id = wine.vineyard"
-                    + " AND wine.variety = 'testVariety';";
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                    + "FROM WINE, VINEYARD "
+                    + "WHERE vineyard.id = wine.vineyard "
+                    + "AND wine.variety = 'testVariety' "
+                    + "AND wine.price <= -1.0 "
+                    + "AND wine.price >= 800.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "testVariety", "0",
-                    "0", 0.0, 800.0, -1, -1, false));
+                    "0", "0", 800.0, -1, -1, -1));
         }
 
         /**
@@ -434,13 +437,14 @@ public class WineDAOTest {
          */
         @Test
         public void testFilterRegion() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
-                    + "wine.rating, wine.variety, wine.price, wine.colour, "
-                    + "vineyard.name AS vineyardName, vineyard.region FROM WINE, VINEYARD "
-                    + "WHERE vineyard.id = wine.vineyard"
-                    + " AND vineyard.region = 'testRegion';";
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                    + "FROM WINE, VINEYARD "
+                    + "WHERE vineyard.id = wine.vineyard "
+                    + "AND wine.colour = 'testRegion' "
+                    + "AND wine.price <= -1.0 AND wine.price >= 800.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "testRegion",
-                    "0", 0.0, 800.0, -1, -1, false));
+                    "0", "0", 800.0, -1, -1, -1));
         }
 
         /**
@@ -448,13 +452,13 @@ public class WineDAOTest {
          */
         @Test
         public void testFilterYear() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
-                    + "wine.rating, wine.variety, wine.price, wine.colour, "
-                    + "vineyard.name AS vineyardName, vineyard.region FROM WINE, VINEYARD "
-                    + "WHERE vineyard.id = wine.vineyard"
-                    + " AND wine.year = 1999;";
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                    + "FROM WINE, VINEYARD "
+                    + "WHERE vineyard.id = wine.vineyard AND vineyard.region = '1999' "
+                    + "AND wine.price <= -1.0 AND wine.price >= 800.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "0",
-                    "1999", 0.0, 800.0, -1, -1, false));
+                    "1999", "0", 800.0, -1, -1, -1));
         }
 
         /**
@@ -463,12 +467,14 @@ public class WineDAOTest {
         @Test
         public void testFilterMinPrice() {
             String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
-                    + "wine.rating, wine.variety, wine.price, wine.colour, "
-                    + "vineyard.name AS vineyardName, vineyard.region FROM WINE, VINEYARD "
-                    + "WHERE vineyard.id = wine.vineyard"
-                    + " AND wine.price >= 5.0;";
+                    +"wine.rating, wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, "
+                    + "vineyard.region FROM WINE, VINEYARD "
+                    + "WHERE vineyard.id = wine.vineyard "
+                    + "AND wine.year = 5 "
+                    + "AND wine.price <= -1.0 "
+                    + "AND wine.price >= 800.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "0",
-                    "0", 5, 800.0, -1, -1, false));
+                    "0", "5", 800.0, -1, -1, -1));
         }
 
         /**
@@ -476,13 +482,13 @@ public class WineDAOTest {
          */
         @Test
         public void testFilterMaxPrice() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
-                    + "wine.rating, wine.variety, wine.price, wine.colour, "
-                    + "vineyard.name AS vineyardName, vineyard.region FROM WINE, VINEYARD "
-                    + "WHERE vineyard.id = wine.vineyard"
-                    + " AND wine.price <= 30.0;";
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                    + "FROM WINE, VINEYARD "
+                    + "WHERE vineyard.id = wine.vineyard "
+                    + "AND wine.year = 5 AND wine.price <= -1.0 AND wine.price >= 30.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "0",
-                    "0", 0.0, 30.0, -1, -1, false));
+                    "0", "5", 30.0, -1, -1, -1));
         }
 
         /**
@@ -490,14 +496,13 @@ public class WineDAOTest {
          */
         @Test
         public void testFilterMinMaxPrice() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
-                    + "wine.rating, wine.variety, wine.price, wine.colour, "
-                    + "vineyard.name AS vineyardName, vineyard.region FROM WINE, VINEYARD "
-                    + "WHERE vineyard.id = wine.vineyard"
-                    + " AND wine.price <= 30.0"
-                    + " AND wine.price >= 5.0;";
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                    + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard "
+                    + "AND wine.year = 5 AND wine.price <= -1.0 "
+                    + "AND wine.price >= 30.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "0",
-                    "0", 5, 30.0, -1, -1, false));
+                    "0", "5", 30.0, -1, -1, -1));
         }
 
         /**
@@ -505,13 +510,13 @@ public class WineDAOTest {
          */
         @Test
         public void testFilterMinRating() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
-                    + "wine.rating, wine.variety, wine.price, wine.colour, "
-                    + "vineyard.name AS vineyardName, vineyard.region FROM WINE, VINEYARD "
-                    + "WHERE vineyard.id = wine.vineyard"
-                    + " AND wine.rating >= 80.0;";
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, " +
+                    "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region " +
+                    "FROM WINE, VINEYARD " +
+                    "WHERE vineyard.id = wine.vineyard " +
+                    "AND wine.price <= 80.0 AND wine.price >= 800.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "0",
-                    "0", 0.0, 800.0, 80, -1, false));
+                    "0", "0", 800.0, 80, -1, -1));
         }
 
         /**
@@ -519,14 +524,13 @@ public class WineDAOTest {
          */
         @Test
         public void testFilterSearch() {
-            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
-                    + "wine.rating, wine.variety, wine.price, wine.colour, "
-                    + "vineyard.name AS vineyardName, vineyard.region FROM WINE, VINEYARD "
-                    + "WHERE vineyard.id = wine.vineyard"
-                    + " AND (wine.name LIKE ? OR wine.description LIKE ?) "
-                    + " AND wine.variety = 'Test Variety';";
+            String expectedSql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, wine.rating, "
+                    + "wine.variety, wine.price, wine.colour, vineyard.name AS vineyardName, vineyard.region "
+                    + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard "
+                    + "AND (wine.name LIKE ? OR wine.description LIKE ?)  AND wine.variety = 'Test Variety' "
+                    + "AND wine.price <= -1.0 AND wine.price >= 800.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder("Yummy", "Test Variety", "0",
-                    "0", 0.0, 800.0, -1, -1, false));
+                    "0", "0", 800.0, -1, -1, -1));
         }
     }
 

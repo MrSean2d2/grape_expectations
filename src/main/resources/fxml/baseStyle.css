@@ -179,7 +179,7 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-background-color: #e7e7e7;
     -fx-text-fill: #404040;
     -fx-padding: 8 15;
-    -fx-background-radius: 12;
+    -fx-background-radius: 5;
     -fx-font-size: 16px;
 }
 
@@ -189,51 +189,54 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-cursor: HAND;
 }
 
-.purple {
+.lavender {
     -fx-background-color: #9f8fef;
     -fx-text-fill: #352c63;
 }
 
-.purple:hover {
+.lavender:hover {
     -fx-background-color: #b8acf6;
 }
 
-.blue {
-    -fx-background-color: #8fb1ef;
-    -fx-text-fill: #2c3c63;
+.seafoam {
+    -fx-background-color: #8DDCDC;
 }
 
-.blue:hover {
-    -fx-background-color: #ace0f6;
+.seafoam:hover {
+    -fx-background-color: #81d0f1;
 }
 
-.green {
-    -fx-background-color: #aaef8f;
-    -fx-text-fill: #40632c;
+.mint {
+    -fx-background-color: #aeee85;
 }
 
-.green:hover {
+.mint:hover {
     -fx-background-color: #e1f6ac;
 }
 
-.red {
+.claret {
     -fx-background-color: #ef8f8f;
-    -fx-text-fill: #632c2c;
 }
 
-.red:hover {
+.claret:hover {
     -fx-background-color: #f6acac;
 }
 
-.yellow {
+.gold {
     -fx-background-color: #efcd8f;
-    -fx-text-fill: #63482c;
 }
 
-.yellow:hover {
+.gold:hover {
     -fx-background-color: #f6d3ac;
 }
 
+.rose {
+    -fx-background-color: #e58fef;
+}
+
+.rose:hover {
+    -fx-background-color: #efacf6;
+}
 
 .popover {
     -fx-background-radius: 15;

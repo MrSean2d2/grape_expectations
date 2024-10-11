@@ -44,6 +44,27 @@ Light mode for the application
     -fx-text-fill: #000000;
 }
 
+.piechart-button {
+    -fx-background-color: #ffffff;
+    -fx-padding: 8 15;
+    -fx-border-width: 2;
+    -fx-border-height: 3;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+.piechart-button.active {
+    -fx-border-color: gray;
+    -fx-border-radius: 5;
+}
+
+.piechart-button:selected{
+    -fx-border-color: gray;
+}
+.piechart-background {
+    -fx-background-color: #e7e7e7;
+
+    -fx-background-radius: 10;
+}
 
 .dropdown .list-cell {
     -fx-background-color: #ffffff;

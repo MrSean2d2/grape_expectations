@@ -16,7 +16,7 @@ import seng202.team5.services.DatabaseService;
 /**
  * Database Access Object for the Created_tags tables in the SQL database.
  *
- * @author Martyn Gascoigne
+ * @author Martyn Gascoigne, Finn Brown
  */
 public class TagsDAO implements DAOInterface<Tag> {
     private static final Logger log = LogManager.getLogger(TagsDAO.class);
@@ -116,6 +116,38 @@ public class TagsDAO implements DAOInterface<Tag> {
         }
     }
 
+    /**
+     * Gets a list of tags associated with a specific wine by wineId.
+     *
+     * @param wineId id of the wine
+     * @return list of tags for the specified wine
+     */
+    public List<Tag> getFromWine(int wineId) {
+        List<Tag> tags = new ArrayList<>();
+        String sql = "SELECT created_tags.tagid, created_tags.userid, created_tags.name, created_tags.colour "
+                + "FROM created_tags "
+                + "JOIN assigned_tags ON created_tags.tagid = assigned_tags.tagid "
+                + "WHERE assigned_tags.wineid=?";
+        try (Connection conn = databaseService.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, wineId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Tag tag = new Tag(
+                        rs.getInt("tagid"),
+                        rs.getInt("userid"),
+                        rs.getString("name"),
+                        rs.getInt("colour"));
+                tags.add(tag);
+            }
+            return tags;
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return new ArrayList<>();
+        }
+    }
+
+
 
     /**
      * Adds an individual tag to database.
@@ -147,15 +179,20 @@ public class TagsDAO implements DAOInterface<Tag> {
 
     /**
      * implementation of DAOInterface delete.
+     * We're deleting the created tags as well as all of their assigned wines
      *
      * @param tagId id of object to delete
      */
     @Override
     public void delete(int tagId) {
         String sql = "DELETE FROM created_tags WHERE tagid=?";
+        String cleanup = "DELETE FROM assigned_tags WHERE tagid=?";
         try (Connection conn = databaseService.connect();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                PreparedStatement ps_cleanup = conn.prepareStatement(cleanup)) {
+            ps_cleanup.setInt(1, tagId);
             ps.setInt(1, tagId);
+            ps_cleanup.executeUpdate();
             ps.executeUpdate();
         } catch (SQLException sqlException) {
             log.error(sqlException);
