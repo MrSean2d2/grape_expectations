@@ -34,6 +34,9 @@ public class EditUserPopupController extends PageController implements ClosableW
     private User curUser;
     private boolean editingCurrentUser;
 
+    /**
+     * Initialises page based on selected user.
+     */
     @FXML
     private void initialize() {
         OpenWindowsService.getInstance().addWindow(this);
@@ -47,6 +50,9 @@ public class EditUserPopupController extends PageController implements ClosableW
         roleComboBox.getSelectionModel().select(curUser.getRole());
     }
 
+    /**
+     * Closes window.
+     */
     @FXML
     @Override
     public void closeWindow() {
@@ -55,6 +61,9 @@ public class EditUserPopupController extends PageController implements ClosableW
         stage.close();
     }
 
+    /**
+     * Saves changes made and closes the window.
+     */
     @FXML
     private void submit() {
         curUser.setUsername(usernameField.getText());
@@ -68,6 +77,9 @@ public class EditUserPopupController extends PageController implements ClosableW
         closeWindow();
     }
 
+    /**
+     * Opens edit password popup.
+     */
     @FXML
     private void openEditPassword() {
         openEditPasswordPopup(true, closeButton.getScene().getWindow());

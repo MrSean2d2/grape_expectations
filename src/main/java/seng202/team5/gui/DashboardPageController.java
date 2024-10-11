@@ -171,7 +171,7 @@ public class DashboardPageController extends PageController {
     }
 
     /**
-     * Populates the pie chart combo box.
+     * Populates the pie chart radio buttons.
      */
     private void initialiseRadioButtons() {
         List<RadioButton> radioButtonList = new ArrayList<>();

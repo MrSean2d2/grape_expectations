@@ -98,18 +98,6 @@ public class Review {
 
     // Setters
 
-
-    /**
-     * Toggles the wine's favourite status and updates the database.
-     *
-     * @param favourite whether the wine is favourite or not
-     */
-    public void toggleFavourite(boolean favourite) {
-        this.favourite = !favourite;
-        reviewDAO.update(this);
-    }
-
-
     /**
      * Set the notes and updates the database.
      *
