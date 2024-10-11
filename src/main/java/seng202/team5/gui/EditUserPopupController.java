@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import seng202.team5.models.Role;
@@ -65,6 +64,7 @@ public class EditUserPopupController extends PageController implements ClosableW
         }
         UserDAO userDAO = new UserDAO();
         userDAO.update(curUser);
+        addNotification("User updated", "#d5e958");
         closeWindow();
     }
 

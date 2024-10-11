@@ -1,6 +1,5 @@
 package seng202.team5.gui;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import javafx.beans.value.ObservableValue;
@@ -22,7 +21,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -228,25 +226,7 @@ public class DataListPageController extends PageController {
 
     private void addWine(ActionEvent event) {
         WineService.getInstance().setSelectedWine(null);
-        try {
-            FXMLLoader addWineLoader = new FXMLLoader(getClass().getResource(
-                    "/fxml/EditWinePopup.fxml"));
-            Parent root = addWineLoader.load();
-            EditWinePopupController controller = addWineLoader.getController();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Add new wine");
-            controller.init(stage);
-            controller.setHeaderController(getHeaderController());
-            String styleSheetUrl = MainWindow.styleSheet;
-            scene.getStylesheets().add(styleSheetUrl);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.showAndWait();
-            onResetSearchFilterButtonClicked();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        openPopup("/fxml/EditWinePopup.fxml", "Add new wine", addWineButton.getScene().getWindow());
     }
 
     /**
