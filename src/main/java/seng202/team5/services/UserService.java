@@ -115,14 +115,29 @@ public class UserService {
         currentUser.set(user);
     }
 
+    /**
+     * Gets current user.
+     *
+     * @return current user
+     */
     public User getCurrentUser() {
         return currentUser.get();
     }
 
+    /**
+     * Gets selected user.
+     *
+     * @return selected user
+     */
     public User getSelectedUser() {
         return selectedUser;
     }
 
+    /**
+     * Sets selected user.
+     *
+     * @param user selected user
+     */
     public void setSelectedUser(User user) {
         this.selectedUser = user;
     }
@@ -326,6 +341,9 @@ public class UserService {
      * @param password the password to check
      * @param hashedPassword the hashed password
      * @return hashed password as a string
+     * @throws NoSuchAlgorithmException if password hashing fails
+     * @throws InvalidKeySpecException if password hashing fails
+     * @throws PasswordIncorrectException if the password is incorrect
      */
     public static boolean verifyPassword(String password, String hashedPassword)
             throws NoSuchAlgorithmException,

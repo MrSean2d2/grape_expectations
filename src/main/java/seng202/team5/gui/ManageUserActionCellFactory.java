@@ -5,11 +5,7 @@ import java.util.Optional;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,6 +33,12 @@ public class ManageUserActionCellFactory implements
         this.pageController = pageController;
     }
 
+    /**
+     * Adds buttons to user table and adds functionality.
+     *
+     * @param userStringTableColumn user column
+     * @return table cell
+     */
     @Override
     public TableCell<User, Boolean> call(TableColumn<User, Boolean> userStringTableColumn) {
         return new TableCell<>() {
@@ -45,6 +47,9 @@ public class ManageUserActionCellFactory implements
             final Button editUserButton = new Button("Edit");
             @Override
             public void updateItem(Boolean item, boolean empty) {
+                deleteUserButton.setTooltip(new Tooltip("Delete User"));
+                editUserButton.setTooltip(new Tooltip("Edit User"));
+
                 super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);

@@ -241,11 +241,6 @@ public class WineDAO implements DAOInterface<Wine> {
                     ps.setDouble(5, wine.getPrice());
                     ps.setString(6, wine.getWineColour());
 
-                    // We need to make this more efficient -
-                    // I have implemented a hash map which hopefully increases the performance
-                    // However we could further improve it by initialising this at the start
-                    // of the app so that if any more wines are added they can just reference
-                    // the hash map, rather than query the db.
                     Vineyard curVineyard = wine.getVineyard();
                     Pair<String, String> vineyardSecondaryKey = Pair.of(curVineyard.getName(),
                             curVineyard.getRegion());
@@ -514,8 +509,7 @@ public class WineDAO implements DAOInterface<Wine> {
     public String queryBuilder(String search, String variety,
                                String colour, String region,
                                String year, double minPrice,
-                               double maxPrice, double minRating,
-                               double maxRating) {
+                               double maxPrice, double minRating) {
 
         // Build the SQL statement
         String sql = "SELECT DISTINCT wine.id, wine.name, wine.description, wine.year, "
@@ -525,7 +519,7 @@ public class WineDAO implements DAOInterface<Wine> {
 
         // Append onto the sql statement if necessary
         if (search != null) {
-            sql +=  " AND (wine.name LIKE ? OR wine.description LIKE ?) ";
+            sql +=  " AND (wine.name LIKE ? OR wine.description LIKE ?)";
         }
 
         // If the variety is valid, add it to the query

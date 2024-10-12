@@ -4,14 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
@@ -32,6 +25,8 @@ import seng202.team5.services.WineService;
  */
 public class EditWinePopupController extends FormErrorController implements ClosableWindow {
 
+    @FXML
+    public Button submitButton;
     @FXML
     private Button closeButton;
 
@@ -167,6 +162,14 @@ public class EditWinePopupController extends FormErrorController implements Clos
         OpenWindowsService.getInstance().addWindow(this);
         wineService = WineService.getInstance();
         wine = wineService.getSelectedWine();
+
+        closeButton.setTooltip(new Tooltip("Close window"));
+        deleteButton.setTooltip(new Tooltip("Delete wine"));
+        submitButton.setTooltip(new Tooltip("Submit changes"));
+        yearField.setTooltip(new Tooltip("Year of wine"));
+        priceField.setTooltip(new Tooltip("Price of wine"));
+        ratingField.setTooltip(new Tooltip("Rating of wine"));
+
         if (wine != null) {
             initLabels();
             initRating();
@@ -177,11 +180,15 @@ public class EditWinePopupController extends FormErrorController implements Clos
             actionLabel.setText("Add wine: ");
             wineLabel.setVisible(false);
             deleteButton.setVisible(false);
+
+
         }
         descriptionArea.setTextFormatter(new TextFormatter<String>(change ->
                 change.getControlNewText().length() <= maxChars ? change : null));
 
         initAutoComplete();
+
+        ratingSlider.setTooltip(new Tooltip("Select wine rating"));
 
 
     }
