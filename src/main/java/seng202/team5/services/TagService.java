@@ -1,16 +1,8 @@
 package seng202.team5.services;
 
-import java.io.IOException;
 import java.util.List;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.Window;
-import seng202.team5.gui.EditTagPopupController;
-import seng202.team5.gui.HeaderController;
-import seng202.team5.gui.MainWindow;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Tag;
 import seng202.team5.repository.TagsDAO;
 
@@ -97,40 +89,42 @@ public class TagService {
     }
 
     /**
-     * Create a new tag popup. If the selected tag is null,
-     * it will prompt the user to create a new tag.
+     * Verify the tag name length.
      *
-     * @param ownerWindow the window that owns the popup
-     * @param headerController the header controller to use
-     * @throws IOException if the page can't be loaded
+     * @param name the name
+     * @return an error message, null if the name is valid
      */
-    public void showEditTagPopup(Window ownerWindow,
-                                 HeaderController headerController) throws IOException {
-        FXMLLoader editWineLoader = new FXMLLoader(getClass()
-                .getResource("/fxml/EditTagPopup.fxml"));
-
-        Parent root = editWineLoader.load();
-        EditTagPopupController controller = editWineLoader.getController();
-
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        controller.init(stage);
-        controller.setHeaderController(headerController);
-
-        Tag selectedTag = getSelectedTag();
-
-        if (selectedTag != null) {
-            stage.setTitle(String.format("Edit tag %s", selectedTag.getName()));
+    public String checkName(String name) {
+        int maxChars = 20;
+        if (name.isBlank()) {
+            return "Tag name can't be blank!";
+        } else if (name.length() > maxChars) {
+            return String.format("Tag name is too long! Must be no more than %s characters.",
+                    maxChars);
         } else {
-            stage.setTitle("Create new Tag");
+            return null;
         }
-        String styleSheetUrl = MainWindow.styleSheet;
-        scene.getStylesheets().add(styleSheetUrl);
-        stage.initOwner(ownerWindow);
-        stage.initModality(Modality.WINDOW_MODAL);
-
-        // Show the popup and wait for it to be closed
-        stage.showAndWait();
     }
+
+    /**
+     * Create a tag, add it to the database, and return it. You must check for
+     * duplicates with {@link TagService#checkTagExists(String, int)} first.
+     *
+     * @param userId the user id of the user who created the tag
+     * @param name the name of the tag
+     * @param colourId the colour id
+     * @return the added tag object
+     */
+    public Tag createTag(int userId, String name, int colourId) {
+        Tag tag = new Tag(userId, name, colourId);
+        int id = tagsDAO.add(tag);
+        if (id != -1) {
+            tag.setTagId(id);
+            setCreatedTag(tag);
+            return tag;
+        } else {
+            return null;
+        }
+    }
+
 }
