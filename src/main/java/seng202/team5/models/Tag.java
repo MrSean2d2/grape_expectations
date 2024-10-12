@@ -14,17 +14,6 @@ public class Tag {
     private int userId;
 
     /**
-     * Constructor with IDs only.
-     */
-    public Tag(int tagId, int userId) {
-        this.tagId = tagId;
-        this.userId = userId;
-        this.name = "";
-        this.colour = 0; // Not set
-    }
-
-
-    /**
      * Constructor with all the parameters.
      */
     public Tag(int tagId, int userId, String name, int colour) {
