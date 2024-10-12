@@ -88,7 +88,7 @@ public class ReviewDAO implements DAOInterface<Review> {
         List<Review> reviews = new ArrayList<>();
         String sql = "SELECT * FROM review WHERE userid=?";
         if (onlyRated) {
-            sql += "AND rating !=-1";//default rating/ unrated
+            sql += "AND rating !=-1"; //default rating/ unrated
         }
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
