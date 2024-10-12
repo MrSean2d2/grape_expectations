@@ -45,29 +45,7 @@ The file is located at build/libs/grape_expectations-1.0.jar
 2. Open a command line interface inside the project directory and run `cd build/libs` to change into the target directory.
 3. Run the command `java -jar grape_expectations-1.0.jar` to open the application.
 
-## Configuration
-In order to select your dataset, make a configuration file name `config.yaml`
-in the same directory as the built jar file. A bundled New Zealand dataset will
-be used by default if no config file is present.
-
-### Config Example
-```yaml
-# config.yaml
-csvPath: /home/me/files/data.csv
-```
-```yaml
-# you can also do relative paths:
-csvPath: ./data.csv
-```
-
-## CSV Format
-The CSV file used must conform to the schema of the WineMag dataset, which has
-header values (note the first blank column):
-```
-,country,description,designation,points,price,province,region_1,region_2,taster_name,taster_twitter_handle,title,variety,winery
-```
 
 ## References
 - Brown, F., Gascoigne, M., Miguel, A., Reitsma, S., Tam, C., & Wills, M. (2024).
-_Grape Expectations - Phase II_. SENG202 Team 5.
-- winemag-data-130k. (2018). Www.kaggle.com. https://www.kaggle.com/datasets/christopheiv/winemagdata130k
+_Grape Expectations - Phase III_. SENG202 Team 5.
