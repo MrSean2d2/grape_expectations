@@ -116,16 +116,7 @@ public class DataListPageController extends PageController {
         wineDAO = new WineDAO(vineyardDAO);
         tagsDAO = new TagsDAO();
 
-        varietyComboBox.setTooltip(new Tooltip("Filter by variety"));
-        regionComboBox.setTooltip(new Tooltip("Filter by region"));
-        yearComboBox.setTooltip(new Tooltip("Filter by year"));
-        priceRangeSlider.setTooltip(new Tooltip("Select a price range"));
-        maxPriceValue.setTooltip(new Tooltip("Set a maximum price"));
-        minPriceValue.setTooltip(new Tooltip("Set a minimum price"));
-        ratingSlider.setTooltip(new Tooltip("Select a minimum rating"));
-        ratingSliderValue.setTooltip(new Tooltip("Set a minimum rating"));
-        searchButton.setTooltip(new Tooltip("Enter search query"));
-        resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
+        initToolTips();
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -231,6 +222,7 @@ public class DataListPageController extends PageController {
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
             addWineButton.setVisible(true);
             addWineButton.setOnAction(this::addWine);
+            addWineButton.setTooltip(new Tooltip("Add Wine"));
         }
     }
 
@@ -329,6 +321,25 @@ public class DataListPageController extends PageController {
     }
 
     /**
+     * Initialises tool tips.
+     */
+    private void initToolTips(){
+        varietyComboBox.setTooltip(new Tooltip("Filter by variety"));
+        regionComboBox.setTooltip(new Tooltip("Filter by region"));
+        yearComboBox.setTooltip(new Tooltip("Filter by year"));
+        priceRangeSlider.setTooltip(new Tooltip("Select a price range"));
+        maxPriceValue.setTooltip(new Tooltip("Set a maximum price"));
+        minPriceValue.setTooltip(new Tooltip("Set a minimum price"));
+        ratingSlider.setTooltip(new Tooltip("Select a minimum rating"));
+        ratingSliderValue.setTooltip(new Tooltip("Set a minimum rating"));
+        searchButton.setTooltip(new Tooltip("Enter search query"));
+        resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
+        tagComboBox.setTooltip(new Tooltip("Filter by tag"));
+        colourComboBox.setTooltip(new Tooltip("Filter by colour"));
+
+    }
+
+    /**
      * Adds listeners to price and rating slider filters, to handle action of such filters.
      */
     private void initializeSliderListeners() {
@@ -366,7 +377,7 @@ public class DataListPageController extends PageController {
     }
 
     /**
-     * set default options of variety combobox to all varieties.
+     * Set default options of variety combobox to all varieties.
      */
     public void setDefaultVarietyBox() {
         List<String> varietyOptions = wineDAO.getVariety();

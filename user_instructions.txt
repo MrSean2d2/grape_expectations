@@ -32,5 +32,5 @@ The default admin user has username "admin" and password "admin". You will be
 asked to change the password on your first log in.
 
 ## Documentation
-If you have any further questions, please open the document grape_expectations_guide.pdf
+If you have any further questions, please open the document seng202_2024_team5_3_jar/grape_expectations_guide.pdf
 which contains helpful documentation for the app.
