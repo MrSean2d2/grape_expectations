@@ -412,10 +412,9 @@ public class WineDAOTest {
                     + "vineyard.name AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD "
                     + "WHERE vineyard.id = wine.vineyard "
-                    + "AND (wine.name LIKE ? OR wine.description LIKE ?)  "
-                    + "AND wine.price <= -1.0 AND wine.price >= 800.0;";
+                    + "AND (wine.name LIKE ? OR wine.description LIKE ?);";
             assertEquals(expectedSql, wineDAO.queryBuilder("Yummy", "0", "0",
-                    "0", "0", 800.0, -1, -1, -1));
+                    "0", "0", 0, 800, -1));
         }
 
         /**
@@ -429,11 +428,9 @@ public class WineDAOTest {
                     + "vineyard.name AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD "
                     + "WHERE vineyard.id = wine.vineyard "
-                    + "AND wine.variety = 'testVariety' "
-                    + "AND wine.price <= -1.0 "
-                    + "AND wine.price >= 800.0;";
+                    + "AND wine.variety = 'testVariety';";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "testVariety", "0",
-                    "0", "0", 800.0, -1, -1, -1));
+                    "0", "0", 0, 800, -1));
         }
 
         /**
@@ -447,10 +444,9 @@ public class WineDAOTest {
                     + "vineyard.name AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD "
                     + "WHERE vineyard.id = wine.vineyard "
-                    + "AND wine.colour = 'testRegion' "
-                    + "AND wine.price <= -1.0 AND wine.price >= 800.0;";
-            assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "testRegion",
-                    "0", "0", 800.0, -1, -1, -1));
+                    + "AND vineyard.region = 'testRegion';";
+            assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "0",
+                    "testRegion", "0", 0, 800, -1));
         }
 
         /**
@@ -463,10 +459,9 @@ public class WineDAOTest {
                     + "wine.variety, wine.price, wine.colour, "
                     + "vineyard.name AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD "
-                    + "WHERE vineyard.id = wine.vineyard AND vineyard.region = '1999' "
-                    + "AND wine.price <= -1.0 AND wine.price >= 800.0;";
+                    + "WHERE vineyard.id = wine.vineyard AND wine.year = 1990;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "0",
-                    "1999", "0", 800.0, -1, -1, -1));
+                    "0", "1990", 0, 800, -1));
         }
 
         /**
@@ -479,11 +474,9 @@ public class WineDAOTest {
                     + "wine.colour, vineyard.name AS vineyardName, "
                     + "vineyard.region FROM WINE, VINEYARD "
                     + "WHERE vineyard.id = wine.vineyard "
-                    + "AND wine.year = 5 "
-                    + "AND wine.price <= -1.0 "
-                    + "AND wine.price >= 800.0;";
+                    + "AND wine.price >= 5.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "0",
-                    "0", "5", 800.0, -1, -1, -1));
+                    "0", "0", 5, 800, -1));
         }
 
         /**
@@ -496,9 +489,9 @@ public class WineDAOTest {
                     + "wine.variety, wine.price, wine.colour, "
                     + "vineyard.name AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard "
-                    + "AND wine.year = 5 AND wine.price <= -1.0 AND wine.price >= 30.0;";
+                    + "AND wine.price <= 30.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "0",
-                    "0", "5", 30.0, -1, -1, -1));
+                    "0", "0", 0, 30, -1));
         }
 
         /**
@@ -511,10 +504,10 @@ public class WineDAOTest {
                     + "wine.variety, wine.price, wine.colour, "
                     + "vineyard.name AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard "
-                    + "AND wine.year = 5 AND wine.price <= -1.0 "
-                    + "AND wine.price >= 30.0;";
+                    + "AND wine.price <= 30.0 "
+                    + "AND wine.price >= 5.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "0",
-                    "0", "5", 30.0, -1, -1, -1));
+                    "0", "0", 5, 30, -1));
         }
 
         /**
@@ -528,9 +521,9 @@ public class WineDAOTest {
                     + "AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD "
                     + "WHERE vineyard.id = wine.vineyard "
-                    + "AND wine.price <= 80.0 AND wine.price >= 800.0;";
+                    + "AND wine.rating >= 80.0;";
             assertEquals(expectedSql, wineDAO.queryBuilder(null, "0", "0",
-                    "0", "0", 800.0, 80, -1, -1));
+                    "0", "0", 0, 800, 80));
         }
 
         /**
@@ -543,11 +536,10 @@ public class WineDAOTest {
                     + "wine.variety, wine.price, wine.colour, "
                     + "vineyard.name AS vineyardName, vineyard.region "
                     + "FROM WINE, VINEYARD WHERE vineyard.id = wine.vineyard "
-                    + "AND (wine.name LIKE ? OR wine.description LIKE ?)  "
-                    + "AND wine.variety = 'Test Variety' "
-                    + "AND wine.price <= -1.0 AND wine.price >= 800.0;";
+                    + "AND (wine.name LIKE ? OR wine.description LIKE ?) "
+                    + "AND wine.variety = 'Test Variety';";
             assertEquals(expectedSql, wineDAO.queryBuilder("Yummy", "Test Variety", "0",
-                    "0", "0", 800.0, -1, -1, -1));
+                    "0", "0", 0, 800, -1));
         }
     }
 

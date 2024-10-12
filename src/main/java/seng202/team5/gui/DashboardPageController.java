@@ -13,10 +13,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -54,9 +52,13 @@ public class DashboardPageController extends PageController {
     @FXML
     public RadioButton tagPieChartRadioButton;
     @FXML
+    public GridPane radioButtonContainer;
+    @FXML
     public Label topColourLabel;
     @FXML
     public Label noTagMessageLabel;
+    @FXML
+    public Button addNewTagButton;
     @FXML
     private PieChart pieChart;
 
@@ -106,18 +108,37 @@ public class DashboardPageController extends PageController {
                     + (5 - numWinesReviewed)
                     + " more wine(s) to view Pie Chart Stats!");
             notEnoughRatingsMessageLabel.setVisible(true);
+            setPieChartButtons(false);
         } else {
             pieChart.setVisible(true);
             notEnoughRatingsMessageLabel.setVisible(false);
-        }
-        updateTopLabels();
+            setPieChartButtons(true);
 
+        }
         initialiseRadioButtons();
+
+        updateTopLabels();
 
         // Add tables
         tagsDAO = new TagsDAO();
 
         initialiseTagList();
+    }
+
+
+    /**
+     * set radio buttons and container of radio buttons to hide or show depending on if
+     * a pie chart can be made (enough wines have been reviewed).
+     *
+     * @param visibility boolean whether buttons should be shown
+     */
+    public void setPieChartButtons(boolean visibility) {
+        colourPieChartButton.setVisible(visibility);
+        regionPieChartButton.setVisible(visibility);
+        tagPieChartRadioButton.setVisible(visibility);
+        varietyPieChartButton.setVisible(visibility);
+        yearPieChartButton.setVisible(visibility);
+        radioButtonContainer.setVisible(visibility);
     }
 
     /**
@@ -151,9 +172,16 @@ public class DashboardPageController extends PageController {
     }
 
     /**
-     * Populates the pie chart combo box.
+     * Populates the pie chart radio buttons.
      */
     private void initialiseRadioButtons() {
+        colourPieChartButton.setTooltip(new Tooltip("Favourite Colour Pie Chart"));
+        varietyPieChartButton.setTooltip(new Tooltip("Favourite Variety Pie Chart"));
+        regionPieChartButton.setTooltip(new Tooltip("Favourite Region Pie Chart"));
+        yearPieChartButton.setTooltip(new Tooltip("Favourite Year Pie Chart"));
+        tagPieChartRadioButton.setTooltip(new Tooltip("Favourite Tag Pie Chart"));
+        addNewTagButton.setTooltip(new Tooltip("Add a new tag"));
+
         List<RadioButton> radioButtonList = new ArrayList<>();
         radioButtonList.add(colourPieChartButton);
         radioButtonList.add(varietyPieChartButton);
@@ -243,6 +271,7 @@ public class DashboardPageController extends PageController {
         // Add an edit button if the user has the ability to
         if (canEdit) {
             Label editButton = new Label("Edit");
+            editButton.setTooltip(new Tooltip("Edit wine list"));
             editButton.setAlignment(Pos.CENTER_RIGHT);
             editButton.setMaxHeight(Double.MAX_VALUE);
             HBox.setMargin(editButton, new Insets(0, 0, 0, 10));
@@ -276,7 +305,7 @@ public class DashboardPageController extends PageController {
 
         // More general styling stuff
         tagContainer.setStyle(tagContainer.getStyle() + "-fx-background-radius: 5;");
-
+        Tooltip.install(tagContainer,new Tooltip( name + " wine list"));
         // Set click event to pass tag name to DataListPage
         tagContainer.setOnMouseClicked(event -> {
             try {

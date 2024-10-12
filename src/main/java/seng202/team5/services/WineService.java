@@ -35,7 +35,7 @@ public class WineService {
     public void populateDatabase(DataLoadService dataLoadService) {
         wineDAO.truncateWines();
         wineDAO.getVineyardDAO().truncateVineyards();
-        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        List<Wine> wines = dataLoadService.processWinesFromCsv(true);
         wineDAO.batchAdd(wines);
     }
 
@@ -67,15 +67,14 @@ public class WineService {
      * @param minPrice the minimum price
      * @param maxPrice the maximum price
      * @param minRating the minimum rating
-     * @param maxRating the maximum rating
      */
     public void searchWines(String search, String variety,
                             String colour, String region,
                             String year, double minPrice,
                             double maxPrice, double minRating,
-                            double maxRating, String selectedTag) {
+                            String selectedTag) {
         String sql = wineDAO.queryBuilder(search, variety, colour, region, year, minPrice,
-                maxPrice, minRating, maxRating);
+                maxPrice, minRating);
         List<Wine> wines = wineDAO.executeSearchFilter(sql, search);
         wineList = FXCollections.observableList(wines, Wine.extractor());
         filterWinesByTag(selectedTag);
@@ -98,6 +97,7 @@ public class WineService {
                 if (selectedTag.equals("All Reviews")) {
                     // Show all wines that the current user has reviewed
                     wineIds = reviewDAO.getIdsFromUser(currentUserId);
+                    System.out.println("user id: "+currentUserId);
                 } else {
                     // Filter reviews that contain the selected tag
                     int tagId = tagsDAO.getIdFromName(selectedTag, currentUserId);
@@ -105,7 +105,7 @@ public class WineService {
                             .map(AssignedTag::getWineId).toList();
 
                 }
-                List<Wine> filteredWines = wineList.stream()
+                List<Wine> filteredWines = getWineList().stream()
                         .filter(wine -> wineIds.contains(wine.getId()))   // Tag filtering
                         .collect(Collectors.toList());
 

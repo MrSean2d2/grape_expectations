@@ -101,9 +101,9 @@ public class DataListPageController extends PageController {
     private double minPriceFilter;
     private double maxPriceFilter;
     private double minRatingFilter;
-    private double maxRatingFilter;
 
     private static final Logger log = LogManager.getLogger(DataListPageController.class);
+    private boolean addedWine = false;
 
     /**
      * Initializes the data List by calling {@link seng202.team5.services.WineService}
@@ -115,16 +115,7 @@ public class DataListPageController extends PageController {
         wineDAO = new WineDAO(vineyardDAO);
         tagsDAO = new TagsDAO();
 
-        varietyComboBox.setTooltip(new Tooltip("Filter by variety"));
-        regionComboBox.setTooltip(new Tooltip("Filter by region"));
-        yearComboBox.setTooltip(new Tooltip("Filter by year"));
-        priceRangeSlider.setTooltip(new Tooltip("Select a price range"));
-        maxPriceValue.setTooltip(new Tooltip("Set a maximum price"));
-        minPriceValue.setTooltip(new Tooltip("Set a minimum price"));
-        ratingSlider.setTooltip(new Tooltip("Select a minimum rating"));
-        ratingSliderValue.setTooltip(new Tooltip("Set a minimum rating"));
-        searchButton.setTooltip(new Tooltip("Enter search query"));
-        resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
+        initToolTips();
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -192,16 +183,22 @@ public class DataListPageController extends PageController {
             tagComboBox.setValue("All Reviews");
             switch (category) {
                 case "Variety":
+                    varietyFilter = filterTerm;
                     varietyComboBox.setValue(filterTerm);
                     break;
                 case "Region":
+                    regionFilter = filterTerm;
                     regionComboBox.setValue(filterTerm);
                     break;
                 case "Year":
+                    yearFilter = filterTerm;
                     yearComboBox.setValue(filterTerm);
                     break;
                 case "Colour":
-                    colourComboBox.setValue(filterTerm);
+                    colourFilter = filterTerm;
+                    if (!filterTerm.equals("Unknown")) {
+                        colourComboBox.setValue(filterTerm);
+                    }
                     break;
                 case "Tags":
                     tagComboBox.setValue(filterTerm);
@@ -216,23 +213,33 @@ public class DataListPageController extends PageController {
         applySearchFilters();
     }
 
+    /**
+     * Shows add wine button if user is an admin.
+     */
     private void initAdminAction() {
         if (UserService.getInstance().getCurrentUser() != null
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
             addWineButton.setVisible(true);
             addWineButton.setOnAction(this::addWine);
+            addWineButton.setTooltip(new Tooltip("Add Wine"));
         } else {
             addWineButton.setVisible(false);
         }
     }
 
+    /**
+     * Opens popup to add new wine.
+     *
+     * @param event button click event
+     */
     private void addWine(ActionEvent event) {
         WineService.getInstance().setSelectedWine(null);
         openPopup("/fxml/EditWinePopup.fxml", "Add new wine", addWineButton.getScene().getWindow());
+        addedWine = true;
     }
 
     /**
-     * Initialize listeners to change the slider values in real time to reflect
+     * Initialize listeners to change the slider and slider values in real time to reflect
      * the current selection.
      */
     private void initializeSliderValueListeners() {
@@ -313,6 +320,25 @@ public class DataListPageController extends PageController {
     }
 
     /**
+     * Initialises tool tips.
+     */
+    private void initToolTips(){
+        varietyComboBox.setTooltip(new Tooltip("Filter by variety"));
+        regionComboBox.setTooltip(new Tooltip("Filter by region"));
+        yearComboBox.setTooltip(new Tooltip("Filter by year"));
+        priceRangeSlider.setTooltip(new Tooltip("Select a price range"));
+        maxPriceValue.setTooltip(new Tooltip("Set a maximum price"));
+        minPriceValue.setTooltip(new Tooltip("Set a minimum price"));
+        ratingSlider.setTooltip(new Tooltip("Select a minimum rating"));
+        ratingSliderValue.setTooltip(new Tooltip("Set a minimum rating"));
+        searchButton.setTooltip(new Tooltip("Enter search query"));
+        resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
+        tagComboBox.setTooltip(new Tooltip("Filter by tag"));
+        colourComboBox.setTooltip(new Tooltip("Filter by colour"));
+
+    }
+
+    /**
      * Adds listeners to price and rating slider filters, to handle action of such filters.
      */
     private void initializeSliderListeners() {
@@ -351,7 +377,7 @@ public class DataListPageController extends PageController {
     }
 
     /**
-     *set default options of variety combobox to all varieties.
+     * Set default options of variety combobox to all varieties.
      */
     public void setDefaultVarietyBox() {
         List<String> varietyOptions = wineDAO.getVariety();
@@ -483,19 +509,20 @@ public class DataListPageController extends PageController {
         ratingSliderValue.setText(String.valueOf(minRating));
 
         // Defaults
-        this.yearFilter = "0";
-        this.varietyFilter = "0";
-        this.colourFilter = "0";
-        this.regionFilter = "0";
-        this.minPriceFilter = 0.0;
-        this.maxPriceFilter = 800.0;
-        this.minRatingFilter = 0.0;
-        this.maxRatingFilter = 100.0;
+        if (!addedWine) {
+            this.yearFilter = "0";
+            this.varietyFilter = "0";
+            this.colourFilter = "0";
+            this.regionFilter = "0";
+            this.minPriceFilter = 0.0;
+            this.maxPriceFilter = 800.0;
+            this.minRatingFilter = 0.0;
+        }
+        addedWine = false;
     }
 
     /**
-     * Gets text from search bar and uses wineDAO to get matching wines
-     * to display on table.
+     * Applies search when search button is clicked.
      */
     @FXML
     private void searchClicked() {
@@ -511,13 +538,15 @@ public class DataListPageController extends PageController {
         WineService.getInstance().searchWines(searchTextField.getText(),
                 varietyFilter, colourFilter, regionFilter,
                 yearFilter, minPriceFilter, maxPriceFilter,
-                minRatingFilter, maxRatingFilter, selectedTag);
+                minRatingFilter, selectedTag);
 
         // If a tag is selected, apply tag filtering as well
         ObservableList<Wine> observableQueryResults = WineService.getInstance().getWineList();
         wineTable.setItems(observableQueryResults);
         tableResults.setText(wineTable.getItems().size() + " results");
-        addNotification("Applied Filter", "#d5e958");
+        if (!addedWine) {
+            addNotification("Applied Filter", "#d5e958");
+        }
     }
 
     /**
@@ -578,7 +607,6 @@ public class DataListPageController extends PageController {
      * Handles action of Year filter selected.
      */
     public void onYearComboBoxClicked() {
-        //TODO: come back to - string vs int
         String selectedYear = String.valueOf(yearComboBox.getValue());
         if (Objects.equals(selectedYear, "Year")) {
             yearFilter = "0";

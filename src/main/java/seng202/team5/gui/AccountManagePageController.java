@@ -69,10 +69,11 @@ public class AccountManagePageController extends PageController {
 
             adminButton.setManaged(true);
             adminButton.setVisible(true);
+            adminButton.setTooltip(new Tooltip("Access Admin Page"));
         } else {
             changePasswordButton.setDisable(false);
             changePasswordButton.setVisible(true);
-
+            changePasswordButton.setTooltip(new Tooltip("Change Password"));
             adminButton.setVisible(false);
             adminButton.setManaged(false);
         }
@@ -89,7 +90,7 @@ public class AccountManagePageController extends PageController {
 
         // Update favourite count text
         ReviewDAO reviewDAO = new ReviewDAO();
-        int numWines = reviewDAO.getFromUser(curUser.getId()).size();
+        int numWines = reviewDAO.getFromUser(curUser.getId(), false).size();
         String wineLabel = "wine";
         if (numWines != 1) {
             wineLabel = "wines";

@@ -76,7 +76,7 @@ public class DashboardService {
      * Initialises data for service, aggregates ratings by variety, region, year.
      */
     public void initializeData() {
-        userReviews = reviewDAO.getFromUser(userId);
+        userReviews = reviewDAO.getFromUser(userId, true);
         TagsDAO tagsDAO = new TagsDAO();
 
         // Create a hash map for each property
@@ -180,7 +180,7 @@ public class DashboardService {
     /**
      * Retrieves the selected pie slice search criteria.
      *
-     * @return a list containing the selected category and filter term
+     * @return a list containing the selected category and filter term.
      */
     public List<String> getSelectedPieSliceSearch() {
         List<String> selectedValues = new ArrayList<>();

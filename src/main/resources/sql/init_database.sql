@@ -25,8 +25,7 @@ CREATE TABLE IF NOT EXISTS WINE (
     price NUMERIC,
     colour TEXT,
     vineyard INTEGER REFERENCES VINEYARD(id),
-    description TEXT,
-    favorite BOOLEAN REFERENCES REVIEW
+    description TEXT
 
 );
 --SPLIT

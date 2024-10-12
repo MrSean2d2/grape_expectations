@@ -9,6 +9,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import seng202.team5.models.Role;
 import seng202.team5.models.User;
@@ -16,13 +17,18 @@ import seng202.team5.repository.UserDAO;
 import seng202.team5.services.OpenWindowsService;
 import seng202.team5.services.UserService;
 
-
 /**
  * A controller for the edit user window.
  *
  * @author Sean Reitsma
  */
 public class EditUserPopupController extends PageController implements ClosableWindow {
+
+    @FXML
+    private Button doneButton;
+
+    @FXML
+    private Button changePasswordButton;
 
     @FXML
     private ComboBox<Role> roleComboBox;
@@ -41,6 +47,9 @@ public class EditUserPopupController extends PageController implements ClosableW
     private User curUser;
     private boolean editingCurrentUser;
 
+    /**
+     * Initialises page based on selected user.
+     */
     private UserDAO userDAO;
 
     private ObservableList<User> userList;
@@ -65,6 +74,11 @@ public class EditUserPopupController extends PageController implements ClosableW
         roleComboBox.setDisable(editingCurrentUser);
         roleComboBox.getItems().setAll(Role.values());
         roleComboBox.getSelectionModel().select(curUser.getRole());
+
+        closeButton.setTooltip(new Tooltip("Close window"));
+        doneButton.setTooltip(new Tooltip("Submit changes"));
+        changePasswordButton.setTooltip(new Tooltip("Edit user's password"));
+        roleComboBox.setTooltip(new Tooltip("Select user role"));
 
         userDAO = new UserDAO();
 
@@ -96,6 +110,9 @@ public class EditUserPopupController extends PageController implements ClosableW
 
     /**
      * Submit the changes to the user.
+     */
+    /**
+     * Saves changes made and closes the window.
      */
     @FXML
     private void submit() {
@@ -136,7 +153,7 @@ public class EditUserPopupController extends PageController implements ClosableW
     }
 
     /**
-     * Open the edit password window.
+     * Opens edit password popup.
      */
     @FXML
     private void openEditPassword() {

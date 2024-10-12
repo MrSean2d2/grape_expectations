@@ -62,10 +62,20 @@ public class Vineyard {
         return name;
     }
 
+    /**
+     * Gets latitude.
+     *
+     * @return latitude
+     */
     public double getLat() {
         return lat;
     }
 
+    /**
+     * Gets longitude.
+     *
+     * @return longitude
+     */
     public double getLon() {
         return lon;
     }
@@ -97,10 +107,20 @@ public class Vineyard {
         this.id = id;
     }
 
+    /**
+     * Sets latitude.
+     *
+     * @param lat latitude
+     */
     public void setLat(double lat) {
         this.lat = lat;
     }
 
+    /**
+     * Sets longitude.
+     *
+     * @param lon longitude
+     */
     public void setLon(double lon) {
         this.lon = lon;
     }

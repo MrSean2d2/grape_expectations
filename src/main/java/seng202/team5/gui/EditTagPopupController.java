@@ -2,11 +2,7 @@ package seng202.team5.gui;
 
 import java.util.Optional;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import seng202.team5.exceptions.DuplicateEntryException;
@@ -65,6 +61,9 @@ public class EditTagPopupController extends FormErrorController implements Closa
 
         // Keep track of the original name
         originalName = tagName;
+
+        closeButton.setTooltip(new Tooltip("Close Window"));
+        deleteButton.setTooltip(new Tooltip("Delete "));
     }
 
 

@@ -32,13 +32,6 @@ public class AssignedTag {
     }
 
     /**
-     * Set the tag's id.
-     */
-    public void setTagId(int id) {
-        this.tagId = id;
-    }
-
-    /**
      * Get the user ID.
      *
      * @return the user ID of this tag
@@ -50,12 +43,6 @@ public class AssignedTag {
 
     // Setters
 
-    /**
-     * Set the tag's user id.
-     */
-    public void setUserId(int id) {
-        this.userId = id;
-    }
 
     /**
      * Get the wine ID.
@@ -64,13 +51,6 @@ public class AssignedTag {
      */
     public int getWineId() {
         return wineId;
-    }
-
-    /**
-     * Set the tag's wine id.
-     */
-    public void setWineId(int id) {
-        this.wineId = id;
     }
 
     /**
