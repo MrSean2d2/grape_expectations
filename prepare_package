@@ -28,6 +28,7 @@ head -n 14 README.md > $readmepath
 wget "https://docs.google.com/document/d/1wE6c949DCYe4v5V_dZtw4fwzKqrRi4VYudtyXYAP9WI/export?format=pdf" -O "${toplevel}/seng202_2024_team5_${phase}_report.pdf"
 # Download the user guide in PDF format
 wget "https://docs.google.com/document/d/1w60B5_k7bpS1l5Odatmc0RSfxViLEWdPtaLlI3JBeH0/export?format=pdf" -O "${jardir}/grape_expectations_guide.pdf"
+wget "https://docs.google.com/spreadsheets/d/1OX62iRgTCCp4CX8Uo8SIcmnOpEoLhmQ_uCxqwutAKak/export?format=xlsx" -O "${toplevel}/seng202_2024_team5_${phase}_manual_testing.xlsx"
 
 # Zip everything up
 zip -r "$toplevel" "$toplevel"
