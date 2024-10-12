@@ -33,6 +33,12 @@ public class ManageUserActionCellFactory implements
         this.pageController = pageController;
     }
 
+    /**
+     * Adds buttons to user table and adds functionality.
+     *
+     * @param userStringTableColumn user column
+     * @return table cell
+     */
     @Override
     public TableCell<User, Boolean> call(TableColumn<User, Boolean> userStringTableColumn) {
         return new TableCell<>() {

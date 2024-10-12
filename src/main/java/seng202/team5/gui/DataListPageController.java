@@ -214,7 +214,9 @@ public class DataListPageController extends PageController {
         applySearchFilters();
     }
 
-
+    /**
+     * Shows add wine button if user is an admin.
+     */
     private void initAdminAction() {
         if (UserService.getInstance().getCurrentUser() != null
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
@@ -224,6 +226,11 @@ public class DataListPageController extends PageController {
         }
     }
 
+    /**
+     * Opens popup to add new wine.
+     *
+     * @param event button click event
+     */
     private void addWine(ActionEvent event) {
         WineService.getInstance().setSelectedWine(null);
         openPopup("/fxml/EditWinePopup.fxml", "Add new wine", addWineButton.getScene().getWindow());
@@ -233,7 +240,7 @@ public class DataListPageController extends PageController {
     }
 
     /**
-     * Initialize listeners to change the slider values in real time to reflect
+     * Initialize listeners to change the slider and slider values in real time to reflect
      * the current selection.
      */
     private void initializeSliderValueListeners() {
@@ -370,7 +377,7 @@ public class DataListPageController extends PageController {
     }
 
     /**
-     *set default options of variety combobox to all varieties.
+     * Set default options of variety combobox to all varieties.
      */
     public void setDefaultVarietyBox() {
         List<String> varietyOptions = wineDAO.getVariety();
@@ -493,8 +500,7 @@ public class DataListPageController extends PageController {
     }
 
     /**
-     * Gets text from search bar and uses wineDAO to get matching wines
-     * to display on table.
+     * Applies search when search button is clicked.
      */
     @FXML
     private void searchClicked() {
@@ -579,7 +585,6 @@ public class DataListPageController extends PageController {
      * Handles action of Year filter selected.
      */
     public void onYearComboBoxClicked() {
-        //TODO: come back to - string vs int
         String selectedYear = String.valueOf(yearComboBox.getValue());
         if (Objects.equals(selectedYear, "Year")) {
             yearFilter = "0";

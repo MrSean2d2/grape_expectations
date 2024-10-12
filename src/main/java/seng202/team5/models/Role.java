@@ -13,10 +13,20 @@ public enum Role {
 
     private final String roleName;
 
+    /**
+     * Constructor for Role.
+     *
+     * @param roleName role
+     */
     Role(String roleName) {
         this.roleName = roleName;
     }
 
+    /**
+     * Gets role of user.
+     *
+     * @return role
+     */
     public String getRoleName() {
         return roleName;
     }
