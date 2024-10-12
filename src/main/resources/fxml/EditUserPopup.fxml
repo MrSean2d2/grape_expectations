@@ -28,7 +28,7 @@
             <RowConstraints vgrow="NEVER" />
          </rowConstraints>
          <children>
-            <Button minWidth="100.0" mnemonicParsing="false" onAction="#submit" text="Submit" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+            <Button fx:id= "doneButton" minWidth="100.0" mnemonicParsing="false" onAction="#submit" text="Submit" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets top="20.0" />
                </GridPane.margin>
@@ -90,7 +90,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Button mnemonicParsing="false" onAction="#openEditPassword" prefWidth="250.0" styleClass="primary-button" text="Update user's password" />
+                        <Button fx:id="changePasswordButton" mnemonicParsing="false" onAction="#openEditPassword" prefWidth="250.0" styleClass="primary-button" text="Update user's password" />
                         <Label text="User Role">
                            <font>
                               <Font size="18.0" />

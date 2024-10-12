@@ -27,7 +27,7 @@
     <RowConstraints vgrow="NEVER" />
   </rowConstraints>
    <children>
-      <Button alignment="CENTER" maxWidth="100.0" mnemonicParsing="false" onAction="#done" text="Done" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+      <Button fx:id="doneButton" alignment="CENTER" maxWidth="100.0" mnemonicParsing="false" onAction="#done" text="Done" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -78,7 +78,7 @@
             <HBox spacing="10.0">
                <children>
                   <TextField fx:id="searchField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyReleased="#enterPressed" promptText="Enter username..." styleClass="textbox" HBox.hgrow="ALWAYS" />
-                  <Button maxHeight="1.7976931348623157E308" minWidth="100.0" mnemonicParsing="false" onAction="#searchPressed" styleClass="primary-button" text="Search">
+                  <Button fx:id="searchButton" maxHeight="1.7976931348623157E308" minWidth="100.0" mnemonicParsing="false" onAction="#searchPressed" styleClass="primary-button" text="Search">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>

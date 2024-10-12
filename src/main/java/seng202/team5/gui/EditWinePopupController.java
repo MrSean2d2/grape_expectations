@@ -33,8 +33,6 @@ public class EditWinePopupController extends FormErrorController implements Clos
     @FXML
     private Button deleteButton;
 
-    @FXML
-    private Label actionLabel;
 
     @FXML
     private TextArea descriptionArea;

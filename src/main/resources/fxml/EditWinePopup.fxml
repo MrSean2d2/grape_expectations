@@ -30,7 +30,7 @@
             <RowConstraints vgrow="NEVER" />
          </rowConstraints>
          <children>
-            <Button minWidth="100.0" mnemonicParsing="false" onAction="#submit" text="Submit" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+            <Button fx:id="submitButton" minWidth="100.0" mnemonicParsing="false" onAction="#submit" text="Submit" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
