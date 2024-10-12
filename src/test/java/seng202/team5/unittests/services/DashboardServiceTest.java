@@ -23,8 +23,6 @@ public class DashboardServiceTest {
     private ReviewDAO reviewDAO;
     private WineDAO wineDAO;
     private VineyardDAO vineyardDAO;
-    private TagsDAO tagsDAO;
-    private AssignedTagsDAO assignedTagsDAO;
     public static DatabaseService databaseService;
 
     /**
@@ -56,8 +54,8 @@ public class DashboardServiceTest {
         vineyardDAO = new VineyardDAO();
         wineDAO = new WineDAO(vineyardDAO);
         UserDAO userDAO = new UserDAO();
-        tagsDAO = new TagsDAO();
-        assignedTagsDAO = new AssignedTagsDAO();
+        TagsDAO tagsDAO = new TagsDAO();
+        AssignedTagsDAO assignedTagsDAO = new AssignedTagsDAO();
 
         User testUser = new User("Test User!", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
@@ -65,10 +63,12 @@ public class DashboardServiceTest {
         this.dashboardService = new DashboardService(testUser.getId(),
                 vineyardDAO, wineDAO, reviewDAO);
 
+        // Create mock vineyards
         Vineyard vineyard1 = new Vineyard("Vineyard A", "Region A");
         Vineyard vineyard2 = new Vineyard("Vineyard B", "Region B");
         Vineyard vineyard3 = new Vineyard("Vineyard C", "Region C");
 
+        // Create mock wines and add to database
         Wine wine1 = new Wine("TestWine1", "delicious", 2020,
                 65, 12, "Pinot Noir", "white", vineyard1);
         Wine wine2 = new Wine("TestWine2", "yummy", 2018,
@@ -80,23 +80,22 @@ public class DashboardServiceTest {
         wine2.setId(wineDAO.add(wine2));
         wine3.setId(wineDAO.add(wine3));
 
+        // Create mock reviews and add to database
         reviewDAO.add(new Review(wine1.getId(), testUser.getId(), true, "Great", 5));
         reviewDAO.add(new Review(wine2.getId(), testUser.getId(), true, "Mid", 3));
         reviewDAO.add(new Review(wine3.getId(), testUser.getId(), true, "bad", 1));
 
-        Tag testTag1 = new Tag(1, testUser.getId());
-        testTag1.setName("My absolute favourites");
-        Tag testTag2 = new Tag(2,testUser.getId());
-        testTag2.setName("To Recommend");
+        // Create mock tags
+        Tag testTag1 = new Tag(1, testUser.getId(),"My absolute favourites", 0);
+        Tag testTag2 = new Tag(2,testUser.getId(), "To Recommend", 0);
 
         int testTag1Id = tagsDAO.add(testTag1);
         int testTag2Id = tagsDAO.add(testTag2);
 
+        // Assign mock tags to wines
         AssignedTag testAssignedTag1 = new AssignedTag(testTag1Id, testUser.getId(), wine1.getId());
         AssignedTag testAssignedTag2 = new AssignedTag(testTag2Id, testUser.getId(), wine2.getId());
         AssignedTag testAssignedTag3 = new AssignedTag(testTag2Id, testUser.getId(), wine1.getId());
-
-
 
         assignedTagsDAO.add(testAssignedTag1);
         assignedTagsDAO.add(testAssignedTag2);
@@ -157,7 +156,7 @@ public class DashboardServiceTest {
     @Test
     public void testTopTags(){
         List<Map.Entry<String, Integer>> topTag = dashboardService.getTopTags();
-        Assertions.assertEquals("To Recommend", topTag.get(0).getKey());
+        Assertions.assertEquals("To Recommend", topTag.getFirst().getKey());
     }
 
     /**
@@ -187,7 +186,7 @@ public class DashboardServiceTest {
      * Tests method with an invalid label.
      */
     @Test
-    public void testSetandGetSelectedPieSearchWithInvalidLabel(){
+    public void testSetAndGetSelectedPieSearchWithInvalidLabel(){
         String category = "Wine Variety";
         String filterTerm = "Pinot Noir";
         dashboardService.setSelectedPieSliceSearch(category,filterTerm);
