@@ -12,10 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -144,6 +141,10 @@ public class DetailedViewPageController extends PageController implements Closab
      */
     @FXML
     private void initialize() {
+        backButton.setTooltip(new Tooltip("Close window"));
+        Tooltip.install(ratingStars, new Tooltip("Rate the wine"));
+
+
         OpenWindowsService.getInstance().addWindow(this);
 
         Wine selectedWine = WineService.getInstance().getSelectedWine();
@@ -154,6 +155,8 @@ public class DetailedViewPageController extends PageController implements Closab
         initWineInfo(selectedWine);
         initUserReviews();
         initAdminActions();
+
+
     }
 
     /**
@@ -201,6 +204,7 @@ public class DetailedViewPageController extends PageController implements Closab
 
             // Add "adder" tag
             addLabel = addBasicTag("+");
+            addLabel.setTooltip(new Tooltip("Add a tag"));
 
             // Create a new tag for each assigned tag
             for (AssignedTag tag : assignedTags) {
@@ -267,6 +271,7 @@ public class DetailedViewPageController extends PageController implements Closab
             Button editWineButton = new Button("Edit Wine");
             editWineButton.getStyleClass().add("detailed_view");
             editWineButton.setOnAction(this::editWine);
+            editWineButton.setTooltip(new Tooltip("Edit wine details"));
             headerButtonContainer.getChildren().add(editWineButton);
         }
     }
@@ -309,9 +314,11 @@ public class DetailedViewPageController extends PageController implements Closab
                     existingTagBox = (VBox) baseLoader.getNamespace().get("existingBox");
                     addTagLabels();
                     content.lookup("#closeButton").setOnMouseClicked(event -> closePopOver());
+                    Tooltip.install(content.lookup("#closeButton"), new Tooltip("Close tag pop up"));
 
                     // Add a button to confirm selection
                     Button confirmButton = (Button) content.lookup("#createTagButton");
+                    confirmButton.setTooltip(new Tooltip("Create a new tag"));
                     confirmButton.setOnAction(event -> {
                         try {
                             TagService.getInstance().setSelectedTag(null);
@@ -377,6 +384,7 @@ public class DetailedViewPageController extends PageController implements Closab
 
             // Add non-existing ones :D
             Label newTag = new Label(tag.getName());
+            newTag.setTooltip(new Tooltip("Add " + tag.getName() + " tag"));
             newTag.getStyleClass().add("tag");
             newTag.getStyleClass().add("max-width");
 

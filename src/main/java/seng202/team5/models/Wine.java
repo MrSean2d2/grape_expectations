@@ -224,7 +224,6 @@ public class Wine {
         yearProperty().set(year);
     }
 
-
     /**
      * Gets the wine's rating value.
      *
@@ -243,7 +242,6 @@ public class Wine {
         ratingValueProperty().set(rating);
     }
 
-
     /**
      * Gets the wine id.
      *
@@ -252,7 +250,6 @@ public class Wine {
     public int getId() {
         return id;
     }
-
 
     /**
      * Gets the wine description.
@@ -267,7 +264,6 @@ public class Wine {
         descriptionProperty().set(description);
     }
 
-
     /**
      * Gets the wine vineyard.
      *
@@ -277,10 +273,14 @@ public class Wine {
         return vineyardProperty().get();
     }
 
+    /**
+     * Sets the wine vineyard.
+     *
+     * @param vineyard vineyard object
+     */
     public final void setVineyard(Vineyard vineyard) {
         vineyardProperty().set(vineyard);
     }
-
 
     /**
      * Gets the wine variety.
@@ -309,7 +309,6 @@ public class Wine {
         return colourProperty().get();
     }
 
-
     /**
      * Gets the wine region.
      *
@@ -318,7 +317,6 @@ public class Wine {
     public final String getRegion() {
         return vineyardProperty().get().getRegion();
     }
-
 
     /**
      * Set the wine's id.

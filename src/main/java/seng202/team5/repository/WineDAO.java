@@ -241,11 +241,6 @@ public class WineDAO implements DAOInterface<Wine> {
                     ps.setDouble(5, wine.getPrice());
                     ps.setString(6, wine.getWineColour());
 
-                    // We need to make this more efficient -
-                    // I have implemented a hash map which hopefully increases the performance
-                    // However we could further improve it by initialising this at the start
-                    // of the app so that if any more wines are added they can just reference
-                    // the hash map, rather than query the db.
                     Vineyard curVineyard = wine.getVineyard();
                     Pair<String, String> vineyardSecondaryKey = Pair.of(curVineyard.getName(),
                             curVineyard.getRegion());
