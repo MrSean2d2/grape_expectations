@@ -63,7 +63,7 @@ public class DataLoadService {
      * @param csvEntry a String[] representing one csv record
      * @return the new wine object
      */
-    private Wine wineFromText(String[] csvEntry) {
+    private Wine wineFromText(String[] csvEntry, boolean loadGeolocation) {
         try {
             // Wine Rating
             if (csvEntry[4] == null) {
@@ -99,7 +99,9 @@ public class DataLoadService {
             // Winery
             String winery = csvEntry[13];
             Vineyard vineyard = new Vineyard(winery, regionName);
-            geolocatorService.queryAddress(vineyard);
+            if (loadGeolocation) {
+                geolocatorService.queryAddress(vineyard);
+            }
 
             // Wine Description - description can be empty
             String description = csvEntry[2];
@@ -171,7 +173,7 @@ public class DataLoadService {
      *
      * @return a list of wines from the csv file
      */
-    public List<Wine> processWinesFromCsv() {
+    public List<Wine> processWinesFromCsv(boolean loadGeolocation) {
         List<String[]> csvResult = new ArrayList<>();
         try (InputStream fileInputStream = (fileName != null)
                 ? Files.newInputStream(fileName) : this.getClass().getResourceAsStream("/nz.csv")) {
@@ -189,7 +191,7 @@ public class DataLoadService {
 
         List<Wine> wines = new ArrayList<>();
         for (String[] entry : csvResult) {
-            Wine wine = wineFromText(entry);
+            Wine wine = wineFromText(entry, loadGeolocation);
             if (wine != null) {
 
                 for (String[] strings : wineColourCSV) {

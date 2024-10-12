@@ -38,3 +38,14 @@ Feature: Filter feature
     Given the user is on the base search page,
     When the user applies filters variety "Syrah" and region "Wairarapa"
     Then no entries are shown
+
+  Scenario: Filter wines by colour
+    Given the user is on the base search page,
+    When the user applies a colour filter "White"
+    Then the system displays results of only wine entries with colour "White"
+
+  Scenario: Filter wines by tag
+    Given the user is on the base search page,
+    And the user has tagged 10 wines as "Favourite",
+    When the user applies the tag filter "Favourite"
+    Then the system displays the 10 reviewed wines of tag "Favourite"
