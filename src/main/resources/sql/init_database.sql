@@ -64,9 +64,9 @@ CREATE TABLE IF NOT EXISTS CREATED_TAGS (
 
 INSERT INTO created_tags (userId, name, colour) VALUES (-1, 'Favourite', 3);
 INSERT INTO created_tags (userId, name, colour) VALUES (-1, 'Wish List', 4);
-INSERT INTO created_tags (userId, name, colour) VALUES (-1, 'Breakfast', 1);
-INSERT INTO created_tags (userId, name, colour) VALUES (-1, 'Lunch', 2);
-INSERT INTO created_tags (userId, name, colour) VALUES (-1, 'Dinner', 0);
+INSERT INTO created_tags (userId, name, colour) VALUES (-1, 'Dinner Party', 1);
+INSERT INTO created_tags (userId, name, colour) VALUES (-1, 'Holiday Wines', 2);
+INSERT INTO created_tags (userId, name, colour) VALUES (-1, 'Gift Wines', 0);
 
 --SPLIT
 CREATE TABLE IF NOT EXISTS ASSIGNED_TAGS (

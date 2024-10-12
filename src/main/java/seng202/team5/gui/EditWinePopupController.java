@@ -190,7 +190,6 @@ public class EditWinePopupController extends FormErrorController implements Clos
             ratingSlider.setValue(0);
             initRatingSlider();
             wineLabel.setText("Add New Wine");
-            wineLabel.setVisible(false);
             deleteButton.setVisible(false);
         }
         descriptionArea.setTextFormatter(new TextFormatter<String>(change ->

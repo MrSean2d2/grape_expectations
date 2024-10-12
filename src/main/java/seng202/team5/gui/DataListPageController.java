@@ -335,7 +335,7 @@ public class DataListPageController extends PageController {
         resetSearchFilterButton.setTooltip(new Tooltip("Reset search query"));
         tagComboBox.setTooltip(new Tooltip("Filter by tag"));
         colourComboBox.setTooltip(new Tooltip("Filter by colour"));
-
+        addWineButton.setTooltip(new Tooltip("Add new wine"));
     }
 
     /**
