@@ -1,6 +1,5 @@
 Feature: Editing Notes on Wines
 
-  // TODO: fix
   Scenario: User saves a note for a wine when logged in
     Given the user is logged in
     And the user is on the detailed view of "Yearlands 2010 Pinot Noir (Marlborough)" wine
