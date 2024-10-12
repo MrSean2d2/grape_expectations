@@ -485,12 +485,12 @@ public class DataListPageController extends PageController {
         List<String> varietyOptions;
 
         // variety filter still at default value
-        if (colourFilter.equals("0") || colourFilter.equals("Colour")) {
+        if (colourFilter.equals(wineDAO.getDefaultStringQuery()) || colourFilter.equals("Colour")) {
             varietyOptions = wineDAO.getVariety();
         } else {
             varietyOptions = wineDAO.getVarietyFromColour(colourFilter);
             if (!varietyOptions.contains(varietyFilter)) {
-                varietyFilter = "0";
+                varietyFilter = wineDAO.getDefaultStringQuery();
                 varietyComboBox.setValue("Variety");
             }
         }
@@ -524,13 +524,13 @@ public class DataListPageController extends PageController {
 
         // Defaults
         if (!addedWine) {
-            this.yearFilter = "0";
-            this.varietyFilter = "0";
-            this.colourFilter = "0";
-            this.regionFilter = "0";
-            this.minPriceFilter = 0.0;
-            this.maxPriceFilter = 800.0;
-            this.minRatingFilter = 0.0;
+            this.yearFilter = wineDAO.getDefaultStringQuery();
+            this.varietyFilter = wineDAO.getDefaultStringQuery();
+            this.colourFilter = wineDAO.getDefaultStringQuery();
+            this.regionFilter = wineDAO.getDefaultStringQuery();
+            this.minPriceFilter = wineDAO.getDefaultMinPrice();
+            this.maxPriceFilter = wineDAO.getDefaultMaxPrice();
+            this.minRatingFilter = wineDAO.getDefaultMinRating();
         }
         addedWine = false;
     }
@@ -581,7 +581,7 @@ public class DataListPageController extends PageController {
     public void onVarietyComboBoxClicked() {
         String selectedVariety = String.valueOf(varietyComboBox.getValue());
         if (Objects.equals(selectedVariety, "Variety")) {
-            varietyFilter = "0";
+            varietyFilter = wineDAO.getDefaultStringQuery();
         } else if (selectedVariety != null) {
             varietyFilter = selectedVariety;
         }
@@ -598,7 +598,7 @@ public class DataListPageController extends PageController {
             setVarietyComboBox();
             applySearchFilters();
         } else {
-            colourFilter = "0";
+            colourFilter = wineDAO.getDefaultStringQuery();
             setVarietyComboBox();
             applySearchFilters();
         }
@@ -610,7 +610,7 @@ public class DataListPageController extends PageController {
     public void onRegionComboBoxClicked() {
         String selectedRegion = String.valueOf(regionComboBox.getValue());
         if (Objects.equals(selectedRegion, "Region")) {
-            regionFilter = "0";
+            regionFilter = wineDAO.getDefaultStringQuery();
         } else if (selectedRegion != null) {
             regionFilter = selectedRegion;
         }
@@ -623,7 +623,7 @@ public class DataListPageController extends PageController {
     public void onYearComboBoxClicked() {
         String selectedYear = String.valueOf(yearComboBox.getValue());
         if (Objects.equals(selectedYear, "Year")) {
-            yearFilter = "0";
+            yearFilter = wineDAO.getDefaultStringQuery();
         } else if (selectedYear != null) {
             yearFilter = selectedYear;
         }
