@@ -11,6 +11,7 @@ import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.*;
 import seng202.team5.repository.*;
+import seng202.team5.services.DataLoadService;
 import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
@@ -25,12 +26,12 @@ public class SearchFilterStepDefs {
     private static WineService wineService;
     private TagsDAO tagsDAO;
 
-//    @BeforeAll
-//    public static void setUp() throws InstanceAlreadyExistsException {
-//        VineyardDAO vineyardDAO = new VineyardDAO();
-//        wineDAO = new WineDAO(vineyardDAO);
-//        wineService = new WineService();
-//
+    @BeforeAll
+    public static void setUp() throws InstanceAlreadyExistsException {
+        VineyardDAO vineyardDAO = new VineyardDAO();
+        wineDAO = new WineDAO(vineyardDAO);
+        wineService = new WineService();
+
 //        DatabaseService.removeInstance();
 //        DatabaseService databaseService = DatabaseService.initialiseInstanceWithUrl(
 //                "jdbc:sqlite:./src/test/resources/test.db");
@@ -38,21 +39,26 @@ public class SearchFilterStepDefs {
 //
 //        List<Wine> testWineList = wineService.getWineList();
 //        wineDAO.batchAdd(testWineList);
-//    }
+        DataLoadService dataLoadService = new DataLoadService();
+        List<Wine> wines = dataLoadService.processWinesFromCsv(false);
+        wineDAO.batchAdd(wines);
+    }
 
     @Given("the user is on the base search page,")
     public void theUserIsOnTheBaseSearchPage() throws InstanceAlreadyExistsException {
-        VineyardDAO vineyardDAO = new VineyardDAO();
-        wineDAO = new WineDAO(vineyardDAO);
-        wineService = new WineService();
+//        VineyardDAO vineyardDAO = new VineyardDAO();
+//        wineDAO = new WineDAO(vineyardDAO);
+//        wineService = new WineService();
 
-        DatabaseService.removeInstance();
-        DatabaseService databaseService = DatabaseService.initialiseInstanceWithUrl(
-                "jdbc:sqlite:./src/test/resources/test.db");
-        databaseService.resetDb();
-
-        List<Wine> testWineList = wineService.getWineList();
-        wineDAO.batchAdd(testWineList);
+//        DatabaseService.removeInstance();
+//        DatabaseService databaseService = DatabaseService.initialiseInstanceWithUrl(
+//                "jdbc:sqlite:./src/test/resources/test.db");
+//        databaseService.resetDb();
+//
+//        //List<Wine> testWineList = wineService.getWineList();
+//        DataLoadService dataLoadService = new DataLoadService();
+//        List<Wine> wines = dataLoadService.processWinesFromCsv(false);
+//        wineDAO.batchAdd(wines);
 
     }
 

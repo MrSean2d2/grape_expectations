@@ -35,7 +35,7 @@ public class WineService {
     public void populateDatabase(DataLoadService dataLoadService) {
         wineDAO.truncateWines();
         wineDAO.getVineyardDAO().truncateVineyards();
-        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        List<Wine> wines = dataLoadService.processWinesFromCsv(true);
         wineDAO.batchAdd(wines);
     }
 
