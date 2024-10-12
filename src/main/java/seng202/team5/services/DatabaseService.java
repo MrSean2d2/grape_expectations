@@ -146,11 +146,22 @@ public class DatabaseService {
         }
     }
 
+    /**
+     * Checks if database exists.
+     *
+     * @param url file url
+     * @return if database exists
+     */
     private boolean checkDataBaseExists(String url) {
         File file = new File(url.substring(url.lastIndexOf(":") + 1));
         return file.exists();
     }
 
+    /**
+     * Creates a database file.
+     *
+     * @param url database file url
+     */
     private void createDatabaseFile(String url) {
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
@@ -166,6 +177,11 @@ public class DatabaseService {
         }
     }
 
+    /**
+     * Gets path to database file.
+     *
+     * @return path to file
+     */
     private String getDataBasePath() {
         String path = DatabaseService.class.getProtectionDomain().getCodeSource()
                 .getLocation().getPath();

@@ -133,6 +133,12 @@ public class HeaderController {
         loadPage("/fxml/DataListPage.fxml");
     }
 
+    /**
+     * Loads the data list page from dashboard with tag filter.
+     *
+     * @param tagFilter selected tag to filter with on data list page
+     * @throws Exception for load
+     */
     @FXML
     void loadDataListPageWithTag(String tagFilter) throws Exception {
         // Load the loading page first

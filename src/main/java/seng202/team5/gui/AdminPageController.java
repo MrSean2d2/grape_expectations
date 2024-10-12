@@ -4,10 +4,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -22,6 +19,10 @@ import seng202.team5.services.OpenWindowsService;
  */
 public class AdminPageController extends PageController {
 
+    @FXML
+    private Button searchButton;
+    @FXML
+    private Button doneButton;
     @FXML
     private TableColumn<User, Boolean> actionColumn;
 
@@ -50,7 +51,6 @@ public class AdminPageController extends PageController {
         userDAO = new UserDAO();
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
-        //actionColumn.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
         actionColumn.setCellFactory(new ManageUserActionCellFactory(this));
         actionColumn.setSortable(false);
 
@@ -58,6 +58,9 @@ public class AdminPageController extends PageController {
                 User.extractor());
         userTable.setItems(users);
         resultsLabel.setText(String.format("Found %d users", users.size()));
+        userTable.setPlaceholder(new Label("No matching users found"));
+        searchButton.setTooltip(new Tooltip("Search for query"));
+        doneButton.setTooltip(new Tooltip("Return to account page"));
     }
 
     /**
