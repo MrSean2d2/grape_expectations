@@ -12,15 +12,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.AssignedTag;
@@ -31,6 +33,7 @@ import seng202.team5.repository.AssignedTagsDAO;
 import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
 import seng202.team5.services.OpenWindowsService;
+import seng202.team5.services.ReviewService;
 import seng202.team5.services.TagService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
@@ -41,19 +44,17 @@ import seng202.team5.services.WineService;
  * @author Finn Brown
  */
 public class DetailedViewPageController extends PageController implements ClosableWindow {
-    private static final Logger log = LogManager.getLogger(DetailedViewPageController.class);
     private final Image emptyStar = new Image(
             Objects.requireNonNull(getClass().getResourceAsStream("/images/empty_star.png")));
     private final Image filledStar = new Image(
             Objects.requireNonNull(getClass().getResourceAsStream("/images/filled_star.png")));
 
-    Label addLabel;
-    boolean canAddTag = true;
-    TagsDAO tagsDAO;
-    AssignedTagsDAO assignedTagsDAO;
-    List<Tag> tagsList;
+    private Label addLabel;
+    private TagsDAO tagsDAO;
+    private AssignedTagsDAO assignedTagsDAO;
+    private List<Tag> tagsList;
 
-    final int MAX_REVIEW_CHARACTERS = 500;
+    private final int MAX_REVIEW_CHARACTERS = 500;
 
     @FXML
     private Label addTagLabel;
@@ -127,6 +128,7 @@ public class DetailedViewPageController extends PageController implements Closab
     private VBox existingTagBox;
     private ReviewDAO reviewDAO;
     private Review review;
+    private ReviewService reviewService;
 
 
     /**
@@ -144,6 +146,7 @@ public class DetailedViewPageController extends PageController implements Closab
      */
     @FXML
     private void initialize() {
+        reviewService = new ReviewService();
         backButton.setTooltip(new Tooltip("Close window"));
         Tooltip.install(ratingStars, new Tooltip("Rate the wine"));
 
@@ -307,7 +310,6 @@ public class DetailedViewPageController extends PageController implements Closab
     public void showTagPopover() {
         if (UserService.getInstance().getCurrentUser() != null) {
             if (tagPopover == null || !tagPopover.isShowing()) {
-                canAddTag = true;
 
                 try {
                     FXMLLoader baseLoader = new FXMLLoader(
@@ -326,32 +328,28 @@ public class DetailedViewPageController extends PageController implements Closab
                     existingTagBox = (VBox) baseLoader.getNamespace().get("existingBox");
                     addTagLabels();
                     content.lookup("#closeButton").setOnMouseClicked(event -> closePopOver());
-                    Tooltip.install(content.lookup("#closeButton"), new Tooltip("Close tag pop up"));
+                    Tooltip.install(content.lookup("#closeButton"),
+                            new Tooltip("Close tag pop up"));
 
                     // Add a button to confirm selection
                     Button confirmButton = (Button) content.lookup("#createTagButton");
                     confirmButton.setTooltip(new Tooltip("Create a new tag"));
                     confirmButton.setOnAction(event -> {
-                        try {
-                            TagService.getInstance().setSelectedTag(null);
-                            TagService.getInstance().showEditTagPopup(
-                                    backButton.getScene().getWindow(),
-                                    getHeaderController());
+                        TagService.getInstance().setSelectedTag(null);
+                        openPopup("/fxml/EditTagPopup.fxml", "Create new Tag",
+                                backButton.getScene().getWindow());
 
-                            // Clear and refresh
-                            Tag createdTag = TagService.getInstance().getCreatedTag();
-                            if (createdTag != null) {
-                                addTag(createdTag);
-                                TagService.getInstance().setCreatedTag(null);
+                        // Clear and refresh
+                        Tag createdTag = TagService.getInstance().getCreatedTag();
+                        if (createdTag != null) {
+                            addTag(createdTag);
+                            TagService.getInstance().setCreatedTag(null);
 
-                                updateTags();
-                            }
-
-                            // Close the popover
-                            closePopOver();
-                        } catch (IOException e) {
-                            log.error(e);
+                            updateTags();
                         }
+
+                        // Close the popover
+                        closePopOver();
                     });
 
                     // Show the Popup below the button
@@ -488,21 +486,6 @@ public class DetailedViewPageController extends PageController implements Closab
     }
 
     /**
-     * Handles creating a new review if the review doesn't exist - called if a user edits anything
-     * and a review doesn't already exist.
-     */
-    private void createReviewIfNotExists() {
-        if (review == null && UserService.getInstance().getCurrentUser() != null) {
-            review = new Review(selectedWineId, userId);
-            try {
-                reviewDAO.add(review);
-            } catch (DuplicateEntryException e) {
-                log.error(e);
-            }
-        }
-    }
-
-    /**
      * handles a user clicking on one of the star icons, changing their review of the wine.
      *
      * @param event mouse event
@@ -513,7 +496,7 @@ public class DetailedViewPageController extends PageController implements Closab
         int clickedStarIndex = Integer.parseInt(
                 clickedStar.getId().substring(4)); // Get star number (e.g., star1 -> 1)
 
-        createReviewIfNotExists();
+        review = reviewService.createReviewIfNotExists(review, selectedWineId, userId);
 
         if (review != null) {
             review.setRating(clickedStarIndex);
@@ -543,7 +526,8 @@ public class DetailedViewPageController extends PageController implements Closab
 
                     // Add review to this wine
                     if (!tagsList.isEmpty() || !noteTextArea.getText().isEmpty()) {
-                        createReviewIfNotExists();
+                        review = reviewService.createReviewIfNotExists(review,
+                                selectedWineId, userId);
                     }
 
                     // Add to assigned tags db

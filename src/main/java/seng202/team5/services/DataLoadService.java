@@ -183,7 +183,8 @@ public class DataLoadService {
         }
 
         List<String[]> wineColourCSV = new ArrayList<>();
-        try (InputStream colourInputStream = this.getClass().getResourceAsStream("/wineColour_NZ_list.csv")) {
+        try (InputStream colourInputStream = this.getClass().getResourceAsStream(
+                "/wineColour_NZ_list.csv")) {
             wineColourCSV = loadFile(colourInputStream);
         } catch (IOException e) {
             log.error(e);

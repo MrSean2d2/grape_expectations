@@ -2,7 +2,6 @@ package seng202.team5.gui;
 
 import static seng202.team5.services.ColourLookupService.getTagLabelColour;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -280,18 +283,14 @@ public class DashboardPageController extends PageController {
 
             // Click event - if the user can edit it
             editButton.setOnMouseClicked(event -> {
-                try {
-                    // Set the selected tag to the tag represented by this list
-                    Tag selectedTag = tagsDAO.getOne(id);
-                    TagService.getInstance().setSelectedTag(selectedTag);
-
-                    TagService.getInstance().showEditTagPopup(userListPane.getScene().getWindow(),
-                            getHeaderController());
-                    // Clear and refresh
-                    initialiseTagList();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                // Set the selected tag to the tag represented by this list
+                Tag selectedTag = tagsDAO.getOne(id);
+                TagService.getInstance().setSelectedTag(selectedTag);
+                openPopup("/fxml/EditTagPopup.fxml",
+                        String.format("Edit tag %s", selectedTag.getName()),
+                        userListPane.getScene().getWindow());
+                // Clear and refresh
+                initialiseTagList();
             });
 
             // Append the edit button to the end of the container
@@ -305,7 +304,7 @@ public class DashboardPageController extends PageController {
 
         // More general styling stuff
         tagContainer.setStyle(tagContainer.getStyle() + "-fx-background-radius: 5;");
-        Tooltip.install(tagContainer,new Tooltip( name + " wine list"));
+        Tooltip.install(tagContainer, new Tooltip(name + " wine list"));
         // Set click event to pass tag name to DataListPage
         tagContainer.setOnMouseClicked(event -> {
             try {
@@ -333,16 +332,12 @@ public class DashboardPageController extends PageController {
     @FXML
     private void addNewTag() {
         // Try to create a new tag
-        try {
-            // Set the selected tag to the tag represented by this list
-            TagService.getInstance().setSelectedTag(null);
-            TagService.getInstance().showEditTagPopup(userListPane.getScene().getWindow(),
-                    getHeaderController());
-            // Clear and refresh
-            initialiseTagList();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        // Set the selected tag to the tag represented by this list
+        TagService.getInstance().setSelectedTag(null);
+        openPopup("/fxml/EditTagPopup.fxml", "Create new Tag",
+                userListPane.getScene().getWindow());
+        // Clear and refresh
+        initialiseTagList();
     }
 
     /**
