@@ -104,7 +104,7 @@ public class WineService {
                             .map(AssignedTag::getWineId).toList();
 
                 }
-                List<Wine> filteredWines = wineList.stream()
+                List<Wine> filteredWines = getWineList().stream()
                         .filter(wine -> wineIds.contains(wine.getId()))   // Tag filtering
                         .collect(Collectors.toList());
 
