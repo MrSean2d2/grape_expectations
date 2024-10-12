@@ -38,7 +38,7 @@ public class UserServiceTest {
     public static void setUp() throws InstanceAlreadyExistsException {
         DatabaseService.removeInstance();
         databaseService = DatabaseService.initialiseInstanceWithUrl(
-                "jdbc:sqlite:./src/test/resources/test_database.db");
+                "jdbc:sqlite:./src/test/resources/test.db");
 
 
     }

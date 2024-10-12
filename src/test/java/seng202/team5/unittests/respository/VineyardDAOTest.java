@@ -29,7 +29,7 @@ public class VineyardDAOTest {
     static void setup() throws InstanceAlreadyExistsException {
         DatabaseService.removeInstance();
         databaseService = DatabaseService.initialiseInstanceWithUrl(
-                "jdbc:sqlite:./src/test/resources/test_database.db");
+                "jdbc:sqlite:./src/test/resources/test.db");
         vineyardDAO = new VineyardDAO();
     }
 

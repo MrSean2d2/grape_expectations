@@ -44,7 +44,7 @@ public class DashboardServiceTest {
     public static void setup() throws DuplicateEntryException, InstanceAlreadyExistsException {
         DatabaseService.removeInstance();
         databaseService = DatabaseService.initialiseInstanceWithUrl(
-                "jdbc:sqlite:./src/test/resources/test_database.db");
+                "jdbc:sqlite:./src/test/resources/test.db");
     }
 
     /**
