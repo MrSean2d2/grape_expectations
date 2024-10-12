@@ -219,9 +219,7 @@ public class SearchFilterStepDefs {
 
     @When("the user applies the tag filter {string}")
     public void theUserAppliesTheTagFilter(String tag) {
-        System.out.println("tag is :" + tag);
         wineService.filterWinesByTag(tag);
-        System.out.println("size is:" + wineService.getWineList().size());
     }
 
     @Then("the system displays the {int} reviewed wines of tag {string}")
