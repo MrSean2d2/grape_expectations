@@ -10,7 +10,7 @@ public class Vineyard {
     private final String name;
     private double lat;
     private double lon;
-    private String region;
+    private final String region;
 
     /**
      * Sets the name of the vineyard.

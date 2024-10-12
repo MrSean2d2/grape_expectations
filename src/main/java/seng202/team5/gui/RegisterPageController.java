@@ -140,10 +140,6 @@ public class RegisterPageController extends FormErrorController {
         resetFieldError(repeatPasswordField);
         resetFieldError(passwordVisibleField);
         resetFieldError(repeatPasswordVisibleField);
-        TextField currentPassField = passwordVisible ? passwordVisibleField
-                : passwordField;
-        TextField currentRepeatField = repeatPasswordVisible ? repeatPasswordVisibleField
-                : repeatPasswordField;
 
         String username = usernameField.getText();
 
@@ -158,15 +154,18 @@ public class RegisterPageController extends FormErrorController {
         // Password validation
         String passMessage = userService.checkPassword(password);
         if (passMessage != null) {
-            fieldError(currentPassField, errorLabel, passMessage);
+            fieldError(passwordVisibleField, errorLabel, passMessage);
+            fieldError(passwordField);
             return;
         }
 
         String repeatedPassword = repeatPasswordField.getText();
 
         if (!password.equals(repeatedPassword)) {
-            fieldError(currentPassField, errorLabel, "Passwords don't match!");
-            fieldError(currentRepeatField);
+            fieldError(passwordVisibleField, errorLabel, "Passwords don't match!");
+            fieldError(passwordField);
+            fieldError(repeatPasswordVisibleField);
+            fieldError(repeatPasswordField);
             return;
         }
 

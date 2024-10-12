@@ -1,226 +1,246 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="776.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.EditWinePopupController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefWidth="900.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.EditWinePopupController">
    <children>
-      <GridPane layoutX="200.0" layoutY="155.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="101.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="403.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <GridPane alignment="TOP_CENTER" layoutX="220.0" layoutY="175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints vgrow="NEVER" />
+            <RowConstraints vgrow="NEVER" />
+         </rowConstraints>
          <children>
-            <GridPane GridPane.hgrow="ALWAYS">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" prefWidth="130.0" />
-                <ColumnConstraints hgrow="SOMETIMES" prefWidth="380.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" prefWidth="108.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="70.0" minHeight="48.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+            <Button fx:id="submitButton" minWidth="100.0" mnemonicParsing="false" onAction="#submit" text="Submit" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <GridPane.margin>
+                  <Insets top="20.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="deleteButton" minWidth="100.0" mnemonicParsing="false" onAction="#deleteWine" text="Delete" GridPane.rowIndex="1">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <GridPane.margin>
+                  <Insets top="20.0" />
+               </GridPane.margin>
+            </Button>
+            <VBox>
                <children>
-                  <Label fx:id="actionLabel" styleClass="header-label" text="&lt;Action&gt;" GridPane.halignment="RIGHT">
-                     <GridPane.margin>
-                        <Insets top="5.0" />
-                     </GridPane.margin></Label>
-                  <Label fx:id="wineLabel" styleClass="header-label" text="&lt;Wine name&gt;" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets left="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeWindow" text="Close" GridPane.columnIndex="2">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Button>
-                  <Label text="Fields marked with * are required" GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
+                  <HBox alignment="CENTER_LEFT" spacing="15.0">
+                     <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Wine.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets top="3.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <VBox>
+                           <children>
+                              <Label fx:id="wineLabel" minHeight="-Infinity" style="-fx-font-weight: 700;" text="Edit Wine" wrapText="true">
+                                 <font>
+                                    <Font size="26.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <Region maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="closeButton" minWidth="100.0" mnemonicParsing="false" onAction="#closeWindow" text="Close">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="30.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox spacing="10.0" styleClass="info-area">
+                     <children>
+                        <VBox HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <VBox maxWidth="1.7976931348623157E308" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <HBox>
+                                             <children>
+                                                <Label maxWidth="1.7976931348623157E308" text="Wine Name" HBox.hgrow="ALWAYS">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warningText" text="*">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <TextField fx:id="nameField" promptText="e.g. Reserve Sauvignon Blanc" styleClass="textbox" />
+                                          <Label fx:id="nameErrorLabel" styleClass="warningText" text="Error label" visible="false" />
+                                          <Label text="Rating">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <HBox spacing="10.0">
+                                             <children>
+                                                <TextField fx:id="ratingField" prefHeight="24.0" prefWidth="104.0" promptText="e.g. 87" styleClass="textbox" />
+                                                <Slider fx:id="ratingSlider" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" showTickLabels="true" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                          <Label styleClass="warningText" text="Spacer" visible="false" />
+                                          <Label text="Variety">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets top="10.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextField fx:id="varietyField" promptText="e.g. Sauvignon Blanc" styleClass="textbox" />
+                                          <Label text="Colour">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets top="10.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextField fx:id="colourField" promptText="e.g. White" styleClass="textbox" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="20.0" left="45.0" right="45.0" top="20.0" />
+                                       </padding>
+                                    </VBox>
+                                    <VBox maxWidth="1.7976931348623157E308" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <HBox>
+                                             <children>
+                                                <Label maxWidth="1.7976931348623157E308" text="Year / Vintage" HBox.hgrow="ALWAYS">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warningText" text="*">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <TextField fx:id="yearField" promptText="e.g 2014" styleClass="textbox" />
+                                          <Label fx:id="yearErrorLabel" styleClass="warningText" text="Error label" visible="false" />
+                                          <HBox>
+                                             <children>
+                                                <Label maxWidth="1.7976931348623157E308" text="Price ($)" HBox.hgrow="ALWAYS">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warningText" text="*">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <TextField fx:id="priceField" promptText="e.g. 18" styleClass="textbox" />
+                                          <Label fx:id="priceErrorLabel" styleClass="warningText" text="Price Error" visible="false" />
+                                          <HBox>
+                                             <children>
+                                                <Label maxWidth="1.7976931348623157E308" text="Vineyard" HBox.hgrow="ALWAYS">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warningText" text="*">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="10.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <TextField fx:id="vineyardField" promptText="e.g. Mills Reef" styleClass="textbox" />
+                                          <Label text="Region">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets top="10.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextField fx:id="regionField" promptText="e.g. Hawke's Bay" styleClass="textbox" />
+                                          <Label fx:id="vineyardErrorLabel" styleClass="warningText" text="Error label" visible="false" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="20.0" left="45.0" right="45.0" top="20.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <VBox spacing="10.0">
+                                 <children>
+                                    <Label text="Description">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <TextArea fx:id="descriptionArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="100.0" promptText="Enter a brief description of the wine (max. 500 characters)" styleClass="textbox" wrapText="true" VBox.vgrow="SOMETIMES" />
+                                    <StackPane>
+                                       <children>
+                                          <Label alignment="CENTER_RIGHT" ellipsisString="-" maxWidth="1.7976931348623157E308" minHeight="-Infinity" text="Fields marked with * are required" textAlignment="CENTER" wrapText="true" />
+                                          <Label fx:id="descriptionErrorLabel" styleClass="warningText" text="Error label" visible="false" StackPane.alignment="CENTER_LEFT" />
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" left="45.0" right="45.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
                </children>
-            </GridPane>
-            <GridPane GridPane.rowIndex="1">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="143.0" prefWidth="145.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.0" minWidth="76.0" prefWidth="76.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="357.0" minWidth="194.0" prefWidth="221.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.0" minWidth="96.0" prefWidth="96.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.0" minWidth="26.0" prefWidth="32.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="422.0" minWidth="91.0" prefWidth="106.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="422.0" minWidth="79.0" prefWidth="84.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="108.0" minHeight="3.0" prefHeight="18.0" vgrow="NEVER" />
-                  <RowConstraints maxHeight="108.0" minHeight="13.0" prefHeight="38.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="108.0" minHeight="3.0" prefHeight="12.0" vgrow="NEVER" />
-                  <RowConstraints maxHeight="108.0" minHeight="10.0" prefHeight="15.0" vgrow="NEVER" />
-                <RowConstraints maxHeight="210.0" minHeight="0.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="210.0" minHeight="4.0" prefHeight="11.0" vgrow="NEVER" />
-                  <RowConstraints maxHeight="226.0" minHeight="34.0" prefHeight="63.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="226.0" minHeight="32.0" prefHeight="62.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="247.0" minHeight="148.0" prefHeight="150.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="226.0" minHeight="28.0" prefHeight="37.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label text="Wine Name:" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <TextField fx:id="nameField" promptText="Input name of wine..." styleClass="textbox" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <Label text="Year:" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <TextField fx:id="yearField" styleClass="textbox" GridPane.columnIndex="5" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <Label text="Rating:" GridPane.rowIndex="4">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Price:" GridPane.columnIndex="3" GridPane.rowIndex="4">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <TextField fx:id="priceField" styleClass="textbox" GridPane.columnIndex="5" GridPane.rowIndex="4">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <Label text="\$" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-                  <Label text="Variety:" GridPane.rowIndex="6">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <TextField fx:id="varietyField" promptText="Enter wine variety..." styleClass="textbox" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <Label text="Vineyard:" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="6">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <TextField fx:id="vineyardField" promptText="Enter vineyard name..." styleClass="textbox" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="6">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <Label text="Description:" GridPane.rowIndex="8" GridPane.valignment="TOP">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <TextArea fx:id="descriptionArea" prefHeight="200.0" prefWidth="200.0" promptText="Enter notes on wine..." styleClass="textbox" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="8">
-                     <GridPane.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextArea>
-                  <Button fx:id="submitButton" mnemonicParsing="false" onAction="#submit" text="Submit" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="9" GridPane.valignment="CENTER">
-                     <GridPane.margin>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Button>
-                  <Label text="Region:" GridPane.columnIndex="3" GridPane.rowIndex="7">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <TextField fx:id="regionField" promptText="Enter region name..." styleClass="textbox" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="7">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <Label text="Colour:" GridPane.rowIndex="7">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <TextField fx:id="colourField" promptText="Enter wine colour..." styleClass="textbox" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <TextField fx:id="ratingField" prefHeight="24.0" prefWidth="104.0" styleClass="textbox" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <Slider fx:id="ratingSlider" showTickLabels="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </Slider>
-                  <Label styleClass="warningText" text="*" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="BASELINE">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label styleClass="warningText" text="*" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.valignment="BASELINE">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label styleClass="warningText" text="*" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="BASELINE">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label styleClass="warningText" text="*" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="BASELINE">
-                     <GridPane.margin>
-                        <Insets left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label fx:id="nameErrorLabel" styleClass="warningText" text="Label" visible="false" GridPane.columnSpan="3" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label fx:id="yearErrorLabel" styleClass="warningText" text="Label" visible="false" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label fx:id="priceErrorLabel" styleClass="warningText" text="Label" visible="false" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="5">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteWine" text="Delete Wine" GridPane.rowIndex="9">
-                     <GridPane.margin>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Button>
-               </children>
-            </GridPane>
+               <GridPane.margin>
+                  <Insets bottom="20.0" />
+               </GridPane.margin>
+            </VBox>
          </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
       </GridPane>
    </children>
 </AnchorPane>

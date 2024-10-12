@@ -375,6 +375,28 @@ public class WineDAO implements DAOInterface<Wine> {
     }
 
     /**
+     * Gets list of different colours of wine.
+     *
+     * @return list of colours
+     */
+    public List<String> getColour() {
+        List<String> varieties = new ArrayList<>();
+        String sql = "SELECT DISTINCT colour FROM WINE ORDER BY colour;";
+        try (Connection conn = databaseService.connect();
+                Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                varieties.add(rs.getString("colour"));
+            }
+            return varieties;
+        } catch (SQLException e) {
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+
+    /**
      * Get the variety from the wine colour.
      *
      * @param givenColour the colour to use

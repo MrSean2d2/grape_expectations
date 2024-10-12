@@ -25,11 +25,11 @@ public class DashboardService {
     private static DashboardService instance;
 
     private List<Review> userReviews;
-    private Map<String, Integer> varietyMap = new HashMap<>();
-    private Map<String, Integer> regionMap = new HashMap<>();
-    private Map<Integer, Integer> yearMap = new HashMap<>();
-    private Map<String, Integer> colourMap = new HashMap<>();
-    private Map<String, Integer> tagMap = new HashMap<>();
+    private final Map<String, Integer> varietyMap = new HashMap<>();
+    private final Map<String, Integer> regionMap = new HashMap<>();
+    private final Map<Integer, Integer> yearMap = new HashMap<>();
+    private final Map<String, Integer> colourMap = new HashMap<>();
+    private final Map<String, Integer> tagMap = new HashMap<>();
     private String selectedCategory;
     private String selectedFilterTerm;
 

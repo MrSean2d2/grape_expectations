@@ -2,6 +2,7 @@ package seng202.team5.gui;
 
 import java.util.List;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -61,8 +62,14 @@ public class AdminPageController extends PageController {
 
         ObservableList<User> users = FXCollections.observableList(userDAO.getAll(),
                 User.extractor());
+
         userTable.setItems(users);
-        resultsLabel.setText(String.format("Found %d users", users.size()));
+        int size = userTable.getItems().size();
+        resultsLabel.setText(String.format("Found %d user%s", size, (size == 1 ? "" : "s")));
+        userTable.getItems().addListener((ListChangeListener<? super User>) change -> {
+            int s = change.getList().size();
+            resultsLabel.setText(String.format("Found %d user%s", s, (s == 1 ? "" : "s")));
+        });
         userTable.setPlaceholder(new Label("No matching users found"));
         searchButton.setTooltip(new Tooltip("Search for query"));
         doneButton.setTooltip(new Tooltip("Return to account page"));
@@ -96,9 +103,15 @@ public class AdminPageController extends PageController {
     private void searchPressed() {
         List<User> results = userDAO.getMatchingUserName(searchField.getText());
         ObservableList<User> users = FXCollections.observableList(results, User.extractor());
-        userTable.setItems(users);
-        resultsLabel.setText(String.format("Found %d users with name '%s'",
-                users.size(), searchField.getText()));
+        userTable.getItems().setAll(users);
+        int s = users.size();
+        String leadingS = ((s == 1) ? "" : "s");
+        if (searchField.getText().isEmpty()) {
+            resultsLabel.setText(String.format("Found %d user%s", s, leadingS));
+        } else {
+            resultsLabel.setText(String.format("Found %d user%s with name like '%s'",
+                    s, leadingS, searchField.getText()));
+        }
     }
 
 }

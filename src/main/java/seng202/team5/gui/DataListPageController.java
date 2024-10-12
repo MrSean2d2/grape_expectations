@@ -222,6 +222,8 @@ public class DataListPageController extends PageController {
             addWineButton.setVisible(true);
             addWineButton.setOnAction(this::addWine);
             addWineButton.setTooltip(new Tooltip("Add Wine"));
+        } else {
+            addWineButton.setVisible(false);
         }
     }
 
@@ -234,8 +236,6 @@ public class DataListPageController extends PageController {
         WineService.getInstance().setSelectedWine(null);
         openPopup("/fxml/EditWinePopup.fxml", "Add new wine", addWineButton.getScene().getWindow());
         addedWine = true;
-        applySearchFilters();
-        setDefaults();
     }
 
     /**
@@ -259,7 +259,7 @@ public class DataListPageController extends PageController {
                         minPriceFilter = newMinPrice;
                         applySearchFilters();
                     } else {
-                        addNotification("Please pick a minimum price greater than "
+                        addNotification("Please pick a minimum price greater than $"
                                 + (int) priceRangeSlider.getMin(), "#d5e958");
                     }
                 } catch (NumberFormatException e) {
@@ -283,8 +283,8 @@ public class DataListPageController extends PageController {
                         maxPriceFilter = newMaxPrice;
                         applySearchFilters();
                     } else {
-                        addNotification("Please pick a maximum price less than "
-                                + (int) priceRangeSlider.getMin(), "#d5e958");
+                        addNotification("Please pick a maximum price less than $"
+                                + (int) priceRangeSlider.getMax(), "#d5e958");
                     }
                 } catch (NumberFormatException e) {
                     addNotification("Invalid Number", "#d5e958");
@@ -373,6 +373,7 @@ public class DataListPageController extends PageController {
         regionComboBox.setItems(observableRegionsList);
 
         setDefaultVarietyBox();
+        setDefaultColourBox();
     }
 
     /**
@@ -395,6 +396,30 @@ public class DataListPageController extends PageController {
         observableVarietyList.addFirst("Variety");
         varietyComboBox.setItems(observableVarietyList);
     }
+
+
+    /**
+     *set default options of colour combobox to all varieties.
+     */
+    public void setDefaultColourBox() {
+        List<String> colourOptions = wineDAO.getColour();
+        setColourOptions(colourOptions);
+    }
+
+    /**
+     * takes list of colour options and sets colour combo box
+     * to have them as options in drop-down.
+     *
+     * @param colourOptions list of colours
+     */
+    public void setColourOptions(List<String> colourOptions) {
+        ObservableList<String> observableColourList =
+                FXCollections.observableArrayList(colourOptions.stream()
+                        .filter(s -> !s.isEmpty()).toList());
+        observableColourList.addFirst("Colour");
+        colourComboBox.setItems(observableColourList);
+    }
+
 
     /**
      * Populates the tag combo box with the user specific tags
@@ -478,7 +503,6 @@ public class DataListPageController extends PageController {
         // Set the initial values
         priceRangeSlider.setLowValue(minPrice);
         priceRangeSlider.setHighValue(maxPrice);
-        ratingSlider.setValue(minRating);
 
         minPriceValue.setText(String.valueOf(minPrice));
         maxPriceValue.setText(String.valueOf(maxPrice));
@@ -612,6 +636,7 @@ public class DataListPageController extends PageController {
         }
 
         setDefaultVarietyBox();
+        setDefaultColourBox();
         addNotification("Search and filters reset", "#d5e958");
     }
 

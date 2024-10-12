@@ -108,6 +108,9 @@ public class DetailedViewPageController extends PageController implements Closab
     private Label varietyLabel;
 
     @FXML
+    private Label colourLabel;
+
+    @FXML
     private Label vineyardLabel;
 
     @FXML
@@ -177,9 +180,18 @@ public class DetailedViewPageController extends PageController implements Closab
             wineDescriptionLabel.textProperty().bind(selectedWine.descriptionProperty());
             provinceLabel.textProperty().bind(selectedWine.vineyardProperty().map(
                     v -> String.format("Region: %s", v.getRegion())));
+
             varietyLabel.textProperty().bind(selectedWine.wineVarietyProperty().map(
-                    v -> String.format("Variety: %s - %s", selectedWine.colourProperty().get(), v)
+                    v -> v
             ));
+
+            colourLabel.textProperty().bind(selectedWine.colourProperty().map(
+                    v -> String.format("Colour / Variety: %s - ", v)
+            ));
+
+            selectedWine.colourProperty().addListener(
+                    (observableValue, s, t1) -> setColourImage(selectedWine));
+
             vineyardLabel.textProperty().bind(selectedWine.vineyardProperty()
                     .map(v -> String.format("Vineyard: %s", v.getName())));
 
@@ -272,7 +284,7 @@ public class DetailedViewPageController extends PageController implements Closab
         if (UserService.getInstance().getCurrentUser() != null
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
             Button editWineButton = new Button("Edit Wine");
-            editWineButton.getStyleClass().add("detailed_view");
+            editWineButton.getStyleClass().addAll("button", "detailed_view");
             editWineButton.setOnAction(this::editWine);
             editWineButton.setTooltip(new Tooltip("Edit wine details"));
             headerButtonContainer.getChildren().add(editWineButton);

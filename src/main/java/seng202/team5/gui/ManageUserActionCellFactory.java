@@ -60,6 +60,11 @@ public class ManageUserActionCellFactory implements
                     setGraphic(null);
                     setText(null);
                 } else {
+                    // Style
+                    buttonsHbox.setSpacing(10);
+                    deleteUserButton.getStyleClass().add("primary-button");
+                    editUserButton.getStyleClass().add("primary-button");
+
                     buttonsHbox.getChildren().clear();
                     buttonsHbox.getChildren().addAll(deleteUserButton, editUserButton);
                     User user = getTableView().getItems().get(getIndex());
@@ -82,9 +87,11 @@ public class ManageUserActionCellFactory implements
                             FXMLLoader editUserLoader = new FXMLLoader(getClass()
                                     .getResource("/fxml/EditUserPopup.fxml"));
                             Parent root = editUserLoader.load();
-                            PageController editUserController = editUserLoader.getController();
+                            EditUserPopupController editUserController =
+                                    editUserLoader.getController();
                             editUserController.setHeaderController(
                                     pageController.getHeaderController());
+                            editUserController.setDataList(getTableView().getItems());
                             Scene scene = new Scene(root);
                             Stage stage = new Stage();
                             stage.setScene(scene);
