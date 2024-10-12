@@ -8,11 +8,9 @@ import org.junit.jupiter.api.Assertions;
 import seng202.team5.models.Review;
 import seng202.team5.models.User;
 import seng202.team5.services.UserService;
-import seng202.team5.services.WineService;
 
 public class UserNotesStepDefs {
     private final UserService userService = UserService.getInstance();
-    private final WineService wineService = WineService.getInstance();
     private Review review;
     private User user;
     private String actualNotes;
@@ -21,22 +19,6 @@ public class UserNotesStepDefs {
     public void theUserIsLoggedIn() {
         user = userService.registerUser("testUser", "password8!");
         userService.setCurrentUser(user);
-
-        //int wineID = wineService.get
-    }
-
-    @When("the user enters {string} into the notes section")
-    public void theUserEntersIntoTheNotesSection(String arg0) {
-        
-    }
-
-    @And("the user is on the detailed view of {string} wine")
-    public void theUserIsOnTheDetailedViewOfWine(String arg0) {
-        
-    }
-
-    @Then("the note {string} is saved to the user review of the {string} entry")
-    public void theNoteIsSavedToTheUserReviewOfTheEntry(String arg0, String arg1) {
     }
 
     @Given("a user is reviewing a wine with id {int}")
