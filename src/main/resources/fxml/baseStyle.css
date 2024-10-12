@@ -29,6 +29,7 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-border-width: 2;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
+    -fx-cursor: HAND;
 }
 
 .button.detailed_view {
@@ -258,5 +259,23 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 
 .slider, .range-slider {
     -fx-focus-color: #4db265;
-    -fx-faint-focus-color: #4DB26591;
+    -fx-faint-focus-color: transparent;
+    -fx-cursor: HAND;
+}
+
+.slider .track, .range-slider .track {
+    -fx-background-color: #ddd;
+}
+
+.slider .thumb, .range-slider .low-thumb, .range-slider .high-thumb {
+    -fx-background-color: #fff;
+    -fx-border-color: #bbb;
+    -fx-border-width: 2;
+    -fx-border-radius: 100;
+}
+
+
+.slider .thumb:hover, .range-slider .low-thumb:hover, .range-slider .high-thumb:hover,
+.slider .thumb:pressed, .range-slider .low-thumb:pressed, .range-slider .high-thumb:pressed {
+    -fx-border-color: #4db265;
 }

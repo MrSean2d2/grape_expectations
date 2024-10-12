@@ -182,7 +182,7 @@ public class WineService {
      * @return true if valid, false otherwise
      */
     public boolean validName(String name) {
-        return (!name.isBlank());
+        return (!name.isBlank() && name.length() < 100);
     }
 
     /**
@@ -193,6 +193,16 @@ public class WineService {
      */
     public boolean validPrice(double price) {
         return (price >= 0);
+    }
+
+    /**
+     * Returns true if the description is valid.
+     *
+     * @param description the description
+     * @return true if valid, false otherwise
+     */
+    public boolean validDescription(String description) {
+        return (description.length() < 500);
     }
 
     /**

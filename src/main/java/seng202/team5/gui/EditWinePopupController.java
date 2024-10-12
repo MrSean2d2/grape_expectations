@@ -45,6 +45,9 @@ public class EditWinePopupController extends FormErrorController implements Clos
     private TextArea descriptionArea;
 
     @FXML
+    private Label descriptionErrorLabel;
+
+    @FXML
     private TextField nameField;
 
     @FXML
@@ -70,6 +73,8 @@ public class EditWinePopupController extends FormErrorController implements Clos
 
     @FXML
     private TextField vineyardField;
+    @FXML
+    private Label vineyardErrorLabel;
 
     @FXML
     private TextField regionField;
@@ -114,16 +119,15 @@ public class EditWinePopupController extends FormErrorController implements Clos
      * Init the labels with information about the current wine.
      */
     private void initLabels() {
-        actionLabel.setText("Edit wine: ");
-        wineLabel.setText(wine.getName());
-        nameField.setText(wine.getName());
-        yearField.setText(String.valueOf(wine.getYear()));
+        wineLabel.setText("Edit wine: " + wine.getName());
     }
 
     /**
      * Init the text fields with the pre-existing wine information.
      */
     private void initFields() {
+        nameField.setText(wine.getName());
+        yearField.setText(String.valueOf(wine.getYear()));
         priceField.setText(String.valueOf(wine.getPrice()));
         varietyField.setText(wine.getWineVariety());
         vineyardField.setText(wine.getVineyard().getName());
@@ -145,6 +149,8 @@ public class EditWinePopupController extends FormErrorController implements Clos
         TextFields.bindAutoCompletion(vineyardField, vineyardSuggestions);
         List<String> regionSuggestions = vineyardDAO.getRegions();
         TextFields.bindAutoCompletion(regionField, regionSuggestions);
+        List<String> colourSuggestions = wineDAO.getColour();
+        TextFields.bindAutoCompletion(colourField, colourSuggestions);
     }
 
     /**
@@ -153,9 +159,9 @@ public class EditWinePopupController extends FormErrorController implements Clos
      * @param stage Top level container for this window
      */
     public void init(Stage stage) {
-        int minWidth = 762;
+        int minWidth = 700;
         stage.setMinWidth(minWidth);
-        int minHeight = 486;
+        int minHeight = 550;
         stage.setMinHeight(minHeight);
     }
 
@@ -174,16 +180,13 @@ public class EditWinePopupController extends FormErrorController implements Clos
         } else {
             ratingSlider.setValue(0);
             initRatingSlider();
-            actionLabel.setText("Add wine: ");
-            wineLabel.setVisible(false);
+            wineLabel.setText("Add New Wine");
             deleteButton.setVisible(false);
         }
         descriptionArea.setTextFormatter(new TextFormatter<String>(change ->
                 change.getControlNewText().length() <= maxChars ? change : null));
 
         initAutoComplete();
-
-
     }
 
     /**
@@ -204,9 +207,9 @@ public class EditWinePopupController extends FormErrorController implements Clos
     private void deleteWine() {
         if (wine != null) {
             Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            confAlert.setTitle("Delete Wine?");
-            confAlert.setHeaderText(String.format("Delete %s?", wine.getName()));
-            confAlert.setContentText("Are you sure you want to delete this wine?");
+            confAlert.setTitle(String.format("Delete %s?", wine.getName()));
+            confAlert.setHeaderText("Are you sure you want to delete this wine?");
+            confAlert.setContentText("This action is irreversible!");
 
             Optional<ButtonType> result = confAlert.showAndWait();
 
@@ -216,7 +219,8 @@ public class EditWinePopupController extends FormErrorController implements Clos
                 wineDAO.delete(wine.getId());
                 wineService.getWineList().remove(wine);
                 closeWindow();
-                addNotification("Wine deleted", "#d5e958");
+                addNotification(String.format("Deleted wine '%s'",
+                        wine.getName()), "#d5e958");
             }
         }
     }
@@ -224,8 +228,8 @@ public class EditWinePopupController extends FormErrorController implements Clos
     /**
      * Show a field error and set the current wine information as invalid.
      *
-     * @param  message the error message
-     * @param  field the TextField containing the error
+     * @param message the error message
+     * @param field the TextField containing the error
      * @param errorLabel the label to show the error message on
      */
     @Override
@@ -247,6 +251,19 @@ public class EditWinePopupController extends FormErrorController implements Clos
         isWineValid = false;
     }
 
+    /**
+     * Show a field error and set the current wine information as invalid.
+     *
+     * @param message the error message
+     * @param area the TextArea containing the error
+     * @param errorLabel the label to show the error message on
+     */
+    protected void areaError(TextArea area, Label errorLabel, String message) {
+        area.getStyleClass().add("field_error");
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+        isWineValid = false;
+    }
 
     /**
      * Turns the year field into an int. Returns 0 and shows an error if parsing
@@ -289,10 +306,13 @@ public class EditWinePopupController extends FormErrorController implements Clos
         priceErrorLabel.setVisible(false);
         yearErrorLabel.setVisible(false);
         nameErrorLabel.setVisible(false);
+        vineyardErrorLabel.setVisible(false);
+        descriptionErrorLabel.setVisible(false);
         yearField.getStyleClass().remove("field_error");
         priceField.getStyleClass().remove("field_error");
         nameField.getStyleClass().remove("field_error");
         vineyardField.getStyleClass().remove("field_error");
+        descriptionArea.getStyleClass().remove("field_error");
     }
 
     /**
@@ -308,18 +328,21 @@ public class EditWinePopupController extends FormErrorController implements Clos
         String variety = varietyField.getText();
         VineyardService vineyardService = VineyardService.getInstance();
         Vineyard vineyard = null;
+
         try {
             vineyard = vineyardService.retreiveVineyard(vineyardField.getText(),
                     regionField.getText());
         } catch (IllegalArgumentException e) {
-            fieldError(vineyardField);
+            fieldError(vineyardField, vineyardErrorLabel, "Vineyard doesn't exist!");
         }
+
         VineyardDAO vineyardDAO = new VineyardDAO();
         WineDAO wineDAO = new WineDAO(vineyardDAO);
         String description = descriptionArea.getText();
         String name = nameField.getText();
         String colour = colourField.getText();
-        showErrors(name, price);
+        showErrors(name, price, description);
+
         if (isWineValid) {
             if (wine == null) {
                 // We are adding a new wine
@@ -365,13 +388,22 @@ public class EditWinePopupController extends FormErrorController implements Clos
      *
      * @param name the name field (shouldn't be blank)
      * @param price the price field (shouldn't be negative)
+     * @param description the description field (should be less than 500 characters)
      */
-    private void showErrors(String name, double price) {
+    private void showErrors(String name, double price, String description) {
         if (!wineService.validName(name)) {
-            fieldError(nameField, nameErrorLabel, "Name can't be blank!");
+            if (name.isEmpty()) {
+                fieldError(nameField, nameErrorLabel, "Name can't be blank!");
+            } else {
+                fieldError(nameField, nameErrorLabel, "Name must be 1-100 characters!");
+            }
         }
         if (!wineService.validPrice(price)) {
             fieldError(priceField, priceErrorLabel, "Price can't be negative!");
+        }
+        if (!wineService.validDescription(description)) {
+            areaError(descriptionArea, descriptionErrorLabel,
+                    "Description must be 0-500 characters!");
         }
     }
 
@@ -382,7 +414,11 @@ public class EditWinePopupController extends FormErrorController implements Clos
      */
     private void checkYear(int year) {
         if (!wineService.validYear(year)) {
-            fieldError(yearField, yearErrorLabel, "Year can't be in the future or older than 1700");
+            if (year <= 1700) {
+                fieldError(yearField, yearErrorLabel, "Year can't older than 1700");
+            } else {
+                fieldError(yearField, yearErrorLabel, "Year can't be in the future");
+            }
         }
     }
 

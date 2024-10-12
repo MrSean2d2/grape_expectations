@@ -80,6 +80,8 @@ public class EditPasswordPopupController extends FormErrorController {
         repeatPasswordVisibleField.textProperty().bindBidirectional(
                 repeatPasswordField.textProperty());
 
+        errorLabel.setVisible(false);
+
         shownIcon = new Image(
                 Objects.requireNonNull(getClass().getResourceAsStream("/images/OpenEye.png")));
         hiddenIcon = new Image(
@@ -119,18 +121,22 @@ public class EditPasswordPopupController extends FormErrorController {
     private void submit() {
         String password = passwordField.getText();
         String repeatPassword = repeatPasswordField.getText();
-        TextField currentPassField = passwordVisible ? passwordVisibleField : passwordField;
-        TextField currentRepeatField = repeatPasswordVisible ? repeatPasswordVisibleField
-                : repeatPasswordField;
 
         UserService userService = UserService.getInstance();
         String message = userService.checkPassword(password);
+
         if (message != null) {
-            fieldError(currentPassField, errorLabel, message);
+            errorLabel.setVisible(true);
+            fieldError(passwordField, errorLabel, message);
+            fieldError(passwordVisibleField, errorLabel, message);
         } else if (!password.equals(repeatPassword)) {
-            fieldError(currentPassField);
-            fieldError(currentRepeatField, errorLabel, "Passwords do not match!");
+            fieldError(passwordField);
+            fieldError(passwordVisibleField);
+            errorLabel.setVisible(true);
+            fieldError(repeatPasswordField, errorLabel, "Passwords do not match!");
+            fieldError(repeatPasswordVisibleField, errorLabel, "Passwords do not match!");
         } else {
+            errorLabel.setVisible(false);
             User user = userService.getSelectedUser();
             userService.updateUserPassword(user, password);
             UserDAO userDAO = new UserDAO();

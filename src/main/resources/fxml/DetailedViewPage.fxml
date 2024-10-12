@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" prefHeight="889.0" prefWidth="1009.0" styleClass="primary" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DetailedViewPageController">
+<GridPane alignment="CENTER" prefHeight="714.0" prefWidth="1006.0" styleClass="primary" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DetailedViewPageController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="500.0" prefWidth="1000.0" />
     </columnConstraints>
@@ -37,7 +37,7 @@
          <ImageView fx:id="wineColourImage" fitHeight="97.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
              <Image url="@../images/unknownColourWine.png" />
          </ImageView>
-        <Label fx:id="nameLabel" maxWidth="1.7976931348623157E308" style="-fx-font-weight: 700;" text="Wine Name" wrapText="true">
+        <Label fx:id="nameLabel" maxWidth="1.7976931348623157E308" minHeight="-Infinity" style="-fx-font-weight: 700;" text="Wine Name " wrapText="true">
             <font>
                 <Font size="30.0" />
             </font>
@@ -59,6 +59,9 @@
                 </font>
             </Button>
         </HBox>
+      <GridPane.margin>
+         <Insets />
+      </GridPane.margin>
     </HBox>
     <VBox spacing="10.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
         <GridPane.margin>
@@ -81,7 +84,7 @@
             </Label>
          </children>
          <VBox.margin>
-            <Insets top="30.0" />
+            <Insets top="20.0" />
          </VBox.margin>
       </HBox>
       <VBox spacing="10.0" styleClass="info-area">
@@ -139,7 +142,7 @@
                        <Font size="16.0" />
                    </font>
                </Label>
-               <Label fx:id="provinceLabel" maxWidth="1.7976931348623157E308" text="Region: ----" GridPane.rowIndex="2">
+               <Label fx:id="provinceLabel" maxWidth="1.7976931348623157E308" text="Region: ----" GridPane.rowIndex="1">
                    <GridPane.margin>
                        <Insets right="10.0" />
                    </GridPane.margin>
@@ -163,7 +166,7 @@
                        <Font size="16.0" />
                    </font>
                </Label>
-               <Label fx:id="vineyardLabel" maxWidth="1.7976931348623157E308" text="Vineyard: ----" GridPane.rowIndex="1">
+               <Label fx:id="vineyardLabel" maxWidth="1.7976931348623157E308" text="Vineyard: ----" GridPane.rowIndex="2">
                    <font>
                        <Font size="16.0" />
                    </font>
@@ -171,11 +174,26 @@
                        <Insets right="10.0" />
                    </GridPane.margin>
                </Label>
-               <Label fx:id="varietyLabel" maxWidth="1.7976931348623157E308" text="Colour / Variety: ----">
-                   <font>
-                       <Font size="16.0" />
-                   </font>
-               </Label>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                     <Label fx:id="colourLabel" text="Colour / Variety: ---- - " HBox.hgrow="ALWAYS">
+                         <font>
+                             <Font size="16.0" />
+                         </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     </Label>
+                  <Label fx:id="varietyLabel" maxWidth="1.7976931348623157E308" text="----" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
             <VBox.margin>
                <Insets />
             </VBox.margin>

@@ -45,9 +45,10 @@ Light mode for the application
     -fx-border-color: transparent;
 }
 
-.textbox {
+.textbox, .slidertextbox {
     -fx-border-color: #bbb;
     -fx-border-width: 2;
+    -fx-border-radius: 5;
 }
 
 .button:hover, .dropdown:hover {
@@ -89,7 +90,7 @@ Light mode for the application
 }
 
 .dropdown .list-cell:hover {
-    -fx-background-color: #bbb;
+    -fx-background-color: #ddd;
 }
 
 
@@ -105,7 +106,7 @@ Light mode for the application
 }
 
 .menu-item:hover {
-    -fx-background-color: #dddddd;
+    -fx-background-color: #ddd;
     -fx-text-fill: #000000;
 }
 
@@ -122,7 +123,7 @@ Light mode for the application
 }
 
 .table-row-cell:hover .table-cell {
-    -fx-background-color: #bbb;
+    -fx-background-color: #ddd;
     -fx-text-fill: #000;
 }
 

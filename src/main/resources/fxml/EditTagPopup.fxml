@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="623.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.EditTagPopupController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="623.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.EditTagPopupController">
    <children>
       <GridPane alignment="TOP_CENTER" layoutX="200.0" layoutY="155.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -49,7 +49,7 @@
                   <Insets />
                </GridPane.margin>
             </VBox>
-            <Button mnemonicParsing="false" onAction="#submit" text="Submit" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+            <Button minWidth="100.0" mnemonicParsing="false" onAction="#submit" text="Submit" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets top="20.0" />
                </GridPane.margin>
@@ -57,7 +57,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete" GridPane.rowIndex="3">
+            <Button fx:id="deleteButton" minWidth="100.0" mnemonicParsing="false" onAction="#delete" text="Delete" GridPane.rowIndex="3">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -87,7 +87,7 @@
                            </children>
                         </VBox>
                         <Region maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeWindow" text="Close">
+                        <Button fx:id="closeButton" minWidth="100.0" mnemonicParsing="false" onAction="#closeWindow" text="Close">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -135,7 +135,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="nameField" styleClass="textbox" text="Example Tag" />
+                        <TextField fx:id="nameField" promptText="Enter tag name" styleClass="textbox" text="Example Tag" />
                         <Label fx:id="nameErrorLabel" styleClass="warningText" text="Error label" visible="false" />
                         <Label text="Tag Colour">
                            <font>

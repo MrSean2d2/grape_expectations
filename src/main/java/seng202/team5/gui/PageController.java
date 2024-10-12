@@ -158,6 +158,7 @@ public class PageController {
             Stage stage = new Stage();
             stage.titleProperty().bind(titleProperty);
             initStageModal(owner, root, controller, stage);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

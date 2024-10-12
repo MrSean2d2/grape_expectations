@@ -23,7 +23,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.RangeSlider?>
 
-<GridPane alignment="TOP_CENTER" prefHeight="841.0" prefWidth="1037.0" styleClass="primary" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
+<GridPane alignment="TOP_CENTER" prefHeight="841.0" prefWidth="1037.0" styleClass="primary" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team5.gui.DataListPageController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="100.0" />
     </columnConstraints>
@@ -64,12 +64,12 @@
                         <Font size="18.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets right="45.0" top="10.0" />
                      </VBox.margin>
                   </Label>
                </children>
                <HBox.margin>
-                  <Insets right="45.0" />
+                  <Insets />
                </HBox.margin>
             </VBox>
          </children>
@@ -104,10 +104,10 @@
                                     </Label>
                                     <HBox prefHeight="40.0" spacing="10.0">
                                        <children>
-                                          <TextField fx:id="ratingSliderValue" alignment="CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="textbox" />
+                                          <TextField fx:id="ratingSliderValue" alignment="CENTER" maxHeight="30.0" maxWidth="50.0" minHeight="20.0" minWidth="40.0" prefHeight="30.0" prefWidth="50.0" promptText="50" styleClass="slidertextbox" />
                                           <StackPane maxWidth="1.7976931348623157E308">
                                              <children>
-                                                <Slider fx:id="ratingSlider" blockIncrement="5.0" majorTickUnit="10.0" min="80.0" minorTickCount="4" prefHeight="40.0" prefWidth="120.0" showTickLabels="true" showTickMarks="true" snapToTicks="true">
+                                                <Slider fx:id="ratingSlider" blockIncrement="5.0" majorTickUnit="10.0" min="80.0" minorTickCount="4" prefHeight="40.0" prefWidth="100.0" showTickLabels="true" showTickMarks="true" snapToTicks="true">
                                                    <cursor>
                                                       <Cursor fx:constant="HAND" />
                                                    </cursor>
@@ -132,17 +132,20 @@
                                     </Label>
                                     <HBox prefHeight="40.0" spacing="10.0">
                                        <children>
-                                          <TextField fx:id="minPriceValue" alignment="TOP_CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="textbox" />
+                                          <TextField fx:id="minPriceValue" alignment="TOP_CENTER" maxHeight="30.0" maxWidth="50.0" minHeight="20.0" minWidth="40.0" prefHeight="30.0" prefWidth="50.0" promptText="0" styleClass="slidertextbox" />
                                           <StackPane maxWidth="1.7976931348623157E308">
                                              <children>
-                                                <RangeSlider fx:id="priceRangeSlider" blockIncrement="25.0" highValue="1.0" highValueChanging="true" lowValue="0.0" lowValueChanging="true" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="4" prefHeight="40.0" prefWidth="120.0" showTickLabels="true" showTickMarks="true" snapToTicks="true">
+                                                <RangeSlider fx:id="priceRangeSlider" blockIncrement="25.0" highValue="1.0" highValueChanging="true" lowValue="0.0" lowValueChanging="true" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="4" prefHeight="40.0" prefWidth="100.0" showTickLabels="true" showTickMarks="true" snapToTicks="true">
                                                    <cursor>
                                                       <Cursor fx:constant="HAND" />
                                                    </cursor>
+                                                   <StackPane.margin>
+                                                      <Insets />
+                                                   </StackPane.margin>
                                                 </RangeSlider>
                                              </children>
                                           </StackPane>
-                                          <TextField fx:id="maxPriceValue" alignment="TOP_CENTER" maxHeight="20.0" maxWidth="40.0" minHeight="20.0" minWidth="40.0" prefHeight="20.0" prefWidth="40.0" styleClass="textbox" />
+                                          <TextField fx:id="maxPriceValue" alignment="TOP_CENTER" maxHeight="30.0" maxWidth="50.0" minHeight="20.0" minWidth="40.0" prefHeight="30.0" prefWidth="50.0" promptText="999" styleClass="slidertextbox" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -177,7 +180,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox prefWidth="250.0" spacing="10.0">
+                  <VBox prefWidth="200.0" spacing="10.0">
                      <children>
                         <HBox spacing="10.0">
                            <children>

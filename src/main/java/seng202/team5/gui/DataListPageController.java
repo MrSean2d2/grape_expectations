@@ -221,6 +221,8 @@ public class DataListPageController extends PageController {
                 && UserService.getInstance().getCurrentUser().getIsAdmin()) {
             addWineButton.setVisible(true);
             addWineButton.setOnAction(this::addWine);
+        } else {
+            addWineButton.setVisible(false);
         }
     }
 
@@ -345,6 +347,7 @@ public class DataListPageController extends PageController {
         regionComboBox.setItems(observableRegionsList);
 
         setDefaultVarietyBox();
+        setDefaultColourBox();
     }
 
     /**
@@ -367,6 +370,30 @@ public class DataListPageController extends PageController {
         observableVarietyList.addFirst("Variety");
         varietyComboBox.setItems(observableVarietyList);
     }
+
+
+    /**
+     *set default options of colour combobox to all varieties.
+     */
+    public void setDefaultColourBox() {
+        List<String> colourOptions = wineDAO.getColour();
+        setColourOptions(colourOptions);
+    }
+
+    /**
+     * takes list of colour options and sets colour combo box
+     * to have them as options in drop-down.
+     *
+     * @param colourOptions list of colours
+     */
+    public void setColourOptions(List<String> colourOptions) {
+        ObservableList<String> observableColourList =
+                FXCollections.observableArrayList(colourOptions.stream()
+                        .filter(s -> !s.isEmpty()).toList());
+        observableColourList.addFirst("Colour");
+        colourComboBox.setItems(observableColourList);
+    }
+
 
     /**
      * Populates the tag combo box with the user specific tags
@@ -581,6 +608,7 @@ public class DataListPageController extends PageController {
         }
 
         setDefaultVarietyBox();
+        setDefaultColourBox();
         addNotification("Search and filters reset", "#d5e958");
     }
 
