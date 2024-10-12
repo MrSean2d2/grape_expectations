@@ -43,7 +43,7 @@ public class DataLoadServiceTest {
                 null, null, "Joe Czerwinski",
                 "@JoeCz", "Stoneleigh 2008 Sauvignon Blanc (Marlborough)",
                 "Sauvignon Blanc", "Stoneleigh", null};
-        assertEquals(16, records.size());
+        assertEquals(19, records.size());
         assertArrayEquals(expectedFirst, records.getFirst());
     }
 

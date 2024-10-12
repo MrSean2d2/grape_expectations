@@ -33,6 +33,10 @@ public class DatabaseServiceTest {
      */
     @Test
     void testDatabaseConnection() throws SQLException {
+        /* Remove the instance in case it was set by other database tests
+        this ensures that the functionality of actually creating the database
+        file gets tested.*/
+        DatabaseService.removeInstance();
         DatabaseService databaseService = DatabaseService.getInstance();
         Connection connection = databaseService.connect();
         assertNotNull(connection);
