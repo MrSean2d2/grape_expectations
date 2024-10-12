@@ -283,7 +283,7 @@ public class WineServiceTest {
         @Test
         public void testSearch() {
             wineService.searchWines("YUMMY", "0", "0",
-                    "0", "0", 0, 800, -1, "Tags");
+                    "0", "0", 0, 800, -1, "Tag");
             ObservableList<Wine> result = wineService.getWineList();
             assertEquals(1, result.size());
             assertTrue(result.getFirst().getDescription().contains("YUMMY"));
@@ -295,7 +295,7 @@ public class WineServiceTest {
         @Test
         public void testFilterVariety() {
             wineService.searchWines("", "testVariety", "0",
-                    "0", "0", 0, 800, -1, "Tags");
+                    "0", "0", 0, 800, -1, "Tag");
             ObservableList<Wine> result = wineService.getWineList();
             assertEquals(5, result.size());
         }
@@ -306,7 +306,7 @@ public class WineServiceTest {
         @Test
         public void testSearchAndFilter() {
             wineService.searchWines("delish", "testVariety", "White", "0",
-                    "0", 0, 800, -1, "Tags");
+                    "0", 0, 800, -1, "Tag");
             ObservableList<Wine> result = wineService.getWineList();
             assertEquals(2, result.size());
             assertEquals("Test Wine 2 delish", result.getFirst().getName());
