@@ -105,6 +105,7 @@ Light mode for the application
     -fx-text-fill: #000000;
 }
 
+
 .menu-item:hover {
     -fx-background-color: #ddd;
     -fx-text-fill: #000000;
@@ -127,6 +128,20 @@ Light mode for the application
     -fx-text-fill: #000;
 }
 
+.list-cell {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+.list-cell:odd {
+    -fx-background-color: #eeeeee;
+    -fx-text-fill: #000000;
+}
+
+.list-cell:hover {
+    -fx-background-color: #ddd;
+    -fx-text-fill: #000000;
+}
 
 .table-row-cell:selected .table-cell {
     -fx-background-color: #4db265;

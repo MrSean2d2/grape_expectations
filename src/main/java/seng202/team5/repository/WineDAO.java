@@ -348,10 +348,13 @@ public class WineDAO implements DAOInterface<Wine> {
      * Called before populating the database to get rid of left-over wines in database
      */
     public void truncateWines() {
-        String sql = "Delete FROM WINE;";
+        String sql = "Delete FROM wine;";
+        String sqlAssignedTag = "Delete FROM assigned_tags;";
         try (Connection conn = databaseService.connect();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                PreparedStatement atps = conn.prepareStatement(sqlAssignedTag);) {
             ps.executeUpdate();
+            atps.executeUpdate();
         } catch (SQLException sqlException) {
             log.error(sqlException);
         }
@@ -669,6 +672,4 @@ public class WineDAO implements DAOInterface<Wine> {
             return new ArrayList<>();
         }
     }
-
-
 }
