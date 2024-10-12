@@ -11,7 +11,6 @@ import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.*;
 import seng202.team5.repository.*;
-import seng202.team5.services.DataLoadService;
 import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;

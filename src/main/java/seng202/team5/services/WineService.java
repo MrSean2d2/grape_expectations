@@ -160,7 +160,7 @@ public class WineService {
                 result = true;
             }
         } catch (NotFoundException e) {
-            result = false;
+            ;
         }
         return result;
     }
