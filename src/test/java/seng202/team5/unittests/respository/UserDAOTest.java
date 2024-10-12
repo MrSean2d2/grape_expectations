@@ -2,7 +2,9 @@ package seng202.team5.unittests.respository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -177,6 +179,34 @@ public class UserDAOTest {
         int adminId = userDAO.add(admin);
         admin.setId(adminId);
         assertEquals(1, userDAO.getAdminCount());
+    }
+
+    /**
+     * Test searching for a username.
+     *
+     * @throws DuplicateEntryException if the admin user already exists
+     */
+    @Test
+    public void testGetMatchingUserName() throws DuplicateEntryException {
+        User admin = new User("admin", "admin", Role.ADMIN, 0);
+        admin.setId(userDAO.add(admin));
+        List<User> results = userDAO.getMatchingUserName("adm");
+        assertEquals(1, results.size());
+        assertEquals("admin", results.getFirst().getUsername());
+    }
+
+    /**
+     * Test adding a user with a duplicate username.
+     *
+     * @throws DuplicateEntryException if the original user to be added is itself
+     *                                 a duplicate
+     */
+    @Test
+    public void testDuplicateUser() throws DuplicateEntryException {
+        User admin = new User("admin", "admin", Role.ADMIN, 0);
+        userDAO.add(admin);
+        User same = new User("admin", "pasword", Role.ADMIN, 2);
+        assertThrows(DuplicateEntryException.class, () -> userDAO.add(same));
     }
 
 }

@@ -11,6 +11,7 @@ import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.*;
 import seng202.team5.repository.*;
+import seng202.team5.services.DataLoadService;
 import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
@@ -38,7 +39,9 @@ public class SearchFilterStepDefs {
                     "jdbc:sqlite:./src/test/resources/test.db");
             databaseService.resetDb();
 
-            List<Wine> testWineList = wineService.getWineList();
+            String csvFilePath = System.getProperty("user.dir") + "/src/test/resources/test.csv";
+            DataLoadService dataLoadService = new DataLoadService(csvFilePath);
+            List<Wine> testWineList = dataLoadService.processWinesFromCsv(false);
             wineDAO.batchAdd(testWineList);
         }
 

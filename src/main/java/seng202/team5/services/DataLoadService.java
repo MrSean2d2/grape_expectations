@@ -82,15 +82,19 @@ public class DataLoadService {
 
             // Wine Name
             String name = csvEntry[11];
-
-            // Wine Year
-            Pattern yearPattern = Pattern.compile("\\d{4}");
-            Matcher yearMatcher = yearPattern.matcher(csvEntry[11]);
-            boolean matchFound = yearMatcher.find();
-            int year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
-            if (year == 0) {
-                //year was not in csv
-                throw new InvalidCsvEntryException("Invalid year");
+            int year;
+            if (name != null && wineService.validName(name)) {
+                // Wine Year
+                Pattern yearPattern = Pattern.compile("\\d{4}");
+                Matcher yearMatcher = yearPattern.matcher(name);
+                boolean matchFound = yearMatcher.find();
+                year = matchFound ? numFromTextOr0(yearMatcher.group()) : 0;
+                if (year == 0) {
+                    //year was not in csv
+                    throw new InvalidCsvEntryException("Invalid year");
+                }
+            } else {
+                throw new InvalidCsvEntryException("Invalid name");
             }
 
             // Wine Variety
@@ -182,10 +186,10 @@ public class DataLoadService {
             log.error(e);
         }
 
-        List<String[]> wineColourCSV = new ArrayList<>();
+        List<String[]> wineColourCsv = new ArrayList<>();
         try (InputStream colourInputStream = this.getClass().getResourceAsStream(
                 "/wineColour_NZ_list.csv")) {
-            wineColourCSV = loadFile(colourInputStream);
+            wineColourCsv = loadFile(colourInputStream);
         } catch (IOException e) {
             log.error(e);
         }
@@ -195,7 +199,7 @@ public class DataLoadService {
             Wine wine = wineFromText(entry, loadGeolocation);
             if (wine != null) {
 
-                for (String[] strings : wineColourCSV) {
+                for (String[] strings : wineColourCsv) {
                     if (strings[0].equals(wine.getWineVariety())) {
                         wine.setColour(strings[1]);
                         break;

@@ -9,8 +9,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
-import seng202.team5.models.*;
-import seng202.team5.repository.*;
+import seng202.team5.models.AssignedTag;
+import seng202.team5.models.Review;
+import seng202.team5.models.Role;
+import seng202.team5.models.Tag;
+import seng202.team5.models.User;
+import seng202.team5.models.Vineyard;
+import seng202.team5.models.Wine;
+import seng202.team5.repository.AssignedTagsDAO;
+import seng202.team5.repository.ReviewDAO;
+import seng202.team5.repository.TagsDAO;
+import seng202.team5.repository.UserDAO;
+import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
 import seng202.team5.services.DashboardService;
 import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
@@ -36,6 +47,16 @@ public class DashboardServiceTest {
         DatabaseService.removeInstance();
         databaseService = DatabaseService.initialiseInstanceWithUrl(
                 "jdbc:sqlite:./src/test/resources/test.db");
+    }
+
+    /**
+     * Test singleton instance.
+     */
+    @Test
+    public void testGetInstance() {
+        DashboardService dashboardService1 = DashboardService.getInstance();
+        Assertions.assertNotNull(dashboardService1);
+        Assertions.assertEquals(dashboardService1, DashboardService.getInstance());
     }
 
     /**
@@ -86,8 +107,8 @@ public class DashboardServiceTest {
         reviewDAO.add(new Review(wine3.getId(), testUser.getId(), true, "bad", 1));
 
         // Create mock tags
-        Tag testTag1 = new Tag(1, testUser.getId(),"My absolute favourites", 0);
-        Tag testTag2 = new Tag(2,testUser.getId(), "To Recommend", 0);
+        Tag testTag1 = new Tag(1, testUser.getId(), "My absolute favourites", 0);
+        Tag testTag2 = new Tag(2, testUser.getId(), "To Recommend", 0);
 
         int testTag1Id = tagsDAO.add(testTag1);
         int testTag2Id = tagsDAO.add(testTag2);
@@ -154,7 +175,7 @@ public class DashboardServiceTest {
      * Tests method retrieving the top wine tags based on ratings
      */
     @Test
-    public void testTopTags(){
+    public void testTopTags() {
         List<Map.Entry<String, Integer>> topTag = dashboardService.getTopTags();
         Assertions.assertEquals("To Recommend", topTag.getFirst().getKey());
     }
@@ -186,24 +207,24 @@ public class DashboardServiceTest {
      * Tests method with an invalid label.
      */
     @Test
-    public void testSetAndGetSelectedPieSearchWithInvalidLabel(){
+    public void testSetAndGetSelectedPieSearchWithInvalidLabel() {
         String category = "Wine Variety";
         String filterTerm = "Pinot Noir";
-        dashboardService.setSelectedPieSliceSearch(category,filterTerm);
+        dashboardService.setSelectedPieSliceSearch(category, filterTerm);
 
         List<String> result = dashboardService.getSelectedPieSliceSearch();
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(2,result.size());
-        Assertions.assertEquals(category,result.getFirst());
-        Assertions.assertEquals(filterTerm,result.get(1));
+        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals(category, result.getFirst());
+        Assertions.assertEquals(filterTerm, result.get(1));
     }
 
     /**
      * Tests the initialisation of data. Ensures user reviews is not null.
      */
     @Test
-    public void testInitialiseData(){
+    public void testInitialiseData() {
         dashboardService.initializeData();
         Assertions.assertNotNull(dashboardService.getUserReviews());
     }
