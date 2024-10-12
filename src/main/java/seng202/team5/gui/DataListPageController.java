@@ -252,7 +252,7 @@ public class DataListPageController extends PageController {
                         minPriceFilter = newMinPrice;
                         applySearchFilters();
                     } else {
-                        addNotification("Please pick a minimum price greater than "
+                        addNotification("Please pick a minimum price greater than $"
                                 + (int) priceRangeSlider.getMin(), "#d5e958");
                     }
                 } catch (NumberFormatException e) {
@@ -276,8 +276,8 @@ public class DataListPageController extends PageController {
                         maxPriceFilter = newMaxPrice;
                         applySearchFilters();
                     } else {
-                        addNotification("Please pick a maximum price less than "
-                                + (int) priceRangeSlider.getMin(), "#d5e958");
+                        addNotification("Please pick a maximum price less than $"
+                                + (int) priceRangeSlider.getMax(), "#d5e958");
                     }
                 } catch (NumberFormatException e) {
                     addNotification("Invalid Number", "#d5e958");
