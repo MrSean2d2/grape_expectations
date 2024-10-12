@@ -36,7 +36,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </TableView>
-      <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#done" text="Done" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+      <Button fx:id="doneButton" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#done" text="Done" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -48,7 +48,7 @@
             <Insets right="10.0" />
          </GridPane.margin>
       </TextField>
-      <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#searchPressed" text="Search" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+      <Button fx:id="searchButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#searchPressed" text="Search" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
