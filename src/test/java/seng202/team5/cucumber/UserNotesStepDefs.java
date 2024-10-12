@@ -10,11 +10,9 @@ import seng202.team5.models.User;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
 
-import java.awt.*;
-
 public class UserNotesStepDefs {
-    private UserService userService = UserService.getInstance();
-    private WineService wineService = WineService.getInstance();
+    private final UserService userService = UserService.getInstance();
+    private final WineService wineService = WineService.getInstance();
     private Review review;
     private User user;
     private String actualNotes;

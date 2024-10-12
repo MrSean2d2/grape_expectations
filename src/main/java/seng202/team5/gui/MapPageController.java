@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Vineyard;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.services.VineyardService;
-import seng202.team5.services.WineService;
 
 /**
  * Controller class for MapPage.fxml.
@@ -36,7 +35,7 @@ public class MapPageController extends PageController {
     private WebView webView;
     private WebEngine webEngine;
     private JSObject javaScriptConnector;
-    private boolean markersDisplayed = true;
+    private final boolean markersDisplayed = true;
     private VineyardDAO vineyardDAO;
     @FXML
     private TableView<Vineyard> vineyardTable;
