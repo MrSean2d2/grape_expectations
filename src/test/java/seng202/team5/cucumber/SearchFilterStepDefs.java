@@ -1,8 +1,5 @@
 package seng202.team5.cucumber;
 
-import io.cucumber.java.Before;
-import io.cucumber.java.BeforeAll;
-import io.cucumber.java.bs.A;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -13,7 +10,6 @@ import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
 import seng202.team5.models.*;
 import seng202.team5.repository.*;
-import seng202.team5.services.DataLoadService;
 import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
 import seng202.team5.services.WineService;
@@ -28,7 +24,6 @@ public class SearchFilterStepDefs {
     private WineService wineService;
     private AssignedTagsDAO assignedTagsDAO;
     private TagsDAO tagsDAO;
-    private User wineEnthusiast;
 
     @Given("the user is on the base search page,")
     public void theUserIsOnTheBaseSearchPage() throws InstanceAlreadyExistsException {
