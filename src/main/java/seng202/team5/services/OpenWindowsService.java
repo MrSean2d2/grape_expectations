@@ -15,7 +15,7 @@ public class OpenWindowsService {
     private final List<ClosableWindow> openWindows;
 
     /**
-     * Constructor ot initialise list of open windows.
+     * Constructor to initialise list of open windows.
      */
     private OpenWindowsService() {
         this.openWindows = new ArrayList<>();
@@ -59,5 +59,12 @@ public class OpenWindowsService {
         for (ClosableWindow window : windowsCopy) {
             window.closeWindow();
         }
+    }
+
+    /**
+     * Retrieve the number of open windows
+     */
+    public List<ClosableWindow> getOpenWindows(){
+        return openWindows;
     }
 }

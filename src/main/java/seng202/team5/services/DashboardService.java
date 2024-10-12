@@ -180,7 +180,7 @@ public class DashboardService {
     /**
      * Retrieves the selected pie slice search criteria.
      *
-     * @return a list containing the selected category and filter term
+     * @return a list containing the selected category and filter term.
      */
     public List<String> getSelectedPieSliceSearch() {
         List<String> selectedValues = new ArrayList<>();
