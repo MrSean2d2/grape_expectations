@@ -322,7 +322,7 @@ public class DataListPageController extends PageController {
     /**
      * Initialises tool tips.
      */
-    private void initToolTips(){
+    private void initToolTips() {
         varietyComboBox.setTooltip(new Tooltip("Filter by variety"));
         regionComboBox.setTooltip(new Tooltip("Filter by region"));
         yearComboBox.setTooltip(new Tooltip("Filter by year"));

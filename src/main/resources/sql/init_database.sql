@@ -58,7 +58,8 @@ CREATE TABLE IF NOT EXISTS CREATED_TAGS (
         REFERENCES USER(id)
             ON DELETE CASCADE,
     name TEXT,
-    colour INTEGER
+    colour INTEGER,
+    UNIQUE (userid, name)
 );
 
 INSERT INTO created_tags (userId, name, colour) VALUES (-1, 'Favourite', 3);

@@ -2,10 +2,14 @@ package seng202.team5.gui;
 
 import java.util.Optional;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.Tag;
 import seng202.team5.repository.TagsDAO;
 import seng202.team5.services.ColourLookupService;
@@ -14,8 +18,9 @@ import seng202.team5.services.TagService;
 import seng202.team5.services.UserService;
 
 /**
- * A controller for the edit wine popup window.
+ * A controller for the edit tag popup window.
  *
+ * @author Martyn Gascoigne
  * @author Sean Reitsma
  */
 public class EditTagPopupController extends FormErrorController implements ClosableWindow {
@@ -41,7 +46,6 @@ public class EditTagPopupController extends FormErrorController implements Closa
     @FXML
     private Button deleteButton;
 
-    private final int maxChars = 20;
     private Tag tag;
     private boolean isTagValid = true;
     private TagService tagService;
@@ -178,14 +182,8 @@ public class EditTagPopupController extends FormErrorController implements Closa
         // Check validity of the tag
         if (isTagValid) {
             if (tag == null) {
-                tag = new Tag(userId, name, tagColourId);
-                try {
-                    tag.setTagId(tagsDAO.add(tag));
-                    TagService.getInstance().setCreatedTag(tag);
-                    closeWindow();
-                } catch (DuplicateEntryException e) {
-                    // There was a duplicate entry
-                }
+                tag = tagService.createTag(userId, name, tagColourId);
+                closeWindow();
             } else {
                 tag.setName(name);
                 tag.setColour(tagColourId);
@@ -227,16 +225,10 @@ public class EditTagPopupController extends FormErrorController implements Closa
      * @param userId the userID of who's editing the tag
      */
     private void showErrors(String name, int userId) {
-        if (name.isEmpty()) {
-            fieldError("Tag name can't be blank!", nameField, nameErrorLabel);
+        String nameError = tagService.checkName(name);
+        if (nameError != null) {
+            fieldError(nameError, nameField, nameErrorLabel);
             isTagValid = false;
-        } else {
-            if (name.length() > maxChars) {
-                fieldError(
-                        String.format("Tag name is too long! Must be no more than %s characters.",
-                        maxChars), nameField, nameErrorLabel);
-                isTagValid = false;
-            }
         }
 
         if (tagService.checkTagExists(name, userId) && (!name.equals(originalName))) {
