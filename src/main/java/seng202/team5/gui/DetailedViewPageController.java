@@ -54,7 +54,7 @@ public class DetailedViewPageController extends PageController implements Closab
     private AssignedTagsDAO assignedTagsDAO;
     private List<Tag> tagsList;
 
-    private final int MAX_REVIEW_CHARACTERS = 500;
+    private final int maxReviewCharacters = 500;
 
     @FXML
     private Label addTagLabel;
@@ -235,7 +235,7 @@ public class DetailedViewPageController extends PageController implements Closab
 
             noteTextArea.setDisable(false);
             noteTextArea.setTextFormatter(new TextFormatter<String>(change -> {
-                if (change.getControlNewText().length() > MAX_REVIEW_CHARACTERS) {
+                if (change.getControlNewText().length() > maxReviewCharacters) {
                     return null;
                 }
                 return change;

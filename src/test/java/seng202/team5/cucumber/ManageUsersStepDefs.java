@@ -16,6 +16,7 @@ public class ManageUsersStepDefs {
     private User currentUser;
     private UserDAO userDAO;
     private String errorMessage;
+
     @Given("a user {string} with password {string} has registered")
     public void userRegistered(String username, String password) throws NotFoundException {
         userDAO = new UserDAO();
@@ -25,21 +26,25 @@ public class ManageUsersStepDefs {
             currentUser = userDAO.getFromUserName(username);
         }
     }
+
     @When("the admin grants user admin rights")
     public void grantAdminRights() {
         currentUser.setRole(Role.ADMIN);
         userDAO.update(currentUser);
     }
+
     @Then("user now has admin role")
     public void userAdminRole() throws NotFoundException {
         Assertions.assertTrue(userDAO.getFromUserName("tester").getIsAdmin());
     }
+
     @When("the admin deletes {string} user")
     public void deleteUser(String username) throws NotFoundException {
         userDAO = new UserDAO();
         currentUser = userDAO.getFromUserName(username);
         userService.deleteUser(currentUser);
     }
+
     @Then("user {string} with password {string} can no longer sign in")
     public void noLongerSignIn(String username, String password) throws PasswordIncorrectException {
         try {
