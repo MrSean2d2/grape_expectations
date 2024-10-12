@@ -31,6 +31,10 @@ public class WineDAO implements DAOInterface<Wine> {
     private final DatabaseService databaseService;
     private static final Logger log = LogManager.getLogger(WineDAO.class);
     private final VineyardDAO vineyardDAO;
+    private final String defaultStringQuery = "0";
+    private final double defaultMaxPrice = 800.0;
+    private final double defaultMinPrice = 0.0;
+    private final int defaultMinRating = 0;
 
     /**
      * WineDAO constructor. Creates a WineDAO object and initialises it with
@@ -525,6 +529,42 @@ public class WineDAO implements DAOInterface<Wine> {
         }
     }
 
+    /**
+     * The default string value for the query builder for when the filter
+     * should not be applied.
+     *
+     * @return the default string value "0"
+     */
+    public String getDefaultStringQuery() {
+        return defaultStringQuery;
+    }
+
+    /**
+     * The default max price allowed for the query builder.
+     *
+     * @return the default max price 800.00
+     */
+    public double getDefaultMaxPrice() {
+        return defaultMaxPrice;
+    }
+
+    /**
+     * The default min price allowed for the query builder.
+     *
+     * @return the default min price 0
+     */
+    public double getDefaultMinPrice() {
+        return defaultMinPrice;
+    }
+
+    /**
+     * The default min rating allowed for the query builder.
+     *
+     * @return the default min rating 0
+     */
+    public int getDefaultMinRating() {
+        return defaultMinRating;
+    }
 
     /**
      * Builds sql query for search and filter.
@@ -550,37 +590,40 @@ public class WineDAO implements DAOInterface<Wine> {
         }
 
         // If the variety is valid, add it to the query
-        if (!(Objects.equals(variety, "0") || variety.equals("null"))) {
+        String nullStringQuery = "null";
+        if (!(Objects.equals(variety, defaultStringQuery) || variety.equals(nullStringQuery))) {
             sql += " AND wine.variety = '" + variety + "'";
         }
         //If the colour is valid, add it to the query
-        if (!(Objects.equals(colour, "0") || Objects.equals(colour, "null"))) {
+        if (!(Objects.equals(colour, defaultStringQuery)
+                || Objects.equals(colour, nullStringQuery))) {
             sql += " AND wine.colour = '" + colour + "'";
         }
 
         // If the region is valid, add it to the query
-        if (!Objects.equals(region, "0") && region != null) {
+        if (!Objects.equals(region, defaultStringQuery) && region != null) {
             region = region.replace("'", "''");
             sql += " AND vineyard.region = '" + region + "'";
         }
 
         // If the year is valid, add it to the query
-        if (!Objects.equals(year, "0")) {
+        if (!Objects.equals(year, defaultStringQuery)) {
             sql += " AND wine.year = " + year;
         }
 
         // If the max price is valid, add it to the query
-        if (maxPrice != 800.0) {
+        if (maxPrice != defaultMaxPrice) {
             sql += " AND wine.price <= " + maxPrice;
         }
 
         // If the min price is valid, add it to the query
-        if (minPrice != 0.0) {
+        if (minPrice != defaultMinPrice) {
             sql += " AND wine.price >= " + minPrice;
         }
 
         // If the rating fields are valid, add them to the query
-        if (minRating > 0 && minRating <= 100) {
+        int defaultMaxRating = 100;
+        if (minRating > defaultMinRating && minRating <= defaultMaxRating) {
             sql += " AND wine.rating >= " + minRating;
         }
 
