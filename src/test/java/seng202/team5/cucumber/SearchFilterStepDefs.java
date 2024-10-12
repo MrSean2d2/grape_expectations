@@ -1,5 +1,6 @@
 package seng202.team5.cucumber;
 
+import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -19,11 +20,25 @@ import seng202.team5.services.WineService;
  */
 
 public class SearchFilterStepDefs {
-    private WineDAO wineDAO;
+    private static WineDAO wineDAO;
     private List<Wine> filteredWines;
-    private WineService wineService;
-    private AssignedTagsDAO assignedTagsDAO;
+    private static WineService wineService;
     private TagsDAO tagsDAO;
+
+//    @BeforeAll
+//    public static void setUp() throws InstanceAlreadyExistsException {
+//        VineyardDAO vineyardDAO = new VineyardDAO();
+//        wineDAO = new WineDAO(vineyardDAO);
+//        wineService = new WineService();
+//
+//        DatabaseService.removeInstance();
+//        DatabaseService databaseService = DatabaseService.initialiseInstanceWithUrl(
+//                "jdbc:sqlite:./src/test/resources/test.db");
+//        databaseService.resetDb();
+//
+//        List<Wine> testWineList = wineService.getWineList();
+//        wineDAO.batchAdd(testWineList);
+//    }
 
     @Given("the user is on the base search page,")
     public void theUserIsOnTheBaseSearchPage() throws InstanceAlreadyExistsException {
@@ -189,7 +204,7 @@ public class SearchFilterStepDefs {
         UserService.getInstance().setCurrentUser(wineEnthusiast);
         ReviewDAO reviewDAO = new ReviewDAO();
         tagsDAO = new TagsDAO();
-        assignedTagsDAO = new AssignedTagsDAO();
+        AssignedTagsDAO assignedTagsDAO = new AssignedTagsDAO();
 
 
         for (int i = 1; i < numWines + 1; i++) {
