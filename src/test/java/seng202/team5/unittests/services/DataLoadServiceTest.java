@@ -53,7 +53,7 @@ public class DataLoadServiceTest {
     @Test
     public void loadWinesTestFirst() {
 
-        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        List<Wine> wines = dataLoadService.processWinesFromCsv(false);
 
         Wine wine = wines.getFirst();
         String expected = new String("Stoneleigh 2008 Sauvignon Blanc (Marlborough)".getBytes(),
@@ -74,7 +74,7 @@ public class DataLoadServiceTest {
     public void loadWinesTestInvalidPrice() {
         csvFilePath = System.getProperty("user.dir") + "/src/test/resources/test_small.csv";
         dataLoadService = new DataLoadService(csvFilePath);
-        assertEquals(0, dataLoadService.processWinesFromCsv().size());
+        assertEquals(0, dataLoadService.processWinesFromCsv(false).size());
     }
 
     /**
@@ -82,7 +82,7 @@ public class DataLoadServiceTest {
      */
     @Test
     public void loadWinesSizeTest() {
-        List<Wine> wines = dataLoadService.processWinesFromCsv();
+        List<Wine> wines = dataLoadService.processWinesFromCsv(false);
         assertEquals(16, wines.size());
     }
 }
