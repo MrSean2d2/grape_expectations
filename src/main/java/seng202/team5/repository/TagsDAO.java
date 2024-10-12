@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.models.Tag;
 import seng202.team5.services.DatabaseService;
 
@@ -182,7 +181,7 @@ public class TagsDAO implements DAOInterface<Tag> {
      * @return return 1 if it could be created, -1 otherwise.
      */
     @Override
-    public int add(Tag toAdd) throws DuplicateEntryException {
+    public int add(Tag toAdd) {
         String sql = "INSERT INTO created_tags (userId, name, colour) VALUES (?, ?, ?)";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql)) {

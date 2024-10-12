@@ -1,6 +1,9 @@
 package seng202.team5.unittests.services;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -57,10 +60,39 @@ public class TagServiceTest {
     }
 
     @Test
-    public void testCustomTagExists() throws DuplicateEntryException {
+    public void testCustomTagExists() {
         Tag tag = new Tag(user.getId(), "Custom", 1);
         TagsDAO tagsDAO = new TagsDAO();
         tag.setTagId(tagsDAO.add(tag));
         assertTrue(tagService.checkTagExists("Custom", user.getId()));
+    }
+
+    @Test
+    public void testCheckEmptyName() {
+        assertEquals("Tag name can't be blank!", tagService.checkName(""));
+    }
+
+    @Test
+    public void testCheckBlankName() {
+        assertEquals("Tag name can't be blank!", tagService.checkName("     "));
+    }
+
+    @Test
+    public void testCheckLongName() {
+        assertEquals("Tag name is too long! Must be no more than 20 characters.",
+                tagService.checkName("alskf;sladfj;aslkjfd;aslfjda;sljdfdlskfjdslkfjdslkfjsdljf"));
+    }
+
+    @Test
+    public void testCreateTag() {
+        Tag tag = tagService.createTag(user.getId(), "A cool tag", 0);
+        assertNotNull(tag);
+        assertEquals(tagService.getCreatedTag(), tag);
+    }
+
+    @Test
+    public void testCreateTagDuplicate() {
+        tagService.createTag(user.getId(), "A tag", 0);
+        assertNull(tagService.createTag(user.getId(), "A tag", 0));
     }
 }
