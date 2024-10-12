@@ -395,4 +395,24 @@ public class ReviewDAOTest {
 
         assertEquals(2, reviewDAO.getAll().size());
     }
+
+    @Test
+    public void testGetIdsFromUser() throws DuplicateEntryException {
+        Wine wine = new Wine("A wine", "A description", 1990, 89,
+                90, "Pinot Noir", "Red", new Vineyard("Vineyard1", "Region"));
+        Wine wine1 = new Wine("Another wine", "A description", 1980, 90, 20, "Chardonnay", "White",
+                new Vineyard("Vineyard2", "Region"));
+        wine.setId(wineDAO.add(wine));
+        wine1.setId(wineDAO.add(wine1));
+        User user = new User("user", "password", Role.USER, 0);
+        user.setId(userDAO.add(user));
+        Review review = new Review(wine.getId(), user.getId());
+        Review review1 = new Review(wine1.getId(), user.getId());
+        reviewDAO.add(review);
+        reviewDAO.add(review1);
+        List<Integer> wineIds = reviewDAO.getIdsFromUser(user.getId());
+        assertEquals(2, wineIds.size());
+        assertEquals(1, wineIds.getFirst());
+        assertEquals(2, wineIds.get(1));
+    }
 }
