@@ -1,6 +1,5 @@
 package seng202.team5.cucumber;
 
-import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -9,8 +8,16 @@ import java.util.List;
 import org.junit.Assert;
 import seng202.team5.exceptions.DuplicateEntryException;
 import seng202.team5.exceptions.InstanceAlreadyExistsException;
-import seng202.team5.models.*;
-import seng202.team5.repository.*;
+import seng202.team5.models.AssignedTag;
+import seng202.team5.models.Review;
+import seng202.team5.models.Role;
+import seng202.team5.models.User;
+import seng202.team5.models.Wine;
+import seng202.team5.repository.AssignedTagsDAO;
+import seng202.team5.repository.ReviewDAO;
+import seng202.team5.repository.TagsDAO;
+import seng202.team5.repository.VineyardDAO;
+import seng202.team5.repository.WineDAO;
 import seng202.team5.services.DataLoadService;
 import seng202.team5.services.DatabaseService;
 import seng202.team5.services.UserService;
@@ -176,9 +183,10 @@ public class SearchFilterStepDefs {
     public void noEntriesAreShown() {
         Assert.assertEquals(0, filteredWines.size());
     }
+
     @When("the user applies a colour filter {string}")
-    public void theUserAppliesAColourFilter(String colour) {
-        String query = wineDAO.queryBuilder("","0", colour,"0","0", 0.0, 800.0, 0);
+    public void theUserAppliesaColourFilter(String colour) {
+        String query = wineDAO.queryBuilder("", "0", colour, "0", "0", 0.0, 800.0, 0);
         filteredWines = wineDAO.executeSearchFilter(query, "");
     }
 
@@ -189,6 +197,7 @@ public class SearchFilterStepDefs {
         }
         Assert.assertFalse(filteredWines.isEmpty());
     }
+
     @And("the user has tagged {int} wines as {string},")
     public void theUserHasTaggedWinesAs(int numWines, String tag)  throws DuplicateEntryException {
         User wineEnthusiast = new User(1, "username", "password12@", Role.USER, 1);
@@ -200,7 +209,8 @@ public class SearchFilterStepDefs {
 
         for (int i = 1; i < numWines + 1; i++) {
             Review wineReview = new Review(i, wineEnthusiast.getId());
-            AssignedTag assignedTag = new AssignedTag(tagsDAO.getIdFromName(tag, wineEnthusiast.getId()),
+            AssignedTag assignedTag = new AssignedTag(tagsDAO.getIdFromName(tag,
+                    wineEnthusiast.getId()),
                     wineEnthusiast.getId(), i);
             assignedTagsDAO.add(assignedTag);
             reviewDAO.add(wineReview);
@@ -209,18 +219,16 @@ public class SearchFilterStepDefs {
 
     @When("the user applies the tag filter {string}")
     public void theUserAppliesTheTagFilter(String tag) {
-        System.out.println("tag is :"+tag);
         wineService.filterWinesByTag(tag);
-        System.out.println("size is:"+wineService.getWineList().size());
     }
 
     @Then("the system displays the {int} reviewed wines of tag {string}")
     public void theSystemDisplaysTheReviewedWinesOfTag(int numWines, String tag) {
         Assert.assertEquals(numWines, wineService.getWineList().size());
-        for (Wine wine: wineService.getWineList()) {
+        for (Wine wine : wineService.getWineList()) {
             int wineid = wine.getId();
             int tagid = tagsDAO.getIdFromName(tag, wineid);
-            Assert.assertEquals(tag,tagsDAO.getOne(tagid).getName());
+            Assert.assertEquals(tag, tagsDAO.getOne(tagid).getName());
         }
     }
 }

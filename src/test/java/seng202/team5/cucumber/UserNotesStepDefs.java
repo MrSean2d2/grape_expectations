@@ -16,9 +16,10 @@ public class UserNotesStepDefs {
     private Review review;
     private User user;
     private String actualNotes;
+
     @Given("the user is logged in")
     public void theUserIsLoggedIn() {
-        user = userService.registerUser("testUser","password8!");
+        user = userService.registerUser("testUser", "password8!");
         userService.setCurrentUser(user);
 
         //int wineID = wineService.get
@@ -39,7 +40,7 @@ public class UserNotesStepDefs {
     }
 
     @Given("a user is reviewing a wine with id {int}")
-    public void aUserIsReviewingAWineWithId(int wineID) {
+    public void userIsReviewingaWineWithId(int wineID) {
         int userID = 1;
         review = new Review(wineID, userID);
     }
@@ -49,10 +50,12 @@ public class UserNotesStepDefs {
         review.setNotes(notes);
         actualNotes = review.getNotes();
     }
+
     @Then("the review should successfully save the notes")
     public void theReviewShouldSuccessfullySaveTheNotes() {
         Assertions.assertNotNull(actualNotes);
     }
+
     @And("the notes in the review should be {string}")
     public void theNotesInTheReviewShouldBe(String expectedNotes) {
         Assertions.assertEquals(expectedNotes, actualNotes);

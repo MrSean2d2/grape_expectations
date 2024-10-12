@@ -35,7 +35,8 @@ public class ReviewServiceTest {
     @BeforeAll
     public static void setUp() throws InstanceAlreadyExistsException {
         DatabaseService.removeInstance();
-        databaseService = DatabaseService.initialiseInstanceWithUrl("jdbc:sqlite:./src/test/resources/test.db");
+        databaseService = DatabaseService.initialiseInstanceWithUrl(
+                "jdbc:sqlite:./src/test/resources/test.db");
         databaseService.resetDb();
     }
 
@@ -48,7 +49,8 @@ public class ReviewServiceTest {
         reviewService = new ReviewService();
         user = UserService.getInstance().registerUser("User", "password");
         UserService.getInstance().setCurrentUser(user);
-        wine = new Wine("Test", "Nice", 1990, 89, 20, "Variety", "Red", new Vineyard("Vineyard", "Region"));
+        wine = new Wine("Test", "Nice", 1990, 89, 20,
+                "Variety", "Red", new Vineyard("Vineyard", "Region"));
         WineDAO wineDAO = new WineDAO(new VineyardDAO());
         wine.setId(wineDAO.add(wine));
     }

@@ -1,5 +1,6 @@
 package seng202.team5.gui;
 
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Objects;
 import javafx.beans.value.ObservableValue;
@@ -14,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -118,6 +120,18 @@ public class DataListPageController extends PageController {
         initToolTips();
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+        priceColumn.setCellFactory(tc -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(currencyFormat.format(price));
+                }
+            }
+        });
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
