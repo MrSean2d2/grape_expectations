@@ -1,5 +1,6 @@
 package seng202.team5.gui;
 
+import java.util.Objects;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -26,7 +27,8 @@ public class LoadingPageController {
     private void initialize() {
         vineyardDAO = new VineyardDAO();
 
-        Image gifImage = new Image(getClass().getResourceAsStream("/images/animation.gif"));
+        Image gifImage = new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/animation.gif")));
 
         // Create an ImageView to display the GIF
         ImageView gifView = new ImageView(gifImage);

@@ -97,7 +97,6 @@ public class WineService {
                 if (selectedTag.equals("All Reviews")) {
                     // Show all wines that the current user has reviewed
                     wineIds = reviewDAO.getIdsFromUser(currentUserId);
-                    System.out.println("user id: " + currentUserId);
                 } else {
                     // Filter reviews that contain the selected tag
                     int tagId = tagsDAO.getIdFromName(selectedTag, currentUserId);

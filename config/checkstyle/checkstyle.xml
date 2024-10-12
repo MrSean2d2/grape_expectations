@@ -261,7 +261,7 @@
       <property name="arrayInitIndent" value="4"/>
     </module>
     <module name="AbbreviationAsWordInName">
-      <property name="allowedAbbreviations" value="DAO"/>
+      <property name="allowedAbbreviations" value="DAO,DB,ID"/>
       <property name="ignoreFinal" value="false"/>
       <property name="allowedAbbreviationLength" value="0"/>
       <property name="tokens"
@@ -272,7 +272,6 @@
     <module name="NoWhitespaceBeforeCaseDefaultColon"/>
     <module name="OverloadMethodsDeclarationOrder"/>
     <module name="ConstructorsDeclarationGrouping"/>
-    <module name="VariableDeclarationUsageDistance"/>
     <module name="CustomImportOrder">
       <property name="sortImportsInGroupAlphabetically" value="true"/>
       <property name="separateLineBetweenGroups" value="true"/>

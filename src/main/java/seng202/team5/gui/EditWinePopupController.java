@@ -129,7 +129,7 @@ public class EditWinePopupController extends FormErrorController implements Clos
     private void initFields() {
         nameField.setText(wine.getName());
         yearField.setText(String.valueOf(wine.getYear()));
-        priceField.setText(String.valueOf(wine.getPrice()));
+        priceField.setText(String.format("%.2f", wine.getPrice()));
         varietyField.setText(wine.getWineVariety());
         vineyardField.setText(wine.getVineyard().getName());
         regionField.setText(wine.getRegion());

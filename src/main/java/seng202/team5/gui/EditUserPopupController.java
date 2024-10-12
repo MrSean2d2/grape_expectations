@@ -9,7 +9,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.*;
+import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import seng202.team5.models.Role;
 import seng202.team5.models.User;
@@ -108,9 +108,6 @@ public class EditUserPopupController extends PageController implements ClosableW
         stage.close();
     }
 
-    /**
-     * Submit the changes to the user.
-     */
     /**
      * Saves changes made and closes the window.
      */
