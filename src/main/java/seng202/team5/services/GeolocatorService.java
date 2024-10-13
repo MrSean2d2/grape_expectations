@@ -41,6 +41,8 @@ public class GeolocatorService {
 
     /**
      * Runs a query with the address given and finds the most applicable lat, lng co-ordinates.
+     *
+     * @param vineyard the vineyard to search for
      */
     public void queryAddress(Vineyard vineyard) {
         String region = vineyard.getRegion();

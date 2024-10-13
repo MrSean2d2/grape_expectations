@@ -40,6 +40,7 @@ public class WineDAO implements DAOInterface<Wine> {
      * WineDAO constructor. Creates a WineDAO object and initialises it with
      * services needed for handling WineVariety and Region objects.
      *
+     * @param vineyardDAO the VineyardDAO to use
      */
     public WineDAO(VineyardDAO vineyardDAO) {
         databaseService = DatabaseService.getInstance();
@@ -352,7 +353,7 @@ public class WineDAO implements DAOInterface<Wine> {
         String sqlAssignedTag = "Delete FROM assigned_tags;";
         try (Connection conn = databaseService.connect();
                 PreparedStatement ps = conn.prepareStatement(sql);
-                PreparedStatement atps = conn.prepareStatement(sqlAssignedTag);) {
+                PreparedStatement atps = conn.prepareStatement(sqlAssignedTag)) {
             ps.executeUpdate();
             atps.executeUpdate();
         } catch (SQLException sqlException) {
@@ -573,7 +574,13 @@ public class WineDAO implements DAOInterface<Wine> {
      * Builds sql query for search and filter.
      *
      * @param search term to search for
-     * @param year to filter
+     * @param variety the variety to use
+     * @param colour the colour to use
+     * @param region the region to use
+     * @param year the year to filter
+     * @param minPrice the min price to use
+     * @param maxPrice the max price to use
+     * @param minRating the min rating to use
      * @return sql string
      */
     public String queryBuilder(String search, String variety,

@@ -28,18 +28,26 @@ public class TagsDAOTest {
 
     public static int defaultTagCount;
 
+    private static User testUser;
+    private static User testUser2;
+
 
     /**
      * Set up the testing scenario.
      */
     @BeforeAll
-    public static void setUp() throws InstanceAlreadyExistsException {
+    public static void setUp() throws InstanceAlreadyExistsException, DuplicateEntryException {
         DatabaseService.removeInstance();
         databaseService = DatabaseService.initialiseInstanceWithUrl(
                 "jdbc:sqlite:./src/test/resources/test.db");
 
         tagsDAO = new TagsDAO();
         userDAO = new UserDAO();
+
+        testUser = new User("test", "pass", Role.USER, 0);
+        testUser.setId(userDAO.add(testUser));
+        testUser2 = new User("test2", "pass", Role.USER, 0);
+        testUser2.setId(userDAO.add(testUser2));
 
         defaultTagCount = tagsDAO.getAll().size();
     }
@@ -69,12 +77,7 @@ public class TagsDAOTest {
      * Test getting all tags.
      */
     @Test
-    public void testGetAll() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", Role.USER, 0);
-        testUser.setId(userDAO.add(testUser));
-        User testUser2 = new User("test2", "pass", Role.USER, 0);
-        testUser2.setId(userDAO.add(testUser2));
-
+    public void testGetAll() {
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
         testTag.setTagId(tagsDAO.add(testTag));
 
@@ -93,12 +96,7 @@ public class TagsDAOTest {
      * Test getting a single tag.
      */
     @Test
-    public void testGetOne() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", Role.USER, 0);
-        testUser.setId(userDAO.add(testUser));
-        User testUser2 = new User("test2", "pass", Role.USER, 0);
-        testUser2.setId(userDAO.add(testUser2));
-
+    public void testGetOne() {
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
         testTag.setTagId(tagsDAO.add(testTag));
 
@@ -123,12 +121,7 @@ public class TagsDAOTest {
      * Test getting from user.
      */
     @Test
-    public void testGetFromUser() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", Role.USER, 0);
-        testUser.setId(userDAO.add(testUser));
-        User testUser2 = new User("test2", "pass", Role.USER, 0);
-        testUser2.setId(userDAO.add(testUser2));
-
+    public void testGetFromUser() {
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
         testTag.setTagId(tagsDAO.add(testTag));
 
@@ -144,13 +137,23 @@ public class TagsDAOTest {
 
 
     /**
+     * Test getting from user.
+     */
+    @Test
+    public void testGetFromNameAndUserId() {
+        Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
+        testTag.setTagId(tagsDAO.add(testTag));
+
+        Tag foundTag = tagsDAO.getFromNameAndUserId("Tag 1", testUser.getId());
+        assertEquals(testTag, foundTag);
+    }
+
+
+    /**
      * Test deleting a tag.
      */
     @Test
-    public void testDeleteTag() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", Role.USER, 0);
-        testUser.setId(userDAO.add(testUser));
-
+    public void testDeleteTag() {
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
         testTag.setTagId(tagsDAO.add(testTag));
 
@@ -168,13 +171,7 @@ public class TagsDAOTest {
      * Test deleting all of a user's tags.
      */
     @Test
-    public void testDeleteTagFromUser() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", Role.USER, 0);
-        testUser.setId(userDAO.add(testUser));
-
-        User testUser2 = new User("test2", "pass", Role.USER, 0);
-        testUser2.setId(userDAO.add(testUser2));
-
+    public void testDeleteTagFromUser() {
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
         testTag.setTagId(tagsDAO.add(testTag));
 
@@ -200,10 +197,7 @@ public class TagsDAOTest {
      * Test updating a tag.
      */
     @Test
-    public void testUpdateTag() throws DuplicateEntryException {
-        User testUser = new User("test", "pass", Role.USER, 0);
-        testUser.setId(userDAO.add(testUser));
-
+    public void testUpdateTag() {
         Tag testTag = new Tag(testUser.getId(), "Tag 1", 0);
         testTag.setTagId(tagsDAO.add(testTag));
 

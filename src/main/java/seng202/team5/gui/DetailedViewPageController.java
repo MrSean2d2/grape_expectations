@@ -428,6 +428,7 @@ public class DetailedViewPageController extends PageController implements Closab
      * The basic tag is used as the "adder" tag
      *
      * @param label the text to display
+     * @return reference to the created tag label
      */
     public Label addBasicTag(String label) {
         Label newTag = new Label(label);

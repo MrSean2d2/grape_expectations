@@ -196,6 +196,8 @@ public class UserService {
     /**
      * Attempt to register a user, if they don't already exist.
      *
+     * @param username the user's username
+     * @param password the user's password
      * @return user if they register
      */
     public User registerUser(String username, String password) {

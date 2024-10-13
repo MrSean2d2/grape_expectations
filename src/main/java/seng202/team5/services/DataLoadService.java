@@ -50,6 +50,8 @@ public class DataLoadService {
     /**
      * DataLoadService constructor with string of file path
      * used for testing with separate csv.
+     *
+     * @param specifiedFileName the name of the file to load
      */
     public DataLoadService(String specifiedFileName) {
         this.fileName = Path.of(specifiedFileName);
@@ -175,6 +177,7 @@ public class DataLoadService {
     /**
      * Reads a csv file and returns all valid wines present in a single list.
      *
+     * @param loadGeolocation whether the geolocation should be loaded
      * @return a list of wines from the csv file
      */
     public List<Wine> processWinesFromCsv(boolean loadGeolocation) {

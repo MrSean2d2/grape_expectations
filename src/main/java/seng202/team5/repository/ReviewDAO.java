@@ -82,6 +82,7 @@ public class ReviewDAO implements DAOInterface<Review> {
      * Gets a list of a given user's reviews (by id).
      *
      * @param id id of the user
+     * @param onlyRated whether only the rated ones should be fetched
      * @return list of reviews from the given user
      */
     public List<Review> getFromUser(int id, boolean onlyRated) {

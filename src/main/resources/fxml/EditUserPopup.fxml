@@ -84,7 +84,7 @@
                            </font>
                         </Label>
                         <TextField fx:id="nameField" promptText="Enter username" styleClass="textbox" text="Username" />
-                        <Label fx:id="errorLabel" styleClass="warningText" text="Error label" visible="false" />
+                        <Label fx:id="errorLabel" styleClass="warning-text" text="Error label" visible="false" />
                         <Label text="Update Password">
                            <font>
                               <Font size="18.0" />

@@ -178,6 +178,8 @@ public class User {
 
     /**
      * Sets the user's ID.
+     *
+     * @param id the user id
      */
     public void setId(int id) {
         this.id = id;
@@ -186,6 +188,8 @@ public class User {
 
     /**
      * Sets the user's role.
+     *
+     * @param role the user role
      */
     public void setRole(Role role) {
         roleProperty().set(role);
@@ -194,6 +198,8 @@ public class User {
 
     /**
      * Sets the user's username.
+     *
+     * @param username the user username
      */
     public void setUsername(String username) {
         usernameProperty().set(username);

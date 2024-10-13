@@ -12,6 +12,10 @@ public class AssignedTag {
 
     /**
      * Constructor with IDs only.
+     *
+     * @param tagId the id for the tag
+     * @param userId the id for the user
+     * @param wineId the id of the wine
      */
     public AssignedTag(int tagId, int userId, int wineId) {
         this.tagId = tagId;

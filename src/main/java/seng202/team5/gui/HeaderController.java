@@ -364,6 +364,9 @@ public class HeaderController {
 
     /**
      * Add a notification to the top page.
+     *
+     * @param text the text to use for the notification
+     * @param col the colour to use on the notification
      */
     public void addNotification(String text, String col) {
         try {
