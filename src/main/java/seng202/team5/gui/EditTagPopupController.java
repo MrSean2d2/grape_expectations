@@ -26,6 +26,8 @@ import seng202.team5.services.UserService;
 public class EditTagPopupController extends FormErrorController implements ClosableWindow {
 
     @FXML
+    public Button submitButton;
+    @FXML
     private Button closeButton;
 
     @FXML
@@ -65,9 +67,6 @@ public class EditTagPopupController extends FormErrorController implements Closa
 
         // Keep track of the original name
         originalName = tagName;
-
-        closeButton.setTooltip(new Tooltip("Close Window"));
-        deleteButton.setTooltip(new Tooltip("Delete "));
     }
 
 
@@ -91,6 +90,10 @@ public class EditTagPopupController extends FormErrorController implements Closa
         OpenWindowsService.getInstance().addWindow(this);
         tagService = TagService.getInstance();
         tag = tagService.getSelectedTag();
+
+        closeButton.setTooltip(new Tooltip("Close Window"));
+        deleteButton.setTooltip(new Tooltip("Delete tag"));
+        submitButton.setTooltip(new Tooltip("Submit changes"));
 
         tagsDAO = new TagsDAO();
 

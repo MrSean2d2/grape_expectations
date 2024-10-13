@@ -46,7 +46,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label fx:id="titleLabel1" style="-fx-font-weight: 700;" text="Wine Database">
+                        <Label style="-fx-font-weight: 700;" text="Wine Database">
                            <font>
                               <Font size="26.0" />
                            </font>
@@ -201,6 +201,11 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ComboBox>
+                        <Label fx:id="logInTagsLabel" styleClass="warningText" text="Log in to filter by tags!" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets left="25.0" />
+                           </VBox.margin>
+                        </Label>
                      </children>
                   </VBox>
                </children>

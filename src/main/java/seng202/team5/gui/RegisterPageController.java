@@ -82,7 +82,7 @@ public class RegisterPageController extends FormErrorController {
     @FXML
     private void togglePasswordVisibility() {
         passwordVisible = !passwordVisible;
-
+        updateToolTip(toggleVisibility, passwordVisible);
         // If password visible, set visibility
         if (passwordVisible) {
             passwordVisibleField.setVisible(true);
@@ -107,7 +107,7 @@ public class RegisterPageController extends FormErrorController {
     @FXML
     private void toggleRepeatPasswordVisibility() {
         repeatPasswordVisible = !repeatPasswordVisible;
-
+        updateToolTip(toggleRepeatVisibility, repeatPasswordVisible);
         // If password visible, set visibility
         if (repeatPasswordVisible) {
             repeatPasswordVisibleField.setVisible(true);
@@ -116,6 +116,7 @@ public class RegisterPageController extends FormErrorController {
             repeatPasswordField.setManaged(false);
             registerButton.requestFocus(); // make the register button focused
             toggleRepeatVisibility.setImage(shownIcon);
+
         } else {
             repeatPasswordField.setVisible(true);
             repeatPasswordField.setManaged(true);
@@ -202,5 +203,16 @@ public class RegisterPageController extends FormErrorController {
     @FXML
     private void goToLogin() {
         swapPage("/fxml/LoginPage.fxml");
+    }
+
+    /**
+     * Set the tooltip of the toggle of password visibility.
+     * @param toggle the imageview to change on toggle
+     * @param isVisible if the user wants to hide or view password
+     */
+    @FXML
+    private void updateToolTip(ImageView toggle, boolean isVisible){
+        String toolTipText = isVisible ? "Hide password" : "View password";
+        Tooltip.install(toggle, new Tooltip(toolTipText));
     }
 }

@@ -8,6 +8,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -46,12 +47,6 @@ public class AccountManagePageController extends PageController {
 
     @FXML
     private Label userIdLabel;
-
-    @FXML
-    private Label userLocationLabel;
-
-    @FXML
-    private Label userJoinDateLabel;
 
     /**
      * Initialize the account manage page.
@@ -99,12 +94,6 @@ public class AccountManagePageController extends PageController {
 
         // Update user id field
         userIdLabel.setText(String.format("%08d", curUser.getId()));
-
-        // Update user location field
-        userLocationLabel.setText("---");
-
-        // Update user join date field
-        userJoinDateLabel.setText("---");
 
         // Make the account button change text
         usernameLabel.textProperty().bind(curUser.usernameProperty());

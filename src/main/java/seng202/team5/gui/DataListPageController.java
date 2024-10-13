@@ -50,6 +50,8 @@ public class DataListPageController extends PageController {
     public ComboBox<String> varietyComboBox;
     @FXML
     public ComboBox<String> colourComboBox;
+    @FXML
+    public Label logInTagsLabel;
 
     @FXML
     private ComboBox<String> tagComboBox;
@@ -456,8 +458,11 @@ public class DataListPageController extends PageController {
             observableTagList.addAll(tagOptions);
             tagComboBox.setItems(observableTagList);
             tagComboBox.setDisable(false);
+            logInTagsLabel.setVisible(false);
         } else {
             tagComboBox.setDisable(true);
+            logInTagsLabel.setVisible(true);
+
         }
 
         // Handle the tag selection event to filter wines
