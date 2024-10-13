@@ -41,6 +41,8 @@ public class TagsDAOTest {
         databaseService = DatabaseService.initialiseInstanceWithUrl(
                 "jdbc:sqlite:./src/test/resources/test.db");
 
+        databaseService.resetDb();
+
         tagsDAO = new TagsDAO();
         userDAO = new UserDAO();
 
@@ -185,6 +187,10 @@ public class TagsDAOTest {
         testTag4.setTagId(tagsDAO.add(testTag4));
 
         List<Tag> tags = tagsDAO.getAll();
+
+        for(Tag tag : tags) {
+            System.out.println(tag);
+        }
 
         assertEquals(4 + defaultTagCount, tags.size());
 
