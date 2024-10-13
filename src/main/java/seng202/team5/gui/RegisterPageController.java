@@ -207,11 +207,12 @@ public class RegisterPageController extends FormErrorController {
 
     /**
      * Set the tooltip of the toggle of password visibility.
+     *
      * @param toggle the imageview to change on toggle
      * @param isVisible if the user wants to hide or view password
      */
     @FXML
-    private void updateToolTip(ImageView toggle, boolean isVisible){
+    private void updateToolTip(ImageView toggle, boolean isVisible) {
         String toolTipText = isVisible ? "Hide password" : "View password";
         Tooltip.install(toggle, new Tooltip(toolTipText));
     }
