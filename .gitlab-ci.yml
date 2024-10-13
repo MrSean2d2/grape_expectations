@@ -16,4 +16,4 @@ generate_artifacts:
     - ./gradlew clean jar
   artifacts:
     paths:
-      - build/libs/grape_expectations-1.0.jar
+      - build/libs/grape_expectations-2.0.jar
