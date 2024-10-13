@@ -48,7 +48,6 @@ public class ReviewDAO implements DAOInterface<Review> {
                 Review review = new Review(
                         rs.getInt("wineid"),
                         rs.getInt("userid"),
-                        rs.getBoolean("favorite"),
                         rs.getString("notes"),
                         rs.getInt("rating"));
                 reviews.add(review);
@@ -99,7 +98,6 @@ public class ReviewDAO implements DAOInterface<Review> {
                 Review review = new Review(
                         rs.getInt("wineid"),
                         rs.getInt("userid"),
-                        rs.getBoolean("favorite"),
                         rs.getString("notes"),
                         rs.getInt("rating"));
                 reviews.add(review);
@@ -152,7 +150,6 @@ public class ReviewDAO implements DAOInterface<Review> {
                 Review review = new Review(
                         rs.getInt("wineid"),
                         rs.getInt("userid"),
-                        rs.getBoolean("favorite"),
                         rs.getString("notes"),
                         rs.getInt("rating"));
                 reviews.add(review);
@@ -184,7 +181,6 @@ public class ReviewDAO implements DAOInterface<Review> {
                 review = new Review(
                         rs.getInt("wineid"),
                         rs.getInt("userid"),
-                        rs.getBoolean("favorite"),
                         rs.getString("notes"),
                         rs.getInt("rating"));
                 return review;
@@ -206,14 +202,13 @@ public class ReviewDAO implements DAOInterface<Review> {
     @Override
     public int add(Review toAdd) throws DuplicateEntryException {
         String sql =
-                "INSERT INTO review (wineid, userid, favorite, notes, rating) VALUES (?,?,?,?,?)";
+                "INSERT INTO review (wineid, userid, notes, rating) VALUES (?,?,?,?)";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, toAdd.getWineId());
             ps.setInt(2, toAdd.getUserId());
-            ps.setBoolean(3, toAdd.isFavourite());
-            ps.setString(4, toAdd.getNotes());
-            ps.setInt(5, toAdd.getRating());
+            ps.setString(3, toAdd.getNotes());
+            ps.setInt(4, toAdd.getRating());
             ps.executeUpdate();
             return 1;
         } catch (SQLException sqlException) {
@@ -261,17 +256,15 @@ public class ReviewDAO implements DAOInterface<Review> {
      */
     @Override
     public void update(Review toUpdate) {
-        String sql = "UPDATE review SET favorite=?, "
-                + "notes=?, "
+        String sql = "UPDATE review SET notes=?, "
                 + "rating=? "
                 + "WHERE wineid=? AND userid=?";
         try (Connection conn = databaseService.connect();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setBoolean(1, toUpdate.isFavourite());
-            ps.setString(2, toUpdate.getNotes());
-            ps.setInt(3, toUpdate.getRating());
-            ps.setInt(4, toUpdate.getWineId());
-            ps.setInt(5, toUpdate.getUserId());
+            ps.setString(1, toUpdate.getNotes());
+            ps.setInt(2, toUpdate.getRating());
+            ps.setInt(3, toUpdate.getWineId());
+            ps.setInt(4, toUpdate.getUserId());
             ps.executeUpdate();
         } catch (SQLException sqlException) {
             log.error(sqlException);

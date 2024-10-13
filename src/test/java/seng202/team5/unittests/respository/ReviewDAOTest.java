@@ -88,13 +88,13 @@ public class ReviewDAOTest {
         User testUser2 = new User("Test User 2", "password", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
-        Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Review testReview1 = new Review(testWine.getId(), testUser.getId(), "Great wine1", 5);
         Review testReview2 =
-                new Review(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+                new Review(testWine.getId(), testUser2.getId(), "Great wine2", 5);
         Review testReview3 =
-                new Review(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+                new Review(testWine2.getId(), testUser.getId(), "Great wine3", 5);
         Review testReview4 =
-                new Review(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+                new Review(testWine2.getId(), testUser2.getId(), "Great wine4", 5);
 
         reviewDAO.add(testReview1);
         reviewDAO.add(testReview2);
@@ -120,7 +120,7 @@ public class ReviewDAOTest {
         User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
-        Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
+        Review testReview = new Review(testWine.getId(), testUser.getId(), "Great wine", 5);
 
         reviewDAO.add(testReview);
 
@@ -158,15 +158,15 @@ public class ReviewDAOTest {
         User testUser2 = new User("Test User 2", "password", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
-        Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Review testReview1 = new Review(testWine.getId(), testUser.getId(), "Great wine1", 5);
         Review testReview2 =
-                new Review(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+                new Review(testWine.getId(), testUser2.getId(), "Great wine2", 5);
         Review testReview3 =
-                new Review(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+                new Review(testWine2.getId(), testUser.getId(), "Great wine3", 5);
         Review testReview4 =
-                new Review(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+                new Review(testWine2.getId(), testUser2.getId(), "Great wine4", 5);
         Review testReview5 =
-                new Review(testWine3.getId(), testUser.getId(), true, "Great wine5", 5);
+                new Review(testWine3.getId(), testUser.getId(), "Great wine5", 5);
 
         reviewDAO.add(testReview1);
         reviewDAO.add(testReview2);
@@ -209,15 +209,15 @@ public class ReviewDAOTest {
         User testUser2 = new User("Test User 2", "password", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
-        Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Review testReview1 = new Review(testWine.getId(), testUser.getId(), "Great wine1", 5);
         Review testReview2 =
-                new Review(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+                new Review(testWine.getId(), testUser2.getId(), "Great wine2", 5);
         Review testReview3 =
-                new Review(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+                new Review(testWine2.getId(), testUser.getId(), "Great wine3", 5);
         Review testReview4 =
-                new Review(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+                new Review(testWine2.getId(), testUser2.getId(), "Great wine4", 5);
         Review testReview5 =
-                new Review(testWine3.getId(), testUser.getId(), true, "Great wine5", 5);
+                new Review(testWine3.getId(), testUser.getId(), "Great wine5", 5);
 
         reviewDAO.add(testReview1);
         reviewDAO.add(testReview2);
@@ -249,7 +249,7 @@ public class ReviewDAOTest {
         User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
-        Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
+        Review testReview = new Review(testWine.getId(), testUser.getId(), "Great wine", 5);
 
         reviewDAO.add(testReview);
         assertEquals(1, reviewDAO.getAll().size());
@@ -270,7 +270,7 @@ public class ReviewDAOTest {
         User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
-        Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
+        Review testReview = new Review(testWine.getId(), testUser.getId(), "Great wine", 5);
 
         reviewDAO.add(testReview);
         assertEquals(1, reviewDAO.getAll().size());
@@ -294,7 +294,7 @@ public class ReviewDAOTest {
         User testUser = new User("Test User", "password", Role.USER, 0);
         testUser.setId(userDAO.add(testUser));
 
-        Review testReview = new Review(testWine.getId(), testUser.getId(), true, "Great wine", 5);
+        Review testReview = new Review(testWine.getId(), testUser.getId(), "Great wine", 5);
 
         reviewDAO.add(testReview);
 
@@ -331,13 +331,13 @@ public class ReviewDAOTest {
         User testUser2 = new User("Test User 2", "password", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
-        Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Review testReview1 = new Review(testWine.getId(), testUser.getId(), "Great wine1", 5);
         Review testReview2 =
-                new Review(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+                new Review(testWine.getId(), testUser2.getId(), "Great wine2", 5);
         Review testReview3 =
-                new Review(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+                new Review(testWine2.getId(), testUser.getId(), "Great wine3", 5);
         Review testReview4 =
-                new Review(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+                new Review(testWine2.getId(), testUser2.getId(), "Great wine4", 5);
 
         reviewDAO.add(testReview1);
         reviewDAO.add(testReview2);
@@ -375,13 +375,13 @@ public class ReviewDAOTest {
         User testUser2 = new User("Test User 2", "password", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
-        Review testReview1 = new Review(testWine.getId(), testUser.getId(), true, "Great wine1", 5);
+        Review testReview1 = new Review(testWine.getId(), testUser.getId(), "Great wine1", 5);
         Review testReview2 =
-                new Review(testWine.getId(), testUser2.getId(), true, "Great wine2", 5);
+                new Review(testWine.getId(), testUser2.getId(), "Great wine2", 5);
         Review testReview3 =
-                new Review(testWine2.getId(), testUser.getId(), true, "Great wine3", 5);
+                new Review(testWine2.getId(), testUser.getId(), "Great wine3", 5);
         Review testReview4 =
-                new Review(testWine2.getId(), testUser2.getId(), true, "Great wine4", 5);
+                new Review(testWine2.getId(), testUser2.getId(), "Great wine4", 5);
 
         reviewDAO.add(testReview1);
         reviewDAO.add(testReview2);

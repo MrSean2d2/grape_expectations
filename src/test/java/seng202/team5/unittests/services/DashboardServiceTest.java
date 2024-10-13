@@ -102,9 +102,9 @@ public class DashboardServiceTest {
         wine3.setId(wineDAO.add(wine3));
 
         // Create mock reviews and add to database
-        reviewDAO.add(new Review(wine1.getId(), testUser.getId(), true, "Great", 5));
-        reviewDAO.add(new Review(wine2.getId(), testUser.getId(), true, "Mid", 3));
-        reviewDAO.add(new Review(wine3.getId(), testUser.getId(), true, "bad", 1));
+        reviewDAO.add(new Review(wine1.getId(), testUser.getId(), "Great", 5));
+        reviewDAO.add(new Review(wine2.getId(), testUser.getId(), "Mid", 3));
+        reviewDAO.add(new Review(wine3.getId(), testUser.getId(), "bad", 1));
 
         // Create mock tags
         Tag testTag1 = new Tag(1, testUser.getId(), "My absolute favourites", 0);
@@ -191,8 +191,7 @@ public class DashboardServiceTest {
         wine4.setId(wineDAO.add(wine4));
 
         reviewDAO.add(new Review(wine4.getId(),
-                dashboardService.getUserReviews().getFirst().getUserId(),
-                true, "Decent", 2));
+                dashboardService.getUserReviews().getFirst().getUserId(), "Decent", 2));
 
         dashboardService.initializeData();
         List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();

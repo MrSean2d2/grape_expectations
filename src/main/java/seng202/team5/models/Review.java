@@ -11,7 +11,6 @@ import seng202.team5.repository.ReviewDAO;
 public class Review {
     private final int wineId;
     private final int userId;
-    private boolean favourite;
     private String notes;
     private int rating;
 
@@ -24,7 +23,6 @@ public class Review {
     public Review(int wineId, int userId) {
         this.wineId = wineId;
         this.userId = userId;
-        this.favourite = false;
         this.notes = "";
         this.rating = -1; // Not set
         this.reviewDAO = new ReviewDAO();
@@ -34,10 +32,9 @@ public class Review {
     /**
      * Constructor with all the parameters.
      */
-    public Review(int wineId, int userId, boolean favourite, String notes, int rating) {
+    public Review(int wineId, int userId, String notes, int rating) {
         this.wineId = wineId;
         this.userId = userId;
-        this.favourite = favourite;
         this.notes = notes;
         this.rating = rating;
         this.reviewDAO = new ReviewDAO();
@@ -64,17 +61,6 @@ public class Review {
     public int getUserId() {
         return userId;
     }
-
-
-    /**
-     * Get the favourite status.
-     *
-     * @return whether the wine is favourite or not
-     */
-    public boolean isFavourite() {
-        return favourite;
-    }
-
 
     /**
      * Get the stored notes.
@@ -136,7 +122,6 @@ public class Review {
         Review review = (Review) o;
         return wineId == review.wineId
                 && userId == review.userId
-                && favourite == review.favourite
                 && rating == review.rating
                 && Objects.equals(notes, review.notes);
     }
