@@ -63,31 +63,11 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Label fx:id="locationTextLabel" text="Location">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="joinedDateTextLabel" text="Member Since">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="userIdLabel" text="00000000">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="userLocationLabel" text="Wellington, New Zealand">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="userJoinDateLabel" text="June 2012">
                            <font>
                               <Font size="18.0" />
                            </font>

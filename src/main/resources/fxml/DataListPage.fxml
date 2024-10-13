@@ -46,7 +46,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label fx:id="titleLabel1" style="-fx-font-weight: 700;" text="Wine Database">
+                        <Label style="-fx-font-weight: 700;" text="Wine Database">
                            <font>
                               <Font size="26.0" />
                            </font>
