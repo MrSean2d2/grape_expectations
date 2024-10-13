@@ -188,10 +188,6 @@ public class TagsDAOTest {
 
         List<Tag> tags = tagsDAO.getAll();
 
-        for(Tag tag : tags) {
-            System.out.println(tag);
-        }
-
         assertEquals(4 + defaultTagCount, tags.size());
 
         tagsDAO.deleteFromUser(1);
