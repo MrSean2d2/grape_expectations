@@ -3,11 +3,7 @@ package seng202.team5.gui;
 import java.util.Objects;
 import java.util.Optional;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -25,6 +21,8 @@ import seng202.team5.services.UserService;
  */
 public class EditPasswordPopupController extends FormErrorController {
 
+    @FXML
+    public Button editPassButton;
     @FXML
     private Label errorLabel;
 
@@ -81,6 +79,7 @@ public class EditPasswordPopupController extends FormErrorController {
                 repeatPasswordField.textProperty());
 
         errorLabel.setVisible(false);
+        editPassButton.setTooltip(new Tooltip("Submit updated password"));
 
         shownIcon = new Image(
                 Objects.requireNonNull(getClass().getResourceAsStream("/images/OpenEye.png")));
@@ -173,6 +172,7 @@ public class EditPasswordPopupController extends FormErrorController {
         passwordVisible = !passwordVisible;
         setVisible(passwordVisible, passwordField, passwordVisibleField);
         toggleVisibility.setImage(passwordVisible ? shownIcon : hiddenIcon);
+        updateToolTip(toggleVisibility, passwordVisible);
     }
 
     /**
@@ -183,6 +183,7 @@ public class EditPasswordPopupController extends FormErrorController {
         repeatPasswordVisible = !repeatPasswordVisible;
         setVisible(repeatPasswordVisible, repeatPasswordField, repeatPasswordVisibleField);
         toggleRepeatVisibility.setImage(repeatPasswordVisible ? shownIcon : hiddenIcon);
+        updateToolTip(toggleRepeatVisibility, passwordVisible);
     }
 
     /**
@@ -199,5 +200,16 @@ public class EditPasswordPopupController extends FormErrorController {
         textField.setManaged(visible);
         passField.setVisible(!visible);
         passField.setManaged(!visible);
+    }
+
+    /**
+     * Set the tooltip of the toggle of password visibility.
+     * @param toggle the imageview to change on toggle
+     * @param isVisible if the user wants to hide or view password
+     */
+    @FXML
+    private void updateToolTip(ImageView toggle, boolean isVisible){
+        String toolTipText = isVisible ? "Hide password" : "View password";
+        Tooltip.install(toggle, new Tooltip(toolTipText));
     }
 }
