@@ -57,6 +57,8 @@ public class Vineyard {
 
     /**
      * Gets the name of the vineyard.
+     *
+     * @return vineyard name
      */
     public String getName() {
         return name;

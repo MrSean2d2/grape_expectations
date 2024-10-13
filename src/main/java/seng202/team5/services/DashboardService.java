@@ -155,6 +155,8 @@ public class DashboardService {
      * Find the max value of a hash map.
      *
      * @param inputMap the map to search
+     * @param <K> first type of input map
+     * @param <V> second type of input map
      * @return the maximum entry if found, null otherwise.
      */
     public <K, V extends Comparable<V>> List<Map.Entry<K, V>> sortHashMap(Map<K, V> inputMap) {

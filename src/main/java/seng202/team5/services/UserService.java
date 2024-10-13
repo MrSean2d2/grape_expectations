@@ -110,6 +110,8 @@ public class UserService {
 
     /**
      * Set the current user to the passed in user.
+     *
+     * @param user to set current user to
      */
     public void setCurrentUser(User user) {
         currentUser.set(user);
@@ -277,7 +279,11 @@ public class UserService {
     /**
      * Attempt to sign in to an account if they exist.
      *
+     * @param password of user signing in
+     * @param username of user signing in
      * @return user if they sign in
+     * @throws NotFoundException exception for if user not found
+     * @throws PasswordIncorrectException exception if entered password incorrect
      */
     public User signinUser(String username, String password) throws
             NotFoundException, PasswordIncorrectException {
@@ -320,8 +326,11 @@ public class UserService {
     /**
      * Generate a hashed version of the password.
      *
+     * @param salt to hash password
      * @param password the password to hash
      * @return hashed password as a string
+     * @throws NoSuchAlgorithmException if no algorithm found
+     * @throws InvalidKeySpecException if invalid key enterd
      */
     public static String hashPassword(String password, byte[] salt)
             throws NoSuchAlgorithmException,
