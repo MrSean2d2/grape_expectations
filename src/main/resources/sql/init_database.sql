@@ -46,7 +46,6 @@ CREATE TABLE IF NOT EXISTS REVIEW (
         REFERENCES USER(id)
             ON DELETE CASCADE,
 
-    favorite BOOLEAN,
     notes TEXT,
     rating INTEGER,
     PRIMARY KEY (wineid, userid)

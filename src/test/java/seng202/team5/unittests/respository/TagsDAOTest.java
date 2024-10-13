@@ -49,7 +49,6 @@ public class TagsDAOTest {
         testUser2 = new User("test2", "pass", Role.USER, 0);
         testUser2.setId(userDAO.add(testUser2));
 
-        defaultTagCount = tagsDAO.getAll().size();
     }
 
 
@@ -59,6 +58,7 @@ public class TagsDAOTest {
     @BeforeEach
     public void resetDb() {
         databaseService.resetDb();
+        defaultTagCount = tagsDAO.getAll().size();
     }
 
 
@@ -185,6 +185,7 @@ public class TagsDAOTest {
         testTag4.setTagId(tagsDAO.add(testTag4));
 
         List<Tag> tags = tagsDAO.getAll();
+
         assertEquals(4 + defaultTagCount, tags.size());
 
         tagsDAO.deleteFromUser(1);
