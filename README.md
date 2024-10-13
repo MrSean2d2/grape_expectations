@@ -43,7 +43,7 @@ The file is located at build/libs/grape_expectations-1.0.jar
 ## Run App
 1. If you haven't already, Build the project.
 2. Open a command line interface inside the project directory and run `cd build/libs` to change into the target directory.
-3. Run the command `java -jar grape_expectations-1.0.jar` to open the application.
+3. Run the command `java -jar grape_expectations-2.0.jar` to open the application.
 
 
 ## References

@@ -3,8 +3,8 @@ This application requires that JRE 21 be installed on your system.
 
 Provided you have unzipped the package on a Unix like machine, file permissions
 should hopefully be preserved, and you can simply navigate to
-seng202_2024_team5_3/seng202_2024_team5_3_jar and double-click the grape_expectations-_version_.jar
-file. Where _version_ will just be a number representing the current product version.
+seng202_2024_team5_3/seng202_2024_team5_3_jar and double-click the grape_expectations-2.0.jar
+file.
 
 If a warning comes up telling you that the file is not marked executable, feel
 free to either set the executable bit, or run the file from the command line using
@@ -19,12 +19,12 @@ the steps below.
 OR
 
 1. Open a terminal in the folder containing the jar file.
-2. Type "chmod u+x grape_expectations-*.jar" (without the quotes).
+2. Type "chmod u+x grape_expectations-2.0.jar" (without the quotes).
 3. Press enter.
 
 ### Run from the command line
 1. Open a terminal in the folder containing the jar file.
-2. Type "java -jar grape_expectations-*.jar" (without the quotes).
+2. Type "java -jar grape_expectations-2.0.jar" (without the quotes).
 3. Press enter.
 
 ## Admin user
