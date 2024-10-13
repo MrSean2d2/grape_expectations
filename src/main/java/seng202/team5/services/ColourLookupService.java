@@ -25,6 +25,24 @@ public class ColourLookupService {
         };
     }
 
+    /**
+     * Get the colour to use (hexadecimal) from the tag ID.
+     *
+     * @param tagId the ID to use
+     * @return the tag's hexadecimal colour
+     */
+    public static String getColourValue(int tagId) {
+        return switch (tagId) {
+            case (0) -> "#9f8fef";
+            case (1) -> "#aeee85";
+            case (2) -> "#8ddCdC";
+            case (3) -> "#ef8f8f";
+            case (4) -> "#efcd8f";
+            case (5) -> "#e58fef";
+            default -> "white";
+        };
+    }
+
 
     /**
      * Get the colour id use from the colour name.

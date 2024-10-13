@@ -12,7 +12,8 @@ public class FormErrorController extends PageController {
     /**
      * Show a field error for the specified field, with an error message.
      *
-     * @param field   the field containing the error
+     * @param field the field containing the error
+     * @param errorLabel the label to display
      * @param message the error message
      */
     protected void fieldError(TextField field, Label errorLabel, String message) {

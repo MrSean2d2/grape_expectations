@@ -35,6 +35,7 @@ public class EditWinePopupController extends FormErrorController implements Clos
 
     @FXML
     public Button submitButton;
+
     @FXML
     private Button closeButton;
 

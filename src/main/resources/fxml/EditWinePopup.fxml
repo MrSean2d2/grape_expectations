@@ -93,7 +93,7 @@
                                                       <Font size="18.0" />
                                                    </font>
                                                 </Label>
-                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warningText" text="*">
+                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warning-text" text="*">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
@@ -101,7 +101,7 @@
                                              </children>
                                           </HBox>
                                           <TextField fx:id="nameField" promptText="e.g. Reserve Sauvignon Blanc" styleClass="textbox" />
-                                          <Label fx:id="nameErrorLabel" styleClass="warningText" text="Error label" visible="false" />
+                                          <Label fx:id="nameErrorLabel" styleClass="warning-text" text="Error label" visible="false" />
                                           <Label text="Rating">
                                              <font>
                                                 <Font size="18.0" />
@@ -113,7 +113,7 @@
                                                 <Slider fx:id="ratingSlider" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" showTickLabels="true" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </HBox>
-                                          <Label styleClass="warningText" text="Spacer" visible="false" />
+                                          <Label styleClass="warning-text" text="Spacer" visible="false" />
                                           <Label text="Variety">
                                              <font>
                                                 <Font size="18.0" />
@@ -146,7 +146,7 @@
                                                       <Font size="18.0" />
                                                    </font>
                                                 </Label>
-                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warningText" text="*">
+                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warning-text" text="*">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
@@ -154,7 +154,7 @@
                                              </children>
                                           </HBox>
                                           <TextField fx:id="yearField" promptText="e.g 2014" styleClass="textbox" />
-                                          <Label fx:id="yearErrorLabel" styleClass="warningText" text="Error label" visible="false" />
+                                          <Label fx:id="yearErrorLabel" styleClass="warning-text" text="Error label" visible="false" />
                                           <HBox>
                                              <children>
                                                 <Label maxWidth="1.7976931348623157E308" text="Price ($)" HBox.hgrow="ALWAYS">
@@ -162,7 +162,7 @@
                                                       <Font size="18.0" />
                                                    </font>
                                                 </Label>
-                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warningText" text="*">
+                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warning-text" text="*">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
@@ -170,7 +170,7 @@
                                              </children>
                                           </HBox>
                                           <TextField fx:id="priceField" promptText="e.g. 18" styleClass="textbox" />
-                                          <Label fx:id="priceErrorLabel" styleClass="warningText" text="Price Error" visible="false" />
+                                          <Label fx:id="priceErrorLabel" styleClass="warning-text" text="Price Error" visible="false" />
                                           <HBox>
                                              <children>
                                                 <Label maxWidth="1.7976931348623157E308" text="Vineyard" HBox.hgrow="ALWAYS">
@@ -181,7 +181,7 @@
                                                       <Insets />
                                                    </HBox.margin>
                                                 </Label>
-                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warningText" text="*">
+                                                <Label alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" styleClass="warning-text" text="*">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
@@ -201,7 +201,7 @@
                                              </VBox.margin>
                                           </Label>
                                           <TextField fx:id="regionField" promptText="e.g. Hawke's Bay" styleClass="textbox" />
-                                          <Label fx:id="vineyardErrorLabel" styleClass="warningText" text="Error label" visible="false" />
+                                          <Label fx:id="vineyardErrorLabel" styleClass="warning-text" text="Error label" visible="false" />
                                        </children>
                                        <padding>
                                           <Insets bottom="20.0" left="45.0" right="45.0" top="20.0" />
@@ -220,7 +220,7 @@
                                     <StackPane>
                                        <children>
                                           <Label alignment="CENTER_RIGHT" ellipsisString="-" maxWidth="1.7976931348623157E308" minHeight="-Infinity" text="Fields marked with * are required" textAlignment="CENTER" wrapText="true" />
-                                          <Label fx:id="descriptionErrorLabel" styleClass="warningText" text="Error label" visible="false" StackPane.alignment="CENTER_LEFT" />
+                                          <Label fx:id="descriptionErrorLabel" styleClass="warning-text" text="Error label" visible="false" StackPane.alignment="CENTER_LEFT" />
                                        </children>
                                     </StackPane>
                                  </children>

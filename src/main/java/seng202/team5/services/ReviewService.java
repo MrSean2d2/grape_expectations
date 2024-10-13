@@ -16,6 +16,9 @@ public class ReviewService {
     private final ReviewDAO reviewDAO;
     private final UserService userService;
 
+    /**
+     * Basic constructor for the ReviewService class.
+     */
     public ReviewService() {
         reviewDAO = new ReviewDAO();
         userService = UserService.getInstance();
@@ -28,6 +31,7 @@ public class ReviewService {
      * @param review the Review object, null if it doesn't exist
      * @param selectedWineId the Wine id for the Review
      * @param userId the User id for the Review
+     * @return the review that was created
      */
     public Review createReviewIfNotExists(Review review, int selectedWineId, int userId) {
         Review result = review;

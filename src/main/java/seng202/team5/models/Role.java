@@ -8,7 +8,13 @@ import java.util.Arrays;
  * @author Sean Reitsma
  */
 public enum Role {
+    /**
+     * The role for admin user accounts.
+     */
     ADMIN("admin"),
+    /**
+     * The role for default user accounts.
+     */
     USER("user");
 
     private final String roleName;

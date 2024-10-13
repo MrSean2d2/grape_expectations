@@ -31,6 +31,8 @@ public class PageController {
 
     /**
      * Method to set the header controller reference.
+     *
+     * @param headerController reference to the header controller.
      */
     public void setHeaderController(HeaderController headerController) {
         this.headerController = headerController;
@@ -53,6 +55,9 @@ public class PageController {
 
     /**
      * Add a notification to the main page.
+     *
+     * @param text the text to use
+     * @param col the colour to use
      */
     public void addNotification(String text, String col) {
         if (headerController != null) {
@@ -62,6 +67,8 @@ public class PageController {
 
     /**
      * Return header controller.
+     *
+     * @return the header controller of this page
      */
     public HeaderController getHeaderController() {
         return this.headerController;

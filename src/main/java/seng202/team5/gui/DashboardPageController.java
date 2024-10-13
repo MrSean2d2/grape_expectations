@@ -30,6 +30,7 @@ import seng202.team5.repository.ReviewDAO;
 import seng202.team5.repository.TagsDAO;
 import seng202.team5.repository.VineyardDAO;
 import seng202.team5.repository.WineDAO;
+import seng202.team5.services.ColourLookupService;
 import seng202.team5.services.DashboardService;
 import seng202.team5.services.TagService;
 import seng202.team5.services.UserService;
@@ -44,24 +45,34 @@ public class DashboardPageController extends PageController {
 
     @FXML
     public Label notEnoughRatingsMessageLabel;
+
     @FXML
     public RadioButton varietyPieChartButton;
+
     @FXML
     public RadioButton regionPieChartButton;
+
     @FXML
     public RadioButton colourPieChartButton;
+
     @FXML
     public RadioButton yearPieChartButton;
+
     @FXML
     public RadioButton tagPieChartRadioButton;
+
     @FXML
     public GridPane radioButtonContainer;
+
     @FXML
     public Label topColourLabel;
+
     @FXML
     public Label noTagMessageLabel;
+
     @FXML
     public Button addNewTagButton;
+
     @FXML
     private PieChart pieChart;
 
@@ -116,7 +127,6 @@ public class DashboardPageController extends PageController {
             pieChart.setVisible(true);
             notEnoughRatingsMessageLabel.setVisible(false);
             setPieChartButtons(true);
-
         }
         initialiseRadioButtons();
 
@@ -355,47 +365,69 @@ public class DashboardPageController extends PageController {
             notEnoughRatingsMessageLabel.setVisible(true);
         }
 
+        int num = 0;
+
         switch (category) {
             case "Variety":
                 List<Map.Entry<String, Integer>> topVariety = dashboardService.getTopVariety();
                 for (Map.Entry<String, Integer> entryVariety : topVariety) {
-                    if (entryVariety.getValue() > 0) {
-                        dataList.add(new PieChart.Data(
-                                entryVariety.getKey(),
-                                entryVariety.getValue()));
+                    if (num >= 5) {
+                        break;
+                    } else {
+                        if (entryVariety.getValue() > 0) {
+                            dataList.add(new PieChart.Data(entryVariety.getKey(),
+                                    entryVariety.getValue()));
+                            num++;
+                        }
                     }
                 }
                 break;
+
             case "Region":
                 List<Map.Entry<String, Integer>> topRegion = dashboardService.getTopRegion();
                 for (Map.Entry<String, Integer> entryRegion : topRegion) {
-                    if (entryRegion.getValue() > 0) {
-                        dataList.add(new PieChart.Data(
-                                entryRegion.getKey(),
-                                entryRegion.getValue()));
+                    if (num >= 5) {
+                        break;
+                    } else {
+                        if (entryRegion.getValue() > 0) {
+                            dataList.add(new PieChart.Data(entryRegion.getKey(),
+                                    entryRegion.getValue()));
+                            num++;
+                        }
                     }
                 }
                 break;
+
             case "Year":
                 List<Map.Entry<Integer, Integer>> topYear = dashboardService.getTopYear();
                 for (Map.Entry<Integer, Integer> entryYear : topYear) {
-                    if (entryYear.getValue() > 0) {
-                        dataList.add(new PieChart.Data(
-                                String.valueOf(entryYear.getKey()),
-                                entryYear.getValue()));
+                    if (num >= 5) {
+                        break;
+                    } else {
+                        if (entryYear.getValue() > 0) {
+                            dataList.add(new PieChart.Data(String.valueOf(entryYear.getKey()),
+                                    entryYear.getValue()));
+                            num++;
+                        }
                     }
                 }
                 break;
+
             case "Colour":
                 List<Map.Entry<String, Integer>> topColour = dashboardService.getTopColour();
                 for (Map.Entry<String, Integer> entryColour : topColour) {
-                    if (entryColour.getValue() > 0) {
-                        dataList.add(new PieChart.Data(
-                                String.valueOf(entryColour.getKey()),
-                                entryColour.getValue()));
+                    if (num >= 5) {
+                        break;
+                    } else {
+                        if (entryColour.getValue() > 0) {
+                            dataList.add(new PieChart.Data(entryColour.getKey(),
+                                    entryColour.getValue()));
+                            num++;
+                        }
                     }
                 }
                 break;
+
             case "Tags":
                 List<Map.Entry<String, Integer>> topTags = dashboardService.getTopTags();
                 if (topTags.isEmpty()) {
@@ -404,13 +436,33 @@ public class DashboardPageController extends PageController {
                 } else {
                     noTagMessageLabel.setVisible(false);
                     for (Map.Entry<String, Integer> entryTag : topTags) {
-                        if (entryTag.getValue() > 0) {
-                            dataList.add(new PieChart.Data(
-                                    String.valueOf(entryTag.getKey()), entryTag.getValue()));
+                        if (num >= 5) {
+                            break;
+                        } else {
+                            if (entryTag.getValue() > 0) {
+                                PieChart.Data newPieData = new PieChart.Data(
+                                        entryTag.getKey(),
+                                        entryTag.getValue());
+
+                                // Update the colour of the piechart - depending on the tag
+                                newPieData.nodeProperty().addListener(
+                                        (observable, oldValue, newValue) -> {
+                                        if (newValue != null) {
+                                            // do something...
+                                            newPieData.getNode().setStyle("-fx-pie-color: "
+                                                    + ColourLookupService.getColourValue(
+                                                            tagsDAO.getFromNameAndUserId(
+                                                            entryTag.getKey(), userId).getColour())
+                                                    + ";");
+                                        }
+                                    });
+
+                                dataList.add(newPieData);
+                                num++;
+                            }
                         }
                     }
                 }
-
                 break;
             default:
                 // Don't add any data!!!
