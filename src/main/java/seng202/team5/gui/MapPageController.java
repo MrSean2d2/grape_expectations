@@ -78,7 +78,7 @@ public class MapPageController extends PageController {
                         log.info("Loaded map");
                     }
                 });
-        vineyardTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        vineyardTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
     }
 
     /**
