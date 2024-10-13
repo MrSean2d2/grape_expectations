@@ -29,6 +29,7 @@ public class EditPasswordPopupController extends FormErrorController {
 
     @FXML
     public Button editPassButton;
+
     @FXML
     private Label errorLabel;
 

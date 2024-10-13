@@ -647,6 +647,7 @@ public class WineDAO implements DAOInterface<Wine> {
      * returns list of wines matching search.
      *
      * @param search name or description of wine
+     * @param querySql sql query to be executed
      * @return list of wines matching search
      */
     public List<Wine> executeSearchFilter(String querySql, String search) {

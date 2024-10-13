@@ -58,6 +58,7 @@ public class VineyardDAO implements DAOInterface<Vineyard> {
      * Returns the id of the vineyard with the specified name.
      *
      * @param vineyardName the name of the vineyard to look up
+     * @param region region of vineyard
      * @return the database id of the vineyard
      */
     public int getIdFromNameRegion(String vineyardName, String region) {

@@ -19,6 +19,9 @@ public class Review {
 
     /**
      * Constructor with IDs only.
+     *
+     * @param userId id of the user
+     * @param wineId id of the wine
      */
     public Review(int wineId, int userId) {
         this.wineId = wineId;

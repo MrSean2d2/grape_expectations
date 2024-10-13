@@ -54,6 +54,10 @@ public class EditUserPopupController extends PageController implements ClosableW
 
     private ObservableList<User> userList;
 
+    /**
+     * Sets the list of users
+     * @param list
+     */
     public void setDataList(ObservableList<User> list) {
         userList = list;
     }

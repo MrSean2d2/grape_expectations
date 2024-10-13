@@ -45,24 +45,34 @@ public class DashboardPageController extends PageController {
 
     @FXML
     public Label notEnoughRatingsMessageLabel;
+
     @FXML
     public RadioButton varietyPieChartButton;
+
     @FXML
     public RadioButton regionPieChartButton;
+
     @FXML
     public RadioButton colourPieChartButton;
+
     @FXML
     public RadioButton yearPieChartButton;
+
     @FXML
     public RadioButton tagPieChartRadioButton;
+
     @FXML
     public GridPane radioButtonContainer;
+
     @FXML
     public Label topColourLabel;
+
     @FXML
     public Label noTagMessageLabel;
+
     @FXML
     public Button addNewTagButton;
+
     @FXML
     private PieChart pieChart;
 
