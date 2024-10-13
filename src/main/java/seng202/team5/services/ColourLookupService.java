@@ -24,4 +24,23 @@ public class ColourLookupService {
             default -> "";
         };
     }
+
+
+    /**
+     * Get the colour id use from the colour name.
+     *
+     * @param colourName the name to use
+     * @return the colour id
+     */
+    public static int getColourName(String colourName) {
+        return switch (colourName) {
+            case ("lavender") -> 0;
+            case ("mint") -> 1;
+            case ("seafoam") -> 2;
+            case ("claret") -> 3;
+            case ("gold") -> 4;
+            case ("rose") -> 5;
+            default -> -1;
+        };
+    }
 }
