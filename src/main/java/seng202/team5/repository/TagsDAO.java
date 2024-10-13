@@ -116,6 +116,36 @@ public class TagsDAO implements DAOInterface<Tag> {
     }
 
     /**
+     * Gets a tag from tag name and user id.
+     *
+     * @param tagName name of the tag
+     * @param userId id of the user
+     * @return The found tag
+     */
+    public Tag getFromNameAndUserId(String tagName, int userId) {
+        Tag tag;
+        String sql = "SELECT * FROM created_tags WHERE name=? AND (userid=? OR userid=-1)";
+        try (Connection conn = databaseService.connect();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, tagName);
+            ps.setInt(2, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                tag = new Tag(
+                        rs.getInt("tagid"),
+                        rs.getInt("userid"),
+                        rs.getString("name"),
+                        rs.getInt("colour"));
+                return tag;
+            }
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return null;
+        }
+        return null;
+    }
+
+    /**
      * Gets a list of tags associated with a specific wine by wineId.
      *
      * @param wineId id of the wine

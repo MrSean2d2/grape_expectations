@@ -27,6 +27,7 @@ public class EditTagPopupController extends FormErrorController implements Closa
 
     @FXML
     public Button submitButton;
+
     @FXML
     private Button closeButton;
 

@@ -15,6 +15,11 @@ public class Tag {
 
     /**
      * Constructor with all the parameters.
+     *
+     * @param tagId the id of the tag
+     * @param userId the id of the user
+     * @param name the name of the tag
+     * @param colour the colour id of the tag
      */
     public Tag(int tagId, int userId, String name, int colour) {
         this.tagId = tagId;
@@ -26,6 +31,10 @@ public class Tag {
 
     /**
      * Constructor with no tagId.
+     *
+     * @param userId the id of the user
+     * @param name the name of the tag
+     * @param colour the colour id of the tag
      */
     public Tag(int userId, String name, int colour) {
         this.userId = userId;
@@ -46,6 +55,8 @@ public class Tag {
 
     /**
      * Set the tag's id.
+     *
+     * @param id the user id
      */
     public void setTagId(int id) {
         this.tagId = id;
@@ -62,6 +73,8 @@ public class Tag {
 
     /**
      * Set the tag's user id.
+     *
+     * @param id the tag id
      */
     public void setUserId(int id) {
         this.userId = id;
@@ -81,6 +94,8 @@ public class Tag {
 
     /**
      * Set the tag's name.
+     *
+     * @param name the tag name
      */
     public void setName(String name) {
         this.name = name;
@@ -97,6 +112,8 @@ public class Tag {
 
     /**
      * Set the tag's colour.
+     *
+     * @param colour the tag colour id
      */
     public void setColour(int colour) {
         this.colour = colour;

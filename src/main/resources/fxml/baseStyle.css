@@ -1,5 +1,5 @@
 /*
-The basic stylesheet for the project. Light and dark mode will inherit these
+The basic stylesheet for the project.
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&family=Space+Mono:wght@400;700&display=swap');
@@ -34,6 +34,7 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 
 .button.detailed_view {
     -fx-font-size: 16;
+    -fx-cursor: HAND;
 }
 
 .button:hover {
@@ -94,7 +95,6 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-padding: 10;
 }
 
-/* Scroll bar style */
 .scroll-bar {
     -fx-background-color: white;
 }
@@ -150,8 +150,6 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-background-radius: 10;
 }
 
-/* Table style */
-
 .table-view {
     -fx-background-color: transparent;
 }
@@ -184,8 +182,6 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-border-width: 0;
 }
 
-
-/* TAGS */
 .tag {
     -fx-background-color: #e7e7e7;
     -fx-text-fill: #404040;
@@ -209,6 +205,14 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-background-color: #b8acf6;
 }
 
+.mint {
+    -fx-background-color: #aeee85;
+}
+
+.mint:hover {
+    -fx-background-color: #e1f6ac;
+}
+
 .seafoam {
     -fx-background-color: #8ddcdc;
 }
@@ -217,13 +221,6 @@ The basic stylesheet for the project. Light and dark mode will inherit these
     -fx-background-color: #c9ffff;
 }
 
-.mint {
-    -fx-background-color: #aeee85;
-}
-
-.mint:hover {
-    -fx-background-color: #e1f6ac;
-}
 
 .claret {
     -fx-background-color: #ef8f8f;
@@ -279,3 +276,9 @@ The basic stylesheet for the project. Light and dark mode will inherit these
 .slider .thumb:pressed, .range-slider .low-thumb:pressed, .range-slider .high-thumb:pressed {
     -fx-border-color: #4db265;
 }
+
+.default-color0.chart-pie { -fx-pie-color: #9f8fef; }
+.default-color1.chart-pie { -fx-pie-color: #aeee85; }
+.default-color2.chart-pie { -fx-pie-color: #8ddcdc; }
+.default-color3.chart-pie { -fx-pie-color: #ef8f8f; }
+.default-color4.chart-pie { -fx-pie-color: #efcd8f; }

@@ -62,7 +62,9 @@ public class OpenWindowsService {
     }
 
     /**
-     * Retrieve the number of open windows.
+     * Retrieve a list of open windows.
+     *
+     * @return the list of windows that are currently open
      */
     public List<ClosableWindow> getOpenWindows() {
         return openWindows;

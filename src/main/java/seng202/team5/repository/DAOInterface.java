@@ -8,6 +8,7 @@ import seng202.team5.exceptions.DuplicateEntryException;
  * (and indeed a copy of) the version given in the
  * <a href="https://eng-git.canterbury.ac.nz/men63/seng202-advanced-fx-public">advanced JavaFX lab</a>.
  *
+ * @param <T> type interface
  * @author Sean Reitsma
  */
 public interface DAOInterface<T> {

@@ -90,7 +90,7 @@
       <VBox spacing="10.0" styleClass="info-area">
          <children>
               <FlowPane fx:id="tagBox" hgap="5.0" maxHeight="1.7976931348623157E308" prefWidth="524.0" rowValignment="TOP" vgap="5.0" />
-              <Label fx:id="addTagLabel" maxWidth="1.7976931348623157E308" styleClass="warningText" text="Log in to add tags!" textFill="#e95958">
+              <Label fx:id="addTagLabel" maxWidth="1.7976931348623157E308" styleClass="warning-text" text="Log in to add tags!" textFill="#e95958">
                   <font>
                       <Font size="16.0" />
                   </font>
@@ -307,7 +307,7 @@
                          <Cursor fx:constant="TEXT" />
                      </cursor>
                  </TextArea>
-                 <Label fx:id="logInMessageLabel" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" styleClass="warningText" text="Log in to write and save notes!" textFill="#e95958">
+                 <Label fx:id="logInMessageLabel" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" styleClass="warning-text" text="Log in to write and save notes!" textFill="#e95958">
                      <font>
                          <Font size="18.0" />
                      </font>

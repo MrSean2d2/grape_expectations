@@ -136,7 +136,7 @@
                            </font>
                         </Label>
                         <TextField fx:id="nameField" promptText="Enter tag name" styleClass="textbox" text="Example Tag" />
-                        <Label fx:id="nameErrorLabel" styleClass="warningText" text="Error label" visible="false" />
+                        <Label fx:id="nameErrorLabel" styleClass="warning-text" text="Error label" visible="false" />
                         <Label text="Tag Colour">
                            <font>
                               <Font size="18.0" />

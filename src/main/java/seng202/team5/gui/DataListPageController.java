@@ -44,12 +44,16 @@ import seng202.team5.services.WineService;
 public class DataListPageController extends PageController {
     @FXML
     public ComboBox<String> yearComboBox;
+
     @FXML
     public ComboBox<String> regionComboBox;
+
     @FXML
     public ComboBox<String> varietyComboBox;
+
     @FXML
     public ComboBox<String> colourComboBox;
+
     @FXML
     public Label logInTagsLabel;
 

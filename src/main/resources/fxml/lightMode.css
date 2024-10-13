@@ -23,7 +23,7 @@ Light mode for the application
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0.0, 3.0);
 }
 
-#backgroundImage{
+#background-image{
     -fx-background-image: url("../images/vineyard_background.jpg");
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
@@ -35,17 +35,17 @@ Light mode for the application
 }
 
 
-.warningText {
+.warning-text {
     -fx-text-fill: #e95958;
 }
 
-.button, .textbox, .dropdown, .slidertextbox {
+.button, .textbox, .dropdown, .slider-textbox {
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
     -fx-border-color: transparent;
 }
 
-.textbox, .slidertextbox {
+.textbox, .slider-textbox {
     -fx-border-color: #bbb;
     -fx-border-width: 2;
     -fx-border-radius: 5;

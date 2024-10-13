@@ -1,8 +1,6 @@
 package seng202.team5.services;
 
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import seng202.team5.models.Tag;
 import seng202.team5.repository.TagsDAO;
 
@@ -15,6 +13,9 @@ public class TagService {
     private final TagsDAO tagsDAO;
     private static TagService instance;
 
+    /**
+     * Default constructor for the tag service class.
+     */
     public TagService() {
         tagsDAO = new TagsDAO();
     }
@@ -70,6 +71,8 @@ public class TagService {
     /**
      * Check if a tag with this name already exists.
      *
+     * @param tagName the tag's name
+     * @param userId the user's id
      * @return if the tag already exists
      */
     public boolean checkTagExists(String tagName, int userId) {

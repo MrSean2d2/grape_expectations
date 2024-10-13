@@ -15,6 +15,7 @@ import seng202.team5.repository.VineyardDAO;
 public class LoadingPageController {
     @FXML
     public Label progressLabel;
+
     @FXML
     private BorderPane spinnerLocation;
     private VineyardDAO vineyardDAO;

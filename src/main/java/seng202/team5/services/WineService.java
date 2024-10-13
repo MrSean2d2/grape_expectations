@@ -23,6 +23,9 @@ public class WineService {
     private ObservableList<Wine> wineList;
     private static WineService instance;
 
+    /**
+     * Basic constructor for the WineService class.
+     */
     public WineService() {
         wineDAO = new WineDAO(new VineyardDAO());
     }
@@ -67,6 +70,7 @@ public class WineService {
      * @param minPrice the minimum price
      * @param maxPrice the maximum price
      * @param minRating the minimum rating
+     * @param selectedTag the currently selected tag
      */
     public void searchWines(String search, String variety,
                             String colour, String region,
@@ -241,6 +245,7 @@ public class WineService {
      * checks if a wine has valid values for its attributes.
      * eg: year and price aren't 0
      *
+     * @param wine the wine to check the validity of
      * @return boolean whether given wine is valid enough to be added to database
      */
     public boolean isValidWine(Wine wine) {
